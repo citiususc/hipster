@@ -1,6 +1,6 @@
 package es.usc.citius.composit.search.function;
 
-public interface HeuristicFunction<S> {
+public interface HeuristicFunction<S,T> {
 
-	public double estimate(S state);
+	public T estimate(S state);
 }

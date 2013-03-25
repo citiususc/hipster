@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>es.usc.citius</groupId>
     <artifactId>search</artifactId>
-    <name>SearchAlgorithms</name>
+    <name>search</name>
     <version>1.0</version>
     <dependencies>
         <dependency>

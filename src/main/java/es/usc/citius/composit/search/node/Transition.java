@@ -3,24 +3,24 @@ package es.usc.citius.composit.search.node;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Successor<S> {
+public class Transition<S> {
 
 	//
 	private final S from;
 	// State
 	private final S state;
 	
-	public Successor(S from, S to){
+	public Transition(S from, S to){
 		this.from = from;
 		this.state = to;
 	}
 	
-	public Successor(Successor<S> successor){
+	public Transition(Transition<S> successor){
 		this.from = successor.from;
 		this.state = successor.state;
 	}
 	
-	public Successor(S to){
+	public Transition(S to){
 		this(null, to);
 	}
 
@@ -32,10 +32,10 @@ public class Successor<S> {
 		return state;
 	}
 	
-	public static <S> Iterable<Successor<S>> map(final S fromState, final Iterable<S> toStates){
-		List<Successor<S>> successors = new LinkedList<Successor<S>>();
+	public static <S> Iterable<Transition<S>> map(final S fromState, final Iterable<S> toStates){
+		List<Transition<S>> successors = new LinkedList<Transition<S>>();
 		for(S state : toStates){
-			successors.add(new Successor<S>(fromState, state));
+			successors.add(new Transition<S>(fromState, state));
 		}
 		return successors;
 	}

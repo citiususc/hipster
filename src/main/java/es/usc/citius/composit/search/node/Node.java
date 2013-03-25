@@ -2,26 +2,26 @@ package es.usc.citius.composit.search.node;
 
 import java.util.List;
 
-public interface Node<S, N extends Node<S, N>> {
+public interface Node<S> {
 
 	/**
 	 * Reconstructs the state path
 	 * 
 	 * @return
 	 */
-	public List<N> path();
+	public List<Node<S>> path();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public N previousNode();
+	public Node<S> previousNode();
 
 	/**
 	 * Successor state held by this node of the search problem.
 	 * @return
 	 */
-	public Successor<S> successor();
+	public Transition<S> transition();
 
 
 }

@@ -1,6 +1,6 @@
 package es.usc.citius.composit.search.function;
 
-import es.usc.citius.composit.search.node.Successor;
+import es.usc.citius.composit.search.node.Transition;
 
 /**
  * Interface that defines the function cost used to
@@ -11,8 +11,8 @@ import es.usc.citius.composit.search.node.Successor;
  * @param <A>
  * @param <S>
  */
-public interface CostFunction<S> {
+public interface CostFunction<S,T> {
 
 	// evaluate(A action, S state) ?
-	public double evaluate(Successor<S> successor);
+	public T evaluate(Transition<S> successor);
 }

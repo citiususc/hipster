@@ -8,11 +8,10 @@ import java.util.Queue;
 
 import es.usc.citius.composit.search.function.CostFunction;
 import es.usc.citius.composit.search.function.HeuristicFunction;
-import es.usc.citius.composit.search.function.SuccessorFunction;
-import es.usc.citius.composit.search.node.HeuristicNode;
-import es.usc.citius.composit.search.node.HeuristicNodeBuilder;
+import es.usc.citius.composit.search.function.TransitionFunction;
+import es.usc.citius.composit.search.node.ComparableNode;
 import es.usc.citius.composit.search.node.NodeBuilder;
-import es.usc.citius.composit.search.node.Successor;
+import es.usc.citius.composit.search.node.Transition;
 
 /**
  * 
@@ -20,24 +19,24 @@ import es.usc.citius.composit.search.node.Successor;
  * 
  * @param <S>
  */
-public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
+public class AstarIterator<S> implements Iterator<S> {
 
 	private final S initialState;
-	private Map<S, HeuristicNode<S>> open;
-	private Map<S, HeuristicNode<S>> closed;
-	private Queue<HeuristicNode<S>> queue;
-	private NodeBuilder<S, HeuristicNode<S>> nodeBuilder;
-	private SuccessorFunction<S> successors;
+	private Map<S, ComparableNode<S>> open;
+	private Map<S, ComparableNode<S>> closed;
+	private Queue<ComparableNode<S>> queue;
+	private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
+	private TransitionFunction<S> successors;
 
 	private AstarIterator(Builder<S> builder) {
 		this.initialState = builder.initialState;
-		this.open = new HashMap<S, HeuristicNode<S>>();
-		this.closed = new HashMap<S, HeuristicNode<S>>();
+		this.open = new HashMap<S, ComparableNode<S>>();
+		this.closed = new HashMap<S, ComparableNode<S>>();
 		this.successors = builder.successor;
 		this.nodeBuilder = builder.nodeBuilder;
 		this.queue = builder.queue;
-		HeuristicNode<S> initialNode = this.nodeBuilder.node(null,
-				new Successor<S>(null, this.initialState));
+		ComparableNode<S> initialNode = this.nodeBuilder.node(null,
+				new Transition<S>(null, this.initialState));
 
 		this.queue.add(initialNode);
 		this.open.put(this.initialState, initialNode);
@@ -47,17 +46,17 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		private final S initialState;
 		private HeuristicFunction<S> heuristic;
 		private CostFunction<S> cost;
-		private SuccessorFunction<S> successor;
-		private Queue<HeuristicNode<S>> queue;
-		private NodeBuilder<S, HeuristicNode<S>> nodeBuilder;
+		private TransitionFunction<S> successor;
+		private Queue<ComparableNode<S>> queue;
+		private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
 
-		public Builder(S initialState, SuccessorFunction<S> successor) {
+		public Builder(S initialState, TransitionFunction<S> successor) {
 			this.initialState = initialState;
 			this.successor = successor;
 			// By default, the cost function retrieves always a cost of 1
 			// for a direct successor.
 			this.cost = new CostFunction<S>() {
-				public double evaluate(Successor<S> successor) {
+				public double evaluate(Transition<S> successor) {
 					return 1;
 				}
 			};
@@ -69,11 +68,11 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 			};
 			// Create a new node builder using the cost function and the
 			// heuristic function
-			this.nodeBuilder = new HeuristicNodeBuilder<S>(cost, heuristic);
+			this.nodeBuilder = new ComparableNodeBuilder<S>(cost, heuristic);
 			// By default, A* uses a Priority Queue. This queue relies
 			// on a binary heap, which has O(log n) for insertions.
 			// However, the delete has a complexity of O(n).
-			this.queue = new PriorityQueue<HeuristicNode<S>>();
+			this.queue = new PriorityQueue<ComparableNode<S>>();
 		}
 
 		/**
@@ -83,7 +82,7 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		 */
 		public Builder<S> heuristic(HeuristicFunction<S> heuristic) {
 			this.heuristic = heuristic;
-			this.nodeBuilder = new HeuristicNodeBuilder<S>(this.cost, heuristic);
+			this.nodeBuilder = new ComparableNodeBuilder<S>(this.cost, heuristic);
 			return this;
 		}
 
@@ -94,7 +93,7 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		 */
 		public Builder<S> cost(CostFunction<S> cost) {
 			this.cost = cost;
-			this.nodeBuilder = new HeuristicNodeBuilder<S>(cost, this.heuristic);
+			this.nodeBuilder = new ComparableNodeBuilder<S>(cost, this.heuristic);
 			return this;
 		}
 
@@ -106,7 +105,7 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		 * @param queue
 		 * @return
 		 */
-		public Builder<S> queue(Queue<HeuristicNode<S>> queue) {
+		public Builder<S> queue(Queue<ComparableNode<S>> queue) {
 			this.queue = queue;
 			return this;
 		}
@@ -120,7 +119,7 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		 * @return
 		 */
 		public Builder<S> customNodeBuilder(
-				NodeBuilder<S, HeuristicNode<S>> nodeBuilder) {
+				NodeBuilder<S, ComparableNode<S>> nodeBuilder) {
 			this.nodeBuilder = nodeBuilder;
 			return this;
 		}
@@ -139,10 +138,10 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		return !open.values().isEmpty();
 	}
 
-	private HeuristicNode<S> takePromising() {
+	private ComparableNode<S> takePromising() {
 		// Poll until a valid state is found
-		HeuristicNode<S> node = queue.poll();
-		while (!open.containsKey(node.successor().state())) {
+		ComparableNode<S> node = queue.poll();
+		while (!open.containsKey(node.transition().state())) {
 			node = queue.poll();
 		}
 		return node;
@@ -152,20 +151,20 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 	 * A* algorithm implementation.
 	 * 
 	 */
-	public HeuristicNode<S> next() {
+	public ComparableNode<S> next() {
 
 		// Take the current node to analyze
-		HeuristicNode<S> current = takePromising();
-		S currentState = current.successor().state();
+		ComparableNode<S> current = takePromising();
+		S currentState = current.transition().state();
 		// Remove it from open
 		open.remove(currentState);
 
 		// Analyze the cost of each movement from the current node
 		// TODO: current.successors() ?
 
-		for (Successor<S> successor : successors.from(currentState)) {
+		for (Transition<S> successor : successors.from(currentState)) {
 			// Build the corresponding search node
-			HeuristicNode<S> successorNode = this.nodeBuilder.node(current,
+			ComparableNode<S> successorNode = this.nodeBuilder.node(current,
 					successor);
 
 			// Take the associated state
@@ -173,11 +172,11 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 
 			// Check if this successor is in the open set (which means that
 			// we have analyzed this node from other movement)
-			HeuristicNode<S> successorOpen = open.get(successorState);
+			ComparableNode<S> successorOpen = open.get(successorState);
 			if (successorOpen != null) {
 				// In this case, if the current move does not improve
 				// the cost of the previous path, discard this movement
-				if (successorOpen.cost() <= successorNode.cost()) {
+				if (successorOpen.compareTo(successorNode) <= 0) {
 					// Keep analyzing the other movements, discard this movement
 					continue;
 				}
@@ -186,10 +185,10 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 			// In other case (the neighbor node has not been considered yet
 			// or the movement does not improve the previous cost) then
 			// check if the neighbor is closed
-			HeuristicNode<S> successorClose = closed.get(successorState);
+			ComparableNode<S> successorClose = closed.get(successorState);
 			if (successorClose != null) {
 				// Check if this path improves the cost of a closed neighbor.
-				if (successorClose.cost() <= successorNode.cost()) {
+				if (successorClose.compareTo(successorNode) <= 0) {
 					// if not, keep searching
 					continue;
 				}
@@ -211,7 +210,7 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 			}
 
 			// Add the new successor to the open list to explore later
-			HeuristicNode<S> result = open.put(successorState, successorNode);
+			ComparableNode<S> result = open.put(successorState, successorNode);
 			// If this state is not duplicated, enqueue
 			if (result == null) {
 				queue.add(successorNode);
@@ -230,15 +229,15 @@ public class AstarIterator<S> implements Iterator<HeuristicNode<S>> {
 		return this.initialState;
 	}
 
-	public Map<S, HeuristicNode<S>> getOpen() {
+	public Map<S, ComparableNode<S>> getOpen() {
 		return open;
 	}
 
-	public Map<S, HeuristicNode<S>> getClosed() {
+	public Map<S, ComparableNode<S>> getClosed() {
 		return closed;
 	}
 
-	public Queue<HeuristicNode<S>> getQueue() {
+	public Queue<ComparableNode<S>> getQueue() {
 		return queue;
 	}
 

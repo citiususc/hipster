@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractSearchNode<S, N extends Node<S, N>>
-		implements Node<S, N> {
+public abstract class AbstractSearchNode<S> implements Node<S> {
 
-	protected Successor<S> state;
-	protected N previousNode = null;
+	protected Transition<S> state;
+	protected Node<S> previousNode = null;
 
-	public AbstractSearchNode(Successor<S> state, N previousNode) {
+	public AbstractSearchNode(Transition<S> state, Node<S> previousNode) {
 		this.previousNode = previousNode;
 		this.state = state;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<N> path() {
-		List<N> path = new ArrayList<N>();
-		N current = (N) this;
+	public List<Node<S>> path() {
+		List<Node<S>> path = new ArrayList<Node<S>>();
+		Node<S> current = (Node<S>) this;
 		while (current != null) {
 			path.add(current);
 			current = current.previousNode();
@@ -28,11 +27,11 @@ public abstract class AbstractSearchNode<S, N extends Node<S, N>>
 	}
 
 	
-	public N previousNode() {
+	public Node<S> previousNode() {
 		return this.previousNode;
 	}
 
-	public Successor<S> successor() {
+	public Transition<S> transition() {
 		return this.state;
 	}
 
