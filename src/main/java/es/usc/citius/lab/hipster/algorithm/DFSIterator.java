@@ -1,11 +1,11 @@
-package es.usc.citius.composit.search.algorithm;
+package es.usc.citius.lab.hipster.algorithm;
 
 import java.util.Iterator;
 import java.util.Stack;
 
-import es.usc.citius.composit.search.function.TransitionFunction;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.composit.search.node.SimpleNode;
-import es.usc.citius.composit.search.node.Transition;
+import es.usc.citius.lab.hipster.node.Transition;
 
 
 

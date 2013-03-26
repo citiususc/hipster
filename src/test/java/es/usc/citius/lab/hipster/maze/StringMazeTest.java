@@ -1,4 +1,4 @@
-package es.usc.citius.composit.search.maze;
+package es.usc.citius.lab.hipster.maze;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import es.usc.citius.composit.search.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.StringMaze;
 
 public class StringMazeTest {
 

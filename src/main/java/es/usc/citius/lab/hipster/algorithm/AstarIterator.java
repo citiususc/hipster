@@ -1,4 +1,4 @@
-package es.usc.citius.composit.search.algorithm;
+package es.usc.citius.lab.hipster.algorithm;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import es.usc.citius.composit.search.function.CostFunction;
-import es.usc.citius.composit.search.function.HeuristicFunction;
-import es.usc.citius.composit.search.function.TransitionFunction;
-import es.usc.citius.composit.search.node.ComparableNode;
-import es.usc.citius.composit.search.node.NodeBuilder;
-import es.usc.citius.composit.search.node.Transition;
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * 

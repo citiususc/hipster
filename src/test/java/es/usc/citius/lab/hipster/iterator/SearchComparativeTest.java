@@ -1,4 +1,4 @@
-package es.usc.citius.composit.search.iterator;
+package es.usc.citius.lab.hipster.iterator;
 
 
 import java.awt.Point;
@@ -16,12 +16,13 @@ import com.google.common.base.Stopwatch;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import es.usc.citius.composit.search.algorithm.AstarIterator;
-import es.usc.citius.composit.search.function.CostFunction;
-import es.usc.citius.composit.search.function.SuccessorFunction;
-import es.usc.citius.composit.search.node.HeuristicNode;
-import es.usc.citius.composit.search.node.Successor;
-import es.usc.citius.composit.search.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.algorithm.AstarIterator;
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.util.maze.StringMaze;
 
 public class SearchComparativeTest {
 	
@@ -223,19 +224,19 @@ public class SearchComparativeTest {
 		int step=0;
 		Stopwatch w = new Stopwatch().start();
 		while (it.hasNext()) {
-			HeuristicNode<Point> state = it.next();
+			                 ComparableNode<Point> state = it.next();
 			step++;
 
 			List<Point> points = new ArrayList<Point>();
-			for (HeuristicNode<Point> node : state.path()) {
-				points.add(node.successor().state());
+			for (Node<Point> node : state.path()) {
+				points.add(node.transition().state());
 			}
 
 			drawPath(maze, points);
 			
 			Thread.sleep(20);
 			
-			if (state.successor().state().equals(maze.getGoalLoc())) {
+			if (state.transition().state().equals(maze.getGoalLoc())) {
 				System.out.println("Path cost: " + state.score());
 				System.out.println("Total time: " + w.stop());
 				break;
@@ -275,16 +276,16 @@ public class SearchComparativeTest {
 	
 	public AstarIterator<Point> createDijkstraIterator(final StringMaze maze){
 		return new AstarIterator.Builder<Point>(maze.getInitialLoc(), 
-				new SuccessorFunction<Point>() {
-					public Iterable<Successor<Point>> from(Point fromState) {
-						Collection<Successor<Point>> successors = new LinkedList<Successor<Point>>();
+				new TransitionFunction<Point>() {
+					public Iterable<Transition<Point>> from(Point fromState) {
+						Collection<Transition<Point>> successors = new LinkedList<Transition<Point>>();
 						for(Point p : maze.validMovesFromCell(fromState)){
-							successors.add(new Successor<Point>(fromState,p));
+							successors.add(new Transition<Point>(fromState,p));
 						}
 						return successors;
 					}
-				}).cost(new CostFunction<Point>() {
-					public double evaluate(Successor<Point> successor) {
+				}).cost(new CostFunction<Point, Double>() {
+					public Double evaluate(Transition<Point> successor) {
 						Point from = successor.from();
 						Point to = successor.state();
 						if (from != null && to != null){
@@ -292,7 +293,7 @@ public class SearchComparativeTest {
 									* (from.x - to.x) + (from.y - to.y)
 									* (from.y - to.y));
 						}
-						return 0;
+						return 0.0;
 					}
 				}).build();
 	}
@@ -301,8 +302,8 @@ public class SearchComparativeTest {
 		Stopwatch w = new Stopwatch().start();
 		AstarIterator<Point> it = createDijkstraIterator(maze);
 		while (it.hasNext()) {
-			HeuristicNode<Point> state = it.next();
-			if (state.successor().state().equals(maze.getGoalLoc())) {
+			ComparableNode<Point> state = it.next();
+			if (state.transition().state().equals(maze.getGoalLoc())) {
 				//System.out.println("ComposIT: " + state.cost());
 				return w.stop().elapsedMillis();
 			}
