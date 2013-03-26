@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>es.usc.citius.lab</groupId>
-    <artifactId>search</artifactId>
-    <name>search</name>
+    <artifactId>hipster</artifactId>
+    <name>hipster</name>
     <version>0.0.1-SNAPSHOT</version>
     <dependencies>
         <dependency>
