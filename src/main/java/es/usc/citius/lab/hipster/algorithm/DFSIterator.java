@@ -4,15 +4,15 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.composit.search.node.SimpleNode;
+import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 
 
 
 
-public class DFSIterator<S> implements Iterator<SimpleNode<S>> {
+public class DFSIterator<S> implements Iterator<Node<S>> {
 
-	private Stack<SimpleNode<S>> stack = new Stack<SimpleNode<S>>();
+	private Stack<Node<S>> stack = new Stack<Node<S>>();
 	private TransitionFunction<S> successors;
 	
 	// required: Successors function
@@ -25,9 +25,9 @@ public class DFSIterator<S> implements Iterator<SimpleNode<S>> {
 		return !stack.isEmpty();
 	}
 
-	public SimpleNode<S> next() {
-		SimpleNode<S> current = stack.pop();
-		for(Transition<S> successor : this.successors.from(current.successor().state())){
+	public Node<S> next() {
+		Node<S> current = stack.pop();
+		for(Transition<S> successor : this.successors.from(current.transition().state())){
 			stack.add(new SimpleNode<S>(successor, current));
 		}
 		return current;

@@ -12,6 +12,7 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 
@@ -50,8 +51,7 @@ public class AstarIteratorTest {
             }
         };
         // Create the iterator
-        AstarIterator<Point> iterator = new AstarIterator.Builder<Point>(
-                maze.getInitialLoc(), successor).cost(g).heuristic(h).build();
+        AstarIterator<Point> iterator = new AstarIterator<Point>(maze.getInitialLoc(), successor, new NumericNodeBuilder<Point>(g, h));
 
         int step = 0;
         Stopwatch timer = new Stopwatch().start();

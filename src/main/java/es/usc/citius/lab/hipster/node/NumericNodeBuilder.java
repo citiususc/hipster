@@ -13,13 +13,13 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
  * @since 26/03/2013
  * @version 1.0
  */
-public class NumericNodeBuilder<S> implements NodeBuilder<S, NumericNode<S>> {
+public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> {
 
     private CostFunction<S, Double> cost;
     private HeuristicFunction<S, Double> heuristic;
 
     /**
-     * Default constructor: requieres the {@link CostFunction} and the
+     * Complete constructor: requires the {@link CostFunction} and the
      * {@link HeuristicFunction} returning Double values to guide the heuristic
      * search.
      *
@@ -31,20 +31,74 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, NumericNode<S>> {
         this.cost = costFunction;
         this.heuristic = heuristicFunction;
     }
+    
+    /**
+     * Partial constructor: requires the {@link CostFunction} returning
+     * Double values, heuristic will be assigned by default (always 0).
+     * @param costFunction cost function implementation
+     */
+    public NumericNodeBuilder(CostFunction<S, Double> costFunction){
+        this.cost = costFunction;
+        this.heuristic = defaultHeuristicFunction();
+    }
+    
+    /**
+     * Partial constructor: requires the {@link HeuristicFunction} returning
+     * Double values, cost will be assigned by default (always 1).
+     * @param heuristicFunction 
+     */
+    public NumericNodeBuilder(HeuristicFunction<S, Double> heuristicFunction){
+        this.cost = defaultCostFunction();
+        this.heuristic = defaultHeuristicFunction();
+    }
+    
+    /**
+     * Default constructor, assigns a default cost function (always 1) 
+     * and a default heuristic function (always 0).
+     */
+    public NumericNodeBuilder(){
+        this.cost = defaultCostFunction();
+        this.heuristic = defaultHeuristicFunction();
+    }
 
     /**
-     * Build method for {@link NumericNode} instances: Internally evaluates the 
+     * Build method for {@link NumericNode} instances: Internally evaluates the
      * cost and heuristic function to instantiate the Node.
      *
      * @param from incoming node
      * @param transition incoming transition
      * @return new instance of NumericNode
      */
-    public NumericNode<S> node(NumericNode<S> from, Transition<S> transition) {
-        double previousCost = (from != null) ? from.cost() : 0d;
+    public ComparableNode<S> node(ComparableNode<S> from, Transition<S> transition) {
+        NumericNode<S> fromCast = (NumericNode<S>) from;
+        double previousCost = (fromCast != null) ? fromCast.cost() : 0d;
         double g = previousCost + cost.evaluate(transition);
         double h = heuristic.estimate(transition.state());
         double f = g + h;
-        return new NumericNode<S>(transition, from, g, f);
+        return new NumericNode<S>(transition, fromCast, g, f);
+    }
+
+    /**
+     * Builds a default heuristic function
+     * @return heuristic function returning always 0
+     */
+    private HeuristicFunction<S, Double> defaultHeuristicFunction() {
+        return new HeuristicFunction<S, Double>() {
+            public Double estimate(S state) {
+                return 0d;
+            }
+        };
+    }
+
+    /**
+     * Builds a default cost function.
+     * @return cost function returning always 1
+     */
+    private CostFunction<S, Double> defaultCostFunction() {
+        return new CostFunction<S, Double>() {
+            public Double evaluate(Transition<S> transition) {
+                return 1d;
+            }
+        };
     }
 }

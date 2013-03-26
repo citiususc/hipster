@@ -21,6 +21,7 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 
@@ -275,8 +276,7 @@ public class SearchComparativeTest {
 	
 	
 	public AstarIterator<Point> createDijkstraIterator(final StringMaze maze){
-		return new AstarIterator.Builder<Point>(maze.getInitialLoc(), 
-				new TransitionFunction<Point>() {
+            TransitionFunction<Point> transitionFunction = new TransitionFunction<Point>() {
 					public Iterable<Transition<Point>> from(Point fromState) {
 						Collection<Transition<Point>> successors = new LinkedList<Transition<Point>>();
 						for(Point p : maze.validMovesFromCell(fromState)){
@@ -284,7 +284,8 @@ public class SearchComparativeTest {
 						}
 						return successors;
 					}
-				}).cost(new CostFunction<Point, Double>() {
+				};
+            CostFunction<Point, Double> costFunction = new CostFunction<Point, Double>() {
 					public Double evaluate(Transition<Point> successor) {
 						Point from = successor.from();
 						Point to = successor.state();
@@ -295,7 +296,8 @@ public class SearchComparativeTest {
 						}
 						return 0.0;
 					}
-				}).build();
+				};
+		return new AstarIterator<Point>(maze.getInitialLoc(), transitionFunction, new NumericNodeBuilder<Point>(costFunction));
 	}
 	
 	public long benchmarkCompositAstar(final StringMaze maze){
