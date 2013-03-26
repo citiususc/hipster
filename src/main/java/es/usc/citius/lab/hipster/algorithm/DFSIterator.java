@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.SimpleNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
 
