@@ -11,6 +11,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
@@ -68,7 +69,7 @@ public class AstarIterator<S> implements Iterator<S> {
 			};
 			// Create a new node builder using the cost function and the
 			// heuristic function
-			this.nodeBuilder = new ComparableNodeBuilder<S>(cost, heuristic);
+			this.nodeBuilder = new NumericNodeBuilder<S>(cost, heuristic);
 			// By default, A* uses a Priority Queue. This queue relies
 			// on a binary heap, which has O(log n) for insertions.
 			// However, the delete has a complexity of O(n).
