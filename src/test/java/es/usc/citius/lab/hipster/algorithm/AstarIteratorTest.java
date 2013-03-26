@@ -12,9 +12,12 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.util.NumericCostEvaluator;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import java.util.List;
 
 public class AstarIteratorTest {
 
@@ -59,9 +62,11 @@ public class AstarIteratorTest {
             ComparableNode<Point> location = iterator.next();
             if (location.transition().state().equals(maze.getGoalLoc())) {
                 long msec = timer.stop().elapsedMillis();
+                List<Node<Point>> path = location.path();
+                Double cost = new NumericCostEvaluator<Point>().evaluate(path, g);
                 assertEquals(step, 128);
-                assertEquals(location.cost(), 27.07, 0.01);
-                System.out.println("[AstarIteratorTest]: A* algorithm test executed. Goal reached in " + step + " steps with a cost of " + location.cost() + " in " + msec + " ms");
+                assertEquals(cost, 27.07, 0.01);
+                System.out.println("[AstarIteratorTest]: A* algorithm test executed. Goal reached in " + step + " steps with a cost of " + path + " in " + msec + " ms");
                 return;
             }
             step++;
