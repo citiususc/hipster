@@ -56,6 +56,11 @@ public class NumericNode<S> extends AbstractNode<S> implements ComparableNode<S>
      */
     public int compareTo(ComparableNode<S> o) {
         NumericNode<S> node = (NumericNode<S>) o;
-        return Double.compare(this.score, node.cost);
+        return Double.compare(this.score, node.score);
+    }
+
+    @Override
+    public String toString() {
+        return this.state.to().toString().concat(" (").concat(new Double(this.cost).toString()).concat(", ").concat(new Double(this.score).toString()).concat(")"); //To change body of generated methods, choose Tools | Templates.
     }
 }

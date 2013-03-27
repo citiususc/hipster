@@ -61,7 +61,7 @@ public class Transition<S> {
      *
      * @return instance of state
      */
-    public S state() {
+    public S to() {
         return to;
     }
 
