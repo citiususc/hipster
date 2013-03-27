@@ -169,7 +169,7 @@ public class AStarMazeTest {
     }
 
     @Test
-    public void Dijkstra_Maz51() throws InterruptedException {
+    public void Dijkstra_Maze5() throws InterruptedException {
         StringMaze maze = new StringMaze(testMaze5);
         execute(maze, false);
     }
@@ -177,9 +177,9 @@ public class AStarMazeTest {
     private void execute(StringMaze maze, boolean heuristic) throws InterruptedException {
         AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
-        List<Point> solutionIterator = MazeSearch.executePrintIteratorSearch(it, maze);
-        List<Point> solutionJung = MazeSearch.executeJungSearch(graph, maze);
-        assertEquals(solutionJung, solutionIterator);
+        MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
+        MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
+        assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
     }
     
     

@@ -28,7 +28,7 @@ public class DFSIterator<S> implements Iterator<Node<S>> {
 
 	public Node<S> next() {
 		Node<S> current = stack.pop();
-		for(Transition<S> successor : this.successors.from(current.transition().state())){
+		for(Transition<S> successor : this.successors.from(current.transition().to())){
 			stack.add(new SimpleNode<S>(successor, current));
 		}
 		return current;

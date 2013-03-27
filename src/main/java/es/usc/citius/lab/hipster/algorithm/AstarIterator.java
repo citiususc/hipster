@@ -47,7 +47,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
     private ComparableNode<S> takePromising() {
         // Poll until a valid state is found
         ComparableNode<S> node = queue.poll();
-        while (!open.containsKey(node.transition().state())) {
+        while (!open.containsKey(node.transition().to())) {
             node = queue.poll();
         }
         return node;
@@ -61,7 +61,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 
         // Take the current node to analyze
         ComparableNode<S> current = takePromising();
-        S currentState = current.transition().state();
+        S currentState = current.transition().to();
         // Remove it from open
         open.remove(currentState);
 
@@ -74,7 +74,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
                     successor);
 
             // Take the associated state
-            S successorState = successor.state();
+            S successorState = successor.to();
 
             // Check if this successor is in the open set (which means that
             // we have analyzed this node from other movement)
@@ -145,5 +145,13 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 
     public Queue<ComparableNode<S>> getQueue() {
         return queue;
+    }
+
+    public NodeBuilder<S, ComparableNode<S>> getNodeBuilder() {
+        return nodeBuilder;
+    }
+
+    public TransitionFunction<S> getTransitionFunction() {
+        return successors;
     }
 }

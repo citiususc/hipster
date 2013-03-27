@@ -73,7 +73,7 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> 
         NumericNode<S> fromCast = (NumericNode<S>) from;
         double previousCost = (fromCast != null) ? fromCast.cost() : 0d;
         double g = previousCost + cost.evaluate(transition);
-        double h = heuristic.estimate(transition.state());
+        double h = heuristic.estimate(transition.to());
         double f = g + h;
         return new NumericNode<S>(transition, fromCast, g, f);
     }

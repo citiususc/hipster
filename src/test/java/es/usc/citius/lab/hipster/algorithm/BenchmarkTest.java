@@ -7,6 +7,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.testutils.AStarIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
@@ -28,38 +29,12 @@ import static org.junit.Assert.*;
  */
 public class BenchmarkTest {
 
-    private static HeuristicFunction<Point, Double> heuristic;
-    private static CostFunction<Point, Double> cost;
-    private static TransitionFunction<Point> transition;
-
     public BenchmarkTest() {
-    }
-
-    @BeforeClass
-    public static void tearUp() {
-
-        heuristic = new HeuristicFunction<Point, Double>() {
-            public Double estimate(Point state) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
-
-        cost = new CostFunction<Point, Double>() {
-            public Double evaluate(Transition<Point> transition) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
-
-        transition = new TransitionFunction<Point>() {
-            public Iterable<Transition<Point>> from(Point current) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
     }
 
     @Test
     public void benchmark() throws InterruptedException {
-        System.out.println("Maze | JUNG (ms) | Composit (ms)");
+        System.out.println("Maze | Composit (ms) | JUNG (ms)");
         System.out.println("-------------------------------------");
         final int times = 5;
         for (int i = 10; i < 500; i += 10) {
@@ -69,20 +44,20 @@ public class BenchmarkTest {
             double min1 = Double.MAX_VALUE, min2 = Double.MAX_VALUE;
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
-                AstarIterator<Point> it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost, heuristic));
+                AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
                 Stopwatch w = new Stopwatch().start();
-                List<Point> resultIterator = MazeSearch.executeIteratorSearch(it, maze);
+                MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
                 long result1 = w.stop().elapsed(TimeUnit.MILLISECONDS);
                 if (result1 < min1) {
                     min1 = result1;
                 }
                 Stopwatch w2 = new Stopwatch().start();
-                List<Point> resultJung = MazeSearch.executeJungSearch(graph, maze);
+                MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
                 long result2 = w2.stop().elapsed(TimeUnit.MILLISECONDS);
                 if (result2 < min2) {
                     min2 = result2;
                 }
-                assertEquals(resultIterator, resultJung);
+                assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
             }
             System.out.println(String.format("%d \t %.5g \t %.5g", i, min1, min2));
         }

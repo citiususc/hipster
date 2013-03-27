@@ -23,7 +23,7 @@ public class NodeToStateListConverter<S> {
         List<S> stateList = new ArrayList<S>(nodeList.size());
         for (Iterator<Node<S>> it = nodeList.iterator(); it.hasNext();) {
             Node<S> current = it.next();
-            stateList.add(current.transition().state());
+            stateList.add(current.transition().to());
         }
         return stateList;
     }
