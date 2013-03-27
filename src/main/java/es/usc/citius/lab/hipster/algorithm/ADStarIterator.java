@@ -1,15 +1,14 @@
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.ADStarNode;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
-import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -20,58 +19,73 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStarIterator<S> implements Iterator<S> {
+public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
 
-    private final S beginState;
-    private Map<S, ComparableNode<S>> open;
-    private Map<S, ComparableNode<S>> closed;
-    private Map<S, ComparableNode<S>> incons;
-    private Queue<S> openQueue;
-    private TransitionFunction<S> predecessorFunction;
-    private TransitionFunction<S> successorFunction;
-    private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
+    private final ADStarNode<S> beginNode;
+    private final Iterable<S> goalStates;
+    private final TransitionFunction<S> predecessorFunction;
+    private final TransitionFunction<S> successorFunction;
+    private Map<S, ADStarNode<S>> open;
+    private Map<S, ADStarNode<S>> closed;
+    private Map<S, ADStarNode<S>> incons;
+    private Queue<ADStarNode<S>> queue;
+    private NodeBuilder<S, ADStarNode<S>> nodeBuilder;
+
+    public ADStarIterator(S begin, Iterable<S> goals, TransitionFunction<S> predecessors, TransitionFunction<S> successors) {
+        this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
+        this.goalStates = goals;
+        this.predecessorFunction = predecessors;
+        this.successorFunction = successors;
+
+        /*Initialization step*/
+        Collection<ComparableNode<S>> goalNodes = new ArrayList<ComparableNode<S>>();
+        for (Iterator<S> it = goals.iterator(); it.hasNext();) {
+            S currentGoal = it.next();
+            ADStarNode<S> currentGoalNode = this.nodeBuilder.node(null, new Transition<S>(null, currentGoal));
+            goalNodes.add(currentGoalNode);
+        }
+    }
 
     /**
-     * Internal public static class to define a builder to create this iterator
-     * with the parameters specified in a transparent way.
+     * Retrieves the most promising node from the open collection, or null if it
+     * is empty.
      *
-     * @param <S>
+     * @return most promising node
      */
-    public static class Builder<S> {
-
-        private S begin;
-        private Iterable<S> goals;
-        private Queue<ComparableNode<S>> queue;
-        private CostFunction<S, Double> costFunction;
-        private HeuristicFunction<S, Double> heuristicFunction;
-        private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
-        private TransitionFunction<S> predecessorFunction;
-        private TransitionFunction<S> successorFunction;
-
-        public Builder(S beginState, TransitionFunction<S> succesorFunction, TransitionFunction<S> predecesorFunction) {
-            /*Mandatory elements assigned to the Builder instance.*/
-            this.begin = beginState;
-            this.predecessorFunction = predecesorFunction;
-            this.successorFunction = succesorFunction;
-
-            /*Default open queue used: PriorityQueue*/
-            this.queue = new PriorityQueue<ComparableNode<S>>();
-
-            /*Default cost function used: Assigns cost 1 to all transitions*/
-            this.costFunction = new CostFunction<S, Double>() {
-                public Double evaluate(Transition<S> transition) {
-                    return 1.0;
-                }
-            };
-
-            /*Default heuristic function used: always returns 0*/
-            this.heuristicFunction = new HeuristicFunction<S, Double>() {
-                public Double estimate(S state) {
-                    return 0.0;
-                }
-            };
-            
-            this.nodeBuilder = new NumericNodeBuilder<S>(this.costFunction, this.heuristicFunction);
+    private ADStarNode<S> takePromising() {
+        while (!this.queue.isEmpty()) {
+            ADStarNode<S> head = this.queue.peek();
+            if (!this.open.containsKey(head.transition().to())) {
+                this.queue.poll();
+            } else {
+                return head;
+            }
         }
+        return null;
+    }
+
+    /**
+     * As the algorithm is executed iteratively refreshing the changed relations
+     * between nodes, this method will return always true.
+     *
+     * @return always true
+     */
+    public boolean hasNext() {
+        return takePromising() != null;
+    }
+
+    public ADStarNode<S> next() {
+        ADStarNode<S> mostPromising = takePromising();
+        /*Loop of ComputeOrImprovePath is true: Actions taken.*/
+        if (mostPromising.compareTo(this.beginNode) < 0 || Double.compare(this.beginNode.getRhs(), this.beginNode.getG()) != 0) {
+        } /*Executes the changed relations processing and Epsilon updating.*/ else {
+        }
+    }
+
+    /**
+     * Method not supported.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException();
     }
 }
