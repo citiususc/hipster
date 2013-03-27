@@ -46,9 +46,9 @@ public class StringMazeTest {
 		assertEquals(maze.getInitialLoc(), new Point(2,0));
 		assertEquals(maze.getGoalLoc(), new Point(9,15));
 		// Print valid moves from initial and goal
-		System.out.println(maze.validMovesFromCell(maze.getInitialLoc()));
-		System.out.println(maze.validMovesFromCell(maze.getGoalLoc()));
-		System.out.println(maze.validMovesFromCell(new Point(3,14)));
+		System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
+		System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
+		System.out.println(maze.validLocationsFrom(new Point(3,14)));
 	}
 
 }
