@@ -127,6 +127,9 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
         return current;
     }
 
+    /**
+     * Unsupported operation.
+     */
     public void remove() {
         throw new UnsupportedOperationException();
     }
