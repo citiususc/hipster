@@ -29,37 +29,6 @@ public class StringMaze {
     private String strMaze[];
     private Point initialLoc;
     private Point goalLoc;
-    // A default mazes
-    public static final String[] defaultMaze1 = {
-        "                  X   O          ",
-        "                  X              ",
-        "                  XXXXXXXX       ",
-        "       XXXXXXXXXX  XXXXX         ",
-        "                X    XXXXXXXXXX  ",
-        "     XXXXXX  XXXXXXX  XXXX       ",
-        "     XXXXXX XXXXXXX  XXXXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "           @                     ",
-        "                                 "
-    };
-    public static final String[] defaultMaze2 = {
-        "                      O          ",
-        "                                 ",
-        "                                 ",
-        "                                 ",
-        "                                 ",
-        "     XXXXXXXXXXXXXXXXXXXXX       ",
-        "     XXXXXXXXXXXXXXXXXXXXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "                       XXX       ",
-        "           @                     ",
-        "                                 "
-    };
 
     public StringMaze(String[] maze2D) {
         this.strMaze = maze2D;
@@ -120,7 +89,7 @@ public class StringMaze {
     public String[] getMazePath(List<Point> path) {
         String[] copyMaze = strMaze.clone();
         for (Point p : path) {
-            if (validCell(p)) {
+            if (validLocation(p)) {
                 //StringBuilder line = new StringBuilder(copyMaze[p.y]);
                 //line.setCharAt(p.x, '.');
                 //copyMaze[p.y] = line.toString();
@@ -137,7 +106,7 @@ public class StringMaze {
         return l.toString();
     }
 
-    public boolean validCell(Point loc) {
+    public boolean validLocation(Point loc) {
         try {
             return maze[loc.x][loc.y];
         } catch (ArrayIndexOutOfBoundsException ex) {
@@ -145,7 +114,7 @@ public class StringMaze {
         }
     }
 
-    public Collection<Point> validMovesFromCell(Point loc) {
+    public Collection<Point> validLocationsFrom(Point loc) {
         Collection<Point> validMoves = new HashSet<Point>();
         // Check for all valid movements
         for (int i = -1; i <= 1; i++) {
@@ -184,12 +153,12 @@ public class StringMaze {
         }
         return output;
     }
-
-    public static StringMaze getDefaultMaze1() {
-        return new StringMaze(defaultMaze1);
-    }
-
-    public static StringMaze getDefaultMaze2() {
-        return new StringMaze(defaultMaze2);
+    
+    public String getMazeForPath(List<Point> points) {
+        String s = "";
+        for (String line : this.getMazePath(points)) {
+            s = s.concat(line).concat("\n");
+        }
+        return s;
     }
 }
