@@ -11,7 +11,7 @@ package es.usc.citius.lab.hipster.node;
 public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> {
 
     private double g;
-    private double rhs;
+    private double v;
     private Key key;
 
     /**
@@ -38,17 +38,17 @@ public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> 
          * queue.
          *
          * @param g g value of the node
-         * @param rhs rhs value of the node
+         * @param v v value of the node
          * @param h
          * @param e
          */
-        public Key(double g, double rhs, double h, double e) {
-            if (g > rhs) {
-                this.first = rhs + e * h;
-                this.second = rhs;
-            } else {
-                this.first = g + h;
+        public Key(double g, double v, double h, double e) {
+            if (v >= g) {
+                this.first = g + e * h;
                 this.second = g;
+            } else {
+                this.first = v + h;
+                this.second = v;
             }
         }
 
@@ -72,16 +72,25 @@ public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> 
         return g;
     }
 
-    public double getRhs() {
-        return rhs;
+    public double getV() {
+        return v;
     }
 
     public void setG(double g) {
         this.g = g;
     }
 
-    public void setRhs(double rhs) {
-        this.rhs = rhs;
+    public void setV(double v) {
+        this.v = v;
+    }
+
+    public void setPreviousNode(ADStarNode<S> previousNode) {
+        this.previousNode = previousNode;
+    }
+
+    @Override
+    public ADStarNode<S> previousNode() {
+        return (ADStarNode<S>) previousNode;
     }
 
     /**
