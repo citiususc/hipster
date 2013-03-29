@@ -2,25 +2,19 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import com.google.common.base.Stopwatch;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
-import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.testutils.AStarIteratorFromMazeCreator;
+import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * This class executes a benchmark to compare {@link AstarIterator} performance
+ * with other implementations of A*.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
@@ -44,7 +38,7 @@ public class BenchmarkTest {
             double min1 = Double.MAX_VALUE, min2 = Double.MAX_VALUE;
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
-                AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
+                AstarIterator<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, false);
                 Stopwatch w = new Stopwatch().start();
                 MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
                 long result1 = w.stop().elapsed(TimeUnit.MILLISECONDS);
