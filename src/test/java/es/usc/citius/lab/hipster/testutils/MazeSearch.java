@@ -16,18 +16,90 @@ import org.apache.commons.collections15.Transformer;
 import static org.junit.Assert.fail;
 
 /**
+ * Class to generate sample maps to test different search algorithms.
  *
  * @author Adrián González Sieira
  * @since 26-03-2013
  * @version 1.0
  */
 public final class MazeSearch {
-    
-    private MazeSearch(){
-    
+
+    private static String[] testMaze1 = new String[]{
+        "        ",
+        "    X   ",
+        "  @ X O ",
+        "    X   ",
+        "        ",
+        "        "};
+    private static String[] testMaze2 = new String[]{
+        "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
+        "XX    XXXXXXXXXX XXX XX     XXXX",
+        "XXXXX  XXXXXX    XXX XX XXX XXXX",
+        "XXX XX XXXXXX XX XXX XX  XX XXXX",
+        "XXX     XXXXX XXXXXX XXXXXX XXXX",
+        "XXXXXXX       XXXXXX        XXXX",
+        "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
+        "XXXXXXXXXX XX    XXXXX      XXXX",
+        "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
+        "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
+        "XXXXXXXXXXX            XXXX XXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
+        "XXXXXX              XXXX XX XXXX",
+        "XXXXXX XXXXXXXXXXXX XX      XXXX",
+        "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+        "XXXXXX XXXXX   XXX            XX",
+        "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
+        "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
+        "XXXXXX            XXXXXXXXXXXXXX"};
+    private static String[] testMaze3 = new String[]{
+        "                      O          ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "           @                     ",
+        "                                 "};
+    private static String[] testMaze4 = new String[]{
+        "                      O          ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "     XXXXXXXXXXXXXXXXXXXXX       ",
+        "     XXXXXXXXXXXXXXXXXXXXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "           @                     ",
+        "                                 "};
+    private static String[] testMaze5 = new String[]{
+        "                  X   O          ",
+        "                  X              ",
+        "                  XXXXXXXX       ",
+        "       XXXXXXXXXX  XXXXX         ",
+        "                X    XXXXXXXXXX  ",
+        "     XXXXXX  XXXXXXX  XXXX       ",
+        "     XXXXXX XXXXXXX  XXXXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "           @                     ",
+        "                                 "};
+
+    private MazeSearch() {
     }
 
-    public static final class Result{
+    public static final class Result {
+
         private List<Point> path;
         private Double cost;
 
@@ -35,7 +107,7 @@ public final class MazeSearch {
             this.path = path;
             this.cost = cost;
         }
-        
+
         public Double getCost() {
             return cost;
         }
@@ -44,7 +116,7 @@ public final class MazeSearch {
             return path;
         }
     }
-    
+
     public static Result executePrintIteratorSearch(AstarIterator<Point> it, StringMaze maze) throws InterruptedException {
         int steps = 0;
         while (it.hasNext()) {
@@ -62,7 +134,7 @@ public final class MazeSearch {
         fail("Solution not found after " + steps + " steps.");
         return null;
     }
-    
+
     public static Result executeIteratorSearch(AstarIterator<Point> it, StringMaze maze) {
         int steps = 0;
         while (it.hasNext()) {
@@ -97,5 +169,25 @@ public final class MazeSearch {
         }
         statePath.add(maze.getGoalLoc());
         return new Result(statePath, cost);
+    }
+
+    public static String[] getTestMaze1() {
+        return testMaze1;
+    }
+
+    public static String[] getTestMaze2() {
+        return testMaze2;
+    }
+
+    public static String[] getTestMaze3() {
+        return testMaze3;
+    }
+
+    public static String[] getTestMaze4() {
+        return testMaze4;
+    }
+
+    public static String[] getTestMaze5() {
+        return testMaze5;
     }
 }
