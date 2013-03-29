@@ -127,7 +127,7 @@ public final class MazeSearch {
             Thread.sleep(20);
             System.out.println(maze.getMazeForPath(statePath));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AStarIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 return new Result(statePath, cost);
             }
         }
@@ -142,7 +142,7 @@ public final class MazeSearch {
             steps++;
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 List<Node<Point>> nodePath = currentNode.path();
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AStarIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
                 return new Result(statePath, cost);
             }

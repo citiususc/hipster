@@ -10,14 +10,16 @@ import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
 
 /**
+ * This class creates the iterators for different algorithms using
+ * {@link StringMaze} as base.
  *
  * @author Adrián González Sieira
  * @since 26-03-2013
  * @version 1.0
  */
-public class AStarIteratorFromMazeCreator {
+public class AlgorithmIteratorFromMazeCreator {
 
-    public static AstarIterator<Point> create(final StringMaze maze, boolean useHeuristic) {
+    public static AstarIterator<Point> astar(final StringMaze maze, boolean useHeuristic) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
@@ -32,8 +34,8 @@ public class AStarIteratorFromMazeCreator {
         }
         return it;
     }
-    
-    public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze){
+
+    public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {
         return new HeuristicFunction<Point, Double>() {
             public Double estimate(Point from) {
                 Point goal = maze.getGoalLoc();
@@ -42,8 +44,8 @@ public class AStarIteratorFromMazeCreator {
             }
         };
     }
-    
-    public static TransitionFunction<Point> defaultTransitionFunction(final StringMaze maze){
+
+    public static TransitionFunction<Point> defaultTransitionFunction(final StringMaze maze) {
         return new TransitionFunction<Point>() {
             public Iterable<Transition<Point>> from(Point fromState) {
                 return Transition.map(fromState,
@@ -51,8 +53,8 @@ public class AStarIteratorFromMazeCreator {
             }
         };
     }
-    
-    public static CostFunction<Point, Double> defaultCostFunction(){
+
+    public static CostFunction<Point, Double> defaultCostFunction() {
         return new CostFunction<Point, Double>() {
             public Double evaluate(Transition<Point> successor) {
                 Point from = successor.from();
