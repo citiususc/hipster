@@ -44,7 +44,7 @@ public class BenchmarkTest {
             double min1 = Double.MAX_VALUE, min2 = Double.MAX_VALUE;
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
-                AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
+                AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
                 Stopwatch w = new Stopwatch().start();
                 MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
                 long result1 = w.stop().elapsed(TimeUnit.MILLISECONDS);

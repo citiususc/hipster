@@ -11,13 +11,13 @@ import es.usc.citius.lab.hipster.node.Transition;
 
 
 
-public class DFSIterator<S> implements Iterator<Node<S>> {
+public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
 	private Stack<Node<S>> stack = new Stack<Node<S>>();
 	private TransitionFunction<S> successors;
 	
 	// required: Successors function
-	public DFSIterator(final S initialState, TransitionFunction<S> successors) {
+	public DepthFirstSearch(final S initialState, TransitionFunction<S> successors) {
 		stack.add(new SimpleNode<S>(new Transition<S>(null, initialState), null));
 		this.successors = successors;
 	}

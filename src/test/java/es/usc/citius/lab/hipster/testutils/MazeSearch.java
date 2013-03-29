@@ -2,7 +2,7 @@ package es.usc.citius.lab.hipster.testutils;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.algorithm.AstarIterator;
+import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
@@ -45,7 +45,7 @@ public final class MazeSearch {
         }
     }
     
-    public static Result executePrintIteratorSearch(AstarIterator<Point> it, StringMaze maze) throws InterruptedException {
+    public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
         int steps = 0;
         while (it.hasNext()) {
             ComparableNode<Point> currentNode = it.next();
@@ -63,7 +63,7 @@ public final class MazeSearch {
         return null;
     }
     
-    public static Result executeIteratorSearch(AstarIterator<Point> it, StringMaze maze) {
+    public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
         int steps = 0;
         while (it.hasNext()) {
             ComparableNode<Point> currentNode = it.next();

@@ -20,7 +20,7 @@ import es.usc.citius.lab.hipster.node.Transition;
  *
  * @param <S>
  */
-public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
+public class AStar<S> implements Iterator<ComparableNode<S>> {
 
     private final S initialState;
     private Map<S, ComparableNode<S>> open;
@@ -29,7 +29,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
     private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
     private TransitionFunction<S> successors;
 
-    public AstarIterator(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, ComparableNode<S>> nodeBuilder) {
+    public AStar(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, ComparableNode<S>> nodeBuilder) {
         this.initialState = initialState;
         this.open = new HashMap<S, ComparableNode<S>>();
         this.closed = new HashMap<S, ComparableNode<S>>();
@@ -161,9 +161,9 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 			return this;
 		}
 		
-		public AstarIterator<S> build(){
+		public AStar<S> build(){
 			NodeBuilder<S, ComparableNode<S>> nodeBuilder = new NumericNodeBuilder<S>(this.cost, this.heuristic);
-			return new AstarIterator<S>(this.initialState, this.transition, nodeBuilder);
+			return new AStar<S>(this.initialState, this.transition, nodeBuilder);
 		}
     }
     

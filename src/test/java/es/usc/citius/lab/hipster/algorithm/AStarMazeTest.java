@@ -175,7 +175,7 @@ public class AStarMazeTest {
     }
 
     private void execute(StringMaze maze, boolean heuristic) throws InterruptedException {
-        AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
+        AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
