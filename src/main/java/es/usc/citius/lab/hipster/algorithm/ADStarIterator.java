@@ -65,13 +65,26 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
         }
         return null;
     }
-    
+
     /**
      * Updates the membership of the node to the algorithm queues.
+     *
      * @param node instance of {@link ADStarNode}
      */
-    private void update(ADStarNode<S> node){
-        //TODO fill method
+    private void update(ADStarNode<S> node) {
+        S state = node.transition().to();
+        if (Double.compare(node.getV(), node.getG()) != 0) {
+            if (!this.closed.containsKey(state)) {
+                this.open.put(state, node);
+                this.queue.offer(node);
+            } else {
+                this.incons.put(state, node);
+            }
+        }
+        else{
+            this.open.remove(state);
+            this.incons.remove(state);
+        }
     }
 
     /**
@@ -91,32 +104,31 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
             /*Loop of ComputeOrImprovePath is true: Actions taken.*/
             /*Removes from Open the most promising node.*/
             this.open.remove(s.transition().to());
-            if(s.getV() > s.getG()){
+            if (s.getV() > s.getG()) {
                 s.setV(s.getG());
                 this.closed.put(s.transition().to(), s);
-                for(Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();){
+                for (Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();) {
                     Transition<S> succesor = it.next();
                     ADStarNode<S> current = this.nodeBuilder.node(s, succesor);
-                    if(current.getG() > s.getG() + this.costFunction.evaluate(current.transition())){
+                    if (current.getG() > s.getG() + this.costFunction.evaluate(current.transition())) {
                         current.setG(current.previousNode().getG() + this.costFunction.evaluate(succesor));
                         update(current);
                     }
                 }
-            }
-            else{
+            } else {
                 s.setV(Double.POSITIVE_INFINITY);
                 update(s);
-                for(Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();){
+                for (Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();) {
                     Transition<S> succesor = it.next();
                     ADStarNode<S> current = this.nodeBuilder.node(s, succesor);
-                    if(current.previousNode().equals(s)){
+                    if (current.previousNode().equals(s)) {
                         Double minValue = Double.POSITIVE_INFINITY;
                         ADStarNode<S> minPredecessorNode = null;
-                        for(Iterator<Transition<S>> it2 = this.predecessorFunction.from(succesor.to()).iterator(); it2.hasNext();){
+                        for (Iterator<Transition<S>> it2 = this.predecessorFunction.from(succesor.to()).iterator(); it2.hasNext();) {
                             Transition<S> predecessor = it2.next();
                             ADStarNode<S> predecessorNode = this.nodeBuilder.node(current, predecessor);
                             Double currentValue = predecessorNode.getV() + this.costFunction.evaluate(predecessor);
-                            if(currentValue < minValue){
+                            if (currentValue < minValue) {
                                 minValue = currentValue;
                                 minPredecessorNode = predecessorNode;
                             }
@@ -126,7 +138,7 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
                     }
                 }
             }
-            
+
         } else {
             /*Executes the changed relations processing and Epsilon updating.*/
         }
