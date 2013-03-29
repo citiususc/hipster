@@ -3,11 +3,8 @@ package es.usc.citius.lab.hipster.algorithm;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
-import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
@@ -23,7 +20,7 @@ import java.util.Queue;
 public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
 
     private final ADStarNode<S> beginNode;
-    private final Iterable<S> goalStates;
+    private final ADStarNode<S> goalNode;
     private final TransitionFunction<S> predecessorFunction;
     private final TransitionFunction<S> successorFunction;
     private final CostFunction<S, Double> costFunction;
@@ -33,19 +30,17 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
     private Queue<ADStarNode<S>> queue;
     private NodeBuilder<S, ADStarNode<S>> nodeBuilder;
 
-    public ADStarIterator(S begin, Iterable<S> goals, TransitionFunction<S> predecessors, TransitionFunction<S> successors) {
+    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction) {
         this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
-        this.goalStates = goals;
+        this.goalNode = this.nodeBuilder.node(null, new Transition<S>(null, goal));
         this.predecessorFunction = predecessors;
         this.successorFunction = successors;
+        this.costFunction = costFunction;
 
         /*Initialization step*/
-        Collection<ComparableNode<S>> goalNodes = new ArrayList<ComparableNode<S>>();
-        for (Iterator<S> it = goals.iterator(); it.hasNext();) {
-            S currentGoal = it.next();
-            ADStarNode<S> currentGoalNode = this.nodeBuilder.node(null, new Transition<S>(null, currentGoal));
-            goalNodes.add(currentGoalNode);
-        }
+        this.beginNode.setG(0);
+        this.open.put(begin, this.beginNode);
+        this.queue.offer(beginNode);
     }
 
     /**
@@ -100,7 +95,7 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
     public ADStarNode<S> next() {
         /*First node in queue is retrieved.*/
         ADStarNode<S> s = takePromising();
-        if (s.compareTo(this.beginNode) < 0 || Double.compare(this.beginNode.getRhs(), this.beginNode.getG()) != 0) {
+        if (this.goalNode.compareTo(s) > 0 || this.goalNode.getV() < this.goalNode.getG()) {
             /*Loop of ComputeOrImprovePath is true: Actions taken.*/
             /*Removes from Open the most promising node.*/
             this.open.remove(s.transition().to());
@@ -143,6 +138,7 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
         } else {
             /*Executes the changed relations processing and Epsilon updating.*/
         }
+        return s;
     }
 
     /**
