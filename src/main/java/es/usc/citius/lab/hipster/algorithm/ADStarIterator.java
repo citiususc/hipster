@@ -135,6 +135,7 @@ public class ADStarIterator<S> implements Iterator<ADStarNode<S>> {
                         }
                         current.setPreviousNode(minPredecessorNode);
                         current.setG(current.previousNode().getV() + this.costFunction.evaluate(current.transition()));
+                        update(current);
                     }
                 }
             }
