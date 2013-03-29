@@ -26,9 +26,11 @@ public class AStarIteratorFromMazeCreator {
 
         AstarIterator<Point> it;
         if (useHeuristic) {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost, heuristic));
+            //it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost, heuristic));
+            it = AstarIterator.iterator(maze.getInitialLoc(), transition).cost(cost).heuristic(heuristic).build();
         } else {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost));
+            //it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost));
+        	it = AstarIterator.iterator(maze.getInitialLoc(), transition).cost(cost).build();
         }
         return it;
     }

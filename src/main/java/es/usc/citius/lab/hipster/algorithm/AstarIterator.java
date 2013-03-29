@@ -6,9 +6,12 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
@@ -66,8 +69,6 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
         open.remove(currentState);
 
         // Analyze the cost of each movement from the current node
-        // TODO: current.successors() ?
-
         for (Transition<S> successor : successors.from(currentState)) {
             // Build the corresponding search node
             ComparableNode<S> successorNode = this.nodeBuilder.node(current,
@@ -129,6 +130,45 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 
     public void remove() {
         throw new UnsupportedOperationException();
+    }
+    
+    public static final class AstarBuilder<S> {
+    	private S initialState;
+    	private TransitionFunction<S> transition;
+    	private HeuristicFunction<S, Double> heuristic = new HeuristicFunction<S, Double>() {
+			public Double estimate(S state) {
+				return 0d;
+			}
+		};
+    	private CostFunction<S, Double> cost = new CostFunction<S, Double>() {
+			public Double evaluate(Transition<S> transition) {
+				return 1d;
+			}
+		};
+		
+		public AstarBuilder(S initialState, TransitionFunction<S> transition){
+			this.initialState = initialState;
+			this.transition = transition;
+		}
+		
+		public AstarBuilder<S> cost(CostFunction<S, Double> costFunction){
+			this.cost = costFunction;
+			return this;
+		}
+		
+		public AstarBuilder<S> heuristic(HeuristicFunction<S, Double> heuristicFunction){
+			this.heuristic = heuristicFunction;
+			return this;
+		}
+		
+		public AstarIterator<S> build(){
+			NodeBuilder<S, ComparableNode<S>> nodeBuilder = new NumericNodeBuilder<S>(this.cost, this.heuristic);
+			return new AstarIterator<S>(this.initialState, this.transition, nodeBuilder);
+		}
+    }
+    
+    public static <S> AstarBuilder<S> iterator(S initialState, TransitionFunction<S> transition){
+    	return new AstarBuilder<S>(initialState, transition);
     }
 
     public S getInitialState() {
