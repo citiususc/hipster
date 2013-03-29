@@ -16,7 +16,7 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.testutils.AStarIteratorFromMazeCreator;
+import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
@@ -96,7 +96,7 @@ public class ADStarMazeTest {
     }
 
     private void execute(StringMaze maze, boolean heuristic) throws InterruptedException {
-        AstarIterator<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
+        ADStarIterator<Point> it = AlgorithmIteratorFromMazeCreator.adstar(maze);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);

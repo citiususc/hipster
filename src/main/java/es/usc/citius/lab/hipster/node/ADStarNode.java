@@ -84,6 +84,10 @@ public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> 
         this.v = v;
     }
 
+    public void setKey(Key key) {
+        this.key = key;
+    }
+
     public void setPreviousNode(ADStarNode<S> previousNode) {
         this.previousNode = previousNode;
     }

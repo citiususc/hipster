@@ -1,9 +1,11 @@
 package es.usc.citius.lab.hipster.testutils;
 
+import es.usc.citius.lab.hipster.algorithm.ADStarIterator;
 import es.usc.citius.lab.hipster.algorithm.AstarIterator;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
@@ -33,6 +35,16 @@ public class AlgorithmIteratorFromMazeCreator {
             it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost));
         }
         return it;
+    }
+    
+    public static ADStarIterator<Point> adstar(final StringMaze maze){
+        HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
+
+        CostFunction<Point, Double> cost = defaultCostFunction();
+
+        TransitionFunction<Point> transition = defaultTransitionFunction(maze);
+        
+        return new ADStarIterator<Point>(maze.getInitialLoc(), maze.getGoalLoc(), transition, transition, cost, heuristic, new ADStarNodeBuilder<Point>());
     }
 
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {
