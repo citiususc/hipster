@@ -4,7 +4,6 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
-import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -35,7 +34,7 @@ public class ADStarIterator<S> implements Iterator<ComparableNode<S>> {
     private Queue<ADStarNode<S>> queue;
     private Double epsilon = 1.0;
 
-    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, ADStarNodeBuilder<S> builder) {
+    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> builder) {
         this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
         this.goalNode = this.nodeBuilder.node(null, new Transition<S>(null, goal));
         this.predecessorFunction = predecessors;
