@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.usc.citius.lab.hipster.testutils;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
@@ -16,18 +32,90 @@ import org.apache.commons.collections15.Transformer;
 import static org.junit.Assert.fail;
 
 /**
+ * Class to generate sample maps to test different search algorithms.
  *
  * @author Adrián González Sieira
  * @since 26-03-2013
  * @version 1.0
  */
 public final class MazeSearch {
-    
-    private MazeSearch(){
-    
+
+    private static String[] testMaze1 = new String[]{
+        "        ",
+        "    X   ",
+        "  @ X O ",
+        "    X   ",
+        "        ",
+        "        "};
+    private static String[] testMaze2 = new String[]{
+        "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
+        "XX    XXXXXXXXXX XXX XX     XXXX",
+        "XXXXX  XXXXXX    XXX XX XXX XXXX",
+        "XXX XX XXXXXX XX XXX XX  XX XXXX",
+        "XXX     XXXXX XXXXXX XXXXXX XXXX",
+        "XXXXXXX       XXXXXX        XXXX",
+        "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
+        "XXXXXXXXXX XX    XXXXX      XXXX",
+        "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
+        "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
+        "XXXXXXXXXXX            XXXX XXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
+        "XXXXXX              XXXX XX XXXX",
+        "XXXXXX XXXXXXXXXXXX XX      XXXX",
+        "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+        "XXXXXX XXXXX   XXX            XX",
+        "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
+        "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
+        "XXXXXX            XXXXXXXXXXXXXX"};
+    private static String[] testMaze3 = new String[]{
+        "                      O          ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "           @                     ",
+        "                                 "};
+    private static String[] testMaze4 = new String[]{
+        "                      O          ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "                                 ",
+        "     XXXXXXXXXXXXXXXXXXXXX       ",
+        "     XXXXXXXXXXXXXXXXXXXXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "           @                     ",
+        "                                 "};
+    private static String[] testMaze5 = new String[]{
+        "                  X   O          ",
+        "                  X              ",
+        "                  XXXXXXXX       ",
+        "       XXXXXXXXXX  XXXXX         ",
+        "                X    XXXXXXXXXX  ",
+        "     XXXXXX  XXXXXXX  XXXX       ",
+        "     XXXXXX XXXXXXX  XXXXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "                       XXX       ",
+        "           @                     ",
+        "                                 "};
+
+    private MazeSearch() {
     }
 
-    public static final class Result{
+    public static final class Result {
+
         private List<Point> path;
         private Double cost;
 
@@ -35,7 +123,7 @@ public final class MazeSearch {
             this.path = path;
             this.cost = cost;
         }
-        
+
         public Double getCost() {
             return cost;
         }
@@ -45,7 +133,9 @@ public final class MazeSearch {
         }
     }
     
-    public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
+    //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
+
+    public static Result executePrintIteratorSearch(Iterator<ComparableNode<Point>> it, StringMaze maze) throws InterruptedException {
         int steps = 0;
         while (it.hasNext()) {
             ComparableNode<Point> currentNode = it.next();
@@ -55,7 +145,7 @@ public final class MazeSearch {
             Thread.sleep(20);
             System.out.println(maze.getMazeForPath(statePath));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AStarIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 return new Result(statePath, cost);
             }
         }
@@ -63,14 +153,16 @@ public final class MazeSearch {
         return null;
     }
     
-    public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
+    //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
+
+    public static Result executeIteratorSearch(Iterator<ComparableNode<Point>> it, StringMaze maze) {
         int steps = 0;
         while (it.hasNext()) {
             ComparableNode<Point> currentNode = it.next();
             steps++;
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 List<Node<Point>> nodePath = currentNode.path();
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AStarIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
                 return new Result(statePath, cost);
             }
@@ -97,5 +189,25 @@ public final class MazeSearch {
         }
         statePath.add(maze.getGoalLoc());
         return new Result(statePath, cost);
+    }
+
+    public static String[] getTestMaze1() {
+        return testMaze1;
+    }
+
+    public static String[] getTestMaze2() {
+        return testMaze2;
+    }
+
+    public static String[] getTestMaze3() {
+        return testMaze3;
+    }
+
+    public static String[] getTestMaze4() {
+        return testMaze4;
+    }
+
+    public static String[] getTestMaze5() {
+        return testMaze5;
     }
 }
