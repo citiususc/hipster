@@ -1,7 +1,24 @@
+/*
+ * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package es.usc.citius.lab.hipster.testutils;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
+import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
@@ -115,6 +132,8 @@ public final class MazeSearch {
             return path;
         }
     }
+    
+    //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
 
     public static Result executePrintIteratorSearch(Iterator<ComparableNode<Point>> it, StringMaze maze) throws InterruptedException {
         int steps = 0;
@@ -133,6 +152,8 @@ public final class MazeSearch {
         fail("Solution not found after " + steps + " steps.");
         return null;
     }
+    
+    //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
     public static Result executeIteratorSearch(Iterator<ComparableNode<Point>> it, StringMaze maze) {
         int steps = 0;
