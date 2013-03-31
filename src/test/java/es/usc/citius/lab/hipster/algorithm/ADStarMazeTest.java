@@ -36,7 +36,7 @@ public class ADStarMazeTest {
 
 
     @Test
-    public void AStar_Maze1() throws InterruptedException {
+    public void ADStar_Maze1() throws InterruptedException {
         StringMaze maze = new StringMaze(MazeSearch.getTestMaze1());
         execute(maze, true);
     }
@@ -48,7 +48,7 @@ public class ADStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze2() throws InterruptedException {
+    public void ADStar_Maze2() throws InterruptedException {
         StringMaze maze = new StringMaze(MazeSearch.getTestMaze2());
         execute(maze, true);
     }
@@ -60,7 +60,7 @@ public class ADStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze3() throws InterruptedException {
+    public void ADStar_Maze3() throws InterruptedException {
         StringMaze maze = new StringMaze(MazeSearch.getTestMaze3());
         execute(maze, true);
     }
@@ -72,7 +72,7 @@ public class ADStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze4() throws InterruptedException {
+    public void ADStar_Maze4() throws InterruptedException {
         StringMaze maze = new StringMaze(MazeSearch.getTestMaze4());
         execute(maze, true);
     }
@@ -84,7 +84,7 @@ public class ADStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze5() throws InterruptedException {
+    public void ADStar_Maze5() throws InterruptedException {
         StringMaze maze = new StringMaze(MazeSearch.getTestMaze5());
         execute(maze, true);
     }

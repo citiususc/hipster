@@ -4,12 +4,13 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
-import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.ComparableNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -35,14 +36,18 @@ public class ADStarIterator<S> implements Iterator<ComparableNode<S>> {
     private Queue<ADStarNode<S>> queue;
     private Double epsilon = 1.0;
 
-    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, ADStarNodeBuilder<S> builder) {
-        this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
-        this.goalNode = this.nodeBuilder.node(null, new Transition<S>(null, goal));
+    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> builder) {
+        this.nodeBuilder = builder;
         this.predecessorFunction = predecessors;
         this.successorFunction = successors;
         this.costFunction = costFunction;
         this.heuristicFunction = heuristic;
-        this.nodeBuilder = builder;
+        this.open = new HashMap<S, ADStarNode<S>>();
+        this.closed = new HashMap<S, ADStarNode<S>>();
+        this.incons = new HashMap<S, ADStarNode<S>>();
+        this.queue = new PriorityQueue<ADStarNode<S>>();
+        this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
+        this.goalNode = this.nodeBuilder.node(null, new Transition<S>(null, goal));
 
         /*Initialization step*/
         this.beginNode.setG(0);
