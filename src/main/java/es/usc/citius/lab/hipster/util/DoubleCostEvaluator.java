@@ -29,7 +29,7 @@ import java.util.List;
  * @since 26-03-2013
  * @version 1.0
  */
-public class NumericCostEvaluator<S> implements CostEvaluator<S, Double>{
+public class DoubleCostEvaluator<S> implements CostEvaluator<S, Double>{
 
     /**
      * Evaluates the cost of the path using Double values

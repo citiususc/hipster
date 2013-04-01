@@ -66,9 +66,7 @@ public class AlgorithmIteratorFromMazeCreator {
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {
         return new HeuristicFunction<Point, Double>() {
             public Double estimate(Point from) {
-                Point goal = maze.getGoalLoc();
-                return Math.sqrt((from.x - goal.x) * (from.x - goal.x)
-                        + (from.y - goal.y) * (from.y - goal.y));
+                return from.distance(maze.getGoalLoc());
             }
         };
     }
@@ -85,13 +83,7 @@ public class AlgorithmIteratorFromMazeCreator {
     public static CostFunction<Point, Double> defaultCostFunction() {
         return new CostFunction<Point, Double>() {
             public Double evaluate(Transition<Point> successor) {
-                Point from = successor.from();
-                Point to = successor.to();
-                if (from != null) {
-                    return Math.sqrt((from.x - to.x) * (from.x - to.x)
-                            + (from.y - to.y) * (from.y - to.y));
-                }
-                return 0.0;
+                return (successor.from() != null)?successor.from().distance(successor.to()):0.0;
             }
         };
     }
