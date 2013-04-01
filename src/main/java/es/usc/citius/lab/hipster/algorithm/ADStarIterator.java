@@ -5,6 +5,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
 import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStarIterator<S> implements Iterator<ComparableNode<S>> {
+public class ADStarIterator<S> implements Iterator<Node<S>> {
 
     private final ADStarNode<S> beginNode;
     private final ADStarNode<S> goalNode;
@@ -113,7 +114,7 @@ public class ADStarIterator<S> implements Iterator<ComparableNode<S>> {
         return takePromising() != null;
     }
 
-    public ComparableNode<S> next() {
+    public Node<S> next() {
         /*First node in queue is retrieved.*/
         ADStarNode<S> s = takePromising();
         if (this.goalNode.compareTo(s) > 0 || this.goalNode.getV() < this.goalNode.getG()) {
