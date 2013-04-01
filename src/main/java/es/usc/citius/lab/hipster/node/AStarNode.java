@@ -17,7 +17,8 @@
 package es.usc.citius.lab.hipster.node;
 
 /**
- * Interface that defines a comparable node.
+ * Interface that defines a comparable node by cost and score
+ * used by the {@link AStar} algorithm.
  *
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
@@ -25,5 +26,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 26/03/2013
  * @version 1.0
  */
-public interface ComparableNode<S> extends Node<S>, Comparable<ComparableNode<S>> {
+public interface AStarNode<S> extends Node<S>, Comparable<AStarNode<S>> {
+	public int compareByCost(AStarNode<S> node);
+	public int compareByScore(AStarNode<S> node);
 }

@@ -23,7 +23,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ComparableNode;
+import es.usc.citius.lab.hipster.node.AStarNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 
@@ -33,23 +33,23 @@ import es.usc.citius.lab.hipster.node.Transition;
  *
  * @param <S>
  */
-public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
+public class AstarIterator<S> implements Iterator<AStarNode<S>> {
 
     private final S initialState;
-    private Map<S, ComparableNode<S>> open;
-    private Map<S, ComparableNode<S>> closed;
-    private Queue<ComparableNode<S>> queue;
-    private NodeBuilder<S, ComparableNode<S>> nodeBuilder;
+    private Map<S, AStarNode<S>> open;
+    private Map<S, AStarNode<S>> closed;
+    private Queue<AStarNode<S>> queue;
+    private NodeBuilder<S, AStarNode<S>> nodeBuilder;
     private TransitionFunction<S> successors;
 
-    public AstarIterator(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, ComparableNode<S>> nodeBuilder) {
+    public AstarIterator(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, AStarNode<S>> nodeBuilder) {
         this.initialState = initialState;
-        this.open = new HashMap<S, ComparableNode<S>>();
-        this.closed = new HashMap<S, ComparableNode<S>>();
+        this.open = new HashMap<S, AStarNode<S>>();
+        this.closed = new HashMap<S, AStarNode<S>>();
         this.successors = transitionFunction;
         this.nodeBuilder = nodeBuilder;
-        this.queue = new PriorityQueue<ComparableNode<S>>();
-        ComparableNode<S> initialNode = this.nodeBuilder.node(null,
+        this.queue = new PriorityQueue<AStarNode<S>>();
+        AStarNode<S> initialNode = this.nodeBuilder.node(null,
                 new Transition<S>(null, this.initialState));
 
         this.queue.add(initialNode);
@@ -60,9 +60,9 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
         return !open.values().isEmpty();
     }
 
-    private ComparableNode<S> takePromising() {
+    private AStarNode<S> takePromising() {
         // Poll until a valid state is found
-        ComparableNode<S> node = queue.poll();
+        AStarNode<S> node = queue.poll();
         while (!open.containsKey(node.transition().to())) {
             node = queue.poll();
         }
@@ -73,10 +73,10 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
      * A* algorithm implementation.
      *
      */
-    public ComparableNode<S> next() {
+    public AStarNode<S> next() {
 
         // Take the current node to analyze
-        ComparableNode<S> current = takePromising();
+        AStarNode<S> current = takePromising();
         S currentState = current.transition().to();
         // Remove it from open
         open.remove(currentState);
@@ -86,7 +86,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 
         for (Transition<S> successor : successors.from(currentState)) {
             // Build the corresponding search node
-            ComparableNode<S> successorNode = this.nodeBuilder.node(current,
+            AStarNode<S> successorNode = this.nodeBuilder.node(current,
                     successor);
 
             // Take the associated state
@@ -94,7 +94,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
 
             // Check if this successor is in the open set (which means that
             // we have analyzed this node from other movement)
-            ComparableNode<S> successorOpen = open.get(successorState);
+            AStarNode<S> successorOpen = open.get(successorState);
             if (successorOpen != null) {
                 // In this case, if the current move does not improve
                 // the cost of the previous path, discard this movement
@@ -107,7 +107,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
             // In other case (the neighbor node has not been considered yet
             // or the movement does not improve the previous cost) then
             // check if the neighbor is closed
-            ComparableNode<S> successorClose = closed.get(successorState);
+            AStarNode<S> successorClose = closed.get(successorState);
             if (successorClose != null) {
                 // Check if this path improves the cost of a closed neighbor.
                 if (successorClose.compareTo(successorNode) <= 0) {
@@ -132,7 +132,7 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
             }
 
             // Add the new successor to the open list to explore later
-            ComparableNode<S> result = open.put(successorState, successorNode);
+            AStarNode<S> result = open.put(successorState, successorNode);
             // If this state is not duplicated, enqueue
             if (result == null) {
                 queue.add(successorNode);
@@ -154,19 +154,19 @@ public class AstarIterator<S> implements Iterator<ComparableNode<S>> {
         return this.initialState;
     }
 
-    public Map<S, ComparableNode<S>> getOpen() {
+    public Map<S, AStarNode<S>> getOpen() {
         return open;
     }
 
-    public Map<S, ComparableNode<S>> getClosed() {
+    public Map<S, AStarNode<S>> getClosed() {
         return closed;
     }
 
-    public Queue<ComparableNode<S>> getQueue() {
+    public Queue<AStarNode<S>> getQueue() {
         return queue;
     }
 
-    public NodeBuilder<S, ComparableNode<S>> getNodeBuilder() {
+    public NodeBuilder<S, AStarNode<S>> getNodeBuilder() {
         return nodeBuilder;
     }
 

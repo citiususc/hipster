@@ -21,7 +21,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 
 /**
  * Implementation of {@link NodeBulder} to create instances of
- * {@link NumericNode}.
+ * {@link AStarDoubleNode}.
  *
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
@@ -29,7 +29,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
  * @since 26/03/2013
  * @version 1.0
  */
-public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> {
+public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
 
     private CostFunction<S, Double> cost;
     private HeuristicFunction<S, Double> heuristic;
@@ -42,7 +42,7 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> 
      * @param costFunction cost function implementation
      * @param heuristicFunction heuristic function implementation
      */
-    public NumericNodeBuilder(CostFunction<S, Double> costFunction,
+    public AStarDoubleNodeBuilder(CostFunction<S, Double> costFunction,
             HeuristicFunction<S, Double> heuristicFunction) {
         this.cost = costFunction;
         this.heuristic = heuristicFunction;
@@ -53,7 +53,7 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> 
      * Double values, heuristic will be assigned by default (always 0).
      * @param costFunction cost function implementation
      */
-    public NumericNodeBuilder(CostFunction<S, Double> costFunction){
+    public AStarDoubleNodeBuilder(CostFunction<S, Double> costFunction){
         this.cost = costFunction;
         this.heuristic = defaultHeuristicFunction();
     }
@@ -63,7 +63,7 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> 
      * Double values, cost will be assigned by default (always 1).
      * @param heuristicFunction 
      */
-    public NumericNodeBuilder(HeuristicFunction<S, Double> heuristicFunction){
+    public AStarDoubleNodeBuilder(HeuristicFunction<S, Double> heuristicFunction){
         this.cost = defaultCostFunction();
         this.heuristic = defaultHeuristicFunction();
     }
@@ -72,26 +72,26 @@ public class NumericNodeBuilder<S> implements NodeBuilder<S, ComparableNode<S>> 
      * Default constructor, assigns a default cost function (always 1) 
      * and a default heuristic function (always 0).
      */
-    public NumericNodeBuilder(){
+    public AStarDoubleNodeBuilder(){
         this.cost = defaultCostFunction();
         this.heuristic = defaultHeuristicFunction();
     }
 
     /**
-     * Build method for {@link NumericNode} instances: Internally evaluates the
+     * Build method for {@link AStarDoubleNode} instances: Internally evaluates the
      * cost and heuristic function to instantiate the Node.
      *
      * @param from incoming node
      * @param transition incoming transition
      * @return new instance of NumericNode
      */
-    public ComparableNode<S> node(ComparableNode<S> from, Transition<S> transition) {
-        NumericNode<S> fromCast = (NumericNode<S>) from;
+    public AStarNode<S> node(AStarNode<S> from, Transition<S> transition) {
+        AStarDoubleNode<S> fromCast = (AStarDoubleNode<S>) from;
         double previousCost = (fromCast != null) ? fromCast.cost() : 0d;
         double g = previousCost + cost.evaluate(transition);
         double h = heuristic.estimate(transition.to());
         double f = g + h;
-        return new NumericNode<S>(transition, fromCast, g, f);
+        return new AStarDoubleNode<S>(transition, fromCast, g, f);
     }
 
     /**

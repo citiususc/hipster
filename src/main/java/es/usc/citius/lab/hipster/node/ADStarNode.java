@@ -8,7 +8,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 27-03-2013
  * @version 1.0
  */
-public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> {
+public class ADStarNode<S> extends AbstractNode<S> implements AStarNode<S> {
 
     private double g;
     private double v;
@@ -104,7 +104,7 @@ public class ADStarNode<S> extends AbstractNode<S> implements ComparableNode<S> 
      * @param o other node instance
      * @return comparation result
      */
-    public int compareTo(ComparableNode<S> o) {
+    public int compareTo(AStarNode<S> o) {
         ADStarNode<S> oCast = (ADStarNode<S>) o;
         return this.key.compareTo(oCast.key);
     }

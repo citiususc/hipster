@@ -22,7 +22,7 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
-import es.usc.citius.lab.hipster.node.NumericNodeBuilder;
+import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
@@ -46,9 +46,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         AstarIterator<Point> it;
         if (useHeuristic) {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost, heuristic));
+            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost, heuristic));
         } else {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new NumericNodeBuilder<Point>(cost));
+            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost));
         }
         return it;
     }
