@@ -28,6 +28,7 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.AStarNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
+import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
@@ -36,7 +37,7 @@ import es.usc.citius.lab.hipster.node.Transition;
  *
  * @param <S>
  */
-public class AStar<S> implements Iterator<AStarNode<S>> {
+public class AStar<S> implements Iterator<Node<S>> {
 
     private final S initialState;
     private Map<S, AStarNode<S>> open;
@@ -76,7 +77,7 @@ public class AStar<S> implements Iterator<AStarNode<S>> {
      * A* algorithm implementation.
      *
      */
-    public AStarNode<S> next() {
+    public Node<S> next() {
 
         // Take the current node to analyze
         AStarNode<S> current = takePromising();
