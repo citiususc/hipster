@@ -55,7 +55,7 @@ public class BenchmarkTest {
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
                 //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
-                AstarIterator<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, false);
+                AStar<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, false);
                 Stopwatch w = new Stopwatch().start();
                 MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
                 long result1 = w.stop().elapsed(TimeUnit.MILLISECONDS);

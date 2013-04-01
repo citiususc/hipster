@@ -17,7 +17,7 @@
 package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.ADStarIterator;
-import es.usc.citius.lab.hipster.algorithm.AstarIterator;
+import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
@@ -37,18 +37,18 @@ import java.awt.Point;
  */
 public class AlgorithmIteratorFromMazeCreator {
 
-    public static AstarIterator<Point> astar(final StringMaze maze, boolean useHeuristic) {
+    public static AStar<Point> astar(final StringMaze maze, boolean useHeuristic) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        AstarIterator<Point> it;
+        AStar<Point> it;
         if (useHeuristic) {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost, heuristic));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost, heuristic));
         } else {
-            it = new AstarIterator<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost));
         }
         return it;
     }
