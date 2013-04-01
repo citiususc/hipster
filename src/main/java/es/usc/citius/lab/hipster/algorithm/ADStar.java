@@ -51,6 +51,8 @@ public class ADStar<S> implements Iterator<Node<S>> {
 
         /*Initialization step*/
         this.beginNode.setG(0);
+        this.beginNode.setKey(new ADStarNode.Key(this.beginNode.getG(), this.beginNode.getV(), this.heuristicFunction.estimate(this.beginNode.transition().to()), this.epsilon));
+        this.goalNode.setKey(new ADStarNode.Key(this.goalNode.getG(), this.goalNode.getV(), this.heuristicFunction.estimate(this.goalNode.transition().to()), this.epsilon));
         insertOpen(beginNode);
     }
 
@@ -78,7 +80,6 @@ public class ADStar<S> implements Iterator<Node<S>> {
      * @param node instance of node to add
      */
     private void insertOpen(ADStarNode<S> node) {
-        node.setKey(new ADStarNode.Key(node.getG(), node.getV(), this.heuristicFunction.estimate(node.transition().to()), this.epsilon));
         this.open.put(node.transition().to(), node);
         this.queue.offer(node);
     }
@@ -92,6 +93,7 @@ public class ADStar<S> implements Iterator<Node<S>> {
         S state = node.transition().to();
         if (Double.compare(node.getV(), node.getG()) != 0) {
             if (!this.closed.containsKey(state)) {
+                node.setKey(new ADStarNode.Key(node.getG(), node.getV(), this.heuristicFunction.estimate(state), this.epsilon));
                 this.open.put(state, node);
                 this.queue.offer(node);
             } else {
@@ -127,6 +129,7 @@ public class ADStar<S> implements Iterator<Node<S>> {
                     Transition<S> succesor = it.next();
                     ADStarNode<S> current = this.nodeBuilder.node(s, succesor);
                     if (current.getG() > s.getG() + this.costFunction.evaluate(current.transition())) {
+                        current.setPreviousNode(s);
                         current.setG(current.previousNode().getG() + this.costFunction.evaluate(succesor));
                         update(current);
                     }
