@@ -1,6 +1,5 @@
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
@@ -25,32 +24,32 @@ public class ADStar<S> implements Iterator<Node<S>> {
 
     private final ADStarNode<S> beginNode;
     private final ADStarNode<S> goalNode;
-    private final TransitionFunction<S> predecessorFunction;
     private final TransitionFunction<S> successorFunction;
-    private final CostFunction<S, Double> costFunction;
     private final HeuristicFunction<S, Double> heuristicFunction;
-    private final NodeBuilder<S, ADStarNode<S>> nodeBuilder;
+    private final NodeBuilder<S, ADStarNode<S>> consistentBuilder;
+    private final NodeBuilder<S, ADStarNode<S>> inconsistentBuilder;
+    private final NodeBuilder<S, ADStarNode<S>> defaultBuilder;
     private Map<S, ADStarNode<S>> open;
     private Map<S, ADStarNode<S>> closed;
     private Map<S, ADStarNode<S>> incons;
     private Queue<ADStarNode<S>> queue;
     private Double epsilon = 1.0;
 
-    public ADStar(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> builder) {
-        this.nodeBuilder = builder;
-        this.predecessorFunction = predecessors;
+    public ADStar(S begin, S goal, TransitionFunction<S> successors, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> defaultBuilder, NodeBuilder<S, ADStarNode<S>> consistentBuilder, NodeBuilder<S, ADStarNode<S>> inconsistentBuilder) {
+        this.consistentBuilder = consistentBuilder;
+        this.defaultBuilder = defaultBuilder;
+        this.inconsistentBuilder= inconsistentBuilder;
         this.successorFunction = successors;
-        this.costFunction = costFunction;
         this.heuristicFunction = heuristic;
         this.open = new HashMap<S, ADStarNode<S>>();
         this.closed = new HashMap<S, ADStarNode<S>>();
         this.incons = new HashMap<S, ADStarNode<S>>();
         this.queue = new PriorityQueue<ADStarNode<S>>();
-        this.beginNode = this.nodeBuilder.node(null, new Transition<S>(null, begin));
-        this.goalNode = this.nodeBuilder.node(null, new Transition<S>(null, goal));
+        this.beginNode = this.defaultBuilder.node(null, new Transition<S>(null, begin));
+        this.goalNode = this.defaultBuilder.node(null, new Transition<S>(null, goal));
 
         /*Initialization step*/
-        this.beginNode.setG(0);
+        this.beginNode.setG(0.0);
         this.beginNode.setKey(new ADStarNode.Key(this.beginNode.getG(), this.beginNode.getV(), this.heuristicFunction.estimate(this.beginNode.transition().to()), this.epsilon));
         this.goalNode.setKey(new ADStarNode.Key(this.goalNode.getG(), this.goalNode.getV(), this.heuristicFunction.estimate(this.goalNode.transition().to()), this.epsilon));
         insertOpen(beginNode);
@@ -127,39 +126,22 @@ public class ADStar<S> implements Iterator<Node<S>> {
                 this.closed.put(s.transition().to(), s);
                 for (Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();) {
                     Transition<S> succesor = it.next();
-                    ADStarNode<S> current = this.nodeBuilder.node(s, succesor);
-                    if (current.getG() > s.getG() + this.costFunction.evaluate(current.transition())) {
-                        current.setPreviousNode(s);
-                        current.setG(current.previousNode().getG() + this.costFunction.evaluate(succesor));
-                        update(current);
-                    }
+                    ADStarNode<S> current = this.consistentBuilder.node(s, succesor);
+                    //TODO update(current) solo hacer cuando se cumple la condición
+                    update(current);
                 }
             } else {
                 s.setV(Double.POSITIVE_INFINITY);
                 update(s);
                 for (Iterator<Transition<S>> it = this.successorFunction.from(s.transition().to()).iterator(); it.hasNext();) {
                     Transition<S> succesor = it.next();
-                    ADStarNode<S> current = this.nodeBuilder.node(s, succesor);
+                    ADStarNode<S> current = this.defaultBuilder.node(s, succesor);
                     if (current.previousNode().equals(s)) {
-                        Double minValue = Double.POSITIVE_INFINITY;
-                        ADStarNode<S> minPredecessorNode = null;
-                        for (Iterator<Transition<S>> it2 = this.predecessorFunction.from(succesor.to()).iterator(); it2.hasNext();) {
-                            Transition<S> predecessor = it2.next();
-                            ADStarNode<S> predecessorNode = this.nodeBuilder.node(current, predecessor);
-                            Double currentValue = predecessorNode.getV() + this.costFunction.evaluate(predecessor);
-                            if (currentValue < minValue) {
-                                minValue = currentValue;
-                                minPredecessorNode = predecessorNode;
-                            }
-                        }
-                        /*Update the parent node to keep the path updated.*/
-                        current.setPreviousNode(minPredecessorNode);
-                        current.setG(current.previousNode().getV() + this.costFunction.evaluate(current.transition()));
+                        current = this.inconsistentBuilder.node(s, succesor);
                         update(current);
                     }
                 }
             }
-
         } else {
             /*Executes the changed relations processing and Epsilon updating.*/
         }

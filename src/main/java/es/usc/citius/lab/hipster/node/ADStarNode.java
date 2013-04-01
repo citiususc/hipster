@@ -10,8 +10,8 @@ package es.usc.citius.lab.hipster.node;
  */
 public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarNode<S>> {
 
-    private double g;
-    private double v;
+    private Double g;
+    private Double v;
     private Key key;
 
     /**
@@ -79,19 +79,19 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
         }
     }
 
-    public double getG() {
+    public Double getG() {
         return g;
     }
 
-    public double getV() {
+    public Double getV() {
         return v;
     }
 
-    public void setG(double g) {
+    public void setG(Double g) {
         this.g = g;
     }
 
-    public void setV(double v) {
+    public void setV(Double v) {
         this.v = v;
     }
 

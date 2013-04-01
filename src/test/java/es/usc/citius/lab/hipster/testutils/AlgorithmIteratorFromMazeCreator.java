@@ -21,8 +21,12 @@ import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.ADStarNode;
+import es.usc.citius.lab.hipster.node.ConsistentADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
+import es.usc.citius.lab.hipster.node.DefaultADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.InconsistentADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
@@ -60,7 +64,15 @@ public class AlgorithmIteratorFromMazeCreator {
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
         
-        return new ADStar<Point>(maze.getInitialLoc(), maze.getGoalLoc(), transition, transition, cost, heuristic, new ADStarNodeBuilder<Point>());
+        NodeBuilder<Point, ADStarNode<Point>> defaultBuilder = new DefaultADStarNodeBuilder<Point>();
+        
+        return new ADStar<Point>(maze.getInitialLoc(), 
+                maze.getGoalLoc(), 
+                transition, 
+                heuristic,
+                defaultBuilder,
+                new ConsistentADStarNodeBuilder<Point>(defaultBuilder, cost),
+                new InconsistentADStarNodeBuilder<Point>(transition, cost, defaultBuilder));
     }
 
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {
