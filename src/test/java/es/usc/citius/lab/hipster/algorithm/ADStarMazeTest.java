@@ -96,7 +96,7 @@ public class ADStarMazeTest {
     }
 
     private void execute(StringMaze maze, boolean heuristic) throws InterruptedException {
-        ADStarIterator<Point> it = AlgorithmIteratorFromMazeCreator.adstar(maze);
+        ADStar<Point> it = AlgorithmIteratorFromMazeCreator.adstar(maze);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);

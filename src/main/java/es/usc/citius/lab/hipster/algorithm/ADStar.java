@@ -21,7 +21,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStarIterator<S> implements Iterator<Node<S>> {
+public class ADStar<S> implements Iterator<Node<S>> {
 
     private final ADStarNode<S> beginNode;
     private final ADStarNode<S> goalNode;
@@ -36,7 +36,7 @@ public class ADStarIterator<S> implements Iterator<Node<S>> {
     private Queue<ADStarNode<S>> queue;
     private Double epsilon = 1.0;
 
-    public ADStarIterator(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> builder) {
+    public ADStar(S begin, S goal, TransitionFunction<S> predecessors, TransitionFunction<S> successors, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristic, NodeBuilder<S, ADStarNode<S>> builder) {
         this.nodeBuilder = builder;
         this.predecessorFunction = predecessors;
         this.successorFunction = successors;
