@@ -152,6 +152,7 @@ public class ADStar<S> implements Iterator<Node<S>> {
                                 minPredecessorNode = predecessorNode;
                             }
                         }
+                        /*Update the parent node to keep the path updated.*/
                         current.setPreviousNode(minPredecessorNode);
                         current.setG(current.previousNode().getV() + this.costFunction.evaluate(current.transition()));
                         update(current);
