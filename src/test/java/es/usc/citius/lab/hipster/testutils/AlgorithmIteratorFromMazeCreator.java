@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
@@ -22,11 +21,11 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
-import es.usc.citius.lab.hipster.node.ConsistentADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.DoubleADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
-import es.usc.citius.lab.hipster.node.DefaultADStarNodeBuilder;
-import es.usc.citius.lab.hipster.node.InconsistentADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.DoubleADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
@@ -56,23 +55,25 @@ public class AlgorithmIteratorFromMazeCreator {
         }
         return it;
     }
-    
-    public static ADStar<Point> adstar(final StringMaze maze){
+
+    public static ADStar<Point> adstar(final StringMaze maze) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
-        
-        NodeBuilder<Point, ADStarNode<Point>> defaultBuilder = new DefaultADStarNodeBuilder<Point>();
-        
-        return new ADStar<Point>(maze.getInitialLoc(), 
-                maze.getGoalLoc(), 
-                transition, 
-                heuristic,
+
+        NodeBuilder<Point, ADStarNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
+
+        ADStarNodeUpdater<Point, ADStarNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
+
+        return new ADStar<Point>(
+                maze.getInitialLoc(),
+                maze.getGoalLoc(),
+                transition,
+                transition,
                 defaultBuilder,
-                new ConsistentADStarNodeBuilder<Point>(defaultBuilder, cost),
-                new InconsistentADStarNodeBuilder<Point>(transition, cost, defaultBuilder));
+                updater);
     }
 
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {

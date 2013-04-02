@@ -16,14 +16,22 @@
 
 package es.usc.citius.lab.hipster.node;
 
+import java.util.Map;
+
 /**
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 01-04-2013
  * @version 1.0
  */
-public interface NodeUpdater<S, N extends Node<S>> {
+public interface ADStarNodeUpdater<S, N extends Node<S>> {
 
-    public boolean update(N current, N parent, Transition<S> transition);
+    public boolean updateConsistent(N node, N parent, Transition<S> transition);
+    
+    public boolean updateInconsistent(N node, Map<Transition<S>, N> predecessorsNodes);
+    
+    public void setMaxV(N node);
+    
+    
     
 }

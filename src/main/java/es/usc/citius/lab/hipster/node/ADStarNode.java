@@ -10,9 +10,9 @@ package es.usc.citius.lab.hipster.node;
  */
 public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarNode<S>> {
 
-    private Double g;
-    private Double v;
-    private Key key;
+    protected Double g;
+    protected Double v;
+    protected Key key;
 
     /**
      * Default constructor for this class, that requires the parent transition
@@ -21,8 +21,11 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
      * @param transition incoming transition
      * @param previousNode parent node
      */
-    public ADStarNode(Transition<S> transition, Node<S> previousNode) {
+    public ADStarNode(Transition<S> transition, Node<S> previousNode, Double g, Double v, Key k) {
         super(transition, previousNode);
+        this.g = g;
+        this.v = v;
+        this.key = k;
     }
 
     /**
@@ -62,6 +65,11 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
                 this.second = v;
             }
         }
+        
+        public Key(double first, double second){
+            this.first = first;
+            this.second = second;
+        }
 
         /**
          * Compares the first value and, if equal, the second one.
@@ -79,14 +87,6 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
         }
     }
 
-    public Double getG() {
-        return g;
-    }
-
-    public Double getV() {
-        return v;
-    }
-
     public void setG(Double g) {
         this.g = g;
     }
@@ -99,12 +99,18 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
         this.key = key;
     }
 
-    public void setPreviousNode(ADStarNode<S> previousNode) {
-        this.previousNode = previousNode;
+    public Double getG() {
+        return g;
+    }
+
+    public Double getV() {
+        return v;
     }
 
     @Override
     public ADStarNode<S> previousNode() {
         return (ADStarNode<S>) previousNode;
     }
+    
+    
 }
