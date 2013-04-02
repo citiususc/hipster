@@ -141,6 +141,7 @@ public final class MazeSearch {
             List<Node<Point>> nodePath = currentNode.path();
             List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
             Thread.sleep(20);
+            System.out.print("\n\n\n\n\n\n\n\n\n");
             System.out.println(maze.getMazeForPath(statePath));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());

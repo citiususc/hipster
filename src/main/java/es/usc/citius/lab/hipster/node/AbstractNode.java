@@ -69,4 +69,9 @@ public abstract class AbstractNode<S> implements Node<S> {
     public Transition<S> transition() {
         return this.state;
     }
+
+    @Override
+    public String toString() {
+        return this.transition().to().toString();
+    }
 }

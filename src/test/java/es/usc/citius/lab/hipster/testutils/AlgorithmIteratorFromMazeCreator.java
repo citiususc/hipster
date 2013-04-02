@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
@@ -21,8 +20,12 @@ import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.ADStarNode;
+import es.usc.citius.lab.hipster.node.DoubleADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.DoubleADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 import java.awt.Point;
@@ -52,15 +55,25 @@ public class AlgorithmIteratorFromMazeCreator {
         }
         return it;
     }
-    
-    public static ADStar<Point> adstar(final StringMaze maze){
+
+    public static ADStar<Point> adstar(final StringMaze maze) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
-        
-        return new ADStar<Point>(maze.getInitialLoc(), maze.getGoalLoc(), transition, transition, cost, heuristic, new ADStarNodeBuilder<Point>());
+
+        NodeBuilder<Point, ADStarNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
+
+        ADStarNodeUpdater<Point, ADStarNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
+
+        return new ADStar<Point>(
+                maze.getInitialLoc(),
+                maze.getGoalLoc(),
+                transition,
+                transition,
+                defaultBuilder,
+                updater);
     }
 
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {

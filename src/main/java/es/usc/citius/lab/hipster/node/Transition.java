@@ -97,4 +97,9 @@ public class Transition<S> {
         }
         return successors;
     }
+
+    @Override
+    public String toString() {
+        return this.from + "->" + this.to;
+    }
 }

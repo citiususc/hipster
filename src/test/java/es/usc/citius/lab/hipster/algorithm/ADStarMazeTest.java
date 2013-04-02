@@ -100,7 +100,7 @@ public class ADStarMazeTest {
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
-        assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
+        assertEquals(resultJung.getCost(), resultIterator.getCost(), 0.001);
     }
     
     
