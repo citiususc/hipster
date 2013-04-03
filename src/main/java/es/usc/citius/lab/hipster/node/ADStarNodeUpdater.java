@@ -32,6 +32,5 @@ public interface ADStarNodeUpdater<S, N extends Node<S>> {
     
     public void setMaxV(N node);
     
-    
-    
+    public void setEpsilon(Double epsilon);
 }

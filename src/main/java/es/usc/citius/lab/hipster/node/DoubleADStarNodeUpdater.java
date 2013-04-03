@@ -74,4 +74,8 @@ public class DoubleADStarNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarNo
     public void setMaxV(ADStarNode<S> node) {
         node.setV(Double.POSITIVE_INFINITY);
     }
+
+    public void setEpsilon(Double epsilon) {
+        this.epsilon = epsilon;
+    }
 }
