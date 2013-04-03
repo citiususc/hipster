@@ -1,8 +1,5 @@
 package es.usc.citius.lab.hipster.algorithm;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
 import es.usc.citius.lab.hipster.node.Node;

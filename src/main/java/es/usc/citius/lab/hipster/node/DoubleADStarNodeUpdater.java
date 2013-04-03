@@ -18,8 +18,11 @@ package es.usc.citius.lab.hipster.node;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
+ * Implements the default updater for {@link ADStarNode} instances
+ * using {@link Double} values.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 01-04-2013
@@ -49,13 +52,26 @@ public class DoubleADStarNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarNo
         return false;
     }
 
-    public boolean updateInconsistent(ADStarNode<S> node, Map<Transition<S>, ADStarNode<S>> predecessorsNodes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updateInconsistent(ADStarNode<S> node, Map<Transition<S>, ADStarNode<S>> predecessorMap) {
+        double minValue = Double.POSITIVE_INFINITY;
+        ADStarNode<S> minParent = null;
+        Transition<S> minTransition = null;
+        for(Entry<Transition<S>, ADStarNode<S>> current : predecessorMap.entrySet()){
+            double value = current.getValue().v + this.costFunction.evaluate(current.getKey());
+            if(value < minValue){
+                minValue = value;
+                minParent = current.getValue();
+                minTransition = current.getKey();
+            }
+        }
+        node.previousNode = minParent;
+        node.g = minValue;
+        node.state = minTransition;
+        node.key = new ADStarNode.Key(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
+        return true;
     }
 
     public void setMaxV(ADStarNode<S> node) {
         node.setV(Double.POSITIVE_INFINITY);
     }
-
-    
 }
