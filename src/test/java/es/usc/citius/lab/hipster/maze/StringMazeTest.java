@@ -51,19 +51,19 @@ public class StringMazeTest {
             "XXXXXX            XXXXXXXXXXXXXX"};
         StringMaze maze = new StringMaze(testMaze);
         // Valid cells
-        assertTrue(maze.getMaze()[2][1]);
-        assertTrue(maze.getMaze()[2][0]);
-        assertTrue(maze.getMaze()[4][5]);
+        assertTrue(maze.getMaze()[1][2]);
+        assertTrue(maze.getMaze()[0][2]);
+        assertTrue(maze.getMaze()[5][4]);
         // Invalid cells
         assertFalse(maze.getMaze()[0][0]);
         assertFalse(maze.getMaze()[1][1]);
-        assertFalse(maze.getMaze()[12][5]);
+        assertFalse(maze.getMaze()[5][12]);
         // Initial loc
         assertEquals(maze.getInitialLoc(), new Point(2, 0));
         assertEquals(maze.getGoalLoc(), new Point(9, 15));
         // Print valid moves from initial and goal
         System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
         System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
-        System.out.println(maze.validLocationsFrom(new Point(3, 14)));
+        System.out.println(maze.validLocationsFrom(new Point(14, 3)));
     }
 }
