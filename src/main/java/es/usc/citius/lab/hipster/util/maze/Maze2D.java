@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.util.maze;
 
 import java.awt.Point;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,19 +33,29 @@ public class Maze2D {
     private int rows;
     private int columns;
     
-    public static enum Symbols {
+    public static enum Symbol {
 		OCCUPIED('X'), 	// 0
 		EMPTY(' '), 	// 1
 		START('@'), 	// 2
-		GOAL('O');		// 3
-		public final char symbol;
+		GOAL('O'),		// 3
+		VISITED('.');
+		public final char character;
 		
-		Symbols(char symbol){
-			this.symbol = symbol;
+		Symbol(char symbol){
+			this.character = symbol;
 		}
 		
 		public byte value(){
 			return (byte)this.ordinal();
+		}
+		
+		public static Symbol parse(char c){
+			for(Symbol s : Symbol.values()){
+				if (s.character == c){
+					return s;
+				}
+			}
+			throw new IllegalArgumentException("Unrecognized char " + c);
 		}
 	};
     
@@ -70,27 +81,18 @@ public class Maze2D {
         		int y = row;
         		char charPoint = maze2D[row].charAt(column);
         		// Parse
-        		switch (charPoint){
-        			case ' ':
-        				maze[row][column]=Symbols.EMPTY.value();
-        				break;
-                    case '@':
-                        maze[row][column] = Symbols.START.value();
-                        initialLoc = new Point(x, y);
-                        break;
-                    case 'O':
-                        maze[row][column] = Symbols.GOAL.value();
-                        goalLoc = new Point(x, y);
-                        break;
-                    default:
-                        maze[row][column] = Symbols.OCCUPIED.value();
+        		maze[row][column] = Symbol.parse(charPoint).value();
+        		if (maze[row][column]==Symbol.GOAL.value()){
+        			this.goalLoc = new Point(x,y);
+        		} else if (maze[row][column]==Symbol.START.value()){
+        			this.initialLoc = new Point(x,y);
         		}
         	}
         }
     }
     
     public boolean isFree(Point p){
-    	return this.maze[p.y][p.x]>Symbols.OCCUPIED.value();
+    	return this.maze[p.y][p.x]>Symbol.OCCUPIED.value();
     }
 
     public static Maze2D random(int size, double spaceProb) {
@@ -98,7 +100,7 @@ public class Maze2D {
         Random r = new Random(System.nanoTime());
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                maze[row][column]= (r.nextDouble() > (1.0d - spaceProb))?Symbols.EMPTY.value():Symbols.OCCUPIED.value();
+                maze[row][column]= (r.nextDouble() > (1.0d - spaceProb))?Symbol.EMPTY.value():Symbol.OCCUPIED.value();
             }
         }
         return new Maze2D(maze, new Point(0,0), new Point(size-1,size-1));
@@ -114,13 +116,13 @@ public class Maze2D {
         return points;
     }
     
-    public void updateLocation(Point p, Symbols symbol){
+    public void updateLocation(Point p, Symbol symbol){
     	int row = p.y;
     	int column = p.x;
     	this.maze[row][column]=symbol.value();
     }
     
-    public void updateRectangle(Point a, Point b, Symbols symbol){
+    public void updateRectangle(Point a, Point b, Symbol symbol){
     	int xfrom = (a.x < b.x)?a.x:b.x;
     	int xto = (a.x > b.x)?a.x:b.x;
     	int yfrom = (a.y < b.y)?a.y:b.y;
@@ -133,19 +135,19 @@ public class Maze2D {
     }
     
     public void putObstacle(Point p){
-    	updateLocation(p, Symbols.OCCUPIED);
+    	updateLocation(p, Symbol.OCCUPIED);
     }
     
     public void removeObstacle(Point p){
-    	updateLocation(p, Symbols.EMPTY);
+    	updateLocation(p, Symbol.EMPTY);
     }
     
     public void putObstacleRectangle(Point a, Point b){
-    	updateRectangle(a, b, Symbols.OCCUPIED);
+    	updateRectangle(a, b, Symbol.OCCUPIED);
     }
     
     public void removeObstacleRectangle(Point a, Point b){
-    	updateRectangle(a, b, Symbols.EMPTY);
+    	updateRectangle(a, b, Symbol.EMPTY);
     }
 
     
@@ -199,7 +201,7 @@ public class Maze2D {
 		char[][] chars = new char[this.rows][this.columns];
 		for (int row = 0; row < this.rows; row++) {
 			for (int column = 0; column < this.columns; column++) {
-				chars[row][column]= Symbols.values()[maze[row][column]].symbol;
+				chars[row][column]= Symbol.values()[maze[row][column]].character;
 			}
 		}
 		return chars;
