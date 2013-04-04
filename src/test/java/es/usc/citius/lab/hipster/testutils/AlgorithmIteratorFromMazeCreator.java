@@ -27,12 +27,12 @@ import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.DoubleADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 
 /**
  * This class creates the iterators for different algorithms using
- * {@link StringMaze} as base.
+ * {@link Maze2D} as base.
  *
  * @author Adrián González Sieira
  * @since 26-03-2013
@@ -40,7 +40,7 @@ import java.awt.Point;
  */
 public class AlgorithmIteratorFromMazeCreator {
 
-    public static AStar<Point> astar(final StringMaze maze, boolean useHeuristic) {
+    public static AStar<Point> astar(final Maze2D maze, boolean useHeuristic) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
@@ -56,7 +56,7 @@ public class AlgorithmIteratorFromMazeCreator {
         return it;
     }
 
-    public static ADStar<Point> adstar(final StringMaze maze) {
+    public static ADStar<Point> adstar(final Maze2D maze) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
         CostFunction<Point, Double> cost = defaultCostFunction();
@@ -76,17 +76,15 @@ public class AlgorithmIteratorFromMazeCreator {
                 updater);
     }
 
-    public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final StringMaze maze) {
+    public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final Maze2D maze) {
         return new HeuristicFunction<Point, Double>() {
             public Double estimate(Point from) {
-                Point goal = maze.getGoalLoc();
-                return Math.sqrt((from.x - goal.x) * (from.x - goal.x)
-                        + (from.y - goal.y) * (from.y - goal.y));
+                return from.distance(maze.getGoalLoc());
             }
         };
     }
 
-    public static TransitionFunction<Point> defaultTransitionFunction(final StringMaze maze) {
+    public static TransitionFunction<Point> defaultTransitionFunction(final Maze2D maze) {
         return new TransitionFunction<Point>() {
             public Iterable<Transition<Point>> from(Point fromState) {
                 return Transition.map(fromState,
@@ -98,13 +96,7 @@ public class AlgorithmIteratorFromMazeCreator {
     public static CostFunction<Point, Double> defaultCostFunction() {
         return new CostFunction<Point, Double>() {
             public Double evaluate(Transition<Point> successor) {
-                Point from = successor.from();
-                Point to = successor.to();
-                if (from != null) {
-                    return Math.sqrt((from.x - to.x) * (from.x - to.x)
-                            + (from.y - to.y) * (from.y - to.y));
-                }
-                return 0.0;
+                return (successor.from() != null)?successor.from().distance(successor.to()):0.0;
             }
         };
     }

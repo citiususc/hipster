@@ -18,12 +18,12 @@ package es.usc.citius.lab.hipster.testutils;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 
 /**
  * Class to obtain an instance of {@link DirectedGraph} (JUNG library) from an
- * instance of {@link StringMaze}.
+ * instance of {@link Maze2D}.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
@@ -35,10 +35,10 @@ public class JungDirectedGraphFromMazeCreator {
     /**
      * Conversion process.
      *
-     * @param maze instance of {@link StringMaze}
+     * @param maze instance of {@link Maze2D}
      * @return instance of {@link DirectedGraph}
      */
-    public static DirectedGraph<Point, JungEdge> create(StringMaze maze) {
+    public static DirectedGraph<Point, JungEdge> create(Maze2D maze) {
         // Create a graph from maze
         DirectedGraph<Point, JungEdge> graph = new DirectedSparseGraph<Point, JungEdge>();
         // Convert maze to graph. For each cell, add all valid neighbors with

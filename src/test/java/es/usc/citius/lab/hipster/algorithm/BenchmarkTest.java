@@ -22,7 +22,7 @@ import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import java.util.concurrent.TimeUnit;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class BenchmarkTest {
         System.out.println("-------------------------------------");
         final int times = 5;
         for (int i = 10; i < 500; i += 10) {
-            StringMaze maze = StringMaze.random(i, 0.9);
+            Maze2D maze = Maze2D.random(i, 0.9);
             // Repeat 10 times
             //Double mean1 = 0d, mean2 = 0d;
             double min1 = Double.MAX_VALUE, min2 = Double.MAX_VALUE;

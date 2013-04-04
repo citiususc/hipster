@@ -21,7 +21,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -43,65 +43,65 @@ public class AStarMazeTest {
 
     @Test
     public void AStar_Maze1() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze1());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze1());
         execute(maze, true);
     }
 
     @Test
     public void Dijkstra_Maze1() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze1());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze1());
         execute(maze, false);
     }
 
     @Test
     public void AStar_Maze2() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze2());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze2());
         execute(maze, true);
     }
 
     @Test
     public void Dijkstra_Maze2() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze2());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze2());
         execute(maze, false);
     }
 
     @Test
     public void AStar_Maze3() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze3());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze3());
         execute(maze, true);
     }
 
     @Test
     public void Dijkstra_Maze3() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze3());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze3());
         execute(maze, false);
     }
 
     @Test
     public void AStar_Maze4() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze4());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze4());
         execute(maze, true);
     }
 
     @Test
     public void Dijkstra_Maze4() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze4());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze4());
         execute(maze, false);
     }
 
     @Test
     public void AStar_Maze5() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze5());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze5());
         execute(maze, true);
     }
 
     @Test
     public void Dijkstra_Maze5() throws InterruptedException {
-        StringMaze maze = new StringMaze(MazeSearch.getTestMaze5());
+        Maze2D maze = new Maze2D(MazeSearch.getTestMaze5());
         execute(maze, false);
     }
 
-    private void execute(StringMaze maze, boolean heuristic) throws InterruptedException {
+    private void execute(Maze2D maze, boolean heuristic) throws InterruptedException {
         //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
         AStar<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, heuristic);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);

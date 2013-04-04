@@ -20,8 +20,8 @@ import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
-import es.usc.citius.lab.hipster.util.NumericCostEvaluator;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -133,7 +133,7 @@ public final class MazeSearch {
     
     //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
 
-    public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, StringMaze maze) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) throws InterruptedException {
         int steps = 0;
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
@@ -144,7 +144,7 @@ public final class MazeSearch {
             System.out.print("\n\n\n\n\n\n\n\n\n");
             System.out.println(maze.getMazeForPath(statePath));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 return new Result(statePath, cost);
             }
         }
@@ -154,14 +154,14 @@ public final class MazeSearch {
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
-    public static Result executeIteratorSearch(Iterator<Node<Point>> it, StringMaze maze) {
+    public static Result executeIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) {
         int steps = 0;
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
             steps++;
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 List<Node<Point>> nodePath = currentNode.path();
-                Double cost = new NumericCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
                 return new Result(statePath, cost);
             }
@@ -170,7 +170,7 @@ public final class MazeSearch {
         return null;
     }
 
-    public static Result executeJungSearch(DirectedGraph<Point, JungEdge> jungGraph, StringMaze maze) {
+    public static Result executeJungSearch(DirectedGraph<Point, JungEdge> jungGraph, Maze2D maze) {
         DijkstraShortestPath<Point, JungEdge> dijkstra = new DijkstraShortestPath<Point, JungEdge>(
                 jungGraph, new Transformer<JungEdge, Double>() {
             public Double transform(JungEdge input) {
