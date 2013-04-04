@@ -26,7 +26,7 @@ import java.util.Set;
 
 public class StringMaze {
 
-    private boolean maze[][];
+    private byte maze[][];
     private Point initialLoc;
     private Point goalLoc;
     private int rows;
@@ -42,9 +42,13 @@ public class StringMaze {
 		Symbols(char symbol){
 			this.symbol = symbol;
 		}
+		
+		public byte value(){
+			return (byte)this.ordinal();
+		}
 	};
     
-    public StringMaze(boolean maze[][], Point initial, Point goal){
+    public StringMaze(byte maze[][], Point initial, Point goal){
     	this.maze = maze;
     	this.rows = maze.length;
     	this.columns = maze[0].length;
@@ -57,7 +61,7 @@ public class StringMaze {
         this.rows = maze2D.length;     		// y axis (rows)
         this.columns = maze2D[0].length();  // x axis (columns)
         
-        maze = new boolean[rows][columns];
+        maze = new byte[rows][columns];
         // Define valid cells
         for(int row = 0; row < this.rows; row++){
         	for(int column = 0; column < this.columns; column++){
@@ -68,33 +72,33 @@ public class StringMaze {
         		// Parse
         		switch (charPoint){
         			case ' ':
-        				maze[row][column]=true;
+        				maze[row][column]=Symbols.EMPTY.value();
         				break;
                     case '@':
-                        maze[row][column] = true;
+                        maze[row][column] = Symbols.START.value();
                         initialLoc = new Point(x, y);
                         break;
                     case 'O':
-                        maze[row][column] = true;
+                        maze[row][column] = Symbols.GOAL.value();
                         goalLoc = new Point(x, y);
                         break;
                     default:
-                        maze[row][column] = false;
+                        maze[row][column] = Symbols.OCCUPIED.value();
         		}
         	}
         }
     }
     
     public boolean isFree(Point p){
-    	return this.maze[p.y][p.x];
+    	return this.maze[p.y][p.x]>Symbols.OCCUPIED.value();
     }
 
     public static StringMaze random(int size, double spaceProb) {
-        boolean[][] maze = new boolean[size][size];
+        byte[][] maze = new byte[size][size];
         Random r = new Random(System.nanoTime());
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
-                maze[row][column]= (r.nextDouble() > (1.0d - spaceProb));
+                maze[row][column]= (r.nextDouble() > (1.0d - spaceProb))?Symbols.EMPTY.value():Symbols.OCCUPIED.value();
             }
         }
         return new StringMaze(maze, new Point(0,0), new Point(size-1,size-1));
@@ -110,13 +114,25 @@ public class StringMaze {
         return points;
     }
     
-    public void updateLocation(Point p, boolean empty){
+    public void updateLocation(Point p, Symbols symbol){
     	int row = p.y;
     	int column = p.x;
-    	this.maze[row][column]=empty;
+    	this.maze[row][column]=symbol.value();
     }
     
-    public void updateArea(Point x, Point y, boolean empty){
+    public void putObstacle(Point p){
+    	updateLocation(p, Symbols.OCCUPIED);
+    }
+    
+    public void removeObstacle(Point p){
+    	updateLocation(p, Symbols.EMPTY);
+    }
+    
+    public void putObstacle(Point x, Point y){
+    	
+    }
+    
+    public void removeObstacle(Point x, Point y){
     	
     }
 
@@ -171,16 +187,7 @@ public class StringMaze {
 		char[][] chars = new char[this.rows][this.columns];
 		for (int row = 0; row < this.rows; row++) {
 			for (int column = 0; column < this.columns; column++) {
-				if (maze[row][column]) {
-					chars[row][column] = ' ';
-				} else {
-					chars[row][column] = 'X';
-				}
-				if (this.initialLoc.getX() == column && this.initialLoc.getY() == row) {
-					chars[row][column] = '@';
-				} else if (this.goalLoc.getX() == column && this.goalLoc.getY() == row) {
-					chars[row][column] = 'O';
-				}
+				chars[row][column]= Symbols.values()[maze[row][column]].symbol;
 			}
 		}
 		return chars;
@@ -219,7 +226,7 @@ public class StringMaze {
 		return differentLocations;
 	}
 
-    public boolean[][] getMaze() {
+    public byte[][] getMaze() {
         return maze;
     }
 
