@@ -8,7 +8,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 27-03-2013
  * @version 1.0
  */
-public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarNode<S>> {
+public class ADStarDoubleNode<S> extends AbstractNode<S> implements Comparable<ADStarDoubleNode<S>> {
 
     protected Double g;
     protected Double v;
@@ -21,7 +21,7 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
      * @param transition incoming transition
      * @param previousNode parent node
      */
-    public ADStarNode(Transition<S> transition, Node<S> previousNode, Double g, Double v, Key k) {
+    public ADStarDoubleNode(Transition<S> transition, Node<S> previousNode, Double g, Double v, Key k) {
         super(transition, previousNode);
         this.g = g;
         this.v = v;
@@ -35,7 +35,7 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
      * @param o other node instance
      * @return comparation result
      */
-    public int compareTo(ADStarNode<S> o) {
+    public int compareTo(ADStarDoubleNode<S> o) {
         return this.key.compareTo(o.key);
     }
 
@@ -108,8 +108,8 @@ public class ADStarNode<S> extends AbstractNode<S> implements Comparable<ADStarN
     }
 
     @Override
-    public ADStarNode<S> previousNode() {
-        return (ADStarNode<S>) previousNode;
+    public ADStarDoubleNode<S> previousNode() {
+        return (ADStarDoubleNode<S>) previousNode;
     }
     
     

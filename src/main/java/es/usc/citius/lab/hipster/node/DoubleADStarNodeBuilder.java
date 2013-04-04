@@ -22,14 +22,14 @@ package es.usc.citius.lab.hipster.node;
  * @since 02-04-2013
  * @version 1.0
  */
-public class DoubleADStarNodeBuilder<S> implements NodeBuilder<S, ADStarNode<S>>{
+public class DoubleADStarNodeBuilder<S> implements NodeBuilder<S, ADStarDoubleNode<S>>{
 
-    public ADStarNode<S> node(ADStarNode<S> from, Transition<S> transition) {
+    public ADStarDoubleNode<S> node(ADStarDoubleNode<S> from, Transition<S> transition) {
         if(from == null){
-            return new ADStarNode<S>(transition, null, 0.0, Double.POSITIVE_INFINITY, new ADStarNode.Key(0, 0));
+            return new ADStarDoubleNode<S>(transition, null, 0.0, Double.POSITIVE_INFINITY, new ADStarDoubleNode.Key(0, 0));
         }
         else{
-         return new ADStarNode<S>(transition, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, new ADStarNode.Key(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));   
+         return new ADStarDoubleNode<S>(transition, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, new ADStarDoubleNode.Key(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));   
         }
     }
 

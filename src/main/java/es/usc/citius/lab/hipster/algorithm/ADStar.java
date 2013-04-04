@@ -1,17 +1,16 @@
 package es.usc.citius.lab.hipster.algorithm;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNode;
+import es.usc.citius.lab.hipster.node.ADStarDoubleNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.Transition;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -25,28 +24,34 @@ import java.util.Queue;
  */
 public class ADStar<S> implements Iterator<Node<S>> {
 
-    private final ADStarNode<S> beginNode;
-    private final ADStarNode<S> goalNode;
+    private final ADStarDoubleNode<S> beginNode;
+    private final ADStarDoubleNode<S> goalNode;
     private final TransitionFunction<S> successorFunction;
     private final TransitionFunction<S> predecessorFunction;
-    private final NodeBuilder<S, ADStarNode<S>> builder;
-    private final ADStarNodeUpdater<S, ADStarNode<S>> updater;
-    private final Map<S, ADStarNode<S>> visited;
-    private Map<S, ADStarNode<S>> open;
-    private Map<S, ADStarNode<S>> closed;
-    private Map<S, ADStarNode<S>> incons;
-    private Queue<ADStarNode<S>> queue;
+    private final NodeBuilder<S, ADStarDoubleNode<S>> builder;
+    private final ADStarNodeUpdater<S, ADStarDoubleNode<S>> updater;
+    private final Map<S, ADStarDoubleNode<S>> visited;
+    private final Iterable<Transition<S>> transitionsChanged;
+    private final S begin;
+    private final S goal;
+    private Map<S, ADStarDoubleNode<S>> open;
+    private Map<S, ADStarDoubleNode<S>> closed;
+    private Map<S, ADStarDoubleNode<S>> incons;
+    private Queue<ADStarDoubleNode<S>> queue;
 
-    public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeBuilder<S, ADStarNode<S>> builder, ADStarNodeUpdater<S, ADStarNode<S>> updater) {
+    public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeBuilder<S, ADStarDoubleNode<S>> builder, ADStarNodeUpdater<S, ADStarDoubleNode<S>> updater) {
+        this.begin = begin;
+        this.goal = goal;
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;
         this.predecessorFunction = predecessors;
-        this.open = new HashMap<S, ADStarNode<S>>();
-        this.closed = new HashMap<S, ADStarNode<S>>();
-        this.incons = new HashMap<S, ADStarNode<S>>();
-        this.queue = new PriorityQueue<ADStarNode<S>>();
-        this.visited = new HashMap<S, ADStarNode<S>>();
+        this.open = new HashMap<S, ADStarDoubleNode<S>>();
+        this.closed = new HashMap<S, ADStarDoubleNode<S>>();
+        this.incons = new HashMap<S, ADStarDoubleNode<S>>();
+        this.queue = new PriorityQueue<ADStarDoubleNode<S>>();
+        this.visited = new HashMap<S, ADStarDoubleNode<S>>();
+        this.transitionsChanged = new HashSet<Transition<S>>();
         this.beginNode = this.builder.node(null, new Transition<S>(null, begin));
         this.goalNode = this.builder.node(this.beginNode, new Transition<S>(null, goal));
 
@@ -62,9 +67,9 @@ public class ADStar<S> implements Iterator<Node<S>> {
      *
      * @return most promising node
      */
-    private ADStarNode<S> takePromising() {
+    private ADStarDoubleNode<S> takePromising() {
         while (!this.queue.isEmpty()) {
-            ADStarNode<S> head = this.queue.peek();
+            ADStarDoubleNode<S> head = this.queue.peek();
             if (!this.open.containsKey(head.transition().to())) {
                 this.queue.poll();
             } else {
@@ -79,7 +84,7 @@ public class ADStar<S> implements Iterator<Node<S>> {
      *
      * @param node instance of node to add
      */
-    private void insertOpen(ADStarNode<S> node) {
+    private void insertOpen(ADStarDoubleNode<S> node) {
         this.open.put(node.transition().to(), node);
         this.queue.offer(node);
     }
@@ -89,9 +94,9 @@ public class ADStar<S> implements Iterator<Node<S>> {
      *
      * @param node instance of {@link ADStarNode}
      */
-    private void update(ADStarNode<S> node) {
+    private void update(ADStarDoubleNode<S> node) {
         S state = node.transition().to();
-        if (Double.compare(node.getV(), node.getG()) != 0) {
+        if (node.getV().compareTo(node.getG()) > 0) {
             if (!this.closed.containsKey(state)) {
                 this.open.put(state, node);
                 this.queue.offer(node);
@@ -102,6 +107,24 @@ public class ADStar<S> implements Iterator<Node<S>> {
             this.open.remove(state);
             this.incons.remove(state);
         }
+    }
+    
+    /**
+     * 
+     * @param state
+     * @return 
+     */
+    private Map<Transition<S>, ADStarDoubleNode<S>> predecessorsMap(S state){
+        //Map<Transition, Node> containing predecesors relations
+        Map<Transition<S>, ADStarDoubleNode<S>> mapPredecessors = new HashMap<Transition<S>, ADStarDoubleNode<S>>();
+        //Fill with non-null pairs of <Transition, Node>
+        for (Transition<S> predecessor : this.predecessorFunction.from(state)) {
+            ADStarDoubleNode<S> predecessorNode = this.visited.get(predecessor.to());
+            if (predecessorNode != null) {
+                mapPredecessors.put(predecessor, predecessorNode);
+            }
+        }
+        return mapPredecessors;
     }
 
     /**
@@ -115,58 +138,78 @@ public class ADStar<S> implements Iterator<Node<S>> {
     }
 
     public Node<S> next() {
-        /*First node in queue is retrieved.*/
-        ADStarNode<S> current = takePromising();
+        //First node in OPEN retrieved, not removed
+        ADStarDoubleNode<S> current = takePromising();
         S state = current.transition().to();
         if (this.goalNode.compareTo(current) > 0 || this.goalNode.getV().compareTo(this.goalNode.getG()) < 0) {
+            //s removed from OPEN
             this.open.remove(state);
-            
+            //if v(s) > g(s)
             boolean consistent = current.getV().compareTo(current.getG()) > 0;
-            if(consistent){
+            if (consistent) {
                 //v(s) = g(s)
                 current.setV(current.getG());
+                //closed = closed U current
                 this.closed.put(state, current);
-            }
-            else{
+            } else {
                 //v(s) = Infinity
                 this.updater.setMaxV(current);
                 update(current);
             }
-            
-            for(Transition<S> successor : this.successorFunction.from(state)){
-                /*if s' not visited before: v(s')=g(s')=Infinity*/
-                ADStarNode<S> successorNode = this.visited.get(successor.to());
+
+            for (Transition<S> successor : this.successorFunction.from(state)) {
+                //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
+                ADStarDoubleNode<S> successorNode = this.visited.get(successor.to());
                 if (successorNode == null) {
                     successorNode = this.builder.node(current, successor);
                     this.visited.put(successor.to(), successorNode);
                 }
-                
-                if(consistent){
+
+                if (consistent) {
                     //if g(s') > g(s) + c(s, s')
                     //  bp(s') = s
                     //  g(s') = g(s) + c(s, s')
-                    this.updater.updateConsistent(successorNode, current, successor);
-                    update(successorNode);
-                }
-                else{
-                    if(successor.to().equals(state)){
-                        Map<Transition<S>, ADStarNode<S>> mapPredecessors = new HashMap<Transition<S>, ADStarNode<S>>();
-                        Sets.newHashSet(Iterables.filter(this.predecessorFunction.from(successor.to()), Predicates.notNull()));
-                        for(Transition<S> predecessor : this.predecessorFunction.from(successor.to())){
-                            ADStarNode<S> predecessorNode = this.visited.get(predecessor.to());
-                            if(predecessorNode != null){
-                                mapPredecessors.put(predecessor, predecessorNode);
-                            }
-                        }
-                        //  bp(s') = arg min ...
-                        //  g(s') = v(bp(s')) + c(bp(s', s''))
-                        this.updater.updateInconsistent(successorNode, mapPredecessors);
+                    boolean doUpdate = this.updater.updateConsistent(successorNode, current, successor);
+                    if (doUpdate) {
+                        update(successorNode);
+                    }
+                } else {
+                    //Generate 
+                    if (successor.to().equals(state)) {
+                        //  bp(s') = arg min s'' predecesor of s' such that (v(s'') + c(s'', s')) 
+                        //  g(s') = v(bp(s')) + c(bp(s'), s'')
+                        this.updater.updateInconsistent(successorNode, predecessorsMap(successor.to()));
                         update(successorNode);
                     }
                 }
-            }            
+            }
         } else {
-            /*Executes the changed relations processing and Epsilon updating.*/
+            // for all directed edges (u, v) with changed edge costs
+            for (Transition<S> transition : this.transitionsChanged) {
+                state = transition.to();
+                //if v != start
+                if (!state.equals(this.begin)) {
+                    //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
+                    ADStarDoubleNode<S> node = this.visited.get(state);
+                    if (node == null) {
+                        node = this.builder.node(current, transition);
+                        this.visited.put(state, node);
+                    }
+                    //  bp(v) = arg min s'' predecesor of v such that (v(s'') + c(s'', v)) 
+                    //  g(v) = v(bp(v)) + c(bp(v), v)
+                    this.updater.updateInconsistent(node, predecessorsMap(transition.to()));
+                    update(node);
+                }
+            }
+            //move states from INCONS to OPEN
+            this.open.putAll(this.incons);
+            //update the priorities for all s in OPEN according to key(s)
+            this.queue.clear();
+            for(ADStarDoubleNode<S> node : this.open.values()){
+                this.queue.offer(node);
+            }
+            //closed = empty
+            this.closed.clear();
         }
         return current;
     }

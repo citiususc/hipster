@@ -20,7 +20,7 @@ import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNode;
+import es.usc.citius.lab.hipster.node.ADStarDoubleNode;
 import es.usc.citius.lab.hipster.node.DoubleADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
@@ -63,9 +63,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        NodeBuilder<Point, ADStarNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
+        NodeBuilder<Point, ADStarDoubleNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
 
-        ADStarNodeUpdater<Point, ADStarNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
+        ADStarNodeUpdater<Point, ADStarDoubleNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
 
         return new ADStar<Point>(
                 maze.getInitialLoc(),
