@@ -214,7 +214,7 @@ public class StringMaze {
 
 	public Set<Point> diff(StringMaze to){
 		char[][] maze1 = this.toCharArray();
-		char[][] maze2 = this.toCharArray();
+		char[][] maze2 = to.toCharArray();
 		Set<Point> differentLocations = new HashSet<Point>();
 		for (int row = 0; row < this.rows; row++) {
 			for (int column = 0; column < this.columns; column++) {

@@ -19,36 +19,76 @@ package es.usc.citius.lab.hipster.maze;
 import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.junit.Test;
+
+import com.google.common.collect.Sets;
 
 import es.usc.citius.lab.hipster.util.maze.StringMaze;
 
 public class StringMazeTest {
-
+	private static final String[] testMaze = {
+	            "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+	            "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
+	            "XX    XXXXXXXXXX XXX XX     XXXX",
+	            "XXXXX  XXXXXX    XXX XX XXX XXXX",
+	            "XXX XX XXXXXX XX XXX XX  XX XXXX",
+	            "XXX     XXXXX XXXXXX XXXXXX XXXX",
+	            "XXXXXXX       XXXXXX        XXXX",
+	            "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
+	            "XXXXXXXXXX XX    XXXXX      XXXX",
+	            "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
+	            "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
+	            "XXXXXXXXXXX            XXXX XXXX",
+	            "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
+	            "XXXXXX              XXXX XX XXXX",
+	            "XXXXXX XXXXXXXXXXXX XX      XXXX",
+	            "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+	            "XXXXXX XXXXX   XXX            XX",
+	            "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
+	            "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
+	            "XXXXXX            XXXXXXXXXXXXXX"};
+	
+	// (10,0), (11,0), (23,16), (24,16)
+	private static final String[] testMaze2 = {
+		        "XX@XXXXXXX  XXXXXXXXXXXXXXXXXXXX",
+		        "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
+		        "XX    XXXXXXXXXX XXX XX     XXXX",
+		        "XXXXX  XXXXXX    XXX XX XXX XXXX",
+		        "XXX XX XXXXXX XX XXX XX  XX XXXX",
+		        "XXX     XXXXX XXXXXX XXXXXX XXXX",
+		        "XXXXXXX       XXXXXX        XXXX",
+		        "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
+		        "XXXXXXXXXX XX    XXXXX      XXXX",
+		        "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
+		        "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
+		        "XXXXXXXXXXX            XXXX XXXX",
+		        "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
+		        "XXXXXX              XXXX XX XXXX",
+		        "XXXXXX XXXXXXXXXXXX XX      XXXX",
+		        "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+		        "XXXXXX XXXXX   XXX     XX     XX",
+		        "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
+		        "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
+		        "XXXXXX            XXXXXXXXXXXXXX"};
+	
+	@Test
+	public void testDiff(){
+		StringMaze maze = new StringMaze(testMaze);
+		StringMaze maze2 = new StringMaze(testMaze2);
+		Collection<Point> diffs = maze.diff(maze2);
+		Collection<Point> result = new HashSet<Point>();
+		result.add(new Point(10,0));
+		result.add(new Point(11,0));
+		result.add(new Point(23,16));
+		result.add(new Point(24,16));
+		assertEquals(diffs, result);
+	}
+	
     @Test
-    public void test() {
-        String[] testMaze = {
-            "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
-            "XX    XXXXXXXXXX XXX XX     XXXX",
-            "XXXXX  XXXXXX    XXX XX XXX XXXX",
-            "XXX XX XXXXXX XX XXX XX  XX XXXX",
-            "XXX     XXXXX XXXXXX XXXXXX XXXX",
-            "XXXXXXX       XXXXXX        XXXX",
-            "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
-            "XXXXXXXXXX XX    XXXXX      XXXX",
-            "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
-            "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
-            "XXXXXXXXXXX            XXXX XXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
-            "XXXXXX              XXXX XX XXXX",
-            "XXXXXX XXXXXXXXXXXX XX      XXXX",
-            "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
-            "XXXXXX XXXXX   XXX            XX",
-            "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
-            "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
-            "XXXXXX            XXXXXXXXXXXXXX"};
+    public void testPoints() {
         StringMaze maze = new StringMaze(testMaze);
         // Valid cells
         assertTrue(maze.validLocation(new Point(2,1)));
@@ -62,8 +102,8 @@ public class StringMazeTest {
         assertEquals(maze.getInitialLoc(), new Point(2, 0));
         assertEquals(maze.getGoalLoc(), new Point(9, 15));
         // Print valid moves from initial and goal
-        System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
-        System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
-        System.out.println(maze.validLocationsFrom(new Point(14, 3)));
+        // System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
+        // System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
+        // System.out.println(maze.validLocationsFrom(new Point(14, 3)));
     }
 }
