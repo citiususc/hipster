@@ -151,7 +151,7 @@ public class Maze2D {
     }
 
     
-    public String[] getMazePath(List<Point> path) {
+    public String[] getMazePath(Collection<Point> path) {
         String[] copyMaze = toStringArray();
         for (Point p : path) {
         	int row = p.y;
@@ -252,7 +252,7 @@ public class Maze2D {
         return goalLoc;
     }
     
-    public String getMazeForPath(List<Point> points) {
+    public String getMazeForPath(Collection<Point> points) {
         String s = "";
         for (String line : this.getMazePath(points)) {
             s = s.concat(line).concat("\n");
