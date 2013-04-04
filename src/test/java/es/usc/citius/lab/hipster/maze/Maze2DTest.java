@@ -26,9 +26,28 @@ import org.junit.Test;
 
 import com.google.common.collect.Sets;
 
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
-public class StringMazeTest {
+public class Maze2DTest {
+	
+	private static final String[] obstacleMaze = {
+				"XX                              ",
+				"          XXXXXXXX              ",
+				"          XXXXXXXX              ",
+				"          XXXXXXXX              ",
+				"                                ",
+				"                                ",
+				"                              XX"};
+	
+	private static final String[] refMaze       = {
+				"XX                              ",
+				"                                ",
+				"                                ",
+				"                                ",
+				"                                ",
+				"                                ",
+				"                              XX"};
+	
 	private static final String[] testMaze = {
 	            "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
 	            "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
@@ -76,8 +95,8 @@ public class StringMazeTest {
 	
 	@Test
 	public void testDiff(){
-		StringMaze maze = new StringMaze(testMaze);
-		StringMaze maze2 = new StringMaze(testMaze2);
+		Maze2D maze = new Maze2D(testMaze);
+		Maze2D maze2 = new Maze2D(testMaze2);
 		Collection<Point> diffs = maze.diff(maze2);
 		Collection<Point> result = new HashSet<Point>();
 		result.add(new Point(10,0));
@@ -89,7 +108,7 @@ public class StringMazeTest {
 	
     @Test
     public void testPoints() {
-        StringMaze maze = new StringMaze(testMaze);
+        Maze2D maze = new Maze2D(testMaze);
         // Valid cells
         assertTrue(maze.validLocation(new Point(2,1)));
         assertTrue(maze.validLocation(new Point(2,0)));
@@ -105,5 +124,17 @@ public class StringMazeTest {
         // System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
         // System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
         // System.out.println(maze.validLocationsFrom(new Point(14, 3)));
+    }
+    
+    @Test
+    public void obstacles(){
+    	Maze2D maze = new Maze2D(refMaze);
+    	Maze2D goal = new Maze2D(obstacleMaze);
+    	maze.putObstacleRectangle(new Point(10,1), new Point(17,3));
+    	//System.out.println(maze.toString());
+    	assertTrue(maze.diff(goal).isEmpty());
+    	maze.removeObstacleRectangle(new Point(10,1), new Point(17,3));
+    	assertTrue(maze.diff(new Maze2D(refMaze)).isEmpty());
+    	assertTrue(!maze.diff(goal).isEmpty());
     }
 }

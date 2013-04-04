@@ -21,7 +21,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
 import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
-import es.usc.citius.lab.hipster.util.maze.StringMaze;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -133,7 +133,7 @@ public final class MazeSearch {
     
     //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
 
-    public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, StringMaze maze) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) throws InterruptedException {
         int steps = 0;
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
@@ -154,7 +154,7 @@ public final class MazeSearch {
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
-    public static Result executeIteratorSearch(Iterator<Node<Point>> it, StringMaze maze) {
+    public static Result executeIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) {
         int steps = 0;
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
@@ -170,7 +170,7 @@ public final class MazeSearch {
         return null;
     }
 
-    public static Result executeJungSearch(DirectedGraph<Point, JungEdge> jungGraph, StringMaze maze) {
+    public static Result executeJungSearch(DirectedGraph<Point, JungEdge> jungGraph, Maze2D maze) {
         DijkstraShortestPath<Point, JungEdge> dijkstra = new DijkstraShortestPath<Point, JungEdge>(
                 jungGraph, new Transformer<JungEdge, Double>() {
             public Double transform(JungEdge input) {

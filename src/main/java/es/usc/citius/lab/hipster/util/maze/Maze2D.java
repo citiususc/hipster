@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class StringMaze {
+public class Maze2D {
 
     private byte maze[][];
     private Point initialLoc;
@@ -48,7 +48,7 @@ public class StringMaze {
 		}
 	};
     
-    public StringMaze(byte maze[][], Point initial, Point goal){
+    public Maze2D(byte maze[][], Point initial, Point goal){
     	this.maze = maze;
     	this.rows = maze.length;
     	this.columns = maze[0].length;
@@ -56,7 +56,7 @@ public class StringMaze {
     	this.goalLoc = goal;
     }
 
-    public StringMaze(String[] maze2D) {
+    public Maze2D(String[] maze2D) {
         // Initialize maze
         this.rows = maze2D.length;     		// y axis (rows)
         this.columns = maze2D[0].length();  // x axis (columns)
@@ -93,7 +93,7 @@ public class StringMaze {
     	return this.maze[p.y][p.x]>Symbols.OCCUPIED.value();
     }
 
-    public static StringMaze random(int size, double spaceProb) {
+    public static Maze2D random(int size, double spaceProb) {
         byte[][] maze = new byte[size][size];
         Random r = new Random(System.nanoTime());
         for (int row = 0; row < size; row++) {
@@ -101,7 +101,7 @@ public class StringMaze {
                 maze[row][column]= (r.nextDouble() > (1.0d - spaceProb))?Symbols.EMPTY.value():Symbols.OCCUPIED.value();
             }
         }
-        return new StringMaze(maze, new Point(0,0), new Point(size-1,size-1));
+        return new Maze2D(maze, new Point(0,0), new Point(size-1,size-1));
     }
 
     public List<Point> getMazePoints() {
@@ -120,6 +120,18 @@ public class StringMaze {
     	this.maze[row][column]=symbol.value();
     }
     
+    public void updateRectangle(Point a, Point b, Symbols symbol){
+    	int xfrom = (a.x < b.x)?a.x:b.x;
+    	int xto = (a.x > b.x)?a.x:b.x;
+    	int yfrom = (a.y < b.y)?a.y:b.y;
+    	int yto = (a.y > b.y)?a.y:b.y;
+    	for(int x = xfrom; x<=xto; x++){
+    		for(int y=yfrom; y<=yto; y++){
+    			updateLocation(new Point(x,y), symbol);
+    		}
+    	}	
+    }
+    
     public void putObstacle(Point p){
     	updateLocation(p, Symbols.OCCUPIED);
     }
@@ -128,12 +140,12 @@ public class StringMaze {
     	updateLocation(p, Symbols.EMPTY);
     }
     
-    public void putObstacle(Point x, Point y){
-    	
+    public void putObstacleRectangle(Point a, Point b){
+    	updateRectangle(a, b, Symbols.OCCUPIED);
     }
     
-    public void removeObstacle(Point x, Point y){
-    	
+    public void removeObstacleRectangle(Point a, Point b){
+    	updateRectangle(a, b, Symbols.EMPTY);
     }
 
     
@@ -212,7 +224,7 @@ public class StringMaze {
 		return output;
 	}
 
-	public Set<Point> diff(StringMaze to){
+	public Set<Point> diff(Maze2D to){
 		char[][] maze1 = this.toCharArray();
 		char[][] maze2 = to.toCharArray();
 		Set<Point> differentLocations = new HashSet<Point>();
