@@ -58,13 +58,19 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 	}
 	
 	public boolean hasNext() {
-		return !this.queue.isEmpty() || !improvement;
+		return !this.queue.isEmpty();
 	}
 
 	public Node<S> next() {
-		improvement = false;
-		// Take the smallest node
+		// Take the next node
 		AStarNode<S> current = this.queue.poll();
+		// Interchange by the latest best version found. This replacement
+		// is required to guarantee that we obtain the most updated version
+		// since the queue is not updated when a best node is found.
+		AStarNode<S> best = this.open.get(current.transition().to());
+		if (best != null){
+			current = best;
+		}
 		// Calculate distances to each neighbor
 		S currentState = current.transition().to();
 		for(Transition<S> successor : this.transition.from(currentState)){
@@ -77,14 +83,12 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 				// path, update and enqueue. Else, discard this node.
 				//if (comparator.compare(successorNode, previousNode) <= 0){
 				if (successorNode.compareByCost(previousNode) < 0){
-					// Replace previousNode
+					// Replace the worst version from open
 					this.open.put(successor.to(), successorNode);
-					improvement = true;
 				}
 			} else {
 				this.queue.add(successorNode);
 				this.open.put(successor.to(), successorNode);
-				improvement = true;
 			}
 		}
 		return current;

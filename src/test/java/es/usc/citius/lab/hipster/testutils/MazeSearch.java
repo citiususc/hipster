@@ -167,9 +167,13 @@ public final class MazeSearch {
     }
     
     //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
-
     public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) throws InterruptedException {
+    	return executePrintIteratorSearch(it, maze, true);
+    }
+
+    public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
         int steps = 0;
+        Result r = null;
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
@@ -182,15 +186,20 @@ public final class MazeSearch {
             System.out.println(getMazeStringSolution(maze, explored, statePath));
             Thread.sleep(20);
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
-            	clearOutput(20);
-            	System.out.println(getMazeStringSolution(maze, explored, statePath));
-            	Thread.sleep(2000);
+            	//clearOutput(20);
+            	//System.out.println(getMazeStringSolution(maze, explored, statePath));
+            	//Thread.sleep(2000);
                 Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
-                return new Result(statePath, cost);
+                r = new Result(statePath, cost);
+                if (exitWhenGoalReached){
+                	return r;
+                }
             }
         }
-        fail("Solution not found after " + steps + " steps.");
-        return null;
+        if (r == null){
+        	fail("Solution not found after " + steps + " steps.");
+        }
+        return r;
     }
     
     public static void clearOutput(int newlines){

@@ -76,7 +76,7 @@ public class BellmanFordTest {
     	BellmanFord<Point> it = AlgorithmIteratorFromMazeCreator.bellmanFord(maze, heuristic);
         DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
-        MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
+        MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze, false);
         assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
     }
     
