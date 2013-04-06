@@ -16,20 +16,26 @@
 
 package es.usc.citius.lab.hipster.testutils;
 
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
-import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import static org.junit.Assert.fail;
+
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections15.Transformer;
-import static org.junit.Assert.fail;
+
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
+import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
+import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
  * Class to generate sample maps to test different search algorithms.
@@ -144,17 +150,41 @@ public final class MazeSearch {
             steps++;
             List<Node<Point>> nodePath = currentNode.path();
             List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
+            clearOutput(20);
+            //System.out.println(maze.getStringMazeFilled(explored, '.'));
+            System.out.println(getMazeStringSolution(maze, explored, statePath));
             Thread.sleep(20);
-            System.out.print("\n\n\n\n\n\n\n\n\n");
-            //System.out.println(maze.getMazeForPath(statePath));
-            System.out.println(maze.getMazeForPath(explored));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
+            	clearOutput(20);
+            	System.out.println(getMazeStringSolution(maze, explored, statePath));
+            	Thread.sleep(2000);
                 Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 return new Result(statePath, cost);
             }
         }
         fail("Solution not found after " + steps + " steps.");
         return null;
+    }
+    
+    public static void clearOutput(int newlines){
+    	char[] chars= new char[newlines];
+        Arrays.fill(chars, '\n');
+        System.out.println(chars);
+    }
+    
+    public static String getMazeStringSolution(Maze2D maze, Collection<Point> explored, Collection<Point> path){
+    	List<Map<Point,Character>> replacements = new ArrayList<Map<Point,Character>>();
+    	Map<Point,Character> replacement = new HashMap<Point, Character>();
+    	for(Point p :explored){
+    		replacement.put(p, '.');
+    	}
+    	replacements.add(replacement);
+    	replacement = new HashMap<Point, Character>();
+    	for(Point p :path){
+    		replacement.put(p, '*');
+    	}
+    	replacements.add(replacement);
+    	return maze.getReplacedMazeString(replacements);
     }
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {

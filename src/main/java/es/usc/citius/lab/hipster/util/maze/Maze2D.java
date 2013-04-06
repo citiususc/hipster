@@ -20,8 +20,11 @@ import java.awt.Point;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -149,19 +152,29 @@ public class Maze2D {
     public void removeObstacleRectangle(Point a, Point b){
     	updateRectangle(a, b, Symbol.EMPTY);
     }
-
     
-    public String[] getMazePath(Collection<Point> path) {
-        String[] copyMaze = toStringArray();
-        for (Point p : path) {
-        	int row = p.y;
-        	int column = p.x;
-            if (validLocation(p)) {
-                copyMaze[row] = replaceChar(copyMaze[row], column, '.');
-            }
-
-        }
-        return copyMaze;
+    public String getReplacedMazeString(List<Map<Point, Character>> replacements){
+    	String[] stringMaze = toStringArray();
+    	for(Map<Point, Character> replacement : replacements){
+	    	for(Point p : replacement.keySet()){
+	    		int row = p.y;
+	    		int column = p.x;
+	    		stringMaze[row] = replaceChar(stringMaze[row], column, replacement.get(p));
+	    	}
+    	}
+    	String output = "";
+    	for(String line : stringMaze){
+    		output += String.format("%s%n", line);
+    	}
+    	return output;
+    }
+    
+    public String getStringMazeFilled(Collection<Point> points, char symbol) {
+    	Map<Point,Character> replacements = new HashMap<Point, Character>();
+    	for(Point p : points){
+    		replacements.put(p, symbol);
+    	}
+    	return getReplacedMazeString(Collections.singletonList(replacements));
     }
 
     private static String replaceChar(String line, int position, char c) {
@@ -176,6 +189,10 @@ public class Maze2D {
         } catch (ArrayIndexOutOfBoundsException ex) {
             return false;
         }
+    }
+    
+    public boolean pointInBounds(Point loc){
+    	return loc.x<this.columns && loc.y < this.rows;
     }
 
     public Collection<Point> validLocationsFrom(Point loc) {
@@ -252,11 +269,5 @@ public class Maze2D {
         return goalLoc;
     }
     
-    public String getMazeForPath(Collection<Point> points) {
-        String s = "";
-        for (String line : this.getMazePath(points)) {
-            s = s.concat(line).concat("\n");
-        }
-        return s;
-    }
+    
 }
