@@ -24,6 +24,8 @@ import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.collections15.Transformer;
@@ -135,14 +137,17 @@ public final class MazeSearch {
 
     public static Result executePrintIteratorSearch(Iterator<Node<Point>> it, Maze2D maze) throws InterruptedException {
         int steps = 0;
+        Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
             Node<Point> currentNode = it.next();
+            explored.add(currentNode.transition().to());
             steps++;
             List<Node<Point>> nodePath = currentNode.path();
             List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
             Thread.sleep(20);
             System.out.print("\n\n\n\n\n\n\n\n\n");
-            System.out.println(maze.getMazeForPath(statePath));
+            //System.out.println(maze.getMazeForPath(statePath));
+            System.out.println(maze.getMazeForPath(explored));
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 return new Result(statePath, cost);
