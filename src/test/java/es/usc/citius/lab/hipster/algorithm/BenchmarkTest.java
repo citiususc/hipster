@@ -47,9 +47,9 @@ public class BenchmarkTest {
         System.out.println("Maze | Composit (ms) | JUNG (ms)");
         System.out.println("-------------------------------------");
         final int times = 5;
-        for (int i = 10; i < 500; i += 10) {
+        for (int i = 10; i < 300; i += 10) {
             Maze2D maze = Maze2D.random(i, 0.9);
-            // Repeat 10 times
+            // Repeat 5 times
             //Double mean1 = 0d, mean2 = 0d;
             double min2 = Double.MAX_VALUE, min1 = Double.MAX_VALUE;
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
