@@ -115,7 +115,8 @@ public final class MazeSearch {
     }
 
     public static final class Result {
-
+        
+        public static final Result NO_RESULT = new Result(new ArrayList<Point>(), Double.POSITIVE_INFINITY);
         private List<Point> path;
         private Double cost;
 
@@ -130,6 +131,32 @@ public final class MazeSearch {
 
         public List<Point> getPath() {
             return path;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 83 * hash + (this.path != null ? this.path.hashCode() : 0);
+            hash = 83 * hash + (this.cost != null ? this.cost.hashCode() : 0);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Result other = (Result) obj;
+            if (this.path != other.path && (this.path == null || !this.path.equals(other.path))) {
+                return false;
+            }
+            if (this.cost != other.cost && (this.cost == null || !this.cost.equals(other.cost))) {
+                return false;
+            }
+            return true;
         }
     }
     
@@ -186,6 +213,9 @@ public final class MazeSearch {
                 maze.getGoalLoc());
         Double cost = 0.0;
         List<Point> statePath = new ArrayList<Point>();
+        if(path.isEmpty()){
+            return Result.NO_RESULT;
+        }
         for (Iterator<JungEdge> it = path.iterator(); it.hasNext();) {
             JungEdge current = it.next();
             statePath.add(current.getSource());
