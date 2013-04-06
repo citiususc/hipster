@@ -30,8 +30,8 @@ import java.util.List;
  */
 public class Transition<S> {
 
-    private final S from;
-    private final S to;
+    protected final S from;
+    protected final S to;
 
     /**
      * Builds a transition from a pair of connected states.
