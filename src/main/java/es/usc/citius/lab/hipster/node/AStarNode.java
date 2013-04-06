@@ -26,6 +26,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 26/03/2013
  * @version 1.0
  */
+@Deprecated
 public interface AStarNode<S> extends Node<S>, Comparable<AStarNode<S>> {
 	public int compareByCost(AStarNode<S> node);
 	public int compareByScore(AStarNode<S> node);

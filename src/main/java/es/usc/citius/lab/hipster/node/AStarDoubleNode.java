@@ -26,6 +26,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 26/03/2013
  * @version 1.0
  */
+@Deprecated
 public class AStarDoubleNode<S> extends AbstractNode<S> implements AStarNode<S>{
 
     protected final double cost; // In A*: g(n)

@@ -29,6 +29,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
  * @since 26/03/2013
  * @version 1.0
  */
+@Deprecated
 public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
 
     private CostFunction<S, Double> cost;
