@@ -17,6 +17,7 @@ package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.AStar;
+import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
@@ -74,6 +75,18 @@ public class AlgorithmIteratorFromMazeCreator {
                 transition,
                 defaultBuilder,
                 updater);
+    }
+    
+    public static BellmanFord<Point> bellmanFord(final Maze2D maze, boolean useHeuristic) {
+        CostFunction<Point, Double> cost = defaultCostFunction();
+
+        TransitionFunction<Point> transition = defaultTransitionFunction(maze);
+
+        BellmanFord<Point> it;
+
+        it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost), null);
+        
+        return it;
     }
 
     public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final Maze2D maze) {

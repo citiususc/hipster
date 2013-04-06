@@ -16,14 +16,15 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.AStarNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -33,7 +34,6 @@ import es.usc.citius.lab.hipster.node.Transition;
  * the shortest path from a source node to all reachable nodes. This is
  * the preferred algorithm when negative weights are allowed.
  * 
- * 
  * @author Pablo Rodríguez Mier
  * 
  * @param <S>
@@ -41,13 +41,20 @@ import es.usc.citius.lab.hipster.node.Transition;
 public class BellmanFord<S> implements Iterator<Node<S>> {
 	
 	private TransitionFunction<S> transition;
-	private NodeBuilder<S, Node<S>> builder;
-	private Queue<Node<S>> queue;
-	private Map<S, Node<S>> open;
+	private NodeBuilder<S, AStarNode<S>> builder;
+	private Queue<AStarNode<S>> queue;
+	private Map<S, AStarNode<S>> open;
+	private Comparator<AStarNode<S>> comparator;
 	private boolean improvement = true;
 	
-	public BellmanFord(){
-		this.queue = new LinkedList<Node<S>>();
+	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, AStarNode<S>> builder, Comparator<Node<S>> comparator){
+		this.builder = builder;
+		this.transition = transition;
+		this.queue = new LinkedList<AStarNode<S>>();
+		this.open = new HashMap<S, AStarNode<S>>();
+		AStarNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
+		this.queue.add(initialNode);
+		this.open.put(initialState, initialNode);
 	}
 	
 	public boolean hasNext() {
@@ -55,38 +62,36 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 	}
 
 	public Node<S> next() {
+		improvement = false;
 		// Take the smallest node
-		Node<S> current = this.queue.poll();
+		AStarNode<S> current = this.queue.poll();
 		// Calculate distances to each neighbor
 		S currentState = current.transition().to();
 		for(Transition<S> successor : this.transition.from(currentState)){
 			// Create the successor node
-			Node<S> successorNode = this.builder.node(current, successor);
+			AStarNode<S> successorNode = this.builder.node(current, successor);
 			// Check if there is any improvement in the old cost
-			Node<S> previousNode = this.open.get(successor.to());
+			AStarNode<S> previousNode = this.open.get(successor.to());
 			if (previousNode != null){
 				// Check both paths. If the new path is better than the previous
 				// path, update and enqueue. Else, discard this node.
-				if (successorNode.compareTo(previousNode) <= 0){
-					// Update and enqueue again
-					improvement = true;
-					this.queue.add(successorNode);
+				//if (comparator.compare(successorNode, previousNode) <= 0){
+				if (successorNode.compareByCost(previousNode) < 0){
 					// Replace previousNode
 					this.open.put(successor.to(), successorNode);
-				}	
+					improvement = true;
+				}
 			} else {
+				this.queue.add(successorNode);
+				this.open.put(successor.to(), successorNode);
 				improvement = true;
 			}
-			
-			
-			// After check all transitions, stop if there
-			// is no improvement of any cost
 		}
+		return current;
 	}
 
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 }
