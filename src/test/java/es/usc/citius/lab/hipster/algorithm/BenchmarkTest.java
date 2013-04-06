@@ -47,30 +47,37 @@ public class BenchmarkTest {
         System.out.println("Maze | Composit (ms) | JUNG (ms)");
         System.out.println("-------------------------------------");
         final int times = 5;
-        for (int i = 10; i < 500; i += 10) {
+        for (int i = 10; i < 300; i += 10) {
             Maze2D maze = Maze2D.random(i, 0.9);
-            // Repeat 10 times
+            // Repeat 5 times
             //Double mean1 = 0d, mean2 = 0d;
-            double min1 = Double.MAX_VALUE, min2 = Double.MAX_VALUE;
+            double min2 = Double.MAX_VALUE, min1 = Double.MAX_VALUE;
             DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
                 //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
                 AStar<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, false);
-                Stopwatch w = new Stopwatch().start();
-                MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
-                long result1 = w.stop().elapsed(TimeUnit.MILLISECONDS);
+                Stopwatch w1 = new Stopwatch().start();
+                MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
+                //In case there is no possible result in the random maze
+                if(resultJung.equals(MazeSearch.Result.NO_RESULT)){
+                    maze = Maze2D.random(i, 0.9);
+                    graph = JungDirectedGraphFromMazeCreator.create(maze);
+                    j--;
+                    continue;
+                }
+                long result1 = w1.stop().elapsed(TimeUnit.MILLISECONDS);
                 if (result1 < min1) {
                     min1 = result1;
                 }
                 Stopwatch w2 = new Stopwatch().start();
-                MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
+                MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze);
                 long result2 = w2.stop().elapsed(TimeUnit.MILLISECONDS);
                 if (result2 < min2) {
                     min2 = result2;
                 }
                 assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
             }
-            System.out.println(String.format("%d \t %.5g \t %.5g", i, min1, min2));
+            System.out.println(String.format("%d \t %.5g \t %.5g", i, min2, min1));
         }
     }
 }
