@@ -44,8 +44,8 @@ public class BenchmarkTest {
 
     @Test
     public void benchmark() throws InterruptedException {
-        System.out.println("Maze | Composit (ms) | JUNG (ms)");
-        System.out.println("-------------------------------------");
+        System.out.println("Maze | Hipster-Dijkstra (ms) | JUNG-Dijkstra (ms)");
+        System.out.println("-------------------------------------------------");
         final int times = 5;
         for (int i = 10; i < 300; i += 10) {
             Maze2D maze = Maze2D.random(i, 0.9);
@@ -77,7 +77,7 @@ public class BenchmarkTest {
                 }
                 assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
             }
-            System.out.println(String.format("%d \t %.5g \t %.5g", i, min2, min1));
+            System.out.println(String.format("%d \t\t %.5g \t\t %.5g", i, min2, min1));
         }
     }
 }
