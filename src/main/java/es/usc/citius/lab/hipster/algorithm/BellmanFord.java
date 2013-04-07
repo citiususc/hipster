@@ -46,14 +46,14 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 	
 	private TransitionFunction<S> transition;
 	private NodeBuilder<S, AStarNode<S>> builder;
-	private Queue<AStarNode<S>> queue;
+	private Queue<S> queue;
 	private Map<S, AStarNode<S>> explored;
 	private Comparator<AStarNode<S>> comparator;
 	private boolean improvement = true;
 	
 	// Create a queue based on LinkedHashSet
 	private class HashQueue<S> extends AbstractQueue<S>{
-		private Set<S> elements = new HashSet<S>();
+		private Set<S> elements = new LinkedHashSet<S>();
 		private S first;
 
 		public boolean offer(S e) {
@@ -64,7 +64,10 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 
 		public S poll() {
 			elements.remove(first);
-			return first;
+			S last = first;
+			// Reasign first
+			first = elements.iterator().next();
+			return last;
 		}
 
 		public S peek() {
@@ -86,10 +89,10 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, AStarNode<S>> builder, Comparator<Node<S>> comparator){
 		this.builder = builder;
 		this.transition = transition;
-		this.queue = new LinkedList<AStarNode<S>>();
+		this.queue = new LinkedList<S>();
 		this.explored = new HashMap<S, AStarNode<S>>();
 		AStarNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
-		this.queue.add(initialNode);
+		this.queue.add(initialState);
 		this.explored.put(initialState, initialNode);
 	}
 	
@@ -97,17 +100,23 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		return !this.queue.isEmpty();
 	}
 	
+	private void enqueue(AStarNode<S> node){
+		S state = node.transition().to();
+		if (!this.queue.contains(state)){
+			this.queue.add(state);
+		}
+		this.explored.put(state, node);
+	}
+	
+	private AStarNode<S> dequeue(){
+		S state = this.queue.poll();
+		return this.explored.get(state);
+	}
+	
 
 	public Node<S> next() {
 		// Take the next node
-		AStarNode<S> current = this.queue.poll();
-		// Interchange by the latest best version found. This replacement
-		// is required to guarantee that we obtain the most updated version
-		// since the queue is not updated when a best node is found.
-		AStarNode<S> best = this.explored.get(current.transition().to());
-		if (best != null){
-			current = best;
-		}
+		AStarNode<S> current = dequeue();
 		// Calculate distances to each neighbor
 		S currentState = current.transition().to();
 		for(Transition<S> successor : this.transition.from(currentState)){
@@ -120,18 +129,11 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 				// path, update and enqueue. Else, discard this node.
 				//if (comparator.compare(successorNode, previousNode) <= 0){
 				if (successorNode.compareByCost(previousNode) < 0){
-					// Replace the worst version from open
-					this.explored.put(successor.to(), successorNode);
-					// Re-enqueue if not in queue
-					
-					// TODO: Improve this operation. 
-					if (!this.queue.contains(successorNode)){
-						this.queue.add(successorNode);
-					}
+					// Replace the worst version and re-enqueue (if not in queue)
+					enqueue(successorNode);
 				}
 			} else {
-				this.queue.add(successorNode);
-				this.explored.put(successor.to(), successorNode);
+				enqueue(successorNode);
 			}
 		}
 		return current;
