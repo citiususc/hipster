@@ -130,6 +130,18 @@ public class BenchmarkTest {
 				return MazeSearch.executeJungSearch(graph, maze);
 			}
 		});
+        
+        // Bellman-Ford
+        bench.add("Hipster-Bellman-Ford", new Algorithm() {
+        	BellmanFord<Point> it; Maze2D maze;
+        	public void initialize(Maze2D maze) {
+				it= AlgorithmIteratorFromMazeCreator.bellmanFord(maze, false);
+				this.maze = maze;
+			}
+			public Result evaluate() {
+				return MazeSearch.executeIteratorSearch(it, maze);
+			}
+		});
 
         int index = 0;
         for(String algName : bench.algorithms.keySet()){
