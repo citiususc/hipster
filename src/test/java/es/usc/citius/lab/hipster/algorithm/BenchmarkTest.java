@@ -52,7 +52,7 @@ public class BenchmarkTest {
             // Repeat 5 times
             //Double mean1 = 0d, mean2 = 0d;
             double min2 = Double.MAX_VALUE, min1 = Double.MAX_VALUE;
-            DirectedGraph<Point, JungEdge> graph = JungDirectedGraphFromMazeCreator.create(maze);
+            DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator.create(maze);
             for (int j = 0; j < times; j++) {
                 //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, false);
                 AStar<Point> it = AlgorithmIteratorFromMazeCreator.astar(maze, false);

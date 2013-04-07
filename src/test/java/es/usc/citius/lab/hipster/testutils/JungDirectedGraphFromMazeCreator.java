@@ -38,9 +38,9 @@ public class JungDirectedGraphFromMazeCreator {
      * @param maze instance of {@link Maze2D}
      * @return instance of {@link DirectedGraph}
      */
-    public static DirectedGraph<Point, JungEdge> create(Maze2D maze) {
+    public static DirectedGraph<Point, JungEdge<Point>> create(Maze2D maze) {
         // Create a graph from maze
-        DirectedGraph<Point, JungEdge> graph = new DirectedSparseGraph<Point, JungEdge>();
+        DirectedGraph<Point, JungEdge<Point>> graph = new DirectedSparseGraph<Point, JungEdge<Point>>();
         // Convert maze to graph. For each cell, add all valid neighbors with
         // their costs
         for (Point source : maze.getMazePoints()) {
@@ -54,7 +54,7 @@ public class JungDirectedGraphFromMazeCreator {
                 double edgeCost = Math.sqrt((source.x - dest.x)
                         * (source.x - dest.x) + (source.y - dest.y)
                         * (source.y - dest.y));
-                JungEdge e = new JungEdge(source, dest, edgeCost);
+                JungEdge<Point> e = new JungEdge<Point>(source, dest, edgeCost);
                 if (!graph.containsEdge(e)) {
                     graph.addEdge(e, source, dest);
                 }

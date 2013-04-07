@@ -41,6 +41,7 @@ import es.usc.citius.lab.hipster.util.maze.Maze2D;
  * Class to generate sample maps to test different search algorithms.
  *
  * @author Adrián González Sieira
+ * @author Pablo Rodríguez Mier
  * @since 26-03-2013
  * @version 1.0
  */
@@ -241,22 +242,22 @@ public final class MazeSearch {
         return null;
     }
 
-    public static Result executeJungSearch(DirectedGraph<Point, JungEdge> jungGraph, Maze2D maze) {
-        DijkstraShortestPath<Point, JungEdge> dijkstra = new DijkstraShortestPath<Point, JungEdge>(
-                jungGraph, new Transformer<JungEdge, Double>() {
-            public Double transform(JungEdge input) {
+    public static Result executeJungSearch(DirectedGraph<Point, JungEdge<Point>> jungGraph, Maze2D maze) {
+        DijkstraShortestPath<Point, JungEdge<Point>> dijkstra = new DijkstraShortestPath<Point, JungEdge<Point>>(
+                jungGraph, new Transformer<JungEdge<Point>, Double>() {
+            public Double transform(JungEdge<Point> input) {
                 return input.getCost();
             }
         }, true);
-        List<JungEdge> path = dijkstra.getPath(maze.getInitialLoc(),
+        List<JungEdge<Point>> path = dijkstra.getPath(maze.getInitialLoc(),
                 maze.getGoalLoc());
         Double cost = 0.0;
         List<Point> statePath = new ArrayList<Point>();
         if(path.isEmpty()){
             return Result.NO_RESULT;
         }
-        for (Iterator<JungEdge> it = path.iterator(); it.hasNext();) {
-            JungEdge current = it.next();
+        for (Iterator<JungEdge<Point>> it = path.iterator(); it.hasNext();) {
+            JungEdge<Point> current = it.next();
             statePath.add(current.getSource());
             cost += current.getCost();
         }
