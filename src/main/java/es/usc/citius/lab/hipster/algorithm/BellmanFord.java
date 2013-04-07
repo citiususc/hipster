@@ -54,20 +54,23 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 	// Create a queue based on LinkedHashSet
 	private class HashQueue<S> extends AbstractQueue<S>{
 		private Set<S> elements = new LinkedHashSet<S>();
-		private S first;
+		private S first = null;
 
 		public boolean offer(S e) {
 			elements.add(e);
-			first = e;
+			if (first == null){
+				first = e;
+			}
 			return true;
 		}
 
 		public S poll() {
+			// Remove the first element
 			elements.remove(first);
-			S last = first;
+			S out = first;
 			// Reasign first
-			first = elements.iterator().next();
-			return last;
+			first = (elements.isEmpty())?null:elements.iterator().next();
+			return out;
 		}
 
 		public S peek() {
@@ -84,12 +87,18 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 			return elements.size();
 		}
 		
+		@Override
+		public boolean contains(Object o) {
+			return this.elements.contains(o);
+		}
+		
 	}
 	
 	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, AStarNode<S>> builder, Comparator<Node<S>> comparator){
 		this.builder = builder;
 		this.transition = transition;
-		this.queue = new LinkedList<S>();
+		//this.queue = new LinkedList<S>();
+		this.queue = new HashQueue<S>();
 		this.explored = new HashMap<S, AStarNode<S>>();
 		AStarNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
 		this.queue.add(initialState);
