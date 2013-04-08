@@ -56,9 +56,18 @@ public class AlgorithmIteratorFromMazeCreator {
         }
         return it;
     }
-
-    public static ADStar<Point> adstar(final Maze2D maze) {
-        HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
+    
+    public static ADStar<Point> adstar(final Maze2D maze, boolean useHeuristic) {
+    	HeuristicFunction<Point, Double> heuristic;
+    	if (useHeuristic){
+    		heuristic = defaultHeuristicFunction(maze);
+    	} else {
+    		heuristic = new HeuristicFunction<Point, Double>() {
+				public Double estimate(Point state) {
+					return 0d;
+				}
+			};
+    	}
 
         CostFunction<Point, Double> cost = defaultCostFunction();
 
@@ -74,7 +83,11 @@ public class AlgorithmIteratorFromMazeCreator {
                 transition,
                 transition,
                 defaultBuilder,
-                updater);
+                updater);	
+    }
+
+    public static ADStar<Point> adstar(final Maze2D maze) {
+        return adstar(maze, true);
     }
     
     public static BellmanFord<Point> bellmanFord(final Maze2D maze, boolean useHeuristic) {

@@ -107,18 +107,6 @@ public class BenchmarkTest {
     public void benchmark() throws InterruptedException {
         Benchmark bench = new Benchmark();
         
-        // Hipster-Dijkstra
-        bench.add("Hipster-Dijkstra", new Algorithm() {	
-			AStar<Point> it; Maze2D maze;
-        	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.astar(maze, false);
-				this.maze = maze;
-			}
-			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
-			}
-		});
-        
         // JUNG-Dijkstra
         bench.add("JUNG-Dijkstra", new Algorithm() {
 			Maze2D maze;DirectedGraph<Point, JungEdge<Point>> graph;
@@ -131,11 +119,35 @@ public class BenchmarkTest {
 			}
 		});
         
+     // Hipster-Dijkstra
+        bench.add("Hipster-Dijkstra", new Algorithm() {	
+			AStar<Point> it; Maze2D maze;
+        	public void initialize(Maze2D maze) {
+				it= AlgorithmIteratorFromMazeCreator.astar(maze, false);
+				this.maze = maze;
+			}
+			public Result evaluate() {
+				return MazeSearch.executeIteratorSearch(it, maze);
+			}
+		});
+        
         // Bellman-Ford
         bench.add("Hipster-Bellman-Ford", new Algorithm() {
         	BellmanFord<Point> it; Maze2D maze;
         	public void initialize(Maze2D maze) {
 				it= AlgorithmIteratorFromMazeCreator.bellmanFord(maze, false);
+				this.maze = maze;
+			}
+			public Result evaluate() {
+				return MazeSearch.executeIteratorSearch(it, maze);
+			}
+		});
+        
+        // ADStar
+        bench.add("Hipster-ADStar", new Algorithm() {
+        	ADStar<Point> it; Maze2D maze;
+        	public void initialize(Maze2D maze) {
+				it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
 				this.maze = maze;
 			}
 			public Result evaluate() {
