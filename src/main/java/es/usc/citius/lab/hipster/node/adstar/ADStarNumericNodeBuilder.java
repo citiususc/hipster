@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.adstar;
+
+import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- * Interface that defines a comparable node by cost and score
- * used by the {@link AStar} algorithm.
  *
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @param <S> class defining the state
- * @since 26/03/2013
+ * @since 02-04-2013
  * @version 1.0
  */
-@Deprecated
-public interface AStarNode<S> extends Node<S>, Comparable<AStarNode<S>> {
-	public int compareByCost(AStarNode<S> node);
-	public int compareByScore(AStarNode<S> node);
+public class ADStarNumericNodeBuilder<S> implements NodeBuilder<S, ADStarNumericNode<S>>{
+
+    public ADStarNumericNode<S> node(ADStarNumericNode<S> from, Transition<S> transition) {
+        if(from == null){
+            return new ADStarNumericNode<S>(transition, null, 0.0, Double.POSITIVE_INFINITY, new ADStarNumericNode.Key(0, 0));
+        }
+        else{
+         return new ADStarNumericNode<S>(transition, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, new ADStarNumericNode.Key(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));   
+        }
+    }
+
 }

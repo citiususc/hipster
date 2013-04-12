@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.astar;
+
+import java.util.Comparator;
+
+import es.usc.citius.lab.hipster.node.AbstractNode;
+import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Concrete implementation of {@link AbstractNode} for nodes comparable by
@@ -26,11 +33,25 @@ package es.usc.citius.lab.hipster.node;
  * @since 26/03/2013
  * @version 1.0
  */
-@Deprecated
-public class AStarDoubleNode<S> extends AbstractNode<S> implements AStarNode<S>{
+public class HeuristicNumericNode<S> extends AbstractNode<S> implements HeuristicNode<S>, Comparable<HeuristicNumericNode<S>>{
 
     protected final double cost; // In A*: g(n)
     protected final double score; // In A*: f(n) = g(n) + h(n)
+    
+    private final Comparator<HeuristicNumericNode<S>> costComparator = new Comparator<HeuristicNumericNode<S>>() {
+		public int compare(HeuristicNumericNode<S> o1,
+				HeuristicNumericNode<S> o2) {
+			return Double.compare(o1.cost, o2.cost);
+		}
+		
+	};
+	
+	private final Comparator<HeuristicNumericNode<S>> scoreComparator = new Comparator<HeuristicNumericNode<S>>() {
+		public int compare(HeuristicNumericNode<S> o1,
+				HeuristicNumericNode<S> o2) {
+			return Double.compare(o1.score, o2.score);
+		}
+	};
 
     /**
      * Default builder
@@ -40,8 +61,8 @@ public class AStarDoubleNode<S> extends AbstractNode<S> implements AStarNode<S>{
      * @param cost total cost value
      * @param score heuristic value
      */
-    public AStarDoubleNode(Transition<S> transition,
-            AStarDoubleNode<S> previous, double cost, double score) {
+    public HeuristicNumericNode(Transition<S> transition,
+            HeuristicNumericNode<S> previous, double cost, double score) {
         super(transition, previous);
         this.cost = cost;
         this.score = score;
@@ -71,7 +92,7 @@ public class AStarDoubleNode<S> extends AbstractNode<S> implements AStarNode<S>{
      * @param o NumericNode object
      * @return int result
      */
-    public int compareTo(AStarDoubleNode<S> o) {
+    public int compareTo(HeuristicNumericNode<S> o) {
         return Double.compare(this.score, o.score);
     }
 
@@ -80,18 +101,21 @@ public class AStarDoubleNode<S> extends AbstractNode<S> implements AStarNode<S>{
         return this.state.to().toString().concat(" (").concat(new Double(this.cost).toString()).concat(", ").concat(new Double(this.score).toString()).concat(")"); //To change body of generated methods, choose Tools | Templates.
     }
 
-	public int compareTo(AStarNode<S> o) {
-		return compareByScore(o);
+	public Comparator<? extends CostNode<S>> costComparator() {
+		return this.costComparator;
 	}
 
-	public int compareByCost(AStarNode<S> o) {
-		AStarDoubleNode<S> node = (AStarDoubleNode<S>) o;
-		return Double.compare(this.cost, node.cost);
+	public Comparator<? extends HeuristicNode<S>> scoreComparator() {
+		return this.scoreComparator;
 	}
 
-	public int compareByScore(AStarNode<S> o) {
-		AStarDoubleNode<S> node = (AStarDoubleNode<S>) o;
-		return Double.compare(this.score, node.score);
+	public <N extends CostNode<S>> int compareByCost(N node) {
+		return this.costComparator.compare(this, (HeuristicNumericNode<S>)node);
 	}
+
+	public <N extends HeuristicNode<S>> int compareByScore(N node) {
+		return this.scoreComparator.compare(this, (HeuristicNumericNode<S>)node);
+	}
+
 
 }

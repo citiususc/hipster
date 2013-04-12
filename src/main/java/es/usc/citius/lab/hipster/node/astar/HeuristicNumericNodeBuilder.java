@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.astar;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
+import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Implementation of {@link NodeBulder} to create instances of
- * {@link AStarDoubleNode}.
+ * {@link HeuristicNumericNode}.
  *
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
@@ -29,8 +32,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
  * @since 26/03/2013
  * @version 1.0
  */
-@Deprecated
-public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
+public class HeuristicNumericNodeBuilder<S> implements NodeBuilder<S, HeuristicNode<S>> {
 
     private CostFunction<S, Double> cost;
     private HeuristicFunction<S, Double> heuristic;
@@ -43,7 +45,7 @@ public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
      * @param costFunction cost function implementation
      * @param heuristicFunction heuristic function implementation
      */
-    public AStarDoubleNodeBuilder(CostFunction<S, Double> costFunction,
+    public HeuristicNumericNodeBuilder(CostFunction<S, Double> costFunction,
             HeuristicFunction<S, Double> heuristicFunction) {
         this.cost = costFunction;
         this.heuristic = heuristicFunction;
@@ -54,7 +56,7 @@ public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
      * Double values, heuristic will be assigned by default (always 0).
      * @param costFunction cost function implementation
      */
-    public AStarDoubleNodeBuilder(CostFunction<S, Double> costFunction){
+    public HeuristicNumericNodeBuilder(CostFunction<S, Double> costFunction){
         this.cost = costFunction;
         this.heuristic = defaultHeuristicFunction();
     }
@@ -64,7 +66,7 @@ public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
      * Double values, cost will be assigned by default (always 1).
      * @param heuristicFunction 
      */
-    public AStarDoubleNodeBuilder(HeuristicFunction<S, Double> heuristicFunction){
+    public HeuristicNumericNodeBuilder(HeuristicFunction<S, Double> heuristicFunction){
         this.cost = defaultCostFunction();
         this.heuristic = defaultHeuristicFunction();
     }
@@ -73,27 +75,12 @@ public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
      * Default constructor, assigns a default cost function (always 1) 
      * and a default heuristic function (always 0).
      */
-    public AStarDoubleNodeBuilder(){
+    public HeuristicNumericNodeBuilder(){
         this.cost = defaultCostFunction();
         this.heuristic = defaultHeuristicFunction();
     }
 
-    /**
-     * Build method for {@link AStarDoubleNode} instances: Internally evaluates the
-     * cost and heuristic function to instantiate the Node.
-     *
-     * @param from incoming node
-     * @param transition incoming transition
-     * @return new instance of NumericNode
-     */
-    public AStarNode<S> node(AStarNode<S> from, Transition<S> transition) {
-        AStarDoubleNode<S> fromCast = (AStarDoubleNode<S>) from;
-        double previousCost = (fromCast != null) ? fromCast.cost() : 0d;
-        double g = previousCost + cost.evaluate(transition);
-        double h = heuristic.estimate(transition.to());
-        double f = g + h;
-        return new AStarDoubleNode<S>(transition, fromCast, g, f);
-    }
+    
 
     /**
      * Builds a default heuristic function
@@ -118,4 +105,22 @@ public class AStarDoubleNodeBuilder<S> implements NodeBuilder<S, AStarNode<S>> {
             }
         };
     }
+    
+    /**
+     * Build method for {@link HeuristicNumericNode} instances: Internally evaluates the
+     * cost and heuristic function to instantiate the Node.
+     *
+     * @param from incoming node
+     * @param transition incoming transition
+     * @return new instance of NumericNode
+     */
+	
+	public HeuristicNode<S> node(HeuristicNode<S> from, Transition<S> transition) {
+		HeuristicNumericNode<S> fromCast = (HeuristicNumericNode<S>)from;
+		double previousCost = (from != null) ? fromCast.cost() : 0d;
+        double g = previousCost + cost.evaluate(transition);
+        double h = heuristic.estimate(transition.to());
+        double f = g + h;
+        return new HeuristicNumericNode<S>(transition, fromCast, g, f);
+	}
 }

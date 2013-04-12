@@ -21,13 +21,13 @@ import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarDoubleNode;
-import es.usc.citius.lab.hipster.node.DoubleADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
-import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.DoubleADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNumericNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNumericNodeBuilder;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNumericNodeUpdater;
+import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 
@@ -50,9 +50,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         AStar<Point> it;
         if (useHeuristic) {
-            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost, heuristic));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost, heuristic));
         } else {
-            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost));
         }
         return it;
     }
@@ -73,9 +73,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        NodeBuilder<Point, ADStarDoubleNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
+        NodeBuilder<Point, ADStarNumericNode<Point>> defaultBuilder = new ADStarNumericNodeBuilder<Point>();
 
-        ADStarNodeUpdater<Point, ADStarDoubleNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
+        ADStarNodeUpdater<Point, ADStarNumericNode<Point>> updater = new ADStarNumericNodeUpdater<Point>(cost, heuristic, 1.0);
 
         return new ADStar<Point>(
                 maze.getInitialLoc(),
@@ -97,7 +97,7 @@ public class AlgorithmIteratorFromMazeCreator {
 
         BellmanFord<Point> it;
 
-        it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost), null);
+        it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost), null);
         
         return it;
     }

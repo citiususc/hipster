@@ -19,16 +19,14 @@ package es.usc.citius.lab.hipster.algorithm;
 import java.util.AbstractQueue;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.AStarNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -45,11 +43,10 @@ import es.usc.citius.lab.hipster.node.Transition;
 public class BellmanFord<S> implements Iterator<Node<S>> {
 	
 	private TransitionFunction<S> transition;
-	private NodeBuilder<S, AStarNode<S>> builder;
+	private NodeBuilder<S, HeuristicNode<S>> builder;
 	private Queue<S> queue;
-	private Map<S, AStarNode<S>> explored;
-	private Comparator<AStarNode<S>> comparator;
-	private boolean improvement = true;
+	private Map<S, HeuristicNode<S>> explored;
+	//private Comparator<HeuristicNode<S>> comparator;
 	
 	// Create a queue based on LinkedHashSet
 	private class HashQueue<S> extends AbstractQueue<S>{
@@ -94,13 +91,13 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		
 	}
 	
-	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, AStarNode<S>> builder, Comparator<Node<S>> comparator){
+	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, HeuristicNode<S>> builder, Comparator<Node<S>> comparator){
 		this.builder = builder;
 		this.transition = transition;
 		//this.queue = new LinkedList<S>();
 		this.queue = new HashQueue<S>();
-		this.explored = new HashMap<S, AStarNode<S>>();
-		AStarNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
+		this.explored = new HashMap<S, HeuristicNode<S>>();
+		HeuristicNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
 		this.queue.add(initialState);
 		this.explored.put(initialState, initialNode);
 	}
@@ -109,7 +106,7 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		return !this.queue.isEmpty();
 	}
 	
-	private void enqueue(AStarNode<S> node){
+	private void enqueue(HeuristicNode<S> node){
 		S state = node.transition().to();
 		if (!this.queue.contains(state)){
 			this.queue.add(state);
@@ -117,7 +114,7 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		this.explored.put(state, node);
 	}
 	
-	private AStarNode<S> dequeue(){
+	private HeuristicNode<S> dequeue(){
 		S state = this.queue.poll();
 		return this.explored.get(state);
 	}
@@ -125,14 +122,14 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 
 	public Node<S> next() {
 		// Take the next node
-		AStarNode<S> current = dequeue();
+		HeuristicNode<S> current = dequeue();
 		// Calculate distances to each neighbor
 		S currentState = current.transition().to();
 		for(Transition<S> successor : this.transition.from(currentState)){
 			// Create the successor node
-			AStarNode<S> successorNode = this.builder.node(current, successor);
+			HeuristicNode<S> successorNode = this.builder.node(current, successor);
 			// Check if there is any improvement in the old cost
-			AStarNode<S> previousNode = this.explored.get(successor.to());
+			HeuristicNode<S> previousNode = this.explored.get(successor.to());
 			if (previousNode != null){
 				// Check both paths. If the new path is better than the previous
 				// path, update and enqueue. Else, discard this node.

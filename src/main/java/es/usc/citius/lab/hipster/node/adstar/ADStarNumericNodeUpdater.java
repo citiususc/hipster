@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.adstar;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.node.Transition;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,35 +30,37 @@ import java.util.Map.Entry;
  * @since 01-04-2013
  * @version 1.0
  */
-public class DoubleADStarNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarDoubleNode<S>>{
+public class ADStarNumericNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarNumericNode<S>>{
 
     private final CostFunction<S, Double> costFunction;
     private final HeuristicFunction<S, Double> heuristicFunction;
     private Double epsilon;
 
-    public DoubleADStarNodeUpdater(CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristicFunction, Double epsilon) {
+    public ADStarNumericNodeUpdater(CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristicFunction, Double epsilon) {
         this.costFunction = costFunction;
         this.heuristicFunction = heuristicFunction;
         this.epsilon = epsilon;
     }
 
-    public boolean updateConsistent(ADStarDoubleNode<S> node, ADStarDoubleNode<S> parent, Transition<S> transition) {
+    public boolean updateConsistent(ADStarNumericNode<S> node, ADStarNumericNode<S> parent, Transition<S> transition) {
         Double accumulatedCost = parent.getG() + this.costFunction.evaluate(transition);
         if(node.g > accumulatedCost){
-            node.previousNode = parent;
+            node.setPreviousNode(parent);
+        	//node.previousNode = parent;
             node.g = accumulatedCost;
-            node.state = transition;
-            node.key = new ADStarDoubleNode.Key(node.g, node.v, this.heuristicFunction.estimate(transition.to()), this.epsilon);
+            node.setState(transition);
+            //node.state = transition;
+            node.key = new ADStarNumericNode.Key(node.g, node.v, this.heuristicFunction.estimate(transition.to()), this.epsilon);
             return true;
         }
         return false;
     }
 
-    public boolean updateInconsistent(ADStarDoubleNode<S> node, Map<Transition<S>, ADStarDoubleNode<S>> predecessorMap) {
+    public boolean updateInconsistent(ADStarNumericNode<S> node, Map<Transition<S>, ADStarNumericNode<S>> predecessorMap) {
         double minValue = Double.POSITIVE_INFINITY;
-        ADStarDoubleNode<S> minParent = null;
+        ADStarNumericNode<S> minParent = null;
         Transition<S> minTransition = null;
-        for(Entry<Transition<S>, ADStarDoubleNode<S>> current : predecessorMap.entrySet()){
+        for(Entry<Transition<S>, ADStarNumericNode<S>> current : predecessorMap.entrySet()){
             double value = current.getValue().v + this.costFunction.evaluate(current.getKey());
             if(value < minValue){
                 minValue = value;
@@ -64,14 +68,16 @@ public class DoubleADStarNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarDo
                 minTransition = current.getKey();
             }
         }
-        node.previousNode = minParent;
+        node.setPreviousNode(minParent);
+        //node.previousNode = minParent;
         node.g = minValue;
-        node.state = minTransition;
-        node.key = new ADStarDoubleNode.Key(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
+        node.setState(minTransition);
+        //node.state = minTransition;
+        node.key = new ADStarNumericNode.Key(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
         return true;
     }
 
-    public void setMaxV(ADStarDoubleNode<S> node) {
+    public void setMaxV(ADStarNumericNode<S> node) {
         node.setV(Double.POSITIVE_INFINITY);
     }
 

@@ -1,4 +1,8 @@
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.adstar;
+
+import es.usc.citius.lab.hipster.node.AbstractNode;
+import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Search node for AD* implementation: requires the values g, rsh and the Key to
@@ -8,7 +12,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 27-03-2013
  * @version 1.0
  */
-public class ADStarDoubleNode<S> extends AbstractNode<S> implements Comparable<ADStarDoubleNode<S>> {
+public class ADStarNumericNode<S> extends AbstractNode<S> implements Comparable<ADStarNumericNode<S>> {
 
     protected Double g;
     protected Double v;
@@ -21,7 +25,7 @@ public class ADStarDoubleNode<S> extends AbstractNode<S> implements Comparable<A
      * @param transition incoming transition
      * @param previousNode parent node
      */
-    public ADStarDoubleNode(Transition<S> transition, Node<S> previousNode, Double g, Double v, Key k) {
+    public ADStarNumericNode(Transition<S> transition, Node<S> previousNode, Double g, Double v, Key k) {
         super(transition, previousNode);
         this.g = g;
         this.v = v;
@@ -35,7 +39,7 @@ public class ADStarDoubleNode<S> extends AbstractNode<S> implements Comparable<A
      * @param o other node instance
      * @return comparation result
      */
-    public int compareTo(ADStarDoubleNode<S> o) {
+    public int compareTo(ADStarNumericNode<S> o) {
         return this.key.compareTo(o.key);
     }
 
@@ -108,8 +112,8 @@ public class ADStarDoubleNode<S> extends AbstractNode<S> implements Comparable<A
     }
 
     @Override
-    public ADStarDoubleNode<S> previousNode() {
-        return (ADStarDoubleNode<S>) previousNode;
+    public ADStarNumericNode<S> previousNode() {
+        return (ADStarNumericNode<S>) previousNode;
     }
     
     

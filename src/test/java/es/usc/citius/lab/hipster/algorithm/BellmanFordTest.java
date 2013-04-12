@@ -28,12 +28,12 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.AStarDoubleNode;
-import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
-import es.usc.citius.lab.hipster.node.AStarNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNode;
+import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
@@ -115,7 +115,7 @@ public class BellmanFordTest {
 			}
 		};
 		
-		NodeBuilder<String, AStarNode<String>> builder = new AStarDoubleNodeBuilder<String>(
+		NodeBuilder<String, HeuristicNode<String>> builder = new HeuristicNumericNodeBuilder<String>(
 				new CostFunction<String, Double>() {
 					public Double evaluate(
 							Transition<String> transition) {

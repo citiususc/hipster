@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.adstar;
 
 import java.util.Map;
+
+import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  *

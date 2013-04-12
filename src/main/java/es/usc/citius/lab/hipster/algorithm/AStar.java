@@ -25,11 +25,11 @@ import java.util.Queue;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.AStarNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
-import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 
 /**
  *
@@ -40,20 +40,20 @@ import es.usc.citius.lab.hipster.node.Transition;
 public class AStar<S> implements Iterator<Node<S>> {
 
     private final S initialState;
-    private Map<S, AStarNode<S>> open;
-    private Map<S, AStarNode<S>> closed;
-    private Queue<AStarNode<S>> queue;
-    private NodeBuilder<S, AStarNode<S>> nodeBuilder;
+    private Map<S, HeuristicNode<S>> open;
+    private Map<S, HeuristicNode<S>> closed;
+    private Queue<HeuristicNode<S>> queue;
+    private NodeBuilder<S, HeuristicNode<S>> nodeBuilder;
     private TransitionFunction<S> successors;
 
-    public AStar(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, AStarNode<S>> nodeBuilder) {
+    public AStar(S initialState, TransitionFunction<S> transitionFunction, NodeBuilder<S, HeuristicNode<S>> nodeBuilder) {
         this.initialState = initialState;
-        this.open = new HashMap<S, AStarNode<S>>();
-        this.closed = new HashMap<S, AStarNode<S>>();
+        this.open = new HashMap<S, HeuristicNode<S>>();
+        this.closed = new HashMap<S, HeuristicNode<S>>();
         this.successors = transitionFunction;
         this.nodeBuilder = nodeBuilder;
-        this.queue = new PriorityQueue<AStarNode<S>>();
-        AStarNode<S> initialNode = this.nodeBuilder.node(null,
+        this.queue = new PriorityQueue<HeuristicNode<S>>();
+        HeuristicNode<S> initialNode = this.nodeBuilder.node(null,
                 new Transition<S>(null, this.initialState));
 
         this.queue.add(initialNode);
@@ -64,9 +64,9 @@ public class AStar<S> implements Iterator<Node<S>> {
         return !open.values().isEmpty();
     }
 
-    private AStarNode<S> takePromising() {
+    private HeuristicNode<S> takePromising() {
         // Poll until a valid state is found
-        AStarNode<S> node = queue.poll();
+        HeuristicNode<S> node = queue.poll();
         while (!open.containsKey(node.transition().to())) {
             node = queue.poll();
         }
@@ -77,10 +77,10 @@ public class AStar<S> implements Iterator<Node<S>> {
      * A* algorithm implementation.
      *
      */
-    public Node<S> next() {
+    public HeuristicNode<S> next() {
 
         // Take the current node to analyze
-        AStarNode<S> current = takePromising();
+        HeuristicNode<S> current = takePromising();
         S currentState = current.transition().to();
         // Remove it from open
         open.remove(currentState);
@@ -88,7 +88,7 @@ public class AStar<S> implements Iterator<Node<S>> {
         // Analyze the cost of each movement from the current node
         for (Transition<S> successor : successors.from(currentState)) {
             // Build the corresponding search node
-            AStarNode<S> successorNode = this.nodeBuilder.node(current,
+            HeuristicNode<S> successorNode = this.nodeBuilder.node(current,
                     successor);
 
             // Take the associated state
@@ -96,7 +96,7 @@ public class AStar<S> implements Iterator<Node<S>> {
 
             // Check if this successor is in the open set (which means that
             // we have analyzed this node from other movement)
-            AStarNode<S> successorOpen = open.get(successorState);
+            HeuristicNode<S> successorOpen = open.get(successorState);
             if (successorOpen != null) {
                 // In this case, if the current move does not improve
                 // the cost of the previous path, discard this movement
@@ -109,7 +109,7 @@ public class AStar<S> implements Iterator<Node<S>> {
             // In other case (the neighbor node has not been considered yet
             // or the movement does not improve the previous cost) then
             // check if the neighbor is closed
-            AStarNode<S> successorClose = closed.get(successorState);
+            HeuristicNode<S> successorClose = closed.get(successorState);
             if (successorClose != null) {
                 // Check if this path improves the cost of a closed neighbor.
                 if (successorClose.compareByCost(successorNode) <= 0) {
@@ -134,7 +134,7 @@ public class AStar<S> implements Iterator<Node<S>> {
             }
 
             // Add the new successor to the open list to explore later
-            AStarNode<S> result = open.put(successorState, successorNode);
+            HeuristicNode<S> result = open.put(successorState, successorNode);
             // If this state is not duplicated, enqueue
             if (result == null) {
                 queue.add(successorNode);
@@ -179,7 +179,7 @@ public class AStar<S> implements Iterator<Node<S>> {
 		}
 		
 		public AStar<S> build(){
-			NodeBuilder<S, AStarNode<S>> nodeBuilder = new AStarDoubleNodeBuilder<S>(this.cost, this.heuristic);
+			NodeBuilder<S, HeuristicNode<S>> nodeBuilder = new HeuristicNumericNodeBuilder<S>(this.cost, this.heuristic);
 			return new AStar<S>(this.initialState, this.transition, nodeBuilder);
 		}
     }
@@ -192,19 +192,19 @@ public class AStar<S> implements Iterator<Node<S>> {
         return this.initialState;
     }
 
-    public Map<S, AStarNode<S>> getOpen() {
+    public Map<S, HeuristicNode<S>> getOpen() {
         return open;
     }
 
-    public Map<S, AStarNode<S>> getClosed() {
+    public Map<S, HeuristicNode<S>> getClosed() {
         return closed;
     }
 
-    public Queue<AStarNode<S>> getQueue() {
+    public Queue<HeuristicNode<S>> getQueue() {
         return queue;
     }
 
-    public NodeBuilder<S, AStarNode<S>> getNodeBuilder() {
+    public NodeBuilder<S, HeuristicNode<S>> getNodeBuilder() {
         return nodeBuilder;
     }
 
