@@ -21,12 +21,12 @@ import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNode;
-import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
-import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
@@ -57,8 +57,19 @@ public class AlgorithmIteratorFromMazeCreator {
         return it;
     }
 
-    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze) {
-        HeuristicFunction<Point, DoubleOperable> heuristic = defaultDoubleOperableHeuristicFunction(maze);
+    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze, boolean useHeuristic) {
+        HeuristicFunction<Point, DoubleOperable> heuristic;
+        if(useHeuristic){
+            heuristic = defaultDoubleOperableHeuristicFunction(maze);
+        }
+        else{
+            heuristic = new HeuristicFunction<Point, DoubleOperable>() {
+
+                public DoubleOperable estimate(Point state) {
+                    return DoubleOperable.MIN;
+                }
+            };
+        }
 
         CostFunction<Point, DoubleOperable> cost = defaultDoubleOperableCostFunction();
 
@@ -66,7 +77,7 @@ public class AlgorithmIteratorFromMazeCreator {
 
         NodeBuilder<Point, ADStarNode<Point, DoubleOperable>> defaultBuilder = new ADStarNodeBuilder<Point, DoubleOperable>(DoubleOperable.MIN, DoubleOperable.MAX);
 
-        ADStarNodeUpdater<Point, DoubleOperable> updater = new ADStarNodeUpdater<Point, DoubleOperable>(cost, heuristic, 1.0);
+        ADStarNodeUpdater<Point, DoubleOperable> updater = new ADStarNodeUpdater<Point, DoubleOperable>(cost, heuristic, 1.0, DoubleOperable.MAX);
 
         return new ADStar<Point, DoubleOperable>(
                 maze.getInitialLoc(),
@@ -77,8 +88,8 @@ public class AlgorithmIteratorFromMazeCreator {
                 updater);	
     }
 
-    public static ADStar<Point> adstar(final Maze2D maze) {
-        return adstar(maze, true);
+    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze) {
+        return adstar(maze, false);
     }
     
     public static BellmanFord<Point> bellmanFord(final Maze2D maze, boolean useHeuristic) {

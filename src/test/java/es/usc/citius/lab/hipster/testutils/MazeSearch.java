@@ -193,7 +193,7 @@ public final class MazeSearch {
                 Double cost = new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 r = new Result(statePath, cost);
                 if (exitWhenGoalReached){
-                	return r;
+                    return r;
                 }
             }
         }

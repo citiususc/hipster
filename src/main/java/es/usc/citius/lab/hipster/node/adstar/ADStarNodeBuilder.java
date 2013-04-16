@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node;
+package es.usc.citius.lab.hipster.node.adstar;
 
+import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.Operable;
 
 /**

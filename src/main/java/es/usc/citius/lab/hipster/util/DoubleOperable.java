@@ -26,8 +26,8 @@ package es.usc.citius.lab.hipster.util;
 public class DoubleOperable implements Operable<DoubleOperable>{
 
     protected double value;
-    public static final DoubleOperable MAX = new DoubleOperable(Double.MAX_VALUE);
-    public static final DoubleOperable MIN = new DoubleOperable(Double.MIN_VALUE);
+    public static final DoubleOperable MAX = new DoubleOperable(Double.POSITIVE_INFINITY);
+    public static final DoubleOperable MIN = new DoubleOperable(0);
 
     public DoubleOperable(double value) {
         this.value = value;
@@ -44,5 +44,9 @@ public class DoubleOperable implements Operable<DoubleOperable>{
     public int compareTo(DoubleOperable o) {
         return Double.compare(value, o.value);
     }
-    
+
+    @Override
+    public String toString() {
+        return new Double(value).toString();
+    }
 }

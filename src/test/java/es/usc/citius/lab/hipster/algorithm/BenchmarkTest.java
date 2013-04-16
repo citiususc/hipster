@@ -19,7 +19,6 @@ package es.usc.citius.lab.hipster.algorithm;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,6 +34,7 @@ import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
 import es.usc.citius.lab.hipster.testutils.MazeSearch.Result;
+import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
@@ -145,7 +145,7 @@ public class BenchmarkTest {
         
         // ADStar
         bench.add("Hipster-ADStar", new Algorithm() {
-        	ADStar<Point> it; Maze2D maze;
+        	ADStar<Point, DoubleOperable> it; Maze2D maze;
         	public void initialize(Maze2D maze) {
 				it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
 				this.maze = maze;

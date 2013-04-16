@@ -18,6 +18,7 @@ package es.usc.citius.lab.hipster.node.adstar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.util.Operable;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,39 +31,41 @@ import java.util.Map.Entry;
  * @since 01-04-2013
  * @version 1.0
  */
-public class ADStarNumericNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarNumericNode<S>>{
+public class ADStarNodeUpdater<S, T extends Operable<T>>{
 
-    private final CostFunction<S, Double> costFunction;
-    private final HeuristicFunction<S, Double> heuristicFunction;
+    private final CostFunction<S, T> costFunction;
+    private final HeuristicFunction<S, T> heuristicFunction;
+    private final T max;
     private Double epsilon;
 
-    public ADStarNumericNodeUpdater(CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> heuristicFunction, Double epsilon) {
+    public ADStarNodeUpdater(CostFunction<S, T> costFunction, HeuristicFunction<S, T> heuristicFunction, double epsilon, T max) {
         this.costFunction = costFunction;
         this.heuristicFunction = heuristicFunction;
         this.epsilon = epsilon;
+        this.max = max;
     }
 
-    public boolean updateConsistent(ADStarNumericNode<S> node, ADStarNumericNode<S> parent, Transition<S> transition) {
-        Double accumulatedCost = parent.getG() + this.costFunction.evaluate(transition);
-        if(node.g > accumulatedCost){
+    public boolean updateConsistent(ADStarNode<S, T> node, ADStarNode<S, T> parent, Transition<S> transition) {
+        T accumulatedCost = parent.getG().add(this.costFunction.evaluate(transition));
+        if(node.g.compareTo(accumulatedCost) > 0){
             node.setPreviousNode(parent);
-        	//node.previousNode = parent;
+            //node.previousNode = parent;
             node.g = accumulatedCost;
             node.setState(transition);
             //node.state = transition;
-            node.key = new ADStarNumericNode.Key(node.g, node.v, this.heuristicFunction.estimate(transition.to()), this.epsilon);
+            node.key = new ADStarNode.Key<T>(node.g, node.v, this.heuristicFunction.estimate(transition.to()), this.epsilon);
             return true;
         }
         return false;
     }
 
-    public boolean updateInconsistent(ADStarNumericNode<S> node, Map<Transition<S>, ADStarNumericNode<S>> predecessorMap) {
-        double minValue = Double.POSITIVE_INFINITY;
-        ADStarNumericNode<S> minParent = null;
+    public boolean updateInconsistent(ADStarNode<S, T> node, Map<Transition<S>, ADStarNode<S, T>> predecessorMap) {
+        T minValue = max;
+        ADStarNode<S, T> minParent = null;
         Transition<S> minTransition = null;
-        for(Entry<Transition<S>, ADStarNumericNode<S>> current : predecessorMap.entrySet()){
-            double value = current.getValue().v + this.costFunction.evaluate(current.getKey());
-            if(value < minValue){
+        for(Entry<Transition<S>, ADStarNode<S, T>> current : predecessorMap.entrySet()){
+            T value = current.getValue().v.add(this.costFunction.evaluate(current.getKey()));
+            if(value.compareTo(minValue) < 0){
                 minValue = value;
                 minParent = current.getValue();
                 minTransition = current.getKey();
@@ -73,12 +76,12 @@ public class ADStarNumericNodeUpdater<S> implements ADStarNodeUpdater<S, ADStarN
         node.g = minValue;
         node.setState(minTransition);
         //node.state = minTransition;
-        node.key = new ADStarNumericNode.Key(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
+        node.key = new ADStarNode.Key<T>(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
         return true;
     }
 
-    public void setMaxV(ADStarNumericNode<S> node) {
-        node.setV(Double.POSITIVE_INFINITY);
+    public void setMaxV(ADStarNode<S, T> node) {
+        node.setV(max);
     }
 
     public void setEpsilon(Double epsilon) {

@@ -1,7 +1,8 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -40,6 +41,7 @@ public class ADStar<S, T extends Operable<T>> implements Iterator<Node<S>> {
 
     public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeBuilder<S, ADStarNode<S, T>> builder, ADStarNodeUpdater<S, T> updater) {
         this.begin = begin;
+        this.goal = goal;
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;
@@ -94,10 +96,9 @@ public class ADStar<S, T extends Operable<T>> implements Iterator<Node<S>> {
      */
     private void update(ADStarNode<S, T> node) {
         S state = node.transition().to();
-        if (node.getV().compareTo(node.getG()) > 0) {
+        if (node.getV().compareTo(node.getG()) != 0) {
             if (!this.closed.containsKey(state)) {
-                this.open.put(state, node);
-                this.queue.offer(node);
+                insertOpen(node);
             } else {
                 this.incons.put(state, node);
             }
@@ -139,7 +140,7 @@ public class ADStar<S, T extends Operable<T>> implements Iterator<Node<S>> {
         //First node in OPEN retrieved, not removed
         ADStarNode<S, T> current = takePromising();
         S state = current.transition().to();
-        if (this.goalNode.compareTo(current) > 0 || this.goalNode.getV().compareTo(this.goalNode.getG()) < 0) {
+        if (this.goalNode.compareTo(current) >= 0 || this.goalNode.getV().compareTo(this.goalNode.getG()) < 0) {
             //s removed from OPEN
             this.open.remove(state);
             //if v(s) > g(s)

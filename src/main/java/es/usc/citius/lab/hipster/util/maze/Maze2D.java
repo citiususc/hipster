@@ -17,7 +17,6 @@
 package es.usc.citius.lab.hipster.util.maze;
 
 import java.awt.Point;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

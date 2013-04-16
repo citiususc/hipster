@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package es.usc.citius.lab.hipster.node;
 
 import java.util.ArrayList;
@@ -71,22 +70,22 @@ public abstract class AbstractNode<S> implements Node<S> {
     }
 
     public Transition<S> getState() {
-		return state;
-	}
+        return state;
+    }
 
-	public void setState(Transition<S> state) {
-		this.state = state;
-	}
+    public void setState(Transition<S> state) {
+        this.state = state;
+    }
 
-	public Node<S> getPreviousNode() {
-		return previousNode;
-	}
+    public Node<S> getPreviousNode() {
+        return previousNode;
+    }
 
-	public void setPreviousNode(Node<S> previousNode) {
-		this.previousNode = previousNode;
-	}
+    public void setPreviousNode(Node<S> previousNode) {
+        this.previousNode = previousNode;
+    }
 
-	@Override
+    @Override
     public String toString() {
         return this.transition().to().toString();
     }
