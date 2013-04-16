@@ -50,9 +50,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         AStar<Point> it;
         if (useHeuristic) {
-            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost, heuristic));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost, heuristic));
         } else {
-            it = new AStar<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost));
+            it = new AStar<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost));
         }
         return it;
     }
@@ -74,7 +74,11 @@ public class AlgorithmIteratorFromMazeCreator {
                 transition,
                 transition,
                 defaultBuilder,
-                updater);
+                updater);	
+    }
+
+    public static ADStar<Point> adstar(final Maze2D maze) {
+        return adstar(maze, true);
     }
     
     public static BellmanFord<Point> bellmanFord(final Maze2D maze, boolean useHeuristic) {
@@ -84,7 +88,7 @@ public class AlgorithmIteratorFromMazeCreator {
 
         BellmanFord<Point> it;
 
-        it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new AStarDoubleNodeBuilder<Point>(cost), null);
+        it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost), null);
         
         return it;
     }

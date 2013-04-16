@@ -70,7 +70,23 @@ public abstract class AbstractNode<S> implements Node<S> {
         return this.state;
     }
 
-    @Override
+    public Transition<S> getState() {
+		return state;
+	}
+
+	public void setState(Transition<S> state) {
+		this.state = state;
+	}
+
+	public Node<S> getPreviousNode() {
+		return previousNode;
+	}
+
+	public void setPreviousNode(Node<S> previousNode) {
+		this.previousNode = previousNode;
+	}
+
+	@Override
     public String toString() {
         return this.transition().to().toString();
     }

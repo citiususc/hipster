@@ -19,6 +19,7 @@ package es.usc.citius.lab.hipster.util.maze;
 import java.awt.Point;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -269,5 +270,11 @@ public class Maze2D {
         return goalLoc;
     }
     
-    
+    public static Maze2D empty(int size){
+    	byte[][] maze = new byte[size][size];
+    	for(int i=0;i<size;i++){
+    		Arrays.fill(maze[i], Symbol.EMPTY.value());	
+    	}
+    	return new Maze2D(maze, new Point(0, 0), new Point(size-1,size-1));
+    }
 }

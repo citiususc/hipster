@@ -4,7 +4,6 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.ADStarNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
-import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.Operable;
 import java.util.HashMap;
@@ -41,7 +40,6 @@ public class ADStar<S, T extends Operable<T>> implements Iterator<Node<S>> {
 
     public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeBuilder<S, ADStarNode<S, T>> builder, ADStarNodeUpdater<S, T> updater) {
         this.begin = begin;
-        this.goal = goal;
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;
