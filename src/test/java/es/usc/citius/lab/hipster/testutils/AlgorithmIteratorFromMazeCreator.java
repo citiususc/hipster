@@ -20,13 +20,13 @@ import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.ADStarDoubleNode;
-import es.usc.citius.lab.hipster.node.DoubleADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.ADStarNode;
 import es.usc.citius.lab.hipster.node.AStarDoubleNodeBuilder;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.DoubleADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 
@@ -56,18 +56,18 @@ public class AlgorithmIteratorFromMazeCreator {
         return it;
     }
 
-    public static ADStar<Point> adstar(final Maze2D maze) {
-        HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
+    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze) {
+        HeuristicFunction<Point, DoubleOperable> heuristic = defaultDoubleOperableHeuristicFunction(maze);
 
-        CostFunction<Point, Double> cost = defaultCostFunction();
+        CostFunction<Point, DoubleOperable> cost = defaultDoubleOperableCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        NodeBuilder<Point, ADStarDoubleNode<Point>> defaultBuilder = new DoubleADStarNodeBuilder<Point>();
+        NodeBuilder<Point, ADStarNode<Point, DoubleOperable>> defaultBuilder = new ADStarNodeBuilder<Point, DoubleOperable>(DoubleOperable.MIN, DoubleOperable.MAX);
 
-        ADStarNodeUpdater<Point, ADStarDoubleNode<Point>> updater = new DoubleADStarNodeUpdater<Point>(cost, heuristic, 1.0);
+        ADStarNodeUpdater<Point, DoubleOperable> updater = new ADStarNodeUpdater<Point, DoubleOperable>(cost, heuristic, 1.0);
 
-        return new ADStar<Point>(
+        return new ADStar<Point, DoubleOperable>(
                 maze.getInitialLoc(),
                 maze.getGoalLoc(),
                 transition,
@@ -97,6 +97,23 @@ public class AlgorithmIteratorFromMazeCreator {
         return new CostFunction<Point, Double>() {
             public Double evaluate(Transition<Point> successor) {
                 return (successor.from() != null)?successor.from().distance(successor.to()):0.0;
+            }
+        };
+    }
+    
+    public static CostFunction<Point, DoubleOperable> defaultDoubleOperableCostFunction() {
+        return new CostFunction<Point, DoubleOperable>() {
+            public DoubleOperable evaluate(Transition<Point> successor) {
+                return (successor.from() != null) ? new DoubleOperable(successor.from().distance(successor.to())) : DoubleOperable.MIN;
+            }
+        };
+    }
+    
+    
+    public static HeuristicFunction<Point, DoubleOperable> defaultDoubleOperableHeuristicFunction(final Maze2D maze) {
+        return new HeuristicFunction<Point, DoubleOperable>() {
+            public DoubleOperable estimate(Point from) {
+                return new DoubleOperable(from.distance(maze.getGoalLoc()));
             }
         };
     }

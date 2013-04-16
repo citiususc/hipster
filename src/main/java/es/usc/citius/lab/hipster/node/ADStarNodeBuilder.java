@@ -16,20 +16,30 @@
 
 package es.usc.citius.lab.hipster.node;
 
+import es.usc.citius.lab.hipster.util.Operable;
+
 /**
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 02-04-2013
  * @version 1.0
  */
-public class DoubleADStarNodeBuilder<S> implements NodeBuilder<S, ADStarDoubleNode<S>>{
+public class ADStarNodeBuilder<S, T extends Operable<T>> implements NodeBuilder<S, ADStarNode<S, T>>{
 
-    public ADStarDoubleNode<S> node(ADStarDoubleNode<S> from, Transition<S> transition) {
+    protected T max;
+    protected T min;
+    
+    public ADStarNodeBuilder(T min, T max) {
+        this.min = min;
+        this.max = max;
+    }
+    
+    public ADStarNode<S, T> node(ADStarNode<S, T> from, Transition<S> transition) {
         if(from == null){
-            return new ADStarDoubleNode<S>(transition, null, 0.0, Double.POSITIVE_INFINITY, new ADStarDoubleNode.Key(0, 0));
+            return new ADStarNode<S, T>(transition, null, min, max, new ADStarNode.Key<T>(min, min));
         }
         else{
-         return new ADStarDoubleNode<S>(transition, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, new ADStarDoubleNode.Key(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));   
+         return new ADStarNode<S, T>(transition, null, max, max, new ADStarNode.Key<T>(max, max));   
         }
     }
 

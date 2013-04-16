@@ -13,24 +13,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package es.usc.citius.lab.hipster.node;
 
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.util.Operable;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
+ * Implements the default updater for {@link ADStarNode} instances
+ * using {@link Double} values.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 01-04-2013
  * @version 1.0
  */
-public interface ADStarNodeUpdater<S, N extends Node<S>> {
+public class ADStarNodeUpdater<S, T extends Operable<T>> {
 
-    public boolean updateConsistent(N node, N parent, Transition<S> transition);
-    
-    public boolean updateInconsistent(N node, Map<Transition<S>, N> predecessorsNodes);
-    
-    public void setMaxV(N node);
-    
-    public void setEpsilon(Double epsilon);
+    private final CostFunction<S, T> costFunction;
+    private final HeuristicFunction<S, T> heuristicFunction;
+    private T max;
+    private double epsilon;
+
+    public ADStarNodeUpdater(CostFunction<S, T> costFunction, HeuristicFunction<S, T> heuristicFunction, double epsilon) {
+        this.costFunction = costFunction;
+        this.heuristicFunction = heuristicFunction;
+        this.epsilon = epsilon;
+    }
+
+    public boolean updateConsistent(ADStarNode<S, T> node, ADStarNode<S, T> parent, Transition<S> transition) {
+        T accumulatedCost = parent.getG().add(this.costFunction.evaluate(transition));
+        if(node.g.compareTo(accumulatedCost) > 0){
+            node.previousNode = parent;
+            node.g = accumulatedCost;
+            node.state = transition;
+            node.key = new ADStarNode.Key<T>(node.g, node.v, this.heuristicFunction.estimate(transition.to()), this.epsilon);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateInconsistent(ADStarNode<S, T> node, Map<Transition<S>, ADStarNode<S, T>> predecessorMap) {
+        T minValue = max;
+        ADStarNode<S, T> minParent = null;
+        Transition<S> minTransition = null;
+        for(Entry<Transition<S>, ADStarNode<S, T>> current : predecessorMap.entrySet()){
+            T value = current.getValue().v.add(this.costFunction.evaluate(current.getKey()));
+            if(value.compareTo(minValue) < 0){
+                minValue = value;
+                minParent = current.getValue();
+                minTransition = current.getKey();
+            }
+        }
+        node.previousNode = minParent;
+        node.g = minValue;
+        node.state = minTransition;
+        node.key = new ADStarNode.Key<T>(node.g, node.v, this.heuristicFunction.estimate(minTransition.to()), this.epsilon);
+        return true;
+    }
+
+    public void setMaxV(ADStarNode<S, T> node) {
+        node.setV(max);
+    }
+
+    public void setEpsilon(Double epsilon) {
+        this.epsilon = epsilon;
+    }
 }
