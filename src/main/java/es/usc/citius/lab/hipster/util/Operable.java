@@ -28,8 +28,6 @@ public interface Operable<T> extends Comparable<T>{
     
     public T add(T operator);
     
-    public T mult(T operator);
-    
-    public T mult(double operator);
+    public T scale(double factor);
     
 }

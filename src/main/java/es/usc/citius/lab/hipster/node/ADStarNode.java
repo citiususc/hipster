@@ -100,7 +100,7 @@ public class ADStarNode<S, T extends Operable<T>> extends AbstractNode<S> implem
          */
         public Key(T g, T v, T h, double e) {
             if (v.compareTo(g) >= 0) {
-                this.first = g.add(h.mult(e));
+                this.first = g.add(h.scale(e));
                 this.second = g;
             } else {
                 this.first = v.add(h);

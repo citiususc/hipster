@@ -37,11 +37,7 @@ public class DoubleOperable implements Operable<DoubleOperable>{
         return new DoubleOperable(value + operator.value);
     }
 
-    public DoubleOperable mult(DoubleOperable operator) {
-        return new DoubleOperable(value * operator.value);
-    }
-
-    public DoubleOperable mult(double operator) {
+    public DoubleOperable scale(double operator) {
         return new DoubleOperable(value * operator);
     }
 
