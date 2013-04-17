@@ -121,7 +121,7 @@ public class BenchmarkTest {
         
      // Hipster-Dijkstra
         bench.add("Hipster-Dijkstra", new Algorithm() {	
-			AStar<Point> it; Maze2D maze;
+			AStar<Point, DoubleOperable> it; Maze2D maze;
         	public void initialize(Maze2D maze) {
 				it= AlgorithmIteratorFromMazeCreator.astar(maze, false);
 				this.maze = maze;
