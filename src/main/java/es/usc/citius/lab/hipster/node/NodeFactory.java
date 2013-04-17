@@ -27,7 +27,7 @@ package es.usc.citius.lab.hipster.node;
  * @since 26/03/2013
  * @version 1.0
  */
-public interface NodeBuilder<S, N extends Node<S>> {
+public interface NodeFactory<S, N extends Node<S>> {
 
     /**
      * Builds a node from the current one and the incoming action

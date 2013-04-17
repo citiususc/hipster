@@ -28,7 +28,7 @@ import java.util.Set;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
@@ -43,7 +43,7 @@ import es.usc.citius.lab.hipster.node.Transition;
 public class BellmanFord<S> implements Iterator<Node<S>> {
 	
 	private TransitionFunction<S> transition;
-	private NodeBuilder<S, HeuristicNode<S>> builder;
+	private NodeFactory<S, HeuristicNode<S>> builder;
 	private Queue<S> queue;
 	private Map<S, HeuristicNode<S>> explored;
 	//private Comparator<HeuristicNode<S>> comparator;
@@ -91,7 +91,7 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		
 	}
 	
-	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, HeuristicNode<S>> builder, Comparator<Node<S>> comparator){
+	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeFactory<S, HeuristicNode<S>> builder, Comparator<Node<S>> comparator){
 		this.builder = builder;
 		this.transition = transition;
 		//this.queue = new LinkedList<S>();

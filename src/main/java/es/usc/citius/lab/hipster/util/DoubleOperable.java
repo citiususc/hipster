@@ -44,6 +44,10 @@ public class DoubleOperable implements Scalable<DoubleOperable>{
     public int compareTo(DoubleOperable o) {
         return Double.compare(value, o.value);
     }
+    
+    public double getValue(){
+    	return this.value;
+    }
 
     @Override
     public String toString() {

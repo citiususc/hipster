@@ -4,7 +4,7 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.util.Scalable;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
     private final ADStarNode<S, T> goalNode;
     private final TransitionFunction<S> successorFunction;
     private final TransitionFunction<S> predecessorFunction;
-    private final NodeBuilder<S, ADStarNode<S, T>> builder;
+    private final NodeFactory<S, ADStarNode<S, T>> builder;
     private final ADStarNodeUpdater<S, T> updater;
     private final Map<S, ADStarNode<S, T>> visited;
     private final Iterable<Transition<S>> transitionsChanged;
@@ -39,7 +39,7 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
     private Map<S, ADStarNode<S, T>> incons;
     private Queue<ADStarNode<S, T>> queue;
 
-    public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeBuilder<S, ADStarNode<S, T>> builder, ADStarNodeUpdater<S, T> updater) {
+    public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, ADStarNodeUpdater<S, T> updater) {
         this.begin = begin;
         this.goal = goal;
         this.builder = builder;

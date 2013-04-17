@@ -30,7 +30,7 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNode;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
@@ -115,7 +115,7 @@ public class BellmanFordTest {
 			}
 		};
 		
-		NodeBuilder<String, HeuristicNode<String>> builder = new HeuristicNumericNodeBuilder<String>(
+		NodeFactory<String, HeuristicNode<String>> builder = new HeuristicNumericNodeBuilder<String>(
 				new CostFunction<String, Double>() {
 					public Double evaluate(
 							Transition<String> transition) {
