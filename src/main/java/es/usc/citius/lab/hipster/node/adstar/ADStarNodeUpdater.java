@@ -18,7 +18,7 @@ package es.usc.citius.lab.hipster.node.adstar;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Operable;
+import es.usc.citius.lab.hipster.util.Scalable;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +31,7 @@ import java.util.Map.Entry;
  * @since 01-04-2013
  * @version 1.0
  */
-public class ADStarNodeUpdater<S, T extends Operable<T>>{
+public class ADStarNodeUpdater<S, T extends Scalable<T>>{
 
     private final CostFunction<S, T> costFunction;
     private final HeuristicFunction<S, T> heuristicFunction;

@@ -17,13 +17,15 @@
 package es.usc.citius.lab.hipster.util;
 
 /**
- *
+ * Defines operations that will be used in objects into 
+ * the algorithm.
+ * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 17-04-2013
+ * @since 16-04-2013
  * @version 1.0
  */
-public interface Operable<T> extends Comparable<T> {
-
-    public T add(T operator);
+public interface Scalable<T> extends Operable<T>{
+    
+    public T scale(double factor);
     
 }

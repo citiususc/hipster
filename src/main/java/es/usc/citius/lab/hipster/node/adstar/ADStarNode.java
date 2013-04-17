@@ -19,7 +19,7 @@ package es.usc.citius.lab.hipster.node.adstar;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Operable;
+import es.usc.citius.lab.hipster.util.Scalable;
 
 /**
  * Basic structure for AD* search iterators.
@@ -28,7 +28,7 @@ import es.usc.citius.lab.hipster.util.Operable;
  * @since 16-04-2013
  * @version 1.0
  */
-public class ADStarNode<S, T extends Operable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>> {
+public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>> {
 
     protected T g;
     protected T v;
@@ -87,7 +87,7 @@ public class ADStarNode<S, T extends Operable<T>> extends AbstractNode<S> implem
     /**
      * Class defining the key of the state, used to order them
      */
-    public static class Key<T extends Operable<T>> implements Comparable<Key<T>> {
+    public static class Key<T extends Scalable<T>> implements Comparable<Key<T>> {
 
         private T first;
         private T second;

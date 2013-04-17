@@ -23,7 +23,7 @@ package es.usc.citius.lab.hipster.util;
  * @since 16-04-2013
  * @version 1.0
  */
-public class DoubleOperable implements Operable<DoubleOperable>{
+public class DoubleOperable implements Scalable<DoubleOperable>{
 
     protected double value;
     public static final DoubleOperable MAX = new DoubleOperable(Double.POSITIVE_INFINITY);

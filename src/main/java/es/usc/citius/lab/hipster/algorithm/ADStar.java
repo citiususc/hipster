@@ -6,7 +6,7 @@ import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Operable;
+import es.usc.citius.lab.hipster.util.Scalable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStar<S, T extends Operable<T>> implements Iterator<Node<S>> {
+public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
 
     private final ADStarNode<S, T> beginNode;
     private final ADStarNode<S, T> goalNode;
