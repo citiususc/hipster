@@ -53,4 +53,12 @@ public class DoubleOperable implements Scalable<DoubleOperable>{
     public String toString() {
         return new Double(value).toString();
     }
+
+    public DoubleOperable neutral() {
+        return MIN;
+    }
+
+    public DoubleOperable max() {
+        return MAX;
+    }
 }

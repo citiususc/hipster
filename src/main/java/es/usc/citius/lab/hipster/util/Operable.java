@@ -26,4 +26,8 @@ public interface Operable<T> extends Comparable<T> {
 
     public T add(T operator);
     
+    public T neutral();
+    
+    public T max();
+    
 }
