@@ -133,7 +133,7 @@ public class BenchmarkTest {
         
         // Bellman-Ford
         bench.add("Hipster-Bellman-Ford", new Algorithm() {
-        	BellmanFord<Point> it; Maze2D maze;
+        	BellmanFord<Point, DoubleOperable> it; Maze2D maze;
         	public void initialize(Maze2D maze) {
 				it= AlgorithmIteratorFromMazeCreator.bellmanFord(maze, false);
 				this.maze = maze;

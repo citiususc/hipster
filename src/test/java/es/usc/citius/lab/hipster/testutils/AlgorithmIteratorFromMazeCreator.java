@@ -27,6 +27,7 @@ import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
+import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
 import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
@@ -94,15 +95,14 @@ public class AlgorithmIteratorFromMazeCreator {
         return adstar(maze, false);
     }
     
-    public static BellmanFord<Point> bellmanFord(final Maze2D maze, boolean useHeuristic) {
+    public static BellmanFord<Point,DoubleOperable> bellmanFord(final Maze2D maze, boolean useHeuristic) {
         CostFunction<Point, DoubleOperable> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        BellmanFord<Point> it;
+        BellmanFord<Point,DoubleOperable> it;
 
-        //it = new BellmanFord<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost), null);
-        it = null;
+        it = new BellmanFord<Point,DoubleOperable>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, DoubleOperable>(cost, DoubleOperable.MIN).toCostNodeFactory());
         return it;
     }
 

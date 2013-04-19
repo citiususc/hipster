@@ -19,6 +19,7 @@ package es.usc.citius.lab.hipster.node.adstar;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.util.Scalable;
 
 /**
@@ -28,7 +29,7 @@ import es.usc.citius.lab.hipster.util.Scalable;
  * @since 16-04-2013
  * @version 1.0
  */
-public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>> {
+public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>>, HeuristicNode<S, T> {
 
     protected T g;
     protected T v;
@@ -131,4 +132,12 @@ public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implem
             }
         }
     }
+
+	public T getCost() {
+		return this.g;
+	}
+
+	public T getScore() {
+		return this.v;
+	}
 }

@@ -33,6 +33,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
 import es.usc.citius.lab.hipster.util.DoubleOperable;
@@ -170,16 +171,16 @@ public final class MazeSearch {
     }
     
     //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
-    public static Result executePrintIteratorSearch(Iterator<HeuristicNode<Point, DoubleOperable>> it, Maze2D maze) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze) throws InterruptedException {
     	return executePrintIteratorSearch(it, maze, true);
     }
 
-    public static Result executePrintIteratorSearch(Iterator<HeuristicNode<Point, DoubleOperable>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
         int steps = 0;
         Result r = null;
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
-            HeuristicNode<Point, DoubleOperable> currentNode = it.next();
+            CostNode<Point, DoubleOperable> currentNode = it.next();
             explored.add(currentNode.transition().to());
             steps++;
             List<Node<Point>> nodePath = currentNode.path();
@@ -228,10 +229,10 @@ public final class MazeSearch {
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
-    public static Result executeIteratorSearch(Iterator<HeuristicNode<Point, DoubleOperable>> it, Maze2D maze) {
+    public static Result executeIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze) {
         int steps = 0;
         while (it.hasNext()) {
-            HeuristicNode<Point, DoubleOperable> currentNode = it.next();
+            CostNode<Point, DoubleOperable> currentNode = it.next();
             steps++;
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 List<Node<Point>> nodePath = currentNode.path();

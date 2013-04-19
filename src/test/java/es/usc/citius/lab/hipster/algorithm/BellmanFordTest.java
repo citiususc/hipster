@@ -34,10 +34,13 @@ import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNode;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
+import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
+import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
@@ -115,18 +118,20 @@ public class BellmanFordTest {
 			}
 		};
 		
-		NodeFactory<String, HeuristicNode<String>> builder = new HeuristicNumericNodeBuilder<String>(
-				new CostFunction<String, Double>() {
-					public Double evaluate(
-							Transition<String> transition) {
-						if (transition.from()==null){
-							return 0d;
-						}
-						return graph.findEdge(transition.from(), transition.to()).getCost();
-					}
-		});
+		NodeFactory<String, CostNode<String, DoubleOperable>> factory = new InformedNodeFactory<String, DoubleOperable>(new CostFunction<String, DoubleOperable>() {
+			public DoubleOperable evaluate(Transition<String> transition) {
+				if (transition.from()==null){
+					return DoubleOperable.MIN;
+				}
+				return new DoubleOperable(graph.findEdge(transition.from(), transition.to()).getCost());
+			}
+
+
+		}, DoubleOperable.MIN).toCostNodeFactory();
 		
-		BellmanFord<String> it = new BellmanFord<String>("A", transition, builder, null);
+		
+		
+		BellmanFord<String, DoubleOperable> it = new BellmanFord<String, DoubleOperable>("A", transition, factory);
 		while(it.hasNext()){
 			Node<String> edgeNode = it.next();
 			System.out.println("Exploring " + edgeNode.transition().from() + "->" + edgeNode.transition().to());
@@ -150,7 +155,7 @@ public class BellmanFordTest {
 
 	private void execute(Maze2D maze, boolean heuristic)
 			throws InterruptedException {
-		BellmanFord<Point> it = AlgorithmIteratorFromMazeCreator.bellmanFord(
+		BellmanFord<Point,DoubleOperable> it = AlgorithmIteratorFromMazeCreator.bellmanFord(
 				maze, heuristic);
 		DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator
 				.create(maze);

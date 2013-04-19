@@ -3,6 +3,7 @@ package es.usc.citius.lab.hipster.algorithm;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -22,7 +23,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
+public class ADStar<S, T extends Scalable<T>> implements Iterator<HeuristicNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
     private final ADStarNode<S, T> goalNode;
@@ -136,7 +137,7 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
         return takePromising() != null;
     }
 
-    public Node<S> next() {
+    public HeuristicNode<S,T> next() {
         //First node in OPEN retrieved, not removed
         ADStarNode<S, T> current = takePromising();
         S state = current.transition().to();
