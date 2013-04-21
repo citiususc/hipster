@@ -160,7 +160,7 @@ public class BellmanFordTest {
 		DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator
 				.create(maze);
 		MazeSearch.Result resultJung = MazeSearch
-				.executeJungSearch(graph, maze);
+				.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
 		MazeSearch.Result resultIterator = MazeSearch
 				.executePrintIteratorSearch(it, maze, false);
 		assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);

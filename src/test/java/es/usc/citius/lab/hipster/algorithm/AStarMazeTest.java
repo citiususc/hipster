@@ -106,7 +106,7 @@ public class AStarMazeTest {
         //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
         AStar<Point,DoubleOperable> it = AlgorithmIteratorFromMazeCreator.astar(maze, heuristic);
         DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator.create(maze);
-        MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze);
+        MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
         assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
     }

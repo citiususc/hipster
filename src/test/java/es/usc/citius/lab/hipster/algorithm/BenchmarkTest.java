@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -29,11 +30,15 @@ import org.junit.Test;
 import com.google.common.base.Stopwatch;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
-import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
+import es.usc.citius.lab.hipster.testutils.JungMazeGraphComponentFactory;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
+import es.usc.citius.lab.hipster.testutils.SearchComponentFactory;
 import es.usc.citius.lab.hipster.testutils.MazeSearch.Result;
+import es.usc.citius.lab.hipster.testutils.MazeSearchComponentFactory;
+import es.usc.citius.lab.hipster.testutils.SearchIterators;
 import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
@@ -102,6 +107,11 @@ public class BenchmarkTest {
     		return results;
     	}
     }
+    
+    private static SearchComponentFactory<Point,DoubleOperable> createComponentFactory(Maze2D maze){
+    	//return new MazeSearchComponentFactory(maze,false);
+    	return new JungMazeGraphComponentFactory(maze, false);
+    }
 
     @Test
     public void benchmark() throws InterruptedException {
@@ -112,46 +122,47 @@ public class BenchmarkTest {
 			Maze2D maze;DirectedGraph<Point, JungEdge<Point>> graph;
 			public void initialize(Maze2D maze) {
 				this.maze = maze;
-				this.graph = JungDirectedGraphFromMazeCreator.create(maze);
+				this.graph = JungMazeGraphComponentFactory.createGraphFrom(maze);
 			}
 			public Result evaluate() {
-				return MazeSearch.executeJungSearch(graph, maze);
+				return MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
 			}
 		});
         
      // Hipster-Dijkstra
         bench.add("Hipster-Dijkstra", new Algorithm() {	
-			AStar<Point, DoubleOperable> it; Maze2D maze;
+			Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.astar(maze, false);
-				this.maze = maze;
+				it= SearchIterators.createAStar(createComponentFactory(maze));
+				goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
         
         // Bellman-Ford
         bench.add("Hipster-Bellman-Ford", new Algorithm() {
-        	BellmanFord<Point, DoubleOperable> it; Maze2D maze;
+        	Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.bellmanFord(maze, false);
-				this.maze = maze;
+        		it = SearchIterators.createBellmanFord(createComponentFactory(maze));
+        		goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
         
         // ADStar
         bench.add("Hipster-ADStar", new Algorithm() {
-        	ADStar<Point, DoubleOperable> it; Maze2D maze;
+        	Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
-				this.maze = maze;
+        		it = SearchIterators.createADStar(createComponentFactory(maze));
+				//it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
+				goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
 

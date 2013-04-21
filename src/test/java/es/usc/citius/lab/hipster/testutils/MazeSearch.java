@@ -229,12 +229,12 @@ public final class MazeSearch {
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
-    public static Result executeIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze) {
+    public static Result executeIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Point goal) {
         int steps = 0;
         while (it.hasNext()) {
             CostNode<Point, DoubleOperable> currentNode = it.next();
             steps++;
-            if (currentNode.transition().to().equals(maze.getGoalLoc())) {
+            if (currentNode.transition().to().equals(goal)) {
                 List<Node<Point>> nodePath = currentNode.path();
                 Double cost = currentNode.getCost().getValue();//new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
@@ -245,15 +245,14 @@ public final class MazeSearch {
         return null;
     }
 
-    public static Result executeJungSearch(DirectedGraph<Point, JungEdge<Point>> jungGraph, Maze2D maze) {
+    public static Result executeJungSearch(DirectedGraph<Point, JungEdge<Point>> jungGraph, Point initial, Point goal) {
         DijkstraShortestPath<Point, JungEdge<Point>> dijkstra = new DijkstraShortestPath<Point, JungEdge<Point>>(
                 jungGraph, new Transformer<JungEdge<Point>, Double>() {
             public Double transform(JungEdge<Point> input) {
                 return input.getCost();
             }
         }, true);
-        List<JungEdge<Point>> path = dijkstra.getPath(maze.getInitialLoc(),
-                maze.getGoalLoc());
+        List<JungEdge<Point>> path = dijkstra.getPath(initial,goal);
         Double cost = 0.0;
         List<Point> statePath = new ArrayList<Point>();
         if(path.isEmpty()){
@@ -264,7 +263,7 @@ public final class MazeSearch {
             statePath.add(current.getSource());
             cost += current.getCost();
         }
-        statePath.add(maze.getGoalLoc());
+        statePath.add(goal);
         return new Result(statePath, cost);
     }
 
