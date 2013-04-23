@@ -27,8 +27,7 @@ import org.junit.Test;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.Operation;
-import es.usc.citius.lab.hipster.function.Operations;
+import es.usc.citius.lab.hipster.function.CostOperator;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
@@ -104,7 +103,7 @@ public class BellmanFordTest {
     	graph.addEdge(new JungEdge<String>("D", "A", 2.0), "D", "A");
     	graph.addEdge(new JungEdge<String>("D", "E", 2.0), "D", "E");
     	
-    	final Operation<Double> accumulator = Operations.addition();
+    	final CostOperator<Double> accumulator = CostOperator.doubleAdditionOp();
     	TransitionFunction<String> transition = new TransitionFunction<String>() {
 			public Iterable<Transition<String>> from(String current) {
 				Collection<Transition<String>> transitions = new ArrayList<Transition<String>>();
@@ -120,7 +119,7 @@ public class BellmanFordTest {
 		NodeFactory<String, CostNode<String, Double>> factory = new InformedNodeFactory<String, Double>(new CostFunction<String, Double>() {
 			public Double evaluate(Transition<String> transition) {
 				if (transition.from()==null){
-					return accumulator.getIdentityValue();
+					return accumulator.getIdentityElem();
 				}
 				return graph.findEdge(transition.from(), transition.to()).getCost();
 			}

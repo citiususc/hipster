@@ -23,16 +23,13 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
-import es.usc.citius.lab.hipster.node.informed.InformedNode;
 
 /**
  *
@@ -181,7 +178,8 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
 		}
 		
 		public AStar<S, Double> build(){
-			NodeFactory<S, HeuristicNode<S,Double>> nodeFactory = new InformedNodeFactory<S, Double>(cost, heuristic, Operations.addition());
+			NodeFactory<S, HeuristicNode<S, Double>> nodeFactory = new InformedNodeFactory<S, Double>(
+					cost, heuristic, CostOperator.doubleAdditionOp());
 			return new AStar<S,Double>(this.initialState, this.transition, nodeFactory);
 		}
     }

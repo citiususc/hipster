@@ -2,7 +2,7 @@ package es.usc.citius.lab.hipster.node.astar;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.Operation;
+import es.usc.citius.lab.hipster.function.CostOperator;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
@@ -13,20 +13,20 @@ public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFact
 
 	private CostFunction<S, T> gf;
 	private HeuristicFunction<S,T> hf;
-	private Operation<T> accumulator;
+	private CostOperator<T> accumulator;
 	
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, HeuristicFunction<S, T> heuristicFunction, Operation<T> accumulator){
+	public InformedNodeFactory(CostFunction<S,T> costFunction, HeuristicFunction<S, T> heuristicFunction, CostOperator<T> accumulator){
 		this.gf = costFunction;
 		this.hf = heuristicFunction;
 		this.accumulator = accumulator;
 	}
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, Operation<T> accumulator){
+	public InformedNodeFactory(CostFunction<S,T> costFunction, CostOperator<T> accumulator){
 		this.gf = costFunction;
 		this.hf = new HeuristicFunction<S, T>() {
 			public T estimate(S state) {
-				return InformedNodeFactory.this.accumulator.getIdentityValue();
+				return InformedNodeFactory.this.accumulator.getIdentityElem();
 			}
 		};
 		this.accumulator = accumulator;
@@ -37,7 +37,7 @@ public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFact
 		T cost, estimatedDistance;
 		
 		if (from == null){
-			cost = estimatedDistance = accumulator.getIdentityValue();
+			cost = estimatedDistance = accumulator.getIdentityElem();
 		} else {
 			cost = accumulator.apply(from.getCost(), this.gf.evaluate(transition));
 	    	estimatedDistance = this.hf.estimate(transition.to());

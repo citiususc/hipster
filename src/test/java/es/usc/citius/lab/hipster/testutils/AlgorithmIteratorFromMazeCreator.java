@@ -19,8 +19,8 @@ import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.Product;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
@@ -79,7 +79,7 @@ public class AlgorithmIteratorFromMazeCreator {
 
         NodeFactory<Point, ADStarNode<Point, Double>> defaultBuilder = new ADStarNodeBuilder<Point, Double>(0d, Double.MAX_VALUE);
 
-        ADStarNodeUpdater<Point, Double> updater = new ADStarNodeUpdater<Point, Double>(cost, heuristic, Operations.addition(), new Product(), 1.0);
+        ADStarNodeUpdater<Point, Double> updater = new ADStarNodeUpdater<Point, Double>(cost, heuristic, CostOperator.doubleAdditionOp(), new Product(), 1.0);
 
         return new ADStar<Point, Double>(
                 maze.getInitialLoc(),
@@ -101,7 +101,7 @@ public class AlgorithmIteratorFromMazeCreator {
 
         BellmanFord<Point,Double> it;
 
-        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, Double>(cost, Operations.addition()).toCostNodeFactory());
+        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, Double>(cost, CostOperator.doubleAdditionOp()).toCostNodeFactory());
         return it;
     }
 
