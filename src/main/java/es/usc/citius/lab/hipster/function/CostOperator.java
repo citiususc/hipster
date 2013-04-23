@@ -1,12 +1,14 @@
 package es.usc.citius.lab.hipster.function;
 
-public class CostOperator<E extends Comparable<E>> implements Operator<E> {
+import es.usc.citius.lab.hipster.algebra.BinaryOperation;
+
+public class CostOperator<E extends Comparable<E>> implements BinaryOperation<E> {
 
 	private E maxElem;
 	private E identityElem;
-	private Operator<E> op;
+	private BinaryOperation<E> op;
 
-	public CostOperator(Operator<E> operation, E identityElem, E maxElem) {
+	public CostOperator(BinaryOperation<E> operation, E identityElem, E maxElem) {
 		this.maxElem = maxElem;
 		this.identityElem = identityElem;
 		this.op = operation;
@@ -25,7 +27,7 @@ public class CostOperator<E extends Comparable<E>> implements Operator<E> {
 	}
 
 	public static CostOperator<Double> doubleAdditionOp() {
-		return new CostOperator<Double>(new Operator<Double>() {
+		return new CostOperator<Double>(new BinaryOperation<Double>() {
 			public Double apply(Double a, Double b) {
 				return a + b;
 			}
@@ -33,7 +35,7 @@ public class CostOperator<E extends Comparable<E>> implements Operator<E> {
 	}
 
 	public static CostOperator<Double> doubleMultiplicationOp() {
-		return new CostOperator<Double>(new Operator<Double>() {
+		return new CostOperator<Double>(new BinaryOperation<Double>() {
 
 			public Double apply(Double a, Double b) {
 				return a * b;
