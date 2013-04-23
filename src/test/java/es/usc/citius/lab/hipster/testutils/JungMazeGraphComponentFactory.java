@@ -6,12 +6,13 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.Operation;
+import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
-public class JungMazeGraphComponentFactory implements SearchComponentFactory<Point, DoubleOperable> {
+public class JungMazeGraphComponentFactory implements SearchComponentFactory<Point, Double> {
 	private final DirectedGraph<Point, JungEdge<Point>> graph;
 	private final Maze2D maze;
 	private boolean useHeuristic;
@@ -30,21 +31,21 @@ public class JungMazeGraphComponentFactory implements SearchComponentFactory<Poi
 		};
 	}
 
-	public CostFunction<Point, DoubleOperable> getCostFunction() {
-		return new CostFunction<Point, DoubleOperable>() {
-			public DoubleOperable evaluate(Transition<Point> transition) {
-				return new DoubleOperable(graph.findEdge(transition.from(), transition.to()).getCost());
+	public CostFunction<Point, Double> getCostFunction() {
+		return new CostFunction<Point, Double>() {
+			public Double evaluate(Transition<Point> transition) {
+				return new Double(graph.findEdge(transition.from(), transition.to()).getCost());
 			}
 		};
 	}
 
-	public HeuristicFunction<Point, DoubleOperable> getHeuristicFunction() {
-		return new HeuristicFunction<Point, DoubleOperable>() {
-			public DoubleOperable estimate(Point state) {
+	public HeuristicFunction<Point, Double> getHeuristicFunction() {
+		return new HeuristicFunction<Point, Double>() {
+			public Double estimate(Point state) {
 				if (useHeuristic){
-					return new DoubleOperable(state.distance(maze.getGoalLoc()));
+					return state.distance(maze.getGoalLoc());
 				} else {
-					return DoubleOperable.MIN;
+					return Operations.addition().getIdentityValue();
 				}
 			}
 		};
@@ -83,14 +84,11 @@ public class JungMazeGraphComponentFactory implements SearchComponentFactory<Poi
         return graph;
     }
 
-	public DoubleOperable getDefaultValue() {
-		return DoubleOperable.MIN;
+	public Operation<Double> getAccumulator() {
+		return Operations.addition();
 	}
 
-	public DoubleOperable getMaxValue() {
-		return DoubleOperable.MAX;
-	}
-
+	
 	
 
 }

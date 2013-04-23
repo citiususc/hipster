@@ -24,6 +24,7 @@ import java.util.Queue;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Node;
@@ -32,8 +33,6 @@ import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.informed.InformedNode;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
-import es.usc.citius.lab.hipster.util.Operable;
 
 /**
  *
@@ -41,7 +40,7 @@ import es.usc.citius.lab.hipster.util.Operable;
  *
  * @param <S>
  */
-public class AStar<S, T extends Operable<T>> implements Iterator<HeuristicNode<S,T>> {
+public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode<S,T>> {
 
     private final S initialState;
     private Map<S, HeuristicNode<S,T>> open;
@@ -155,14 +154,14 @@ public class AStar<S, T extends Operable<T>> implements Iterator<HeuristicNode<S
     public static final class AstarBuilder<S> {
     	private S initialState;
     	private TransitionFunction<S> transition;
-    	private HeuristicFunction<S, DoubleOperable> heuristic = new HeuristicFunction<S, DoubleOperable>() {
-			public DoubleOperable estimate(S state) {
-				return new DoubleOperable(0);
+    	private HeuristicFunction<S, Double> heuristic = new HeuristicFunction<S, Double>() {
+			public Double estimate(S state) {
+				return 0d;
 			}
 		};
-    	private CostFunction<S, DoubleOperable> cost = new CostFunction<S, DoubleOperable>() {
-			public DoubleOperable evaluate(Transition<S> transition) {
-				return new DoubleOperable(1d);
+    	private CostFunction<S, Double> cost = new CostFunction<S, Double>() {
+			public Double evaluate(Transition<S> transition) {
+				return 1d;
 			}
 		};
 		
@@ -171,19 +170,19 @@ public class AStar<S, T extends Operable<T>> implements Iterator<HeuristicNode<S
 			this.transition = transition;
 		}
 		
-		public AstarBuilder<S> cost(CostFunction<S, DoubleOperable> costFunction){
+		public AstarBuilder<S> cost(CostFunction<S, Double> costFunction){
 			this.cost = costFunction;
 			return this;
 		}
 		
-		public AstarBuilder<S> heuristic(HeuristicFunction<S, DoubleOperable> heuristicFunction){
+		public AstarBuilder<S> heuristic(HeuristicFunction<S, Double> heuristicFunction){
 			this.heuristic = heuristicFunction;
 			return this;
 		}
 		
-		public AStar<S, DoubleOperable> build(){
-			NodeFactory<S, HeuristicNode<S,DoubleOperable>> nodeFactory = new InformedNodeFactory<S, DoubleOperable>(cost, heuristic, DoubleOperable.MIN);
-			return new AStar<S,DoubleOperable>(this.initialState, this.transition, nodeFactory);
+		public AStar<S, Double> build(){
+			NodeFactory<S, HeuristicNode<S,Double>> nodeFactory = new InformedNodeFactory<S, Double>(cost, heuristic, Operations.addition());
+			return new AStar<S,Double>(this.initialState, this.transition, nodeFactory);
 		}
     }
     

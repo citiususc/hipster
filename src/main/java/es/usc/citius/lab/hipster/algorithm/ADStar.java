@@ -7,7 +7,6 @@ import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Scalable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,7 +22,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStar<S, T extends Scalable<T>> implements Iterator<HeuristicNode<S,T>> {
+public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
     private final ADStarNode<S, T> goalNode;

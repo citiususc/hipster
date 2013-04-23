@@ -30,6 +30,7 @@ import org.junit.Test;
 import com.google.common.base.Stopwatch;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
+import es.usc.citius.lab.hipster.function.Product;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
@@ -39,7 +40,6 @@ import es.usc.citius.lab.hipster.testutils.SearchComponentFactory;
 import es.usc.citius.lab.hipster.testutils.MazeSearch.Result;
 import es.usc.citius.lab.hipster.testutils.MazeSearchComponentFactory;
 import es.usc.citius.lab.hipster.testutils.SearchIterators;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
@@ -108,7 +108,7 @@ public class BenchmarkTest {
     	}
     }
     
-    private static SearchComponentFactory<Point,DoubleOperable> createComponentFactory(Maze2D maze){
+    private static SearchComponentFactory<Point,Double> createComponentFactory(Maze2D maze){
     	//return new MazeSearchComponentFactory(maze,false);
     	return new JungMazeGraphComponentFactory(maze, false);
     }
@@ -131,7 +131,7 @@ public class BenchmarkTest {
         
      // Hipster-Dijkstra
         bench.add("Hipster-Dijkstra", new Algorithm() {	
-			Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
+			Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
 				it= SearchIterators.createAStar(createComponentFactory(maze));
 				goal = maze.getGoalLoc();
@@ -143,7 +143,7 @@ public class BenchmarkTest {
         
         // Bellman-Ford
         bench.add("Hipster-Bellman-Ford", new Algorithm() {
-        	Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
+        	Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
         		it = SearchIterators.createBellmanFord(createComponentFactory(maze));
         		goal = maze.getGoalLoc();
@@ -155,9 +155,9 @@ public class BenchmarkTest {
         
         // ADStar
         bench.add("Hipster-ADStar", new Algorithm() {
-        	Iterator<? extends CostNode<Point, DoubleOperable>> it; Point goal;
+        	Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
-        		it = SearchIterators.createADStar(createComponentFactory(maze));
+        		it = SearchIterators.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE);
 				//it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
 				goal = maze.getGoalLoc();
 			}

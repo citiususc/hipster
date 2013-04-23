@@ -21,7 +21,6 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 import org.junit.Test;
@@ -104,7 +103,7 @@ public class AStarMazeTest {
 
     private void execute(Maze2D maze, boolean heuristic) throws InterruptedException {
         //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
-        AStar<Point,DoubleOperable> it = AlgorithmIteratorFromMazeCreator.astar(maze, heuristic);
+        AStar<Point,Double> it = AlgorithmIteratorFromMazeCreator.astar(maze, heuristic);
         DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
         MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);

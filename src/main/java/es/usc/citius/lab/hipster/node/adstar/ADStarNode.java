@@ -16,11 +16,12 @@
 
 package es.usc.citius.lab.hipster.node.adstar;
 
+import es.usc.citius.lab.hipster.function.Operation;
+import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
-import es.usc.citius.lab.hipster.util.Scalable;
 
 /**
  * Basic structure for AD* search iterators.
@@ -29,7 +30,7 @@ import es.usc.citius.lab.hipster.util.Scalable;
  * @since 16-04-2013
  * @version 1.0
  */
-public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>>, HeuristicNode<S, T> {
+public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>>, HeuristicNode<S, T> {
 
     protected T g;
     protected T v;
@@ -88,7 +89,7 @@ public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implem
     /**
      * Class defining the key of the state, used to order them
      */
-    public static class Key<T extends Scalable<T>> implements Comparable<Key<T>> {
+    public static class Key<T extends Comparable<T>> implements Comparable<Key<T>> {
 
         private T first;
         private T second;
@@ -102,12 +103,12 @@ public class ADStarNode<S, T extends Scalable<T>> extends AbstractNode<S> implem
          * @param h
          * @param e
          */
-        public Key(T g, T v, T h, double e) {
+        public Key(T g, T v, T h, double e, Operation<T> add, ScalarFunction<T> scale) {
             if (v.compareTo(g) >= 0) {
-                this.first = g.add(h.scale(e));
+                this.first = add.apply(g, scale.scale(h, e)); //g.add(h.scale(e));
                 this.second = g;
             } else {
-                this.first = v.add(h);
+                this.first = add.apply(v, h); //v.add(h);
                 this.second = v;
             }
         }

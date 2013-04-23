@@ -36,7 +36,6 @@ import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
@@ -171,16 +170,16 @@ public final class MazeSearch {
     }
     
     //public static Result executePrintIteratorSearch(AStar<Point> it, StringMaze maze) throws InterruptedException {
-    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, Double>> it, Maze2D maze) throws InterruptedException {
     	return executePrintIteratorSearch(it, maze, true);
     }
 
-    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
+    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, Double>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
         int steps = 0;
         Result r = null;
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
-            CostNode<Point, DoubleOperable> currentNode = it.next();
+            CostNode<Point, Double> currentNode = it.next();
             explored.add(currentNode.transition().to());
             steps++;
             List<Node<Point>> nodePath = currentNode.path();
@@ -193,7 +192,7 @@ public final class MazeSearch {
             	//clearOutput(20);
             	//System.out.println(getMazeStringSolution(maze, explored, statePath));
             	//Thread.sleep(2000);
-                Double cost = currentNode.getCost().getValue();//new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = currentNode.getCost();//new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 r = new Result(statePath, cost);
                 if (exitWhenGoalReached){
                     return r;
@@ -229,14 +228,14 @@ public final class MazeSearch {
     
     //public static Result executeIteratorSearch(AStar<Point> it, StringMaze maze) {
 
-    public static Result executeIteratorSearch(Iterator<? extends CostNode<Point, DoubleOperable>> it, Point goal) {
+    public static Result executeIteratorSearch(Iterator<? extends CostNode<Point, Double>> it, Point goal) {
         int steps = 0;
         while (it.hasNext()) {
-            CostNode<Point, DoubleOperable> currentNode = it.next();
+            CostNode<Point, Double> currentNode = it.next();
             steps++;
             if (currentNode.transition().to().equals(goal)) {
                 List<Node<Point>> nodePath = currentNode.path();
-                Double cost = currentNode.getCost().getValue();//new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
+                Double cost = currentNode.getCost();//new DoubleCostEvaluator<Point>().evaluate(nodePath, AlgorithmIteratorFromMazeCreator.defaultCostFunction());
                 List<Point> statePath = new NodeToStateListConverter<Point>().convert(nodePath);
                 return new Result(statePath, cost);
             }

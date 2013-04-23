@@ -6,9 +6,8 @@ import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.util.Operable;
 
-public class BellmanFordIteratorFactory<S, T extends Operable<T>> implements
+public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
 		AlgorithmIteratorFactory<S, T> {
 	private final SearchComponentFactory<S, T> componentFactory;
 
@@ -19,7 +18,7 @@ public class BellmanFordIteratorFactory<S, T extends Operable<T>> implements
 
 	public Iterator<? extends CostNode<S, T>> buildIteratorSearch() {
 		NodeFactory<S, CostNode<S, T>> factory = new InformedNodeFactory<S, T>(
-				componentFactory.getCostFunction(), componentFactory.getDefaultValue())
+				componentFactory.getCostFunction(), componentFactory.getAccumulator())
 				.toCostNodeFactory();
 
 		return new BellmanFord<S, T>(

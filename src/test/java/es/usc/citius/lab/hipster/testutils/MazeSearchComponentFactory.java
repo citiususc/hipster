@@ -4,12 +4,13 @@ import java.awt.Point;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.Operation;
+import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
-public class MazeSearchComponentFactory implements SearchComponentFactory<Point, DoubleOperable> {
+public class MazeSearchComponentFactory implements SearchComponentFactory<Point, Double> {
 	private final Maze2D maze;
 	private boolean useHeuristic;
 	
@@ -26,21 +27,21 @@ public class MazeSearchComponentFactory implements SearchComponentFactory<Point,
 		};
 	}
 
-	public CostFunction<Point, DoubleOperable> getCostFunction() {
-		return new CostFunction<Point, DoubleOperable>() {
-			public DoubleOperable evaluate(Transition<Point> transition) {
-				return new DoubleOperable(transition.from().distance(transition.to()));
+	public CostFunction<Point, Double> getCostFunction() {
+		return new CostFunction<Point, Double>() {
+			public Double evaluate(Transition<Point> transition) {
+				return new Double(transition.from().distance(transition.to()));
 			}
 		};
 	}
 
-	public HeuristicFunction<Point, DoubleOperable> getHeuristicFunction() {
-		return new HeuristicFunction<Point, DoubleOperable>() {
-			public DoubleOperable estimate(Point state) {
+	public HeuristicFunction<Point, Double> getHeuristicFunction() {
+		return new HeuristicFunction<Point, Double>() {
+			public Double estimate(Point state) {
 				if (useHeuristic){
-				return new DoubleOperable(state.distance(maze.getGoalLoc()));
+				return new Double(state.distance(maze.getGoalLoc()));
 				} else {
-					return DoubleOperable.MIN;
+					return 0d;
 				}
 			}
 		};
@@ -54,13 +55,11 @@ public class MazeSearchComponentFactory implements SearchComponentFactory<Point,
 		return maze.getGoalLoc();
 	}
 
-	public DoubleOperable getDefaultValue() {
-		return DoubleOperable.MIN;
+	public Operation<Double> getAccumulator() {
+		return Operations.addition();
 	}
 
-	public DoubleOperable getMaxValue() {
-		return DoubleOperable.MAX;
-	}
+	
 
 
 }

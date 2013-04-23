@@ -2,48 +2,47 @@ package es.usc.citius.lab.hipster.node.astar;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.Operation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.informed.InformedNode;
-import es.usc.citius.lab.hipster.util.Operable;
 
-public class InformedNodeFactory<S, T extends Operable<T>> implements NodeFactory<S, HeuristicNode<S,T>> {
+public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFactory<S, HeuristicNode<S,T>> {
 
 	private CostFunction<S, T> gf;
 	private HeuristicFunction<S,T> hf;
-	private T defaultValue;
+	private Operation<T> accumulator;
 	
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, HeuristicFunction<S, T> heuristicFunction, T defaultValue){
+	public InformedNodeFactory(CostFunction<S,T> costFunction, HeuristicFunction<S, T> heuristicFunction, Operation<T> accumulator){
 		this.gf = costFunction;
 		this.hf = heuristicFunction;
-		this.defaultValue = defaultValue;
+		this.accumulator = accumulator;
 	}
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, final T defaultValue){
+	public InformedNodeFactory(CostFunction<S,T> costFunction, Operation<T> accumulator){
 		this.gf = costFunction;
 		this.hf = new HeuristicFunction<S, T>() {
 			public T estimate(S state) {
-				return defaultValue;
+				return InformedNodeFactory.this.accumulator.getIdentityValue();
 			}
 		};
-		this.defaultValue = defaultValue;
+		this.accumulator = accumulator;
 	}
 	
 	public HeuristicNode<S, T> node(HeuristicNode<S, T> from,
 			Transition<S> transition) {
-		T newCost, newScore;
+		T cost, estimatedDistance;
 		
 		if (from == null){
-			newCost = defaultValue;
-			newScore = defaultValue;
+			cost = estimatedDistance = accumulator.getIdentityValue();
 		} else {
-			newCost = from.getCost().add(this.gf.evaluate(transition));
-	    	newScore = this.hf.estimate(transition.to());
+			cost = accumulator.apply(from.getCost(), this.gf.evaluate(transition));
+	    	estimatedDistance = this.hf.estimate(transition.to());
 		}
-    	return new InformedNode<S, T>(transition, from, newCost, newCost.add(newScore));
+    	return new InformedNode<S, T>(transition, from, cost, accumulator.apply(cost, estimatedDistance));
 	}
 	
 	public NodeFactory<S, CostNode<S,T>> toCostNodeFactory(){

@@ -20,6 +20,8 @@ import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.Operations;
+import es.usc.citius.lab.hipster.function.Product;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.NodeFactory;
@@ -28,7 +30,6 @@ import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import java.awt.Point;
 
@@ -42,47 +43,45 @@ import java.awt.Point;
  */
 public class AlgorithmIteratorFromMazeCreator {
 
-    public static AStar<Point, DoubleOperable> astar(final Maze2D maze, boolean useHeuristic) {
-        HeuristicFunction<Point, DoubleOperable> heuristic = defaultHeuristicFunction(maze);
+    public static AStar<Point, Double> astar(final Maze2D maze, boolean useHeuristic) {
+        HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
 
-        CostFunction<Point, DoubleOperable> cost = defaultCostFunction();
+        CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        AStar<Point,DoubleOperable> it;
+        AStar<Point,Double> it;
         if (useHeuristic) {
         	it = AStar.iterator(maze.getInitialLoc(), transition).cost(cost).heuristic(heuristic).build();
-            //it = new AStar<Point,DoubleOperable>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost, heuristic));
         } else {
         	it = AStar.iterator(maze.getInitialLoc(), transition).cost(cost).build();
-            //it = new AStar<Point>(maze.getInitialLoc(), transition, new HeuristicNumericNodeBuilder<Point>(cost));
         }
         return it;
     }
 
-    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze, boolean useHeuristic) {
-        HeuristicFunction<Point, DoubleOperable> heuristic;
+    public static ADStar<Point, Double> adstar(final Maze2D maze, boolean useHeuristic) {
+        HeuristicFunction<Point, Double> heuristic;
         if(useHeuristic){
-            heuristic = defaultDoubleOperableHeuristicFunction(maze);
+            heuristic = defaultDoubleHeuristicFunction(maze);
         }
         else{
-            heuristic = new HeuristicFunction<Point, DoubleOperable>() {
+            heuristic = new HeuristicFunction<Point, Double>() {
 
-                public DoubleOperable estimate(Point state) {
-                    return DoubleOperable.MIN;
+                public Double estimate(Point state) {
+                    return 0d;
                 }
             };
         }
 
-        CostFunction<Point, DoubleOperable> cost = defaultDoubleOperableCostFunction();
+        CostFunction<Point, Double> cost = defaultDoubleCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        NodeFactory<Point, ADStarNode<Point, DoubleOperable>> defaultBuilder = new ADStarNodeBuilder<Point, DoubleOperable>(DoubleOperable.MIN, DoubleOperable.MAX);
+        NodeFactory<Point, ADStarNode<Point, Double>> defaultBuilder = new ADStarNodeBuilder<Point, Double>(0d, Double.MAX_VALUE);
 
-        ADStarNodeUpdater<Point, DoubleOperable> updater = new ADStarNodeUpdater<Point, DoubleOperable>(cost, heuristic, 1.0, DoubleOperable.MAX);
+        ADStarNodeUpdater<Point, Double> updater = new ADStarNodeUpdater<Point, Double>(cost, heuristic, Operations.addition(), new Product(), 1.0);
 
-        return new ADStar<Point, DoubleOperable>(
+        return new ADStar<Point, Double>(
                 maze.getInitialLoc(),
                 maze.getGoalLoc(),
                 transition,
@@ -91,25 +90,25 @@ public class AlgorithmIteratorFromMazeCreator {
                 updater);	
     }
 
-    public static ADStar<Point, DoubleOperable> adstar(final Maze2D maze) {
+    public static ADStar<Point, Double> adstar(final Maze2D maze) {
         return adstar(maze, false);
     }
     
-    public static BellmanFord<Point,DoubleOperable> bellmanFord(final Maze2D maze, boolean useHeuristic) {
-        CostFunction<Point, DoubleOperable> cost = defaultCostFunction();
+    public static BellmanFord<Point,Double> bellmanFord(final Maze2D maze, boolean useHeuristic) {
+        CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
 
-        BellmanFord<Point,DoubleOperable> it;
+        BellmanFord<Point,Double> it;
 
-        it = new BellmanFord<Point,DoubleOperable>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, DoubleOperable>(cost, DoubleOperable.MIN).toCostNodeFactory());
+        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, Double>(cost, Operations.addition()).toCostNodeFactory());
         return it;
     }
 
-    public static HeuristicFunction<Point, DoubleOperable> defaultHeuristicFunction(final Maze2D maze) {
-        return new HeuristicFunction<Point, DoubleOperable>() {
-            public DoubleOperable estimate(Point from) {
-                return new DoubleOperable(from.distance(maze.getGoalLoc()));
+    public static HeuristicFunction<Point, Double> defaultHeuristicFunction(final Maze2D maze) {
+        return new HeuristicFunction<Point, Double>() {
+            public Double estimate(Point from) {
+                return new Double(from.distance(maze.getGoalLoc()));
             }
         };
     }
@@ -123,27 +122,27 @@ public class AlgorithmIteratorFromMazeCreator {
         };
     }
 
-    public static CostFunction<Point, DoubleOperable> defaultCostFunction() {
-        return new CostFunction<Point, DoubleOperable>() {
-            public DoubleOperable evaluate(Transition<Point> successor) {
-                return (successor.from() != null)?new DoubleOperable(successor.from().distance(successor.to())):new DoubleOperable(0.0);
+    public static CostFunction<Point, Double> defaultCostFunction() {
+        return new CostFunction<Point, Double>() {
+            public Double evaluate(Transition<Point> successor) {
+                return (successor.from() != null)?new Double(successor.from().distance(successor.to())): 0d;
             }
         };
     }
     
-    public static CostFunction<Point, DoubleOperable> defaultDoubleOperableCostFunction() {
-        return new CostFunction<Point, DoubleOperable>() {
-            public DoubleOperable evaluate(Transition<Point> successor) {
-                return (successor.from() != null) ? new DoubleOperable(successor.from().distance(successor.to())) : DoubleOperable.MIN;
+    public static CostFunction<Point, Double> defaultDoubleCostFunction() {
+        return new CostFunction<Point, Double>() {
+            public Double evaluate(Transition<Point> successor) {
+                return (successor.from() != null) ? new Double(successor.from().distance(successor.to())) : 0d;
             }
         };
     }
     
     
-    public static HeuristicFunction<Point, DoubleOperable> defaultDoubleOperableHeuristicFunction(final Maze2D maze) {
-        return new HeuristicFunction<Point, DoubleOperable>() {
-            public DoubleOperable estimate(Point from) {
-                return new DoubleOperable(from.distance(maze.getGoalLoc()));
+    public static HeuristicFunction<Point, Double> defaultDoubleHeuristicFunction(final Maze2D maze) {
+        return new HeuristicFunction<Point, Double>() {
+            public Double estimate(Point from) {
+                return new Double(from.distance(maze.getGoalLoc()));
             }
         };
     }

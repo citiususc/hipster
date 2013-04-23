@@ -27,20 +27,18 @@ import org.junit.Test;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.Operation;
+import es.usc.citius.lab.hipster.function.Operations;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNode;
-import es.usc.citius.lab.hipster.node.astar.HeuristicNumericNodeBuilder;
 import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
@@ -106,6 +104,7 @@ public class BellmanFordTest {
     	graph.addEdge(new JungEdge<String>("D", "A", 2.0), "D", "A");
     	graph.addEdge(new JungEdge<String>("D", "E", 2.0), "D", "E");
     	
+    	final Operation<Double> accumulator = Operations.addition();
     	TransitionFunction<String> transition = new TransitionFunction<String>() {
 			public Iterable<Transition<String>> from(String current) {
 				Collection<Transition<String>> transitions = new ArrayList<Transition<String>>();
@@ -118,20 +117,20 @@ public class BellmanFordTest {
 			}
 		};
 		
-		NodeFactory<String, CostNode<String, DoubleOperable>> factory = new InformedNodeFactory<String, DoubleOperable>(new CostFunction<String, DoubleOperable>() {
-			public DoubleOperable evaluate(Transition<String> transition) {
+		NodeFactory<String, CostNode<String, Double>> factory = new InformedNodeFactory<String, Double>(new CostFunction<String, Double>() {
+			public Double evaluate(Transition<String> transition) {
 				if (transition.from()==null){
-					return DoubleOperable.MIN;
+					return accumulator.getIdentityValue();
 				}
-				return new DoubleOperable(graph.findEdge(transition.from(), transition.to()).getCost());
+				return graph.findEdge(transition.from(), transition.to()).getCost();
 			}
 
 
-		}, DoubleOperable.MIN).toCostNodeFactory();
+		}, accumulator).toCostNodeFactory();
 		
 		
 		
-		BellmanFord<String, DoubleOperable> it = new BellmanFord<String, DoubleOperable>("A", transition, factory);
+		BellmanFord<String, Double> it = new BellmanFord<String, Double>("A", transition, factory);
 		while(it.hasNext()){
 			Node<String> edgeNode = it.next();
 			System.out.println("Exploring " + edgeNode.transition().from() + "->" + edgeNode.transition().to());
@@ -155,7 +154,7 @@ public class BellmanFordTest {
 
 	private void execute(Maze2D maze, boolean heuristic)
 			throws InterruptedException {
-		BellmanFord<Point,DoubleOperable> it = AlgorithmIteratorFromMazeCreator.bellmanFord(
+		BellmanFord<Point,Double> it = AlgorithmIteratorFromMazeCreator.bellmanFord(
 				maze, heuristic);
 		DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator
 				.create(maze);

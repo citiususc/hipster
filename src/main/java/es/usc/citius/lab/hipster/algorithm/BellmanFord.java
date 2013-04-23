@@ -30,7 +30,6 @@ import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.util.Operable;
 
 /**
  * Bellman Ford (BF) algorithm is a label correcting method that computes
@@ -41,7 +40,7 @@ import es.usc.citius.lab.hipster.util.Operable;
  * 
  * @param <S>
  */
-public class BellmanFord<S, T extends Operable<T>> implements Iterator<CostNode<S,T>> {
+public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNode<S,T>> {
 	
 	private TransitionFunction<S> transition;
 	private NodeFactory<S, CostNode<S,T>> factory;

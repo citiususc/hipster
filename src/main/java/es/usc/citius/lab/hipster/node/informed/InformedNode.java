@@ -2,7 +2,6 @@ package es.usc.citius.lab.hipster.node.informed;
 
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Operable;
 
 /**
  * 
@@ -11,7 +10,7 @@ import es.usc.citius.lab.hipster.util.Operable;
  * @param <S>
  * @param <T>
  */
-public class InformedNode<S, T extends Operable<T>> extends AbstractNode<S> implements HeuristicNode<S, T>, Comparable<HeuristicNode<S,T>> {
+public class InformedNode<S, T extends Comparable<T>> extends AbstractNode<S> implements HeuristicNode<S, T>, Comparable<HeuristicNode<S,T>> {
 
 	private T cost;
 	private T score;
