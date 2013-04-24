@@ -1,6 +1,6 @@
-package es.usc.citius.lab.hipster.algebra;
+package es.usc.citius.lab.hipster.experimental.algebra;
 
-public interface Monoid<E extends Monoid<E>> extends Comparable<E> {
+public interface MonoidElement<E extends MonoidElement<E>> {
 
 	/**
 	 * A monoid element must implement an associative binary operation over
