@@ -32,9 +32,9 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
+import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.util.DoubleCostEvaluator;
 import es.usc.citius.lab.hipster.util.NodeToStateListConverter;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;

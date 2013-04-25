@@ -1,7 +1,5 @@
-package es.usc.citius.lab.hipster.node.informed;
+package es.usc.citius.lab.hipster.node;
 
-import es.usc.citius.lab.hipster.node.AbstractNode;
-import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * 

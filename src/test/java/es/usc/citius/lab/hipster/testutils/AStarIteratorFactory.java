@@ -3,10 +3,10 @@ package es.usc.citius.lab.hipster.testutils;
 import java.util.Iterator;
 
 import es.usc.citius.lab.hipster.algorithm.AStar;
+import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
+import es.usc.citius.lab.hipster.node.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 
 public class AStarIteratorFactory<S, T extends Comparable<T>> implements
 		AlgorithmIteratorFactory<S, T> {

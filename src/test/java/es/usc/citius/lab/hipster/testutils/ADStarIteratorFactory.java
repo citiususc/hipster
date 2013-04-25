@@ -5,11 +5,11 @@ import java.util.Iterator;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
+import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
 
 public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
 		AlgorithmIteratorFactory<S, T> {

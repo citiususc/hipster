@@ -26,10 +26,10 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
+import es.usc.citius.lab.hipster.node.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.astar.InformedNodeFactory;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 
 /**
  *

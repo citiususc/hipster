@@ -31,7 +31,7 @@ import com.google.common.base.Stopwatch;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.function.Product;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.JungMazeGraphComponentFactory;

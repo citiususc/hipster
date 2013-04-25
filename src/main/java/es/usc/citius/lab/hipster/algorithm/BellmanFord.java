@@ -26,10 +26,10 @@ import java.util.Queue;
 import java.util.Set;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
 
 /**
  * Bellman Ford (BF) algorithm is a label correcting method that computes

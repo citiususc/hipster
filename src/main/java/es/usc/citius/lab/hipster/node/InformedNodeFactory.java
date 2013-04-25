@@ -1,13 +1,8 @@
-package es.usc.citius.lab.hipster.node.astar;
+package es.usc.citius.lab.hipster.node;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.CostOperator;
-import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
-import es.usc.citius.lab.hipster.node.informed.InformedNode;
 
 public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFactory<S, HeuristicNode<S,T>> {
 
