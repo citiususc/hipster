@@ -68,10 +68,10 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
      * @return most promising node
      */
     private ADStarNode<S, T> takePromising() {
-        while (!this.queue.isEmpty()) {
-            ADStarNode<S, T> head = this.queue.peek();
-            if (!this.open.containsKey(head.transition().to())) {
-                this.queue.poll();
+        while (!queue.isEmpty()) {
+            ADStarNode<S, T> head = queue.peek();
+            if (!open.containsKey(head.transition().to())) {
+                queue.poll();
             } else {
                 return head;
             }
@@ -104,6 +104,7 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
             }
         } else {
             this.open.remove(state);
+            //this.queue.remove(node);
             this.incons.remove(state);
         }
     }
@@ -143,6 +144,7 @@ public class ADStar<S, T extends Scalable<T>> implements Iterator<Node<S>> {
         if (this.goalNode.compareTo(current) >= 0 || this.goalNode.getV().compareTo(this.goalNode.getG()) < 0) {
             //s removed from OPEN
             this.open.remove(state);
+            //this.queue.remove(current);
             //if v(s) > g(s)
             boolean consistent = current.getV().compareTo(current.getG()) > 0;
             if (consistent) {
