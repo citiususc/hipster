@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import es.usc.citius.lab.hipster.collection.HashQueue;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.Node;
@@ -46,50 +47,7 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
 	private NodeFactory<S, CostNode<S,T>> factory;
 	private Queue<S> queue;
 	private Map<S, CostNode<S,T>> explored;
-	//private Comparator<CostNode<S,T>> comparator;
 	
-	// Create a queue based on LinkedHashSet
-	private class HashQueue<S> extends AbstractQueue<S>{
-		private Set<S> elements = new LinkedHashSet<S>();
-		private S first = null;
-
-		public boolean offer(S e) {
-			elements.add(e);
-			if (first == null){
-				first = e;
-			}
-			return true;
-		}
-
-		public S poll() {
-			// Remove the first element
-			elements.remove(first);
-			S out = first;
-			// Reasign first
-			first = (elements.isEmpty())?null:elements.iterator().next();
-			return out;
-		}
-
-		public S peek() {
-			return first;
-		}
-
-		@Override
-		public Iterator<S> iterator() {
-			return elements.iterator();
-		}
-
-		@Override
-		public int size() {
-			return elements.size();
-		}
-		
-		@Override
-		public boolean contains(Object o) {
-			return this.elements.contains(o);
-		}
-		
-	}
 	
 	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeFactory<S, CostNode<S,T>> builder){
 		this.factory = builder;
