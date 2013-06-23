@@ -281,12 +281,6 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	public Collection<Set<Set<E>>> enumerate() throws InterruptedException,
-			ExecutionException {
-
-		return solutions;
-
-	}
 
 	public boolean hasNext() {
 
