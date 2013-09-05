@@ -22,23 +22,23 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import es.usc.citius.lab.hipster.testutils.JungUtils;
 import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.CostNode;
-import es.usc.citius.lab.hipster.node.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
-import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
+import es.usc.citius.lab.hipster.testutils.MazeUtils;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 
 /**
  * Executes tests over predefined maze strings, comparing the results between
@@ -132,7 +132,7 @@ public class BellmanFordTest {
 		BellmanFord<String, Double> it = new BellmanFord<String, Double>("A", transition, factory);
 		while(it.hasNext()){
 			Node<String> edgeNode = it.next();
-			System.out.println("Exploring " + edgeNode.transition().from() + "->" + edgeNode.transition().to());
+			//System.out.println("Exploring " + edgeNode.transition().from() + "->" + edgeNode.transition().to());
 			String vertex = edgeNode.transition().to();
 			if (vertex.equals("E")){
 				// Evaluate cost:
@@ -142,10 +142,10 @@ public class BellmanFordTest {
 						continue;
 					}
 					JungEdge<String> edge = graph.findEdge(node.transition().from(), node.transition().to());
-					System.out.println(edge);
+					//System.out.println(edge);
 					cost += edge.getCost();
 				}
-				System.out.println("Cost to goal: " + cost);
+				//System.out.println("Cost to goal: " + cost);
 			}
 		}
     	
@@ -153,15 +153,11 @@ public class BellmanFordTest {
 
 	private void execute(Maze2D maze, boolean heuristic)
 			throws InterruptedException {
-		BellmanFord<Point,Double> it = AlgorithmIteratorFromMazeCreator.bellmanFord(
-				maze, heuristic);
-		DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator
-				.create(maze);
-		MazeSearch.Result resultJung = MazeSearch
-				.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
-		MazeSearch.Result resultIterator = MazeSearch
-				.executePrintIteratorSearch(it, maze, false);
-		assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
+		BellmanFord<Point,Double> it = MazeUtils.bellmanFord(maze, heuristic);
+		DirectedGraph<Point, JungEdge<Point>> graph = JungUtils.create(maze);
+		MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
+		MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze.getGoalLoc());
+		assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.0000001);
 	}
 
 }

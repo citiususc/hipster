@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IterativeSetCoverTest {
+public class SetCoverIteratorTest {
 
 	@Test
 	public void testIterativeSetCover01() {
@@ -24,16 +24,35 @@ public class IterativeSetCoverTest {
         sets.add(new HashSet<String>(Arrays.asList("5","6")));
         sets.add(new HashSet<String>(Arrays.asList("1","3", "5")));
 
-        IterativeSetCover<String> it = new IterativeSetCover<String>(sets);
+        SetCoverIterator<String> it = new SetCoverIterator<String>(sets);
         Set<Set<String>> result = null;
         int i = 0;
         while(it.hasNext()){
             result = it.next();
-            System.out.println("Solution found: " + result);
             i++;
         }
         assertTrue(i==1 && result != null && result.equals(solution));
 
 	}
 
+    @Test
+    public void testIterativeSetCover02() {
+
+        Set<Set<String>> sets = new HashSet<Set<String>>();
+        sets.add(new HashSet<String>(Arrays.asList("3","7")));
+        sets.add(new HashSet<String>(Arrays.asList("2","4")));
+        sets.add(new HashSet<String>(Arrays.asList("3","4","5","6")));
+        sets.add(new HashSet<String>(Arrays.asList("5")));
+        sets.add(new HashSet<String>(Arrays.asList("1")));
+        sets.add(new HashSet<String>(Arrays.asList("1","2","5","6")));
+
+        SetCoverIterator<String> it = new SetCoverIterator<String>(sets);
+        Set<Set<String>> result = null;
+        while(it.hasNext()){
+            result = it.next();
+            assertTrue(result.size()==3);
+            break;
+        }
+
+    }
 }

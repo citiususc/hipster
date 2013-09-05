@@ -18,10 +18,10 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.testutils.JungEdge;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
-import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
+import es.usc.citius.lab.hipster.testutils.JungUtils;
+import es.usc.citius.lab.hipster.testutils.MazeUtils;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import java.awt.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -102,12 +102,11 @@ public class AStarMazeTest {
     }
 
     private void execute(Maze2D maze, boolean heuristic) throws InterruptedException {
-        //AStar<Point> it = AStarIteratorFromMazeCreator.create(maze, heuristic);
-        AStar<Point,Double> it = AlgorithmIteratorFromMazeCreator.astar(maze, heuristic);
-        DirectedGraph<Point, JungEdge<Point>> graph = JungDirectedGraphFromMazeCreator.create(maze);
+        AStar<Point,Double> it = MazeUtils.astar(maze, heuristic);
+        DirectedGraph<Point, JungEdge<Point>> graph = JungUtils.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
-        MazeSearch.Result resultIterator = MazeSearch.executePrintIteratorSearch(it, maze);
-        assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.001);
+        MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze.getGoalLoc());
+        assertEquals(resultIterator.getCost(), resultJung.getCost(), 0.0000001);
     }
     
     

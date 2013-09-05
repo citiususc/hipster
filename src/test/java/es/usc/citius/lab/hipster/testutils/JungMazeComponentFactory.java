@@ -6,17 +6,17 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 
-public class JungMazeGraphComponentFactory implements SearchComponentFactory<Point, Double> {
+public class JungMazeComponentFactory implements SearchComponentFactory<Point, Double> {
 	private final DirectedGraph<Point, JungEdge<Point>> graph;
 	private final Maze2D maze;
 	private boolean useHeuristic;
 	
-	public JungMazeGraphComponentFactory(Maze2D maze, boolean useHeuristic){
+	public JungMazeComponentFactory(Maze2D maze, boolean useHeuristic){
 		this.maze = maze;
 		this.graph = createGraphFrom(maze);
 		this.useHeuristic = useHeuristic;

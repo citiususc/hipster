@@ -98,13 +98,20 @@ public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
 		}
 		return false;
 	}
-	
-	
 
-	public static <S> MultiObjectiveLS<S> iterator(){
+    public Map<S, Collection<MultiObjectiveNode<S>>> getNonDominatedSolutions() {
+        return nonDominated.asMap();
+    }
+
+    public static <S> MultiObjectiveLS<S> iterator(){
 		return null;
 	}
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
+
+    public Map<S, Collection<MultiObjectiveNode<S>>> search() {
+        while(this.hasNext()) this.next();
+        return getNonDominatedSolutions();
+    }
 }

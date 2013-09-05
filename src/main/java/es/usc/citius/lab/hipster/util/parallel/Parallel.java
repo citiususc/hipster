@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  * @author Pablo Rodríguez Mier
  * @version 13.01, 26 Jan 2013
  */
-public class Parallel {
+public final class Parallel {
 
 	private Parallel() {
 		throw new RuntimeException("Not instantiable");
@@ -263,7 +263,6 @@ public class Parallel {
 	 * 
 	 * @param elements
 	 * @param task
-	 * @see Each
 	 */
 	public static <A, V> Collection<V> ForEach(Iterable<A> elements,
 			F<A, V> task) {
@@ -284,7 +283,6 @@ public class Parallel {
 	 *            upper bound
 	 * @param action
 	 *            the action to perform in each iteration
-	 * @see #ForEach(Iterable, Function)
 	 */
 	public static void For(final long from, final long to,
 			final Action<Long> action) {

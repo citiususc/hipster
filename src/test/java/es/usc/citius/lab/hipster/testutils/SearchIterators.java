@@ -3,7 +3,7 @@ package es.usc.citius.lab.hipster.testutils;
 import java.util.Iterator;
 
 import es.usc.citius.lab.hipster.function.ScalarFunction;
-import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 
 public final class SearchIterators {
 

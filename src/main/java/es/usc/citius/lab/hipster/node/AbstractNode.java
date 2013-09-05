@@ -17,10 +17,11 @@ package es.usc.citius.lab.hipster.node;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
- * Implements the basic operations for a serch node:
+ * Implements the basic operations for search nodes:
  * <ul>
  * <li> obtains the path from current state to the begin
  * <li> obtains the previous node to current
@@ -50,6 +51,11 @@ public abstract class AbstractNode<S> implements Node<S> {
         this.state = transition;
     }
 
+    /**
+     * Generates the list of nodes from the current node to
+     * the first node.
+     * @return List with all nodes, where index 0 represents the first node of the path.
+     */
     public List<Node<S>> path() {
         List<Node<S>> path = new ArrayList<Node<S>>();
         Node<S> current = this;
@@ -88,5 +94,20 @@ public abstract class AbstractNode<S> implements Node<S> {
     @Override
     public String toString() {
         return this.transition().to().toString();
+    }
+
+    /**
+     * From a list of {@link Node} elements obtain the associated states.
+     *
+     * @author Adrián González Sieira
+     * @since 26-03-2013
+     * @version 1.0
+     */
+    public static <S> List<S> statesFrom(List<Node<S>> nodeList) {
+        List<S> stateList = new ArrayList<S>(nodeList.size());
+        for(Node<S> node : nodeList) {
+            stateList.add(node.transition().to());
+        }
+        return stateList;
     }
 }

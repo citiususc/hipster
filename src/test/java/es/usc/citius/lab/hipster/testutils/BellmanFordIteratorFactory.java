@@ -3,8 +3,8 @@ package es.usc.citius.lab.hipster.testutils;
 import java.util.Iterator;
 
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
-import es.usc.citius.lab.hipster.node.CostNode;
-import es.usc.citius.lab.hipster.node.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 
 public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements

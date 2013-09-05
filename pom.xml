@@ -5,9 +5,14 @@
     <artifactId>hipster</artifactId>
     <name>hipster</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>https://bitbucket.org/adrian_gonzalez/hipster</url>
+    <url>https://bitbucket.org/hipster/hipster/</url>
     <properties>
         <gpg.skip>true</gpg.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <test.jvm.argLine>
+            -server
+            -XX:+AggressiveOpts
+        </test.jvm.argLine>
     </properties>
     <organization>
         <name>Centro de Investigación en Tecnoloxías da Información (CITIUS)</name>
@@ -29,16 +34,16 @@
         <maven>3.0.3</maven>
     </prerequisites>
     <scm>
-        <connection>scm:git:git://bitbucket.org/adrian_gonzalez/hipster.git</connection>
-        <developerConnection>scm:git:ssh://git@bitbucket.org/adrian_gonzales/hipster.git</developerConnection>
-        <url>https://bitbucket.org/adrian_gonzalez/hipster/src</url>
+        <connection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</connection>
+        <developerConnection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</developerConnection>
+        <url>https://hipster@bitbucket.org/hipster/hipster.git</url>
     </scm>
     <developers>
         <developer>
             <id>pablormier</id>
             <name>Pablo Rodríguez Mier</name>
             <email>pablo.rodriguez.mier@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS)</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -49,7 +54,7 @@
             <id>adrian_gonzalez</id>
             <name>Adrián González Sieira</name>
             <email>adrian.gonzalez@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS)</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -63,6 +68,8 @@
             <artifactId>guava</artifactId>
             <version>14.0.1</version>
         </dependency>
+
+        <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

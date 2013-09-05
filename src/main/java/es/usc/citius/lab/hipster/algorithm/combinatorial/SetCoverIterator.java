@@ -54,7 +54,7 @@ import es.usc.citius.lab.hipster.util.parallel.Parallel;
  * 
  * @param <E>
  */
-public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
+public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
 
 	// Ordered map (descending by key) with the available sets
 	// ordered by size and mapped back to their bitset representation
@@ -74,6 +74,8 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 	// Next element index
 	private int nextElementIndex = 0;
 	private Set<Set<E>> nextElement = null;
+    // Use parallelization
+    private boolean parallelized = false;
 
 	/**
 	 * Class Result is used to store the information obtained for each thread
@@ -167,8 +169,7 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 
 	}
 
-	public ParallelSetCover(Set<Set<E>> sets)
-			throws InterruptedException, ExecutionException {
+	public SetCoverIterator(Set<Set<E>> sets) {
 
 		this.solutions = new LinkedList<Set<Set<E>>>();
 		// Obtain the elements from the sets
@@ -216,7 +217,7 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 	 * @param value
 	 *            True (1) false (0)
 	 */
-	public Set<BitSet> findByColumn(Collection<BitSet> bitsets, int position,
+	private Set<BitSet> findByColumn(Collection<BitSet> bitsets, int position,
 			boolean value) {
 		Set<BitSet> rows = new HashSet<BitSet>();
 		// Find rows with ones in that position
@@ -228,7 +229,7 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 		return rows;
 	}
 
-	public Set<BitSet> findByColumn(int fromIndex, int bitPosition,
+	private Set<BitSet> findByColumn(int fromIndex, int bitPosition,
 			boolean value) {
 		Set<BitSet> rows = new HashSet<BitSet>();
 		for (int i = fromIndex; i < this.bitsetList.size(); i++) {
@@ -240,7 +241,7 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 		return rows;
 	}
 
-	public List<Integer> findBitIndex(BitSet bitset, boolean value) {
+	private List<Integer> findBitIndex(BitSet bitset, boolean value) {
 		List<Integer> indexes = new ArrayList<Integer>();
 		for (int i = 0; i < this.size; i++) {
 			if (bitset.get(i) == value) {
@@ -250,7 +251,6 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 		return indexes;
 	}
 
-	// TODO: Optimize this function.
 	private boolean isDominated(Collection<Set<Set<E>>> solutions,
 			Set<Set<E>> candidate) {
 		for (Set<Set<E>> solution : solutions) {
@@ -291,35 +291,19 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 		while (this.solutions.size() <= this.nextElementIndex
 				&& !this.queue.isEmpty()) {
 
-			Collection<Result> nextLevel = null;
-			try {
+            Collection<Result> nextLevel = null;
+            if (parallelized){
+                try {
+                    nextLevel = parallelSearch();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            } else {
+                nextLevel = sequentialSearch();
+            }
 
-				nextLevel = new Parallel.ForEach<State, Result>(queue)
-						.apply(new Parallel.F<State, Result>() {
-							public Result apply(State state) {
-								Set<State> candidates = new HashSet<State>();
-								Collection<Set<Set<E>>> localSolutions = new HashSet<Set<Set<E>>>();
-								for (State candidate : state.candidates()) {
-									Set<Set<E>> candidateSets = candidate
-											.stateSets();
-									if (!isDominated(solutions, candidateSets)) {
-										if (candidate.isFinal()) {
-											localSolutions.add(candidateSets);
-										} else {
-											candidates.add(candidate);
-										}
-									}
-								}
-								return new Result(candidates, localSolutions);
-
-							}
-						}).values();
-
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
 
 			// Empty the queue
 			queue.clear();
@@ -331,7 +315,6 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 			}
 		}
 		// Get the next solution
-		// TODO: Solutions cannot be removed!!!!!!
 		if (this.nextElementIndex < solutions.size()) {
 			this.nextElement = solutions.get(this.nextElementIndex);
 			this.nextElementIndex++;
@@ -342,6 +325,49 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 		return this.nextElement != null;
 	}
 
+    private Collection<Result> sequentialSearch(){
+        Collection<Result> results = new ArrayList<Result>(queue.size());
+        for(State state : this.queue){
+            Set<State> candidates = new HashSet<State>();
+            Collection<Set<Set<E>>> localSolutions = new HashSet<Set<Set<E>>>();
+            for (State candidate : state.candidates()) {
+                Set<Set<E>> candidateSets = candidate.stateSets();
+                if (!isDominated(solutions, candidateSets)) {
+                    if (candidate.isFinal()) {
+                        localSolutions.add(candidateSets);
+                    } else {
+                        candidates.add(candidate);
+                    }
+                }
+            }
+            results.add(new Result(candidates, localSolutions));
+        }
+        return results;
+    }
+
+    private Collection<Result> parallelSearch() throws ExecutionException, InterruptedException {
+        return new Parallel.ForEach<State, Result>(queue)
+            .apply(new Parallel.F<State, Result>() {
+                public Result apply(State state) {
+                    Set<State> candidates = new HashSet<State>();
+                    Collection<Set<Set<E>>> localSolutions = new HashSet<Set<Set<E>>>();
+                    for (State candidate : state.candidates()) {
+                        Set<Set<E>> candidateSets = candidate
+                                .stateSets();
+                        if (!isDominated(solutions, candidateSets)) {
+                            if (candidate.isFinal()) {
+                                localSolutions.add(candidateSets);
+                            } else {
+                                candidates.add(candidate);
+                            }
+                        }
+                    }
+                    return new Result(candidates, localSolutions);
+
+                }
+            }).values();
+    }
+
 	public Set<Set<E>> next() {
 		return this.nextElement;
 	}
@@ -349,5 +375,13 @@ public class ParallelSetCover<E> implements Iterator<Set<Set<E>>> {
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
+
+    public boolean isParallelized() {
+        return parallelized;
+    }
+
+    public void useParallelization(boolean parallelized) {
+        this.parallelized = parallelized;
+    }
 
 }

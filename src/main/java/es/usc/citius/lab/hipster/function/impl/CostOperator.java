@@ -1,5 +1,7 @@
-package es.usc.citius.lab.hipster.function;
+package es.usc.citius.lab.hipster.function.impl;
 
+
+import es.usc.citius.lab.hipster.function.BinaryOperation;
 
 public class CostOperator<E extends Comparable<E>> implements BinaryOperation<E> {
 

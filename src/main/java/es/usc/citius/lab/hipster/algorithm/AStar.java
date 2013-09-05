@@ -23,11 +23,11 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
-import es.usc.citius.lab.hipster.node.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
@@ -106,7 +106,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
 
             // In other case (the neighbor node has not been considered yet
             // or the movement does not improve the previous cost) then
-            // check if the neighbor is closeddefaultHeuristicFunction
+            // check if the neighbor is closed
             HeuristicNode<S,T> successorClose = closed.get(successor.to());
             if (successorClose != null) {
                 // Check if this path improves the cost of a closed neighbor.
@@ -184,7 +184,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
 		}
     }
     
-    public static <S> AstarBuilder<S> iterator(S initialState, TransitionFunction<S> transition){
+    public static <S> AstarBuilder<S> getSearchIterator(S initialState, TransitionFunction<S> transition){
     	return new AstarBuilder<S>(initialState, transition);
     }
 

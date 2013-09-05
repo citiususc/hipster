@@ -14,20 +14,30 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.util;
+package es.usc.citius.lab.hipster.node.uninformed;
 
-import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
-import java.util.List;
+import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- *
- * @author Adrián González Sieira
- * @since 26-03-2013
+ * Simplest node that can be used by search algorithms.
+ * 
+ * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
+ * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @param <S> class defining the state
+ * @since 26/03/2013
  * @version 1.0
  */
-public interface CostEvaluator<S, T> {
-    
-    public T evaluate(List<Node<S>> path, CostFunction<S, T> costFunction);
-    
+public class SimpleNode<S> extends AbstractNode<S> {
+
+    /**
+     * Basic constructor for this node.
+     * @param transition incoming transition
+     * @param previousNode parent node
+     */
+    public SimpleNode(Transition<S> transition, Node<S> previousNode) {
+        super(transition, previousNode);
+    }
+
 }

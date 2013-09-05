@@ -16,19 +16,14 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import java.util.AbstractQueue;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 import es.usc.citius.lab.hipster.collection.HashQueue;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.CostNode;
-import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
@@ -77,7 +72,7 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
 		return this.explored.get(state);
 	}
 	
-
+    // TODO; Detect negative cycles
 	public CostNode<S,T> next() {
 		// Take the next node
 		CostNode<S,T> current = dequeue();
@@ -93,7 +88,6 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
 				// path, update and enqueue. Else, discard this node.
 				//if (comparator.compare(successorNode, previousNode) <= 0){
 				if (successorNode.getCost().compareTo(previousNode.getCost())<0){
-				//if (successorNode.compareByCost(previousNode) < 0){
 					// Replace the worst version and re-enqueue (if not in queue)
 					enqueue(successorNode);
 				}

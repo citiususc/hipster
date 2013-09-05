@@ -18,7 +18,7 @@ package es.usc.citius.lab.hipster.testutils;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import java.awt.Point;
 
 /**
@@ -30,7 +30,7 @@ import java.awt.Point;
  * @since 26-03-2013
  * @version 1.0
  */
-public class JungDirectedGraphFromMazeCreator {
+public class JungUtils {
 
     /**
      * Conversion process.

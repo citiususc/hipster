@@ -19,17 +19,17 @@ import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.Product;
+import es.usc.citius.lab.hipster.function.impl.Product;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
-import es.usc.citius.lab.hipster.node.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import java.awt.Point;
 
 /**
@@ -40,7 +40,7 @@ import java.awt.Point;
  * @since 26-03-2013
  * @version 1.0
  */
-public class AlgorithmIteratorFromMazeCreator {
+public class MazeUtils {
 
     public static AStar<Point, Double> astar(final Maze2D maze, boolean useHeuristic) {
         HeuristicFunction<Point, Double> heuristic = defaultHeuristicFunction(maze);
@@ -51,9 +51,9 @@ public class AlgorithmIteratorFromMazeCreator {
 
         AStar<Point,Double> it;
         if (useHeuristic) {
-        	it = AStar.iterator(maze.getInitialLoc(), transition).cost(cost).heuristic(heuristic).build();
+        	it = AStar.getSearchIterator(maze.getInitialLoc(), transition).cost(cost).heuristic(heuristic).build();
         } else {
-        	it = AStar.iterator(maze.getInitialLoc(), transition).cost(cost).build();
+        	it = AStar.getSearchIterator(maze.getInitialLoc(), transition).cost(cost).build();
         }
         return it;
     }

@@ -1,10 +1,6 @@
 package es.usc.citius.lab.hipster.algorithm.multiobjective;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -24,7 +20,7 @@ import static org.junit.Assert.*;
 public class MOLSTest {
 
 	@Test
-	public void test() {
+	public void testMultiobjectiveSearch() {
 		// Create a MultiObjective graph with 
 		// two attributes: Response time and Throughput
 		final Multimap<String, String> graph = HashMultimap.create();
@@ -64,22 +60,21 @@ public class MOLSTest {
 			
 		};
 		NodeFactory<String, MultiObjectiveNode<String>> factory = new QoSObjectiveNodeFactory<String>(evaluator);
-		MultiObjectiveLS<String> it = new MultiObjectiveLS<String>("X", t, factory);
-		
+		MultiObjectiveLS<String> algorithm = new MultiObjectiveLS<String>("X", t, factory);
+        Map<String, Collection<MultiObjectiveNode<String>>> solution = algorithm.search();
 
-		while(it.hasNext()){
-			it.next();
-		}
-		// Non-dominated solutions
+		// Non-dominated solutions (expected)
 		Set<QoSObjectives> expected = new HashSet<QoSObjectives>();
 		expected.add(new QoSObjectives(190d, 400));
 		expected.add(new QoSObjectives(135d, 50));
 		expected.add(new QoSObjectives(140d, 60));
 		expected.add(new QoSObjectives(135d, 50));
-		for(MultiObjectiveNode<String> n : it.nonDominated.get("Y")){
+
+        // Read all non dominated paths to Y
+		for(MultiObjectiveNode<String> n :solution.get("Y")){
 			QoSObjectiveNode<String> node = (QoSObjectiveNode<String>)n;
 			assertTrue("Solution not expected - " + node.objectives, expected.contains(node.objectives));
-			System.out.println(node.objectives.responseTime + " RT / " + node.objectives.throughput + " TH - " + node.path());
+			//System.out.println(node.objectives.responseTime + " RT / " + node.objectives.throughput + " TH - " + node.path());
 		}		
 	}
 

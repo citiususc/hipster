@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Implementation of a {@link java.util.Queue} backed by a {@link LinkedHashSet}
+ * @param <S>
+ */
 public class HashQueue<S> extends AbstractQueue<S> {
 
 	private Set<S> elements = new LinkedHashSet<S>();
