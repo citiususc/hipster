@@ -43,7 +43,9 @@
             <id>pablormier</id>
             <name>Pablo Rodríguez Mier</name>
             <email>pablo.rodriguez.mier@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
+                Compostela
+            </organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -54,7 +56,9 @@
             <id>adrian_gonzalez</id>
             <name>Adrián González Sieira</name>
             <email>adrian.gonzalez@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
+                Compostela
+            </organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -128,18 +132,21 @@
                 </executions>
             </plugin>
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <!--<stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
