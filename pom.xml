@@ -15,7 +15,7 @@
         </test.jvm.argLine>
     </properties>
     <organization>
-        <name>Centro de Investigación en Tecnoloxías da Información (CITIUS)</name>
+        <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
         <url>http://citius.usc.es</url>
     </organization>
     <issueManagement>
@@ -43,10 +43,6 @@
             <id>pablormier</id>
             <name>Pablo Rodríguez Mier</name>
             <email>pablo.rodriguez.mier@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
-                Compostela
-            </organization>
-            <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
                 <role>developer</role>
@@ -56,10 +52,6 @@
             <id>adrian_gonzalez</id>
             <name>Adrián González Sieira</name>
             <email>adrian.gonzalez@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
-                Compostela
-            </organization>
-            <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
                 <role>developer</role>
