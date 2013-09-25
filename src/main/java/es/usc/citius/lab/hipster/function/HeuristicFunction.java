@@ -30,7 +30,7 @@ package es.usc.citius.lab.hipster.function;
 public interface HeuristicFunction<S, T> {
 
     /**
-     * Obtains the minimum estimted cost of traversing from current state to any
+     * Obtains the minimum estimated cost of traversing from current state to any
      * goal.
      *
      * @param state current state

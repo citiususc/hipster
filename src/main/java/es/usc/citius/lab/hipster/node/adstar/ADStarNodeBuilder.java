@@ -16,9 +16,8 @@
 
 package es.usc.citius.lab.hipster.node.adstar;
 
-import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.Scalable;
 
 /**
  *
@@ -26,7 +25,7 @@ import es.usc.citius.lab.hipster.util.Scalable;
  * @since 02-04-2013
  * @version 1.0
  */
-public class ADStarNodeBuilder<S, T extends Scalable<T>> implements NodeBuilder<S, ADStarNode<S, T>>{
+public class ADStarNodeBuilder<S, T extends Comparable<T>> implements NodeFactory<S, ADStarNode<S, T>>{
 
     protected T max;
     protected T min;

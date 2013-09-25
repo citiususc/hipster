@@ -21,12 +21,14 @@ import java.util.Stack;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.SimpleNode;
+import es.usc.citius.lab.hipster.node.uninformed.SimpleNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
 
-
-
+/**
+ *
+ * @param <S>
+ */
 public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
 	private Stack<Node<S>> stack = new Stack<Node<S>>();

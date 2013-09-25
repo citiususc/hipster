@@ -5,9 +5,14 @@
     <artifactId>hipster</artifactId>
     <name>hipster</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>https://bitbucket.org/adrian_gonzalez/hipster</url>
+    <url>https://bitbucket.org/hipster/hipster/</url>
     <properties>
         <gpg.skip>true</gpg.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <test.jvm.argLine>
+            -server
+            -XX:+AggressiveOpts
+        </test.jvm.argLine>
     </properties>
     <organization>
         <name>Centro de Investigación en Tecnoloxías da Información (CITIUS)</name>
@@ -29,16 +34,18 @@
         <maven>3.0.3</maven>
     </prerequisites>
     <scm>
-        <connection>scm:git:git://bitbucket.org/adrian_gonzalez/hipster.git</connection>
-        <developerConnection>scm:git:ssh://git@bitbucket.org/adrian_gonzales/hipster.git</developerConnection>
-        <url>https://bitbucket.org/adrian_gonzalez/hipster/src</url>
+        <connection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</connection>
+        <developerConnection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</developerConnection>
+        <url>https://hipster@bitbucket.org/hipster/hipster.git</url>
     </scm>
     <developers>
         <developer>
             <id>pablormier</id>
             <name>Pablo Rodríguez Mier</name>
             <email>pablo.rodriguez.mier@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS)</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
+                Compostela
+            </organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -49,7 +56,9 @@
             <id>adrian_gonzalez</id>
             <name>Adrián González Sieira</name>
             <email>adrian.gonzalez@usc.es</email>
-            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS)</organization>
+            <organization>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de
+                Compostela
+            </organization>
             <organizationUrl>http://citius.usc.es</organizationUrl>
             <roles>
                 <role>owner</role>
@@ -63,6 +72,8 @@
             <artifactId>guava</artifactId>
             <version>14.0.1</version>
         </dependency>
+
+        <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -98,6 +109,14 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
@@ -113,18 +132,21 @@
                 </executions>
             </plugin>
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <!--<stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

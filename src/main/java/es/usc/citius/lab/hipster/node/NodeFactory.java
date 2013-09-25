@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.util;
+package es.usc.citius.lab.hipster.node;
 
 /**
- * Defines operations that will be used in objects into 
- * the algorithm.
+ * Interface defining the builder to create instances
+ * of {@link Node}.
  * 
+ * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 16-04-2013
+ * @param <S> class defining the state
+ * @param <N> class defining the node
+ * @since 26/03/2013
  * @version 1.0
  */
-public interface Scalable<T> extends Operable<T>{
-    
-    public T scale(double factor);
-    
+public interface NodeFactory<S, N extends Node<S>> {
+
+    /**
+     * Builds a node from the current one and the incoming action
+     * to reach it.
+     * @param from incoming node
+     * @param transition incoming transition
+     * @return 
+     */
+    public N node(N from, Transition<S> transition);
 }

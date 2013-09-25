@@ -24,9 +24,7 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
-
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 
 public class Maze2DTest {
 	
@@ -120,18 +118,13 @@ public class Maze2DTest {
         // Initial loc
         assertEquals(maze.getInitialLoc(), new Point(2, 0));
         assertEquals(maze.getGoalLoc(), new Point(9, 15));
-        // Print valid moves from initial and goal
-        // System.out.println(maze.validLocationsFrom(maze.getInitialLoc()));
-        // System.out.println(maze.validLocationsFrom(maze.getGoalLoc()));
-        // System.out.println(maze.validLocationsFrom(new Point(14, 3)));
     }
     
     @Test
-    public void obstacles(){
+    public void testObstacles(){
     	Maze2D maze = new Maze2D(refMaze);
     	Maze2D goal = new Maze2D(obstacleMaze);
     	maze.putObstacleRectangle(new Point(10,1), new Point(17,3));
-    	//System.out.println(maze.toString());
     	assertTrue(maze.diff(goal).isEmpty());
     	maze.removeObstacleRectangle(new Point(10,1), new Point(17,3));
     	assertTrue(maze.diff(new Maze2D(refMaze)).isEmpty());

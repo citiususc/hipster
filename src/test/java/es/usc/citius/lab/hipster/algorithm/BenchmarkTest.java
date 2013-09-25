@@ -20,22 +20,23 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import es.usc.citius.lab.hipster.testutils.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Stopwatch;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.testutils.AlgorithmIteratorFromMazeCreator;
-import es.usc.citius.lab.hipster.testutils.JungDirectedGraphFromMazeCreator;
-import es.usc.citius.lab.hipster.testutils.JungEdge;
-import es.usc.citius.lab.hipster.testutils.MazeSearch;
+import es.usc.citius.lab.hipster.function.impl.Product;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.testutils.JungMazeComponentFactory;
 import es.usc.citius.lab.hipster.testutils.MazeSearch.Result;
-import es.usc.citius.lab.hipster.util.DoubleOperable;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 
 /**
  * This class executes a benchmark to compare the performance of
@@ -102,8 +103,14 @@ public class BenchmarkTest {
     		return results;
     	}
     }
+    
+    private static SearchComponentFactory<Point,Double> createComponentFactory(Maze2D maze){
+    	//return new MazeSearchComponentFactory(maze,false);
+    	return new JungMazeComponentFactory(maze, false);
+    }
 
     @Test
+    @Ignore("Benchmark test disabled")
     public void benchmark() throws InterruptedException {
         Benchmark bench = new Benchmark();
         
@@ -112,46 +119,47 @@ public class BenchmarkTest {
 			Maze2D maze;DirectedGraph<Point, JungEdge<Point>> graph;
 			public void initialize(Maze2D maze) {
 				this.maze = maze;
-				this.graph = JungDirectedGraphFromMazeCreator.create(maze);
+				this.graph = JungMazeComponentFactory.createGraphFrom(maze);
 			}
 			public Result evaluate() {
-				return MazeSearch.executeJungSearch(graph, maze);
+				return MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
 			}
 		});
         
      // Hipster-Dijkstra
         bench.add("Hipster-Dijkstra", new Algorithm() {	
-			AStar<Point> it; Maze2D maze;
+			Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.astar(maze, false);
-				this.maze = maze;
+				it= SearchIterators.createAStar(createComponentFactory(maze));
+				goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
         
         // Bellman-Ford
         bench.add("Hipster-Bellman-Ford", new Algorithm() {
-        	BellmanFord<Point> it; Maze2D maze;
+        	Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.bellmanFord(maze, false);
-				this.maze = maze;
+        		it = SearchIterators.createBellmanFord(createComponentFactory(maze));
+        		goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
         
         // ADStar
         bench.add("Hipster-ADStar", new Algorithm() {
-        	ADStar<Point, DoubleOperable> it; Maze2D maze;
+        	Iterator<? extends CostNode<Point, Double>> it; Point goal;
         	public void initialize(Maze2D maze) {
-				it= AlgorithmIteratorFromMazeCreator.adstar(maze, false);
-				this.maze = maze;
+        		it = SearchIterators.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE);
+				//it= MazeUtils.adstar(maze, false);
+				goal = maze.getGoalLoc();
 			}
 			public Result evaluate() {
-				return MazeSearch.executeIteratorSearch(it, maze);
+				return MazeSearch.executeIteratorSearch(it, goal);
 			}
 		});
 

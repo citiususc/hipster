@@ -16,19 +16,15 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import java.util.AbstractQueue;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
+import es.usc.citius.lab.hipster.collection.HashQueue;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
-import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.NodeBuilder;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
@@ -40,64 +36,21 @@ import es.usc.citius.lab.hipster.node.Transition;
  * 
  * @param <S>
  */
-public class BellmanFord<S> implements Iterator<Node<S>> {
+public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNode<S,T>> {
 	
 	private TransitionFunction<S> transition;
-	private NodeBuilder<S, HeuristicNode<S>> builder;
+	private NodeFactory<S, CostNode<S,T>> factory;
 	private Queue<S> queue;
-	private Map<S, HeuristicNode<S>> explored;
-	//private Comparator<HeuristicNode<S>> comparator;
+	private Map<S, CostNode<S,T>> explored;
 	
-	// Create a queue based on LinkedHashSet
-	private class HashQueue<S> extends AbstractQueue<S>{
-		private Set<S> elements = new LinkedHashSet<S>();
-		private S first = null;
-
-		public boolean offer(S e) {
-			elements.add(e);
-			if (first == null){
-				first = e;
-			}
-			return true;
-		}
-
-		public S poll() {
-			// Remove the first element
-			elements.remove(first);
-			S out = first;
-			// Reasign first
-			first = (elements.isEmpty())?null:elements.iterator().next();
-			return out;
-		}
-
-		public S peek() {
-			return first;
-		}
-
-		@Override
-		public Iterator<S> iterator() {
-			return elements.iterator();
-		}
-
-		@Override
-		public int size() {
-			return elements.size();
-		}
-		
-		@Override
-		public boolean contains(Object o) {
-			return this.elements.contains(o);
-		}
-		
-	}
 	
-	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeBuilder<S, HeuristicNode<S>> builder, Comparator<Node<S>> comparator){
-		this.builder = builder;
+	public BellmanFord(S initialState, TransitionFunction<S> transition, NodeFactory<S, CostNode<S,T>> builder){
+		this.factory = builder;
 		this.transition = transition;
 		//this.queue = new LinkedList<S>();
 		this.queue = new HashQueue<S>();
-		this.explored = new HashMap<S, HeuristicNode<S>>();
-		HeuristicNode<S> initialNode = builder.node(null, new Transition<S>(initialState));
+		this.explored = new HashMap<S, CostNode<S,T>>();
+		CostNode<S,T> initialNode = builder.node(null, new Transition<S>(initialState));
 		this.queue.add(initialState);
 		this.explored.put(initialState, initialNode);
 	}
@@ -106,7 +59,7 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		return !this.queue.isEmpty();
 	}
 	
-	private void enqueue(HeuristicNode<S> node){
+	private void enqueue(CostNode<S,T> node){
 		S state = node.transition().to();
 		if (!this.queue.contains(state)){
 			this.queue.add(state);
@@ -114,27 +67,27 @@ public class BellmanFord<S> implements Iterator<Node<S>> {
 		this.explored.put(state, node);
 	}
 	
-	private HeuristicNode<S> dequeue(){
+	private CostNode<S,T> dequeue(){
 		S state = this.queue.poll();
 		return this.explored.get(state);
 	}
 	
-
-	public Node<S> next() {
+    // TODO; Detect negative cycles
+	public CostNode<S,T> next() {
 		// Take the next node
-		HeuristicNode<S> current = dequeue();
+		CostNode<S,T> current = dequeue();
 		// Calculate distances to each neighbor
 		S currentState = current.transition().to();
 		for(Transition<S> successor : this.transition.from(currentState)){
 			// Create the successor node
-			HeuristicNode<S> successorNode = this.builder.node(current, successor);
+			CostNode<S,T> successorNode = this.factory.node(current, successor);
 			// Check if there is any improvement in the old cost
-			HeuristicNode<S> previousNode = this.explored.get(successor.to());
+			CostNode<S,T> previousNode = this.explored.get(successor.to());
 			if (previousNode != null){
 				// Check both paths. If the new path is better than the previous
 				// path, update and enqueue. Else, discard this node.
 				//if (comparator.compare(successorNode, previousNode) <= 0){
-				if (successorNode.compareByCost(previousNode) < 0){
+				if (successorNode.getCost().compareTo(previousNode.getCost())<0){
 					// Replace the worst version and re-enqueue (if not in queue)
 					enqueue(successorNode);
 				}

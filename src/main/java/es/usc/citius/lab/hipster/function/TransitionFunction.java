@@ -37,5 +37,5 @@ public interface TransitionFunction<S> {
      * @param current current state
      * @return set of available transitions to other states
      */
-    public Iterable<Transition<S>> from(S current);
+    public Iterable<? extends Transition<S>> from(S current);
 }

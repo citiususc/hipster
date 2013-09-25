@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.util.maze;
+package es.usc.citius.lab.hipster.algorithm.multiobjective.maze;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -28,6 +28,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * This class defines a 2D ASCII Maze used to easily validate the search algorithms.
+ *
+ */
 public class Maze2D {
 
     private byte maze[][];
@@ -35,7 +39,10 @@ public class Maze2D {
     private Point goalLoc;
     private int rows;
     private int columns;
-    
+
+    /**
+     * Symbols allowed to create a maze
+     */
     public static enum Symbol {
 		OCCUPIED('X'), 	// 0
 		EMPTY(' '), 	// 1
@@ -61,7 +68,13 @@ public class Maze2D {
 			throw new IllegalArgumentException("Unrecognized char " + c);
 		}
 	};
-    
+
+    /**
+     * Creates a new 2D ASCII Maze.
+     * @param maze 2D Byte array of that represents the maze using {@link Symbol}
+     * @param initial Starting point
+     * @param goal Goal point
+     */
     public Maze2D(byte maze[][], Point initial, Point goal){
     	this.maze = maze;
     	this.rows = maze.length;
@@ -70,6 +83,10 @@ public class Maze2D {
     	this.goalLoc = goal;
     }
 
+    /**
+     * Creates a new 2D ASCII Maze from a array of Strings.
+     * @param maze2D Array of strings representing the maze. Use symbols from {@code Symbol}
+     */
     public Maze2D(String[] maze2D) {
         // Initialize maze
         this.rows = maze2D.length;     		// y axis (rows)
@@ -93,11 +110,22 @@ public class Maze2D {
         	}
         }
     }
-    
+
+    /**
+     * Check if the point {@code p} in the maze is empty or occupied.
+     * @param p Point to check
+     * @return True if is free, false if is not empty.
+     */
     public boolean isFree(Point p){
     	return this.maze[p.y][p.x]>Symbol.OCCUPIED.value();
     }
 
+    /**
+     * Create a random squared 2D Maze.
+     * @param size Size of the maze
+     * @param spaceProb uniform probability (between 0-1) of a cell to be empty
+     * @return Random maze
+     */
     public static Maze2D random(int size, double spaceProb) {
         byte[][] maze = new byte[size][size];
         Random r = new Random(System.nanoTime());
@@ -109,6 +137,10 @@ public class Maze2D {
         return new Maze2D(maze, new Point(0,0), new Point(size-1,size-1));
     }
 
+    /**
+     * Return all tiles (i,j) of the maze
+     * @return List of points, from (0,0) to (m,n).
+     */
     public List<Point> getMazePoints() {
         List<Point> points = new ArrayList<Point>();
         for (int row = 0; row < this.rows; row++) {
@@ -118,7 +150,12 @@ public class Maze2D {
         }
         return points;
     }
-    
+
+    /**
+     * Replace a tile in the maze
+     * @param p Point of the tile to be replaced
+     * @param symbol New symbol
+     */
     public void updateLocation(Point p, Symbol symbol){
     	int row = p.y;
     	int column = p.x;
