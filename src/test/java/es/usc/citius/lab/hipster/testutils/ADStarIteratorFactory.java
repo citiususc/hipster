@@ -1,15 +1,17 @@
 package es.usc.citius.lab.hipster.testutils;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
 
 public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
 		AlgorithmIteratorFactory<S, T> {
@@ -35,8 +37,10 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
 		ADStarNodeUpdater<S, T> updater = new ADStarNodeUpdater<S, T>(
 				f.getCostFunction(), f.getHeuristicFunction(), f.getAccumulator(), this.scale,
 				this.epsilon);
+		
+		Collection<S> goals = new ArrayList<S>(); goals.add(f.getGoalState());
 
-		return new ADStar<S, T>(f.getInitialState(), f.getGoalState(),
+		return new ADStar<S, T>(f.getInitialState(), goals,
 				f.getTransitionFunction(), f.getTransitionFunction(),
 				defaultBuilder, updater);
 	}

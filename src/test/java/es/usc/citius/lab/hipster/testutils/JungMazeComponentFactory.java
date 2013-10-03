@@ -6,7 +6,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
@@ -44,7 +44,7 @@ public class JungMazeComponentFactory implements SearchComponentFactory<Point, D
 				if (useHeuristic){
 					return state.distance(maze.getGoalLoc());
 				} else {
-					return CostOperator.doubleAdditionOp().getIdentityElem();
+					return BinaryOperation.doubleAdditionOp().getIdentityElem();
 				}
 			}
 		};
@@ -83,8 +83,8 @@ public class JungMazeComponentFactory implements SearchComponentFactory<Point, D
         return graph;
     }
 
-	public CostOperator<Double> getAccumulator() {
-		return CostOperator.doubleAdditionOp();
+	public BinaryOperation<Double> getAccumulator() {
+		return BinaryOperation.doubleAdditionOp();
 	}
 
 	

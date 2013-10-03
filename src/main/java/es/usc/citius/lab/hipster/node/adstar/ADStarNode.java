@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.node.adstar;
 
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
@@ -103,7 +103,7 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
          * @param h
          * @param e
          */
-        public Key(T g, T v, T h, double e, CostOperator<T> add, ScalarFunction<T> scale) {
+        public Key(T g, T v, T h, double e, BinaryOperation<T> add, ScalarFunction<T> scale) {
             if (v.compareTo(g) >= 0) {
                 this.first = add.apply(g, scale.scale(h, e)); //g.add(h.scale(e));
                 this.second = g;

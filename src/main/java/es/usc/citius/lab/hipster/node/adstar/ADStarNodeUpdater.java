@@ -17,7 +17,7 @@ package es.usc.citius.lab.hipster.node.adstar;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.node.Transition;
 
@@ -36,12 +36,12 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
 
 	private final CostFunction<S, T> costFunction;
 	private final HeuristicFunction<S, T> heuristicFunction;
-	private final CostOperator<T> add;
+	private final BinaryOperation<T> add;
 	private final ScalarFunction<T> scale;
 	private double epsilon;
 
 	public ADStarNodeUpdater(CostFunction<S, T> costFunction,
-			HeuristicFunction<S, T> heuristicFunction, CostOperator<T> add,
+			HeuristicFunction<S, T> heuristicFunction, BinaryOperation<T> add,
 			ScalarFunction<T> scale, double epsilon) {
 		this.costFunction = costFunction;
 		this.heuristicFunction = heuristicFunction;
