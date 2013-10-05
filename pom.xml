@@ -72,29 +72,24 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung2</artifactId>
-            <version>2.0.1</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
+        <!-- JUNG is used to compare both quality and performance of the algorithms -->
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-graph-impl</artifactId>
             <version>2.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung-api</artifactId>
-            <version>2.0.1</version>
-            <scope>test</scope>
+            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-algorithms</artifactId>
             <version>2.0.1</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+        <!-- Caliper is used to benchmark the code -->
+        <dependency>
+            <groupId>com.google.caliper</groupId>
+            <artifactId>caliper</artifactId>
+            <version>1.0-beta-1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -128,7 +123,12 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
-                    <!--<stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>-->
+                    <!--
+                        Use a custom stylesheet. The stylesheet is an adaptation
+                        of the original JDK 7 stylesheet, copying some key designs from
+                        Mockito css http://github.com/mockito/mockito
+                    -->
+                    <stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>
                 </configuration>
                 <executions>
                     <execution>

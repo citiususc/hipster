@@ -17,7 +17,7 @@
 package es.usc.citius.lab.hipster.node;
 
 /**
- * Interface defining the builder to create instances
+ * Interface defining the factory to create instances
  * of {@link Node}.
  * 
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>

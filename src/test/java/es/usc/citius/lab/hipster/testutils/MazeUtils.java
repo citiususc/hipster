@@ -24,7 +24,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.impl.Product;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
-import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
@@ -48,6 +48,11 @@ public class MazeUtils {
         CostFunction<Point, Double> cost = defaultCostFunction();
 
         TransitionFunction<Point> transition = defaultTransitionFunction(maze);
+        /*
+        HeuristicAlgorithmBuilder<Point> builder = new HeuristicAlgorithmBuilder<Point>(maze.getInitialLoc(), transition)
+                .cost(cost)
+                .heuristic(heuristic)
+                .build(new AStarFactory<Point>());*/
 
         AStar<Point,Double> it;
         if (useHeuristic) {
@@ -100,7 +105,7 @@ public class MazeUtils {
 
         BellmanFord<Point,Double> it;
 
-        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new InformedNodeFactory<Point, Double>(cost, CostOperator.doubleAdditionOp()).toCostNodeFactory());
+        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new HeuristicNodeImplFactory<Point, Double>(cost, CostOperator.doubleAdditionOp()).toCostNodeFactory());
         return it;
     }
 

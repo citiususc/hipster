@@ -31,7 +31,7 @@ import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -84,6 +84,17 @@ public class BellmanFordTest {
 		execute(maze, false);
 	}
 
+    @Test
+    public void negativeCycles(){
+        final DirectedGraph<String, JungEdge<String>> graph = new DirectedSparseMultigraph<String, JungEdge<String>>();
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addEdge(new JungEdge<>("A", "B", 1.0), "A", "B");
+        graph.addEdge(new JungEdge<>("B", "A", -2.0), "B", "A");
+        graph.addEdge(new JungEdge<>("B", "C", 1.0), "B", "C");
+    }
+
 	@Test
     public void PositiveWeightedGraph(){
     	final DirectedGraph<String, JungEdge<String>> graph = new DirectedSparseMultigraph<String, JungEdge<String>>();
@@ -116,7 +127,7 @@ public class BellmanFordTest {
 			}
 		};
 		
-		NodeFactory<String, CostNode<String, Double>> factory = new InformedNodeFactory<String, Double>(new CostFunction<String, Double>() {
+		NodeFactory<String, CostNode<String, Double>> factory = new HeuristicNodeImplFactory<String, Double>(new CostFunction<String, Double>() {
 			public Double evaluate(Transition<String> transition) {
 				if (transition.from()==null){
 					return accumulator.getIdentityElem();
@@ -130,7 +141,8 @@ public class BellmanFordTest {
 		
 		
 		BellmanFord<String, Double> it = new BellmanFord<String, Double>("A", transition, factory);
-		while(it.hasNext()){
+		double result = Double.POSITIVE_INFINITY;
+        while(it.hasNext()){
 			Node<String> edgeNode = it.next();
 			//System.out.println("Exploring " + edgeNode.transition().from() + "->" + edgeNode.transition().to());
 			String vertex = edgeNode.transition().to();
@@ -145,10 +157,12 @@ public class BellmanFordTest {
 					//System.out.println(edge);
 					cost += edge.getCost();
 				}
-				//System.out.println("Cost to goal: " + cost);
+				if (cost < result){
+                    result = cost;
+                }
 			}
 		}
-    	
+    	assertEquals(7.0, result, 0.0);
     }
 
 	private void execute(Maze2D maze, boolean heuristic)

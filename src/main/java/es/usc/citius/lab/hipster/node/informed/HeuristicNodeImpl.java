@@ -13,28 +13,46 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package es.usc.citius.lab.hipster.node.uninformed;
+package es.usc.citius.lab.hipster.node.informed;
+
 
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
 
-public class UninformedNode<S, T extends Comparable<T>> extends AbstractNode<S> implements CostNode<S, T>, Comparable<CostNode<S,T>> {
+/**
+ * 
+ * @author Pablo Rodríguez Mier
+ *
+ * @param <S>
+ * @param <T>
+ */
+public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<S> implements HeuristicNode<S, T>, Comparable<HeuristicNode<S,T>> {
 
 	private T cost;
-
-	public UninformedNode(Transition<S> transition, CostNode<S,T> previousNode, T cost) {
+	private T score;
+	
+	public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost, T score) {
 		super(transition, previousNode);
 		this.cost = cost;
+		this.score = score;
+	}
+	
+	public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost) {
+		super(transition, previousNode);
+		this.cost = cost;
+		this.score = cost;
 	}
 
 	public T getCost() {
 		return this.cost;
 	}
 
-	
-	public int compareTo(CostNode<S, T> o) {
-		return this.cost.compareTo(o.getCost());
+	public T getScore() {
+		return this.score;
+	}
+
+	public int compareTo(HeuristicNode<S, T> o) {
+		return this.score.compareTo(o.getScore());
 	}
 
 }

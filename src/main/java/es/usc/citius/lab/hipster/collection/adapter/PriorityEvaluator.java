@@ -13,28 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package es.usc.citius.lab.hipster.node.uninformed;
 
-import es.usc.citius.lab.hipster.node.AbstractNode;
-import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+package es.usc.citius.lab.hipster.collection.adapter;
 
-public class UninformedNode<S, T extends Comparable<T>> extends AbstractNode<S> implements CostNode<S, T>, Comparable<CostNode<S,T>> {
-
-	private T cost;
-
-	public UninformedNode(Transition<S> transition, CostNode<S,T> previousNode, T cost) {
-		super(transition, previousNode);
-		this.cost = cost;
-	}
-
-	public T getCost() {
-		return this.cost;
-	}
-
-	
-	public int compareTo(CostNode<S, T> o) {
-		return this.cost.compareTo(o.getCost());
-	}
-
+/**
+ * This interface is intended for the definition of evaluators to calculate
+ * the priority (double) of a concrete element. This can be used to adapt different
+ * data structures (like the most implementations of heaps for java) which use
+ * doubles to sort the elements instead of defining comparable types (as used by
+ * {@link java.util.Queue}.
+ *
+ * @author Pablo Rodríguez Mier
+ */
+public interface PriorityEvaluator<E> {
+    double getPriority(E e);
 }

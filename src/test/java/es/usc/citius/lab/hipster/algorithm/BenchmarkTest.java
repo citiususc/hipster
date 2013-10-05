@@ -34,7 +34,7 @@ import com.google.common.base.Stopwatch;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import es.usc.citius.lab.hipster.function.impl.Product;
 import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.testutils.JungMazeComponentFactory;
+import es.usc.citius.lab.hipster.testutils.JungMazeHeuristicProblem;
 import es.usc.citius.lab.hipster.testutils.MazeSearch.Result;
 import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 
@@ -104,9 +104,9 @@ public class BenchmarkTest {
     	}
     }
     
-    private static SearchComponentFactory<Point,Double> createComponentFactory(Maze2D maze){
-    	//return new MazeSearchComponentFactory(maze,false);
-    	return new JungMazeComponentFactory(maze, false);
+    private static HeuristicSearchProblem<Point,Double> createComponentFactory(Maze2D maze){
+    	//return new MazeHeuristicSearchProblem(maze,false);
+    	return new JungMazeHeuristicProblem(maze, false);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class BenchmarkTest {
 			Maze2D maze;DirectedGraph<Point, JungEdge<Point>> graph;
 			public void initialize(Maze2D maze) {
 				this.maze = maze;
-				this.graph = JungMazeComponentFactory.createGraphFrom(maze);
+				this.graph = JungMazeHeuristicProblem.createGraphFrom(maze);
 			}
 			public Result evaluate() {
 				return MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());

@@ -37,10 +37,10 @@ public class ADStarNodeBuilder<S, T extends Comparable<T>> implements NodeFactor
     
     public ADStarNode<S, T> node(ADStarNode<S, T> from, Transition<S> transition) {
         if(from == null){
-            return new ADStarNode<S, T>(transition, null, min, max, new ADStarNode.Key<T>(min, min));
+            return new ADStarNode<>(transition, null, min, max, new ADStarNode.Key<T>(min, min));
         }
         else{
-         return new ADStarNode<S, T>(transition, null, max, max, new ADStarNode.Key<T>(max, max));   
+         return new ADStarNode<>(transition, null, max, max, new ADStarNode.Key<T>(max, max));
         }
     }
 

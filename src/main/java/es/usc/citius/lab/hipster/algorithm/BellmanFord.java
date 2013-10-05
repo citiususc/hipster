@@ -34,7 +34,8 @@ import es.usc.citius.lab.hipster.node.Transition;
  * 
  * @author Pablo Rodríguez Mier
  * 
- * @param <S>
+ * @param <S> state type
+ * @param <T> cost type used to compare different nodes
  */
 public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNode<S,T>> {
 	

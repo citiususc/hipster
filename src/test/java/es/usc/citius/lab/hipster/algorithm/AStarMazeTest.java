@@ -16,15 +16,17 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.testutils.JungEdge;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.testutils.JungUtils;
-import es.usc.citius.lab.hipster.testutils.MazeUtils;
-import es.usc.citius.lab.hipster.testutils.MazeSearch;
 import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
-import java.awt.Point;
+import es.usc.citius.lab.hipster.testutils.JungEdge;
+import es.usc.citius.lab.hipster.testutils.JungUtils;
+import es.usc.citius.lab.hipster.testutils.MazeSearch;
+import es.usc.citius.lab.hipster.testutils.MazeUtils;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.awt.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Executes tests over predefined maze strings, comparing the results between
@@ -103,6 +105,11 @@ public class AStarMazeTest {
 
     private void execute(Maze2D maze, boolean heuristic) throws InterruptedException {
         AStar<Point,Double> it = MazeUtils.astar(maze, heuristic);
+        /*
+        PriorityFibonacciQueue<HeuristicNode<Point, Double>> q = new PriorityFibonacciQueue<HeuristicNode<Point, Double>>(new HeuristicNodePriorityEvaluator<Point, Double>());
+        q.offer(it.getQueue().poll());
+        it.setQueue(q);*/
+
         DirectedGraph<Point, JungEdge<Point>> graph = JungUtils.create(maze);
         MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, maze.getGoalLoc());

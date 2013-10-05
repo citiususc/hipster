@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class HashQueue<S> extends AbstractQueue<S> {
 
-	private Set<S> elements = new LinkedHashSet<S>();
+	private Set<S> elements = new LinkedHashSet<>();
 	private S first = null;
 
 	public boolean offer(S e) {

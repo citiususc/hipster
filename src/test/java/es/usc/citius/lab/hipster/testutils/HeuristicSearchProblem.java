@@ -15,17 +15,19 @@
  */
 package es.usc.citius.lab.hipster.testutils;
 
-import java.util.Iterator;
 
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
 
-/**
- * @author Pablo Rodríguez Mier
- * @param <S>
- * @param <T>
- */
-public interface AlgorithmIteratorFactory<S, T extends Comparable<T>> {
+public interface HeuristicSearchProblem<S, T extends Comparable<T>> {
 
-	Iterator<? extends CostNode<S,T>> create();
+	TransitionFunction<S> getTransitionFunction();
+	CostFunction<S, T> getCostFunction();
+	HeuristicFunction<S, T> getHeuristicFunction();
+	S getInitialState();
+	S getGoalState();
+	CostOperator<T> getAccumulator();
 	
 }

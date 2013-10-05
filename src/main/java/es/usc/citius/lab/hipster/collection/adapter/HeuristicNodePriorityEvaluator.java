@@ -13,28 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package es.usc.citius.lab.hipster.function;
+
+package es.usc.citius.lab.hipster.collection.adapter;
+
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 
 /**
- * This interface is used to define abstract scalar functions.Example:
- * <pre>
- *     {@code new ScalarFunction<Double>(){
- *              Double scale(Double a, double b){
- *                  return a*b;
- *              }
- *          }
- *     }
- * </pre>
- *
  * @author Pablo Rodríguez Mier
- * @param <A> type of the domain of the function.
  */
-public interface ScalarFunction<A> {
-    /**
-     * Scale operation.
-     * @param a value to be scaled
-     * @param b scale factor
-     * @return {@literal a} scaled by a factor of {@literal b}.
-     */
-	A scale(A a, double b);
+public class HeuristicNodePriorityEvaluator<S, T extends Comparable<T>> implements PriorityEvaluator<HeuristicNode<S,T>> {
+    @Override
+    public double getPriority(HeuristicNode<S, T> heuristicNode) {
+        T cost = heuristicNode.getScore();
+        if (cost instanceof Number){
+            return ((Number)cost).doubleValue();
+        }
+        throw new ClassCastException("Automatic cast to double of the HeuristicNode score failed. HeuristicNode#getScore() is not returning a Number. Please " +
+                "use a different PriorityEvaluator to evaluate properly the custom type used by HeuristicNode.");
+    }
 }

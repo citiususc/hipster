@@ -13,28 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package es.usc.citius.lab.hipster.node.uninformed;
 
-import es.usc.citius.lab.hipster.node.AbstractNode;
-import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+package es.usc.citius.lab.hipster.algorithm.problem;
 
-public class UninformedNode<S, T extends Comparable<T>> extends AbstractNode<S> implements CostNode<S, T>, Comparable<CostNode<S,T>> {
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
 
-	private T cost;
-
-	public UninformedNode(Transition<S> transition, CostNode<S,T> previousNode, T cost) {
-		super(transition, previousNode);
-		this.cost = cost;
-	}
-
-	public T getCost() {
-		return this.cost;
-	}
-
-	
-	public int compareTo(CostNode<S, T> o) {
-		return this.cost.compareTo(o.getCost());
-	}
-
+/**
+ * @author Pablo Rodríguez Mier
+ */
+public interface HeuristicSearchProblem<S,T extends Comparable<T>> extends SearchProblem<S,T> {
+    HeuristicFunction<S,T> getHeuristicFunction();
 }

@@ -24,7 +24,7 @@ import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- * Basic structure for AD* search iterators.
+ * Special node used by the ADStar algorithm
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 16-04-2013

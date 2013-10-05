@@ -27,17 +27,24 @@ import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
-import es.usc.citius.lab.hipster.node.informed.InformedNodeFactory;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
+ * Implementation of the A* algorithm. The A* algorithm extends the original
+ * Dijkstra's algorithm by including heuristics to improve the search. By default,
+ * the implementation uses a {@link PriorityQueue} for the nodes, which requires
+ * {@literal O(n*log n)} time for insertions. The queue can be changed to use another
+ * type of queue, for example a fibonacci heap as a queue, which works with constant amortized
+ * time for insertions.
  *
  * @author Pablo Rodríguez Mier
  *
  * @param <S>
+ * @param <T>
  */
-public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode<S,T>> {
+public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode<S,T>>, Iterator<HeuristicNode<S,T>> {
 
     private final S initialState;
     private Map<S, HeuristicNode<S,T>> open;
@@ -49,12 +56,12 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
 
     public AStar(S initialState, TransitionFunction<S> transitionFunction, NodeFactory<S, HeuristicNode<S,T>> factory) {
         this.initialState = initialState;
-        this.open = new HashMap<S, HeuristicNode<S,T>>();
-        this.closed = new HashMap<S, HeuristicNode<S,T>>();
+        this.open = new HashMap<>();
+        this.closed = new HashMap<>();
         this.successors = transitionFunction;
         this.factory = factory;
-        this.queue = new PriorityQueue<HeuristicNode<S,T>>();
-        HeuristicNode<S,T> initialNode = this.factory.node(null, new Transition<S>(initialState));
+        this.queue = new PriorityQueue<>();
+        HeuristicNode<S,T> initialNode = this.factory.node(null, new Transition<>(initialState));
         this.queue.add(initialNode);
         this.open.put(this.initialState, initialNode);
     }
@@ -73,53 +80,39 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
     }
 
     /**
-     * A* algorithm implementation.
+     * Calculates the next visited state. Each state contains the information of the partial path
+     * explored. To check if the state is the goal state, just check the corresponding node of
+     * the state with {@code currentNode.transition().to().equals(myGoalState)}
+     *
+     * @return next visited state.
+     * @see HeuristicNode
      *
      */
     public HeuristicNode<S,T> next() {
 
-        // Take the current node to analyze
         HeuristicNode<S,T> current = takePromising();
         S currentState = current.transition().to();
-        // Remove it from open
         open.remove(currentState);
 
         // Analyze the cost of each movement from the current node
         for (Transition<S> successor : successors.from(currentState)) {
         	// Compute the new cost of the successor
-        	//T newCost = current.getCost().add(this.cost.evaluate(successor));
-        	//T newScore = this.heuristic.estimate(successor.to());
-        	//HeuristicNode<S,T> successorNode = new InformedNode<S, T>(successor, current, newCost, newScore);
         	HeuristicNode<S,T> successorNode = this.factory.node(current, successor);
-            // Check if this successor is in the open set (which means that
-            // we have analyzed this node from other movement)
             HeuristicNode<S,T> successorOpen = open.get(successor.to());
             if (successorOpen != null) {
-                // In this case, if the current move does not improve
-                // the cost of the previous path, discard this movement
                 if (successorOpen.getCost().compareTo(successorNode.getCost())<=0){
-            	//if (successorOpen.compareByCost(successorNode) <= 0) {
                     // Keep analyzing the other movements, discard this movement
                     continue;
                 }
             }
 
-            // In other case (the neighbor node has not been considered yet
-            // or the movement does not improve the previous cost) then
-            // check if the neighbor is closed
             HeuristicNode<S,T> successorClose = closed.get(successor.to());
             if (successorClose != null) {
                 // Check if this path improves the cost of a closed neighbor.
                 if (successorClose.getCost().compareTo(successorNode.getCost())<=0){
-            	//if (successorClose.compareByCost(successorNode) <= 0) {
-                    // if not, keep searching
                     continue;
                 }
             }
-
-            // Now, if we reach this point, we know for sure that this movement
-            // is better than other previously explored. If the neighbor is open
-            // and we now know a better path, then remove the old one from open
 
             if (successorOpen != null) {
                 open.remove(successor.to());
@@ -144,67 +137,148 @@ public class AStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode
         return current;
     }
 
+    /**
+     * Remove is not supported
+     */
     public void remove() {
         throw new UnsupportedOperationException();
     }
-    
-    public static final class AstarBuilder<S> {
-    	private S initialState;
-    	private TransitionFunction<S> transition;
-    	private HeuristicFunction<S, Double> heuristic = new HeuristicFunction<S, Double>() {
-			public Double estimate(S state) {
-				return 0d;
-			}
-		};
-    	private CostFunction<S, Double> cost = new CostFunction<S, Double>() {
-			public Double evaluate(Transition<S> transition) {
-				return 1d;
-			}
-		};
-		
-		public AstarBuilder(S initialState, TransitionFunction<S> transition){
-			this.initialState = initialState;
-			this.transition = transition;
-		}
-		
-		public AstarBuilder<S> cost(CostFunction<S, Double> costFunction){
-			this.cost = costFunction;
-			return this;
-		}
-		
-		public AstarBuilder<S> heuristic(HeuristicFunction<S, Double> heuristicFunction){
-			this.heuristic = heuristicFunction;
-			return this;
-		}
-		
-		public AStar<S, Double> build(){
-			NodeFactory<S, HeuristicNode<S, Double>> nodeFactory = new InformedNodeFactory<S, Double>(
-					cost, heuristic, CostOperator.doubleAdditionOp());
-			return new AStar<S,Double>(this.initialState, this.transition, nodeFactory);
-		}
-    }
-    
-    public static <S> AstarBuilder<S> getSearchIterator(S initialState, TransitionFunction<S> transition){
-    	return new AstarBuilder<S>(initialState, transition);
+
+    @Override
+    public Iterator<HeuristicNode<S, T>> iterator() {
+        return this;
     }
 
+
+    /**
+     * Get the initial state used by the algorithm.
+     * @return initial state.
+     */
     public S getInitialState() {
         return this.initialState;
     }
 
+    /**
+     * Get the internal map used by the algorithm to keep the relations between
+     * unexplored states and nodes. The map returned is the original copy. Modifications to
+     * the map can alter the normal function of the algorithm.
+     *
+     * @return open map with the unexplored nodes and states.
+     */
     public Map<S, HeuristicNode<S,T>> getOpen() {
         return open;
     }
 
+    /**
+     * Get the internal map used by the algorithm to keep the relations between
+     * explored states and nodes. Modifications to the map can alter the normal
+     * function of the algorithm.
+     *
+     * @return closed map with the explored nodes and states
+     */
     public Map<S, HeuristicNode<S,T>> getClosed() {
         return closed;
     }
 
+    /**
+     * Returns the original queue used by the algorithm to sort the unexplored
+     * nodes. The original queue is a java {@code PriorityQueue}. External modifications
+     * to the queue can cause malfunction. This method can be used for example to check
+     * the size of the queue during the search or to implement low level optimizations.
+     *
+     * @return original copy of the internal queue.
+     */
     public Queue<HeuristicNode<S,T>> getQueue() {
         return queue;
     }
 
+    /**
+     * Replace the original open map with the provided one. Modifications to the open map
+     * can cause malfunction. Use only for optimization purposes.
+     * @param open internal open map.
+     */
+    public void setOpen(Map<S, HeuristicNode<S, T>> open) {
+        this.open = open;
+    }
+
+    /**
+     * Replace the original close map with the provided one. Modifications to the close map
+     * can cause malfunction. Use only for optimization purposes.
+     * @param closed internal close map.
+     */
+    public void setClosed(Map<S, HeuristicNode<S, T>> closed) {
+        this.closed = closed;
+    }
+
+    /**
+     * Replace the original queue.
+     * @param queue provided queue to replace.
+     */
+    public void setQueue(Queue<HeuristicNode<S, T>> queue) {
+        this.queue = queue;
+    }
+
+
+    /**
+     * Returns the {@link NodeFactory} used by the algorithm to create
+     * new
+     * @return
+     */
+    public NodeFactory<S, HeuristicNode<S, T>> getFactory() {
+        return factory;
+    }
+
+    public void setFactory(NodeFactory<S, HeuristicNode<S, T>> factory) {
+        this.factory = factory;
+    }
+
+    /**
+     * Return the transition function used to calculate the successors of a node.
+     * @return transition function.
+     * @see TransitionFunction
+     */
     public TransitionFunction<S> getTransitionFunction() {
         return successors;
+    }
+
+    // TODO: Remove this
+    public static final class AstarBuilder<S> {
+        private S initialState;
+        private TransitionFunction<S> transition;
+        private HeuristicFunction<S, Double> heuristic = new HeuristicFunction<S, Double>() {
+            public Double estimate(S state) {
+                return 0d;
+            }
+        };
+        private CostFunction<S, Double> cost = new CostFunction<S, Double>() {
+            public Double evaluate(Transition<S> transition) {
+                return 1d;
+            }
+        };
+
+        public AstarBuilder(S initialState, TransitionFunction<S> transition){
+            this.initialState = initialState;
+            this.transition = transition;
+        }
+
+        public AstarBuilder<S> cost(CostFunction<S, Double> costFunction){
+            this.cost = costFunction;
+            return this;
+        }
+
+        public AstarBuilder<S> heuristic(HeuristicFunction<S, Double> heuristicFunction){
+            this.heuristic = heuristicFunction;
+            return this;
+        }
+
+        public AStar<S, Double> build(){
+            NodeFactory<S, HeuristicNode<S, Double>> nodeFactory = new HeuristicNodeImplFactory<S, Double>(
+                    cost, heuristic, CostOperator.doubleAdditionOp());
+            return new AStar<S,Double>(this.initialState, this.transition, nodeFactory);
+        }
+    }
+
+    public static <S> AstarBuilder<S> getSearchIterator(S initialState, TransitionFunction<S> transition){
+        return new AstarBuilder<S>(initialState, transition);
     }
 }

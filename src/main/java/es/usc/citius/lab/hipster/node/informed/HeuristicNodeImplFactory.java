@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package es.usc.citius.lab.hipster.node.informed;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
@@ -6,24 +21,24 @@ import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
-public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFactory<S, HeuristicNode<S,T>> {
+public class HeuristicNodeImplFactory<S, T extends Comparable<T>> implements NodeFactory<S, HeuristicNode<S,T>> {
 
 	private CostFunction<S, T> gf;
 	private HeuristicFunction<S,T> hf;
 	private CostOperator<T> accumulator;
 	
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, HeuristicFunction<S, T> heuristicFunction, CostOperator<T> accumulator){
+	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, HeuristicFunction<S, T> heuristicFunction, CostOperator<T> accumulator){
 		this.gf = costFunction;
 		this.hf = heuristicFunction;
 		this.accumulator = accumulator;
 	}
 	
-	public InformedNodeFactory(CostFunction<S,T> costFunction, CostOperator<T> accumulator){
+	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, CostOperator<T> accumulator){
 		this.gf = costFunction;
 		this.hf = new HeuristicFunction<S, T>() {
 			public T estimate(S state) {
-				return InformedNodeFactory.this.accumulator.getIdentityElem();
+				return HeuristicNodeImplFactory.this.accumulator.getIdentityElem();
 			}
 		};
 		this.accumulator = accumulator;
@@ -39,7 +54,7 @@ public class InformedNodeFactory<S, T extends Comparable<T>> implements NodeFact
 			cost = accumulator.apply(from.getCost(), this.gf.evaluate(transition));
 	    	estimatedDistance = this.hf.estimate(transition.to());
 		}
-    	return new InformedNode<S, T>(transition, from, cost, accumulator.apply(cost, estimatedDistance));
+    	return new HeuristicNodeImpl<>(transition, from, cost, accumulator.apply(cost, estimatedDistance));
 	}
 	
 	public NodeFactory<S, CostNode<S,T>> toCostNodeFactory(){

@@ -20,7 +20,7 @@ import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Interface that defines the function cost used to evaluate the cost of a
- * successor.
+ * transition from {@code a} to {@code b}.
  *
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
