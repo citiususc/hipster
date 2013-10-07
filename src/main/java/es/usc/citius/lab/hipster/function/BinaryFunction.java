@@ -16,23 +16,23 @@
 package es.usc.citius.lab.hipster.function;
 
 /**
- * A scalar operation transforms an operator using
- * a numerical value.
+ * A binary function combines two elements
+ * and obtains a result of the same type.
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  *
  * @param <E> operator class
  */
-public interface ScalarFunction<E> {
+public interface BinaryFunction<E> {
 	
 	/**
-	 * Scales the first operator with the second numerical value.
+	 * Combines both operators 
 	 * 
-	 * @param a operator to scale
-	 * @param b scaling factor
+	 * @param a first operator
+	 * @param b second operator
 	 * @return result
 	 */
-	E scale(E a, double b);
+	E apply(E a, E b);
 	
 }

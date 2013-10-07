@@ -17,7 +17,7 @@ package es.usc.citius.lab.hipster.node.informed;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
@@ -25,16 +25,16 @@ public class HeuristicNodeImplFactory<S, T extends Comparable<T>> implements Nod
 
 	private CostFunction<S, T> gf;
 	private HeuristicFunction<S,T> hf;
-	private CostOperator<T> accumulator;
+	private BinaryOperation<T> accumulator;
 	
 	
-	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, HeuristicFunction<S, T> heuristicFunction, CostOperator<T> accumulator){
+	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, HeuristicFunction<S, T> heuristicFunction, BinaryOperation<T> accumulator){
 		this.gf = costFunction;
 		this.hf = heuristicFunction;
 		this.accumulator = accumulator;
 	}
 	
-	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, CostOperator<T> accumulator){
+	public HeuristicNodeImplFactory(CostFunction<S, T> costFunction, BinaryOperation<T> accumulator){
 		this.gf = costFunction;
 		this.hf = new HeuristicFunction<S, T>() {
 			public T estimate(S state) {

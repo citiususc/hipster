@@ -23,13 +23,13 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 
 /**
  * Implementation of the A* algorithm. The A* algorithm extends the original
@@ -273,7 +273,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
 
         public AStar<S, Double> build(){
             NodeFactory<S, HeuristicNode<S, Double>> nodeFactory = new HeuristicNodeImplFactory<S, Double>(
-                    cost, heuristic, CostOperator.doubleAdditionOp());
+                    cost, heuristic, BinaryOperation.doubleAdditionOp());
             return new AStar<S,Double>(this.initialState, this.transition, nodeFactory);
         }
     }

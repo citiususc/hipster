@@ -28,8 +28,8 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
@@ -114,7 +114,7 @@ public class BellmanFordTest {
     	graph.addEdge(new JungEdge<String>("D", "A", 2.0), "D", "A");
     	graph.addEdge(new JungEdge<String>("D", "E", 2.0), "D", "E");
     	
-    	final CostOperator<Double> accumulator = CostOperator.doubleAdditionOp();
+    	final BinaryOperation<Double> accumulator = BinaryOperation.doubleAdditionOp();
     	TransitionFunction<String> transition = new TransitionFunction<String>() {
 			public Iterable<Transition<String>> from(String current) {
 				Collection<Transition<String>> transitions = new ArrayList<Transition<String>>();

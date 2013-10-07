@@ -18,7 +18,7 @@ package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 
 public interface HeuristicSearchProblem<S, T extends Comparable<T>> {
@@ -28,6 +28,6 @@ public interface HeuristicSearchProblem<S, T extends Comparable<T>> {
 	HeuristicFunction<S, T> getHeuristicFunction();
 	S getInitialState();
 	S getGoalState();
-	CostOperator<T> getAccumulator();
+	BinaryOperation<T> getAccumulator();
 	
 }

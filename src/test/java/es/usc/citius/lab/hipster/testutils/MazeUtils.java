@@ -20,18 +20,20 @@ import java.awt.Point;
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
-import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.impl.Product;
-import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
-import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
+
+import java.util.Arrays;
 
 /**
  * This class creates the iterators for different algorithms using
@@ -84,11 +86,11 @@ public class MazeUtils {
 
         NodeFactory<Point, ADStarNode<Point, Double>> defaultBuilder = new ADStarNodeBuilder<Point, Double>(0d, Double.MAX_VALUE);
 
-        ADStarNodeUpdater<Point, Double> updater = new ADStarNodeUpdater<Point, Double>(cost, heuristic, CostOperator.doubleAdditionOp(), new Product(), 1.0);
-
+        ADStarNodeUpdater<Point, Double> updater = new ADStarNodeUpdater<Point, Double>(cost, heuristic, BinaryOperation.doubleAdditionOp(), new Product(), 1.0);
+        
         return new ADStar<Point, Double>(
                 maze.getInitialLoc(),
-                maze.getGoalLoc(),
+                Arrays.asList(new Point[]{maze.getGoalLoc()}),
                 transition,
                 transition,
                 defaultBuilder,
@@ -106,7 +108,8 @@ public class MazeUtils {
 
         BellmanFord<Point,Double> it;
 
-        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new HeuristicNodeImplFactory<Point, Double>(cost, CostOperator.doubleAdditionOp()).toCostNodeFactory());
+        it = new BellmanFord<Point,Double>(maze.getInitialLoc(), transition, new HeuristicNodeImplFactory<Point, Double>(cost, BinaryOperation.doubleAdditionOp()).toCostNodeFactory());
+        
         return it;
     }
 

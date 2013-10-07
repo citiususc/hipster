@@ -22,6 +22,10 @@ import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,39 +44,59 @@ import java.util.Queue;
 public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
-    private final ADStarNode<S, T> goalNode;
+    private final Collection<ADStarNode<S, T>> goalNodes;
     private final TransitionFunction<S> successorFunction;
     private final TransitionFunction<S> predecessorFunction;
     private final NodeFactory<S, ADStarNode<S, T>> builder;
     private final ADStarNodeUpdater<S, T> updater;
     private final Map<S, ADStarNode<S, T>> visited;
     private final Iterable<Transition<S>> transitionsChanged;
-    private final S begin;
-    private final S goal;
+    //queues used by the algorithm
     private Map<S, ADStarNode<S, T>> open;
     private Map<S, ADStarNode<S, T>> closed;
     private Map<S, ADStarNode<S, T>> incons;
     private Queue<ADStarNode<S, T>> queue;
 
-    public ADStar(S begin, S goal, TransitionFunction<S> successors, TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, ADStarNodeUpdater<S, T> updater) {
-        this.begin = begin;
-        this.goal = goal;
+    
+    public ADStar(S begin, S goal, TransitionFunction<S> successors, 
+    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
+    		ADStarNodeUpdater<S, T> updater) {
+    	this(begin, Collections.singleton(goal), successors, predecessors, builder, updater);
+    }
+    
+    
+    public ADStar(S begin, Collection<S> goals, TransitionFunction<S> successors, 
+    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
+    		ADStarNodeUpdater<S, T> updater) {
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;
         this.predecessorFunction = predecessors;
+        //initialize queues
         this.open = new HashMap<S, ADStarNode<S, T>>();
         this.closed = new HashMap<S, ADStarNode<S, T>>();
         this.incons = new HashMap<S, ADStarNode<S, T>>();
         this.queue = new PriorityQueue<ADStarNode<S, T>>();
+        //initialize collection of visited nodes
         this.visited = new HashMap<S, ADStarNode<S, T>>();
+        //initialize set of changed transitions
         this.transitionsChanged = new HashSet<Transition<S>>();
+        //initial node creation
         this.beginNode = this.builder.node(null, new Transition<S>(null, begin));
-        this.goalNode = this.builder.node(this.beginNode, new Transition<S>(null, goal));
-
-        /*Initialization step*/
+        //mark begin node as visited by the algorithm
         this.visited.put(begin, this.beginNode);
-        this.visited.put(goal, this.goalNode);
+        //initialize goal node collection
+        Collection<ADStarNode<S, T>> goalsList = new ArrayList<ADStarNode<S,T>>();
+        //iterate over the set of goals
+        for(S goal : goals){
+        	//create new node for current goal
+        	ADStarNode<S, T> goalNode = this.builder.node(this.beginNode, new Transition<S>(null, goal));
+        	goalsList.add(goalNode);
+        	//mark current goal as visited by the algorithm
+        	this.visited.put(goal, goalNode);
+        }
+        this.goalNodes = goalsList;
+        //insert initial node at OPEN
         insertOpen(this.beginNode);
     }
 
@@ -83,10 +107,10 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
      * @return most promising node
      */
     private ADStarNode<S, T> takePromising() {
-        while (!this.queue.isEmpty()) {
-            ADStarNode<S, T> head = this.queue.peek();
-            if (!this.open.containsKey(head.transition().to())) {
-                this.queue.poll();
+        while (!queue.isEmpty()) {
+            ADStarNode<S, T> head = queue.peek();
+            if (!open.containsKey(head.transition().to())) {
+                queue.poll();
             } else {
                 return head;
             }
@@ -119,6 +143,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
             }
         } else {
             this.open.remove(state);
+            //this.queue.remove(node);
             this.incons.remove(state);
         }
     }
@@ -129,7 +154,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
      * @return 
      */
     private Map<Transition<S>, ADStarNode<S, T>> predecessorsMap(S state){
-        //Map<Transition, Node> containing predecesors relations
+        //Map<Transition, Node> containing predecessors relations
         Map<Transition<S>, ADStarNode<S, T>> mapPredecessors = new HashMap<Transition<S>, ADStarNode<S, T>>();
         //Fill with non-null pairs of <Transition, Node>
         for (Transition<S> predecessor : this.predecessorFunction.from(state)) {
@@ -155,9 +180,11 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
         //First node in OPEN retrieved, not removed
         ADStarNode<S, T> current = takePromising();
         S state = current.transition().to();
-        if (this.goalNode.compareTo(current) >= 0 || this.goalNode.getV().compareTo(this.goalNode.getG()) < 0) {
+        ADStarNode<S, T> minGoal = Collections.min(this.goalNodes);
+        if (minGoal.compareTo(current) >= 0 || minGoal.getV().compareTo(minGoal.getG()) < 0) {
             //s removed from OPEN
             this.open.remove(state);
+            //this.queue.remove(current);
             //if v(s) > g(s)
             boolean consistent = current.getV().compareTo(current.getG()) > 0;
             if (consistent) {
@@ -202,7 +229,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
             for (Transition<S> transition : this.transitionsChanged) {
                 state = transition.to();
                 //if v != start
-                if (!state.equals(this.begin)) {
+                if (!state.equals(this.beginNode.transition().to())) {
                     //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
                     ADStarNode<S, T> node = this.visited.get(state);
                     if (node == null) {
