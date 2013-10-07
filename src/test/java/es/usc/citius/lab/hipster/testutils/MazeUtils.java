@@ -15,22 +15,23 @@
  */
 package es.usc.citius.lab.hipster.testutils;
 
+import java.awt.Point;
+
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
-import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.impl.Product;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
-import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
-import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
-import java.awt.Point;
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.Product;
+import es.usc.citius.lab.hipster.node.NodeFactory;
+import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 
 /**
  * This class creates the iterators for different algorithms using

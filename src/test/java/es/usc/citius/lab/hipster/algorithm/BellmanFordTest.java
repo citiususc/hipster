@@ -22,23 +22,23 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import es.usc.citius.lab.hipster.testutils.JungUtils;
 import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.testutils.MazeUtils;
+import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 import es.usc.citius.lab.hipster.testutils.JungEdge;
+import es.usc.citius.lab.hipster.testutils.JungUtils;
 import es.usc.citius.lab.hipster.testutils.MazeSearch;
-import es.usc.citius.lab.hipster.algorithm.multiobjective.maze.Maze2D;
+import es.usc.citius.lab.hipster.testutils.MazeUtils;
 
 /**
  * Executes tests over predefined maze strings, comparing the results between
