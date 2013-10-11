@@ -16,31 +16,31 @@
 
 package es.usc.citius.lab.hipster.node.adstar;
 
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.AbstractNode;
+import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
 
 /**
  * Special node used by the ADStar algorithm
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
  * @since 16-04-2013
+ * @version 1.0
  */
 public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> implements Comparable<ADStarNode<S, T>>, HeuristicNode<S, T> {
 
-    T g;
-    T v;
-    Key<T> key;
-
+    protected T g;
+    protected T v;
+    protected Key<T> key;  
+    
     /**
      * Default constructor for this class, that requires the parent transition
      * and previous node.
      *
-     * @param transition   incoming transition
+     * @param transition incoming transition
      * @param previousNode parent node
      */
     public ADStarNode(Transition<S> transition, Node<S> previousNode, T g, T v, Key<T> k) {
@@ -74,7 +74,7 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
     public ADStarNode<S, T> previousNode() {
         return (ADStarNode<S, T>) previousNode;
     }
-
+    
     /**
      * Compares {@link ADStarNode} instances attending to their {@link Key}
      * values.
@@ -85,7 +85,7 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
     public int compareTo(ADStarNode<S, T> o) {
         return this.key.compareTo(o.key);
     }
-
+    
     /**
      * Class defining the key of the state, used to order them
      */
@@ -103,7 +103,7 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
          * @param h
          * @param e
          */
-        public Key(T g, T v, T h, double e, CostOperator<T> add, ScalarFunction<T> scale) {
+        public Key(T g, T v, T h, double e, BinaryOperation<T> add, ScalarFunction<T> scale) {
             if (v.compareTo(g) >= 0) {
                 this.first = add.apply(g, scale.scale(h, e)); //g.add(h.scale(e));
                 this.second = g;
@@ -112,8 +112,8 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
                 this.second = v;
             }
         }
-
-        public Key(T first, T second) {
+        
+        public Key(T first, T second){
             this.first = first;
             this.second = second;
         }
@@ -134,11 +134,11 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
         }
     }
 
-    public T getCost() {
-        return this.g;
-    }
+	public T getCost() {
+		return this.g;
+	}
 
-    public T getScore() {
-        return this.v;
-    }
+	public T getScore() {
+		return this.v;
+	}
 }
