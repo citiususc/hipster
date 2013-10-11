@@ -24,15 +24,20 @@ import es.usc.citius.lab.hipster.node.HeuristicNode;
 import java.util.*;
 
 /**
+ * <p>
  * Implementation of the A* algorithm. The A* algorithm extends the original
  * Dijkstra's algorithm by including heuristics to improve the search. By default,
  * the implementation uses a {@link PriorityQueue} for the nodes, which requires
  * {@literal O(n*log n)} time for insertions. The queue can be changed to use another
  * type of queue, for example a fibonacci heap as a queue, which works with constant amortized
  * time for insertions.
+ * </p>
  *
- * @param <S>
- * @param <T>
+ * <a href="#">Original paper</a>:
+ * Hart, Peter E., Nils J. Nilsson, and Bertram Raphael. <b>"A formal basis for the heuristic determination of minimum cost paths."</b>. <i>IEEE Transactions on Systems Science and Cybernetics 4.2 (1968): 100-107</i>.
+ *
+ * @param <S> state type
+ * @param <T> cost type
  * @author Pablo Rodríguez Mier
  */
 public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode<S, T>>, Iterator<HeuristicNode<S, T>> {
@@ -236,45 +241,4 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
     public TransitionFunction<S> getTransitionFunction() {
         return successors;
     }
-    /*
-    // TODO: Remove this
-    public static final class AstarBuilder<S> {
-        private S initialState;
-        private TransitionFunction<S> transition;
-        private HeuristicFunction<S, Double> heuristic = new HeuristicFunction<S, Double>() {
-            public Double estimate(S state) {
-                return 0d;
-            }
-        };
-        private CostFunction<S, Double> cost = new CostFunction<S, Double>() {
-            public Double evaluate(Transition<S> transition) {
-                return 1d;
-            }
-        };
-
-        public AstarBuilder(S initialState, TransitionFunction<S> transition) {
-            this.initialState = initialState;
-            this.transition = transition;
-        }
-
-        public AstarBuilder<S> cost(CostFunction<S, Double> costFunction) {
-            this.cost = costFunction;
-            return this;
-        }
-
-        public AstarBuilder<S> heuristic(HeuristicFunction<S, Double> heuristicFunction) {
-            this.heuristic = heuristicFunction;
-            return this;
-        }
-
-        public AStar<S, Double> build() {
-            NodeFactory<S, HeuristicNode<S, Double>> nodeFactory = new HeuristicNodeImplFactory<S, Double>(
-                    cost, heuristic, CostOperator.doubleAdditionOp());
-            return new AStar<S, Double>(this.initialState, this.transition, nodeFactory);
-        }
-    }
-
-    public static <S> AstarBuilder<S> getSearchIterator(S initialState, TransitionFunction<S> transition) {
-        return new AstarBuilder<S>(initialState, transition);
-    }*/
 }

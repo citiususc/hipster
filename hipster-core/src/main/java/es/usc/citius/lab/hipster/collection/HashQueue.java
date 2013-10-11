@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Implementation of a {@link java.util.Queue} backed by a {@link java.util.LinkedHashSet}
  *
- * @param <S>
+ * @param <S> the type of elements held in this collection
  */
 public class HashQueue<S> extends AbstractQueue<S> {
 

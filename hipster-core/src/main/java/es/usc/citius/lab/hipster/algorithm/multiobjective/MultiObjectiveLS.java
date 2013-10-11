@@ -25,10 +25,13 @@ import es.usc.citius.lab.hipster.node.Transition;
 import java.util.*;
 
 /**
- * Implementation of the multiobjective label setting algorithm described
- * by Martins and Santos.
+ * <p>Implementation of the multi-objective label setting algorithm described
+ * by Martins and Santos.</p>
  *
- * @param <S>
+ * Original paper:
+ * Martins, E. D. Q. V., & Santos, J. L. E. (1999). <b>"The labeling algorithm for the multiobjective shortest path problem"</b>. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i>.
+ *
+ * @param <S> type of the states used by the algorithm
  * @author Pablo Rodríguez Mier
  */
 public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
@@ -108,9 +111,6 @@ public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
         return nonDominated.asMap();
     }
 
-    public static <S> MultiObjectiveLS<S> iterator() {
-        return null;
-    }
 
     public void remove() {
         throw new UnsupportedOperationException();

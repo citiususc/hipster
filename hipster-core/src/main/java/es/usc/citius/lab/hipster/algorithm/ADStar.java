@@ -34,10 +34,16 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
- * Iterator to execute an AD* search algorithm.
+ * <p>Iterator to execute an AD* (Anytime Dynamic A*) search algorithm.</p>
+ *
+ * <a href="http://www-cgi.cs.cmu.edu/afs/cs.cmu.edu/Web/People/maxim/files/ad_icaps05.pdf">Original paper</a>:
+ * Maxim Likhachev, David Ferguson, Geoffrey Gordon, Anthony (Tony) Stentz, and Sebastian Thrun,
+ * <b>"Anytime Dynamic A*: An Anytime, Replanning Algorithm"</b>
+ * <i>Proceedings of the International Conference on Automated Planning and Scheduling (ICAPS), June, 2005.</i>.
  *
  * @author Adrián González Sieira
  * @param <S> class that defines the states
+ * @param <T> cost type used to compute the costs.
  * @since 26-03-2013
  * @version 1.0
  */

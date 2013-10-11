@@ -20,7 +20,25 @@ import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Provides a function to calculate the available transitions that
- * can be applied to a given state.
+ * can be applied to a given state. For example, if the states are
+ * 2D points in a Cartesian Coordinate System ({@link java.awt.Point})
+ * and the neighbors (reachable states) from that point are all the surrounding points
+ * (avoiding diagonal movements), the transition function can be implemented as:
+ *
+ * <pre>
+ *     {@code TransitionFunction<Point> transition = new TransitionFunction<Point>(){
+ *             Iterable<? extends Transition<Point>> from(Point origin) {
+ *                     // Compute the four available movements from origin
+ *                     Set<Point> states = new HashSet<Point>();
+ *                     states.add(new Point(origin.x+1, origin.y));
+ *                     states.add(new Point(origin.x+1, origin.y));
+ *                     states.add(new Point(origin.x+1, origin.y));
+ *                     states.add(new Point(origin.x+1, origin.y));
+ *                     return Transition.map(origin, states);
+ *             }
+ *         }
+ *     }
+ * </pre>
  *
  * @param <S> type of the state
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>

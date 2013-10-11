@@ -17,6 +17,7 @@ package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
@@ -25,10 +26,10 @@ import java.util.Iterator;
 
 public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, T> {
-    private final HeuristicSearchProblem<S, T> componentFactory;
+    private final SearchProblem<S, T> componentFactory;
 
     public BellmanFordIteratorFactory(
-            HeuristicSearchProblem<S, T> componentFactory) {
+            SearchProblem<S, T> componentFactory) {
         this.componentFactory = componentFactory;
     }
 

@@ -19,26 +19,61 @@ import es.usc.citius.lab.hipster.algorithm.factory.ADStarIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.AStarIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.BellmanFordIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.node.CostNode;
 
 import java.util.Iterator;
 
+/**
+ * Methods to obtain a search algorithm given the definition of the problem
+ * to solve.
+ * @see HeuristicSearchProblem
+ */
 public final class SearchIterators {
 
     private SearchIterators() {
     }
 
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> aStar(HeuristicSearchProblem<S, T> componentFactory) {
-        return new AStarIteratorFactory<S, T>(componentFactory).create();
+    /**
+     * Creates a {@literal A*} search algorithm.
+     *
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param <S> state class
+     * @param <T> cost type (for example, {@link Double}).
+     * @return new A-Star iterator that iterates over the {@link CostNode}
+     * @see AStar
+     */
+    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> aStar(HeuristicSearchProblem<S, T> problem) {
+        return new AStarIteratorFactory<S, T>(problem).create();
     }
 
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> bellmanFord(HeuristicSearchProblem<S, T> componentFactory) {
-        return new BellmanFordIteratorFactory<S, T>(componentFactory).create();
+    /**
+     * Creates a <a href="en.wikipedia.org/wiki/Bellman–Ford_algorithm">Bellman-Ford</a> algorithm
+     *
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param <S> state class
+     * @param <T> cost type (for example, {@link Double}).
+     * @return new BellmanFord iterator that iterates over the {@link CostNode}
+     * @see BellmanFord
+     */
+    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> bellmanFord(SearchProblem<S, T> problem) {
+        return new BellmanFordIteratorFactory<S, T>(problem).create();
     }
 
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> adStar(HeuristicSearchProblem<S, T> componentFactory, ScalarFunction<T> scale, double epsilon, T min, T max) {
-        return new ADStarIteratorFactory<S, T>(componentFactory, scale, epsilon, min, max).create();
+    /**
+     * Creates an AD-Star algorithm.
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param scale {@link ScalarFunction} used to perform internal scale operations to scale the cost type used
+     * @param epsilon
+     * @param min
+     * @param max
+     * @param <S> state class
+     * @param <T> cost type (for example, {@link Double}).
+     * @return
+     */
+    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> adStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
+        return new ADStarIteratorFactory<S, T>(problem, scale, epsilon, min, max).create();
     }
 
 }

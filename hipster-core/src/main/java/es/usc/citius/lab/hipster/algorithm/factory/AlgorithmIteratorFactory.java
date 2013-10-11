@@ -20,12 +20,18 @@ import es.usc.citius.lab.hipster.node.CostNode;
 import java.util.Iterator;
 
 /**
- * @param <S>
- * @param <T>
+ * Factory interface to create iterative algorithm using {@link CostNode}.
+ * @param <S> type of the states used by the algorithm
+ * @param <T> type of the cost used by the algorithm
  * @author Pablo Rodríguez Mier
  */
 public interface AlgorithmIteratorFactory<S, T extends Comparable<T>> {
 
+    /**
+     * Create a new iterative algorithm
+     * @return iterator that iterates over {@link CostNode} nodes
+     * TODO: change return type
+     */
     Iterator<? extends CostNode<S, T>> create();
 
 }

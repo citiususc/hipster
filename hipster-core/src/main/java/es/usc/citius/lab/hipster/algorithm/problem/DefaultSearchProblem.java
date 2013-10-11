@@ -26,6 +26,8 @@ import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 
 /**
+ * A default search problem that works with doubles.
+ *
  * @author Pablo Rodríguez Mier
  */
 public class DefaultSearchProblem<S> implements SearchProblem<S, Double> {

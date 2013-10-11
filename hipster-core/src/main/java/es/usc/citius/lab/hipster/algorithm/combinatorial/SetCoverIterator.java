@@ -45,9 +45,11 @@ import java.util.concurrent.ExecutionException;
  * information. This combination is redundant.</li>
  * </ul>
  * <p/>
- * This problem is based on the SCP (Set Cover Problem) but it does not find the
+ * This problem is based on the SCP (Set Cover Problem) but it just does not find the
  * combination with the minimum number of sets. Instead, it enumerates all
- * possible combinations that cover all elements discarding redundant solutions.
+ * possible combinations that cover all elements discarding redundant solutions (sorted
+ * by the size of the solution).
+ *
  * For more information read <a
  * href="http://en.wikipedia.org/wiki/Set_cover_problem"
  * >http://en.wikipedia.org/wiki/Set_cover_problem</a>
