@@ -22,7 +22,46 @@ import java.util.*;
 import java.util.List;
 
 /**
+ * <p>
  * This class defines a 2D ASCII Maze used to easily validate the search algorithms.
+ * Example usage:</p>
+ *
+ * <pre>
+ *     {@code public static String[] example = new String[]{
+ *                  "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+ *                  "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
+ *                  "XX    XXXXXXXXXX XXX XX     XXXX",
+ *                  "XXXXX  XXXXXX    XXX XX XXX XXXX",
+ *                  "XXX XX XXXXXX XX XXX XX  XX XXXX",
+ *                  "XXX     XXXXX XXXXXX XXXXXX XXXX",
+ *                  "XXXXXXX       XXXXXX        XXXX",
+ *                  "XXXXXXXXXX XXXXX XXXXXXXXXXXXXXX",
+ *                  "XXXXXXXXXX XX    XXXXX      XXXX",
+ *                  "XXXXXXXXXX    XXXXXXXX XXXX XXXX",
+ *                  "XXXXXXXXXXX XXXXXXXXXX XXXX XXXX",
+ *                  "XXXXXXXXXXX            XXXX XXXX",
+ *                  "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
+ *                  "XXXXXX              XXXX XX XXXX",
+ *                  "XXXXXX XXXXXXXXXXXX XX      XXXX",
+ *                  "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+ *                  "XXXXXX XXXXX   XXX            XX",
+ *                  "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
+ *                  "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
+ *                  "XXXXXX            XXXXXXXXXXXXXX"};
+ *
+ *            Maze2D maze = new Maze2D(example);
+ *     }
+ * </pre>
+ *
+ * Symbol table used by Maze2D:
+ * <ul>
+ *     <li>"X": occupied tile</li>
+ *     <li>" ": empty tile</li>
+ *     <li>"@": initial state (starting point)</li>
+ *     <li>"O": goal state</li>
+ *     <li>".": visited tile</li>
+ * </ul>
+ *
  */
 public class Maze2D {
 

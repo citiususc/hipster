@@ -31,9 +31,9 @@ import es.usc.citius.lab.hipster.node.Transition;
  *                     // Compute the four available movements from origin
  *                     Set<Point> states = new HashSet<Point>();
  *                     states.add(new Point(origin.x+1, origin.y));
- *                     states.add(new Point(origin.x+1, origin.y));
- *                     states.add(new Point(origin.x+1, origin.y));
- *                     states.add(new Point(origin.x+1, origin.y));
+ *                     states.add(new Point(origin.x-1, origin.y));
+ *                     states.add(new Point(origin.x, origin.y+1));
+ *                     states.add(new Point(origin.x, origin.y-1));
  *                     return Transition.map(origin, states);
  *             }
  *         }
