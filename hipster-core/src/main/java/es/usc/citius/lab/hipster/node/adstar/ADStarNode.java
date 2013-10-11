@@ -16,10 +16,11 @@
 
 package es.usc.citius.lab.hipster.node.adstar;
 
-import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
+
 import es.usc.citius.lab.hipster.function.ScalarFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.AbstractNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 

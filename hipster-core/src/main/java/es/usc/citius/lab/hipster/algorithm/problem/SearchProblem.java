@@ -18,7 +18,7 @@ package es.usc.citius.lab.hipster.algorithm.problem;
 
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 
 /**
  * @author Pablo Rodríguez Mier
@@ -33,6 +33,6 @@ public interface SearchProblem<S, T extends Comparable<T>> {
 
     CostFunction<S, T> getCostFunction();
 
-    CostOperator<T> getAccumulator();
+    BinaryOperation<T> getAccumulator();
 
 }

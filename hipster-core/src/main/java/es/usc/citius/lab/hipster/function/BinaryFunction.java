@@ -14,19 +14,19 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.algorithm.builder;
-
-import es.usc.citius.lab.hipster.algorithm.AStar;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
+package es.usc.citius.lab.hipster.function;
 
 /**
- * @author Pablo Rodríguez Mier
- *         Date: 9/10/13
+ * Defines a binary operation. The binary operation interface is
+ * useful for defining abstract functions such as arithmetic functions
+ * for the search algorithms. It takes two elements
+ * and obtains a result of the same type.
+ *
+ * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
+ *
+ * @param <T> operator class
  */
-public class AStarFactory<S> implements HeuristicAlgorithmFactory<S> {
-
-    @Override
-    public Iterable<HeuristicNode<S, Double>> create(HeuristicAlgorithmBuilder<S> builder) {
-        return new AStar<S, Double>(builder.getInitialState(), builder.getTransition(), builder.getNodeFactory());
-    }
+public interface BinaryFunction<T> {
+    T apply(T a, T b);
 }

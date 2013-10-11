@@ -16,11 +16,11 @@
 package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.Transition;
 
 import java.awt.*;
@@ -75,8 +75,8 @@ public class MazeHeuristicSearchProblem implements HeuristicSearchProblem<Point,
         return maze.getGoalLoc();
     }
 
-    public CostOperator<Double> getAccumulator() {
-        return CostOperator.doubleAdditionOp();
+    public BinaryOperation<Double> getAccumulator() {
+        return BinaryOperation.doubleAdditionOp();
     }
 
 

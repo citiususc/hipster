@@ -18,7 +18,7 @@ package es.usc.citius.lab.hipster.function.impl;
 import es.usc.citius.lab.hipster.function.BinaryFunction;
 
 /**
- * A binary operation is an implementation of {@link BinaryFunction} that also
+ * A binary operation is an implementation of {@link es.usc.citius.lab.hipster.function.BinaryFunction} that also
  * has the following definitions:
  * <ul>
  * 		<li>identity element (A*I = A)</li>

@@ -16,6 +16,7 @@
 
 package es.usc.citius.lab.hipster.algorithm.problem;
 
+import es.usc.citius.lab.hipster.function.BinaryFunction;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
@@ -73,7 +74,7 @@ public class DefaultSearchProblem<S> implements SearchProblem<S, Double> {
     }
 
     @Override
-    public CostOperator<Double> getAccumulator() {
+    public BinaryOperation<Double> getAccumulator() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

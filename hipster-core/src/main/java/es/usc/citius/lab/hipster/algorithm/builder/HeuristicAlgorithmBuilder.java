@@ -16,10 +16,11 @@
 
 package es.usc.citius.lab.hipster.algorithm.builder;
 
+import es.usc.citius.lab.hipster.function.BinaryFunction;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.CostOperator;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
@@ -56,7 +57,7 @@ public class HeuristicAlgorithmBuilder<S> {
     }
 
     public Iterable<HeuristicNode<S, Double>> build(HeuristicAlgorithmFactory<S> factory) {
-        this.nodeFactory = new HeuristicNodeImplFactory<S, Double>(cost, heuristic, CostOperator.doubleAdditionOp());
+        this.nodeFactory = new HeuristicNodeImplFactory<S, Double>(cost, heuristic, BinaryOperation.doubleAdditionOp());
         return factory.create(this);
     }
 
