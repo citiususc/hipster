@@ -31,7 +31,7 @@
 //import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 //import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 //import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
-//import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+//import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 //
 //import java.awt.*;
 //

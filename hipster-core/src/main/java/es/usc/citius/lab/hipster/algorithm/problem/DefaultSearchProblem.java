@@ -16,14 +16,13 @@
 
 package es.usc.citius.lab.hipster.algorithm.problem;
 
-import es.usc.citius.lab.hipster.function.BinaryFunction;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 
 /**
  * A default search problem that works with doubles.

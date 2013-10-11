@@ -19,7 +19,7 @@ package es.usc.citius.lab.hipster.algorithm;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.SimpleNode;
+import es.usc.citius.lab.hipster.node.impl.SimpleNode;
 
 import java.util.Iterator;
 import java.util.Stack;

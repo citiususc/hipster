@@ -16,11 +16,10 @@
 package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
-import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.CostNode;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
+import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 
 import java.util.Iterator;
 

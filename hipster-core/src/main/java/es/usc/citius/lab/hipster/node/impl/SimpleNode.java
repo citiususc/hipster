@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.node.informed;
+package es.usc.citius.lab.hipster.node.impl;
 
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;

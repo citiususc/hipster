@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package es.usc.citius.lab.hipster.node.informed;
+package es.usc.citius.lab.hipster.node.impl;
 
 
 import es.usc.citius.lab.hipster.node.AbstractNode;
