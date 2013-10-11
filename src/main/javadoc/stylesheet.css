@@ -493,9 +493,13 @@ code {
     font-family: "Consolas", "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Lucida Sans Typewriter"; 
 }
 
+code, tt {
+    font-size: 1.0em;
+}
+
 pre { 
     color: #555;
-    font-size:1.2em; 
+    font-size:1.0em;
     line-height: 1.2em; 
     font-family: "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Consolas", "Lucida Sans Typewriter"; 
 }
