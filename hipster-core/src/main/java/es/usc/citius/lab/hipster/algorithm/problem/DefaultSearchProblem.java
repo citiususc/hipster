@@ -21,7 +21,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 
 /**
@@ -70,6 +70,11 @@ public class DefaultSearchProblem<S> implements SearchProblem<S, Double> {
     @Override
     public CostFunction<S, Double> getCostFunction() {
         return this.costFunction;
+    }
+
+    @Override
+    public CostOperator<Double> getAccumulator() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

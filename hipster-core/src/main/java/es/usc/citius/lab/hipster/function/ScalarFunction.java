@@ -26,7 +26,10 @@ package es.usc.citius.lab.hipster.function;
  *     }
  * </pre>
  *
- * @param <A> type of the domain of the function.
+ * To create a default scalar function to operate with doubles,
+ * simple use {@link es.usc.citius.lab.hipster.function.impl.Product}.
+ *
+ * @param <T> type of the domain of the function.
  * @author Pablo Rodríguez Mier
  */
 public interface ScalarFunction<T> {

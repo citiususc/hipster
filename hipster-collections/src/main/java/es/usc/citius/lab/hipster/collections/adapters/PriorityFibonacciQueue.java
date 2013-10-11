@@ -25,7 +25,7 @@ import java.util.Iterator;
  * @author Pablo Rodríguez Mier
  */
 public class PriorityFibonacciQueue<E> extends AbstractQueue<E> {
-    private final FibonacciHeap<E> heap = new FibonacciHeap<>();
+    private final FibonacciHeap<E> heap = new FibonacciHeap<E>();
     private PriorityEvaluator<E> evaluator;
 
     public PriorityFibonacciQueue(PriorityEvaluator<E> evaluator) {

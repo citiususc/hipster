@@ -17,12 +17,14 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 
+import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.MazeUtils;
 import es.usc.citius.lab.hipster.util.maze.Mazes;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.Iterator;
 
 
 import static org.junit.Assert.assertEquals;
@@ -148,7 +150,7 @@ public class BellmanFordTest {
     } */
 
     private void execute(Mazes.Example example) {
-        BellmanFord<Point, Double> it = MazeUtils.bellmanFord(example.getMaze());
+        Iterator<? extends CostNode<Point, Double>> it = SearchIterators.bellmanFord(new MazeHeuristicSearchProblem(example.getMaze(), false));
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.00000001);
     }

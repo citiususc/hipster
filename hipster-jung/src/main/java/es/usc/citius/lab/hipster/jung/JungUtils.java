@@ -16,11 +16,17 @@
 
 package es.usc.citius.lab.hipster.jung;
 
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.lab.hipster.util.maze.MazeSearch;
+import org.apache.commons.collections15.Transformer;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * Class to obtain an instance of {@link DirectedGraph} (JUNG library) from an
@@ -39,7 +45,7 @@ public class JungUtils {
      * @param maze instance of {@link Maze2D}
      * @return instance of {@link DirectedGraph}
      */
-    public static DirectedGraph<Point, JungEdge<Point>> create(Maze2D maze) {
+    public static DirectedGraph<Point, JungEdge<Point>> createGraphFromMaze(Maze2D maze) {
         // Create a graph from maze
         DirectedGraph<Point, JungEdge<Point>> graph = new DirectedSparseGraph<Point, JungEdge<Point>>();
         // Convert maze to graph. For each cell, add all valid neighbors with
@@ -63,4 +69,22 @@ public class JungUtils {
         }
         return graph;
     }
+
+    public static <V,E> DijkstraShortestPath<V,E> createUnweightedDijkstraAlgorithm(Graph<V,E> graph, boolean cache){
+        return new DijkstraShortestPath<V,E>(graph, new Transformer<E, Double>() {
+            @Override
+            public Double transform(E e) {
+                return 1.0d;
+            }
+        }, cache);
+
+    }
+
+    public static <V,E> List<E> runUnweightedDijkstra(Graph<V, E> jungGraph, V initial, V goal, boolean cache) {
+        DijkstraShortestPath<V,E> dijkstra = createUnweightedDijkstraAlgorithm(jungGraph, cache);
+
+        return dijkstra.getPath(initial, goal);
+    }
+
+
 }

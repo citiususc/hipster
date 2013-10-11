@@ -1,1 +1,10 @@
 language: java
+jdk:
+  - oraclejdk7
+  - openjdk6
+branches:
+  only:
+    - master
+    - development
+before_install: 'mvn -version'
+install: 'mvn clean install -DskipTests'

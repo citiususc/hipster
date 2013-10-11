@@ -17,7 +17,7 @@
 package es.usc.citius.lab.hipster.algorithm.builder;
 
 
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 
 public interface HeuristicAlgorithmFactory<S> {
     Iterable<HeuristicNode<S, Double>> create(HeuristicAlgorithmBuilder<S> builder);

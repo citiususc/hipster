@@ -25,7 +25,7 @@ import java.util.Iterator;
  * @author Pablo Rodríguez Mier
  */
 public class JGraphTFibonacciQueue<E> extends AbstractQueue<E> {
-    private JGraphTFibonacciHeap<E> heap = new JGraphTFibonacciHeap<>();
+    private JGraphTFibonacciHeap<E> heap = new JGraphTFibonacciHeap<E>();
     private PriorityEvaluator<E> evaluator;
 
     public JGraphTFibonacciQueue(PriorityEvaluator<E> evaluator) {
@@ -37,17 +37,17 @@ public class JGraphTFibonacciQueue<E> extends AbstractQueue<E> {
         return new Iterator<E>() {
             @Override
             public boolean hasNext() {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return heap.size() > 0;
             }
 
             @Override
             public E next() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return heap.min().getData();
             }
 
             @Override
             public void remove() {
-                //To change body of implemented methods use File | Settings | File Templates.
+                throw new UnsupportedOperationException();
             }
         };
     }

@@ -20,7 +20,7 @@ import es.usc.citius.lab.hipster.collection.HashQueue;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.CostNode;
 
 import java.util.HashMap;
 import java.util.Iterator;

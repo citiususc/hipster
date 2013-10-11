@@ -22,7 +22,7 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.informed.HeuristicNodeImplFactory;
 
 public class HeuristicAlgorithmBuilder<S> {

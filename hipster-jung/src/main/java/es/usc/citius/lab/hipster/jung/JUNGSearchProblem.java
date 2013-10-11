@@ -21,6 +21,7 @@ import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.Transition;
 import org.apache.commons.collections15.Transformer;
 
@@ -96,6 +97,11 @@ public class JUNGSearchProblem<V, E> implements HeuristicSearchProblem<V, Double
                 return transformer.transform(edge).doubleValue();
             }
         };
+    }
+
+    @Override
+    public CostOperator<Double> getAccumulator() {
+        return CostOperator.doubleAdditionOp();
     }
 
     @Override

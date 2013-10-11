@@ -15,12 +15,15 @@
  */
 package es.usc.citius.lab.hipster.algorithm;
 
+import es.usc.citius.lab.hipster.function.impl.Product;
+import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.MazeUtils;
 import es.usc.citius.lab.hipster.util.maze.Mazes;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -85,12 +88,9 @@ public class ADStarMazeTest {
     }
 
     private void execute(Mazes.Example example, boolean heuristic) {
-        ADStar<Point, Double> it = MazeUtils.adstar(example.getMaze(), heuristic);
-        //DirectedGraph<Point, JungEdge<Point>> graph = JungUtils.create(maze);
-        //MazeSearch.Result resultJung = MazeSearch.executeJungSearch(graph, maze.getInitialLoc(), maze.getGoalLoc());
+        Iterator<? extends CostNode<Point,Double>> it = SearchIterators.adStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), new Product(), 1.0d, 0.0d, Double.MAX_VALUE);
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.000000001);
-        //assertEquals(resultJung.getCost(), resultIterator.getCost(), 0.0000001);
     }
 
 

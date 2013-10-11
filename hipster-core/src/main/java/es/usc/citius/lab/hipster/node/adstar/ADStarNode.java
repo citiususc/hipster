@@ -21,7 +21,7 @@ import es.usc.citius.lab.hipster.function.impl.CostOperator;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 
 /**
  * Special node used by the ADStar algorithm

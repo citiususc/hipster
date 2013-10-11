@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.collections.adapters;
 
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 
 /**
  * @author Pablo Rodríguez Mier

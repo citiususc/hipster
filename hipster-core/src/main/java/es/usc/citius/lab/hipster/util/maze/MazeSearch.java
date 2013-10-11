@@ -20,7 +20,7 @@ package es.usc.citius.lab.hipster.util.maze;
 
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.informed.CostNode;
+import es.usc.citius.lab.hipster.node.CostNode;
 
 import java.awt.*;
 import java.util.*;
@@ -151,26 +151,5 @@ public final class MazeSearch {
         }
         return Result.NO_RESULT;
     }
-    /*
-    public static Result executeJungSearch(DirectedGraph<Point, JungEdge<Point>> jungGraph, Point initial, Point goal) {
-        DijkstraShortestPath<Point, JungEdge<Point>> dijkstra = new DijkstraShortestPath<Point, JungEdge<Point>>(
-                jungGraph, new Transformer<JungEdge<Point>, Double>() {
-            public Double transform(JungEdge<Point> input) {
-                return input.getCost();
-            }
-        }, true);
-        List<JungEdge<Point>> path = dijkstra.getPath(initial, goal);
-        Double cost = 0.0;
-        List<Point> statePath = new ArrayList<Point>();
-        if (path.isEmpty()) {
-            return Result.NO_RESULT;
-        }
-        for (Iterator<JungEdge<Point>> it = path.iterator(); it.hasNext(); ) {
-            JungEdge<Point> current = it.next();
-            statePath.add(current.getSource());
-            cost += current.getCost();
-        }
-        statePath.add(goal);
-        return new Result(statePath, cost);
-    }*/
+
 }

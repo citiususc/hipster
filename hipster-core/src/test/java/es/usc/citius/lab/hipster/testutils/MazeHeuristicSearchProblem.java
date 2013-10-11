@@ -15,6 +15,7 @@
  */
 package es.usc.citius.lab.hipster.testutils;
 
+import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
@@ -31,6 +32,11 @@ public class MazeHeuristicSearchProblem implements HeuristicSearchProblem<Point,
     public MazeHeuristicSearchProblem(Maze2D maze, boolean useHeuristic) {
         this.maze = maze;
         this.useHeuristic = useHeuristic;
+    }
+
+    public MazeHeuristicSearchProblem(Maze2D maze) {
+        this.maze = maze;
+        this.useHeuristic = false;
     }
 
     public TransitionFunction<Point> getTransitionFunction() {

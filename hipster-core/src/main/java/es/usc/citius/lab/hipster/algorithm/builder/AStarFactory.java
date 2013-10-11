@@ -17,7 +17,7 @@
 package es.usc.citius.lab.hipster.algorithm.builder;
 
 import es.usc.citius.lab.hipster.algorithm.AStar;
-import es.usc.citius.lab.hipster.node.informed.HeuristicNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 
 /**
  * @author Pablo Rodríguez Mier
