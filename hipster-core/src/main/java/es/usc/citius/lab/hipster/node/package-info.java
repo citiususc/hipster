@@ -15,10 +15,7 @@
  */
 
 /**
- * This package contains implementations of different heuristic search algorithms such as
- * {@link es.usc.citius.lab.hipster.algorithm.AStar}, {@link es.usc.citius.lab.hipster.algorithm.BellmanFord},
- * {@link es.usc.citius.lab.hipster.algorithm.ADStar} and more. Each algorithm is defined
- * as an iterator. Each time {@link java.util.Iterator#next()} is called, a {@link es.usc.citius.lab.hipster.node.Node}
- * which represents the current node explored by the algorithm is returned.
+ * Package with classes and interfaces for defining and creating search
+ * nodes. Nodes are the basic structure for the search algorithms.
  */
-package es.usc.citius.lab.hipster.algorithm;
+package es.usc.citius.lab.hipster.node;
