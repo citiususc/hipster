@@ -546,13 +546,14 @@ a:link {
     text-decoration:none;
 }
 
+/* Original color CC3300 */
 a:visited { 
-    color:#CC3300; 
+    color:#f36126;
 }
 
 a:visited:hover { 
     color: #fff; 
-    background-color:#CC3300;
+    background-color:#f36126;
 }
 
 /* Remove blue bar */
