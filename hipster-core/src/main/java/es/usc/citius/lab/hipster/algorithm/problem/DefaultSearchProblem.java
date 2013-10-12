@@ -25,7 +25,10 @@ import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 
 /**
- * A default search problem that works with doubles.
+ * A default search problem that works with doubles. By default this
+ * implementation uses a {@link es.usc.citius.lab.hipster.function.impl.BinaryOperation#doubleAdditionOp()}
+ * as the default accumulator. The {@link CostFunction} to compute the cost of a node
+ * must work with {@link Double}.
  *
  * @author Pablo Rodríguez Mier
  */

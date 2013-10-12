@@ -27,7 +27,7 @@ import java.util.Stack;
 
 /**
  * Very basic implementation of the Depth-First-Search (DFS) algorithm using
- * a {@link Stack} as the basic data structure.
+ * a {@link Stack} as the underlying data structure.
  *
  * @param <S> state type.
  */

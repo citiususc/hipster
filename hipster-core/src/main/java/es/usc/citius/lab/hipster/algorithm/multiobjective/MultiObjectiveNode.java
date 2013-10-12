@@ -18,6 +18,10 @@ package es.usc.citius.lab.hipster.algorithm.multiobjective;
 
 import es.usc.citius.lab.hipster.node.Node;
 
+/**
+ * Interface to define search nodes that can be
+ * @param <S>
+ */
 public interface MultiObjectiveNode<S> extends Node<S> {
     boolean dominates(MultiObjectiveNode<S> node);
 }
