@@ -19,9 +19,17 @@ package es.usc.citius.lab.hipster.algorithm.multiobjective;
 import es.usc.citius.lab.hipster.node.Node;
 
 /**
- * Interface to define search nodes that can be
- * @param <S>
+ * Interface to define multiobjective search nodes. A multiobjective
+ * search node implements a function {@link  MultiObjectiveNode#dominates(MultiObjectiveNode)}
+ * to test whether this node dominates or not over a different node.
+ *
+ * @param <S> type of the state handled by the node.
  */
 public interface MultiObjectiveNode<S> extends Node<S> {
+    /**
+     * Check if this node dominates the node passed as argument.
+     * @param node provided node.
+     * @return true if this node dominates the provided node. False otherwise.
+     */
     boolean dominates(MultiObjectiveNode<S> node);
 }

@@ -18,8 +18,18 @@ package es.usc.citius.lab.hipster.function.impl;
 
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 
+/**
+ * Implements the ScalarFunction product for doubles.
+ * @see ScalarFunction
+ */
 public class Product implements ScalarFunction<Double> {
 
+    /**
+     * Returns a*b
+     * @param a value to be scaled
+     * @param b scale factor
+     * @return a*b
+     */
     public Double scale(Double a, double b) {
         return a * b;
     }

@@ -52,6 +52,10 @@ public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
         return !this.queue.isEmpty();
     }
 
+    /**
+     * Computes and returns the next explored {@link MultiObjectiveNode}.
+     * @return
+     */
     public MultiObjectiveNode<S> next() {
         // 1- Take smallest lexicographical element from queue
         // 2- For all successors:
@@ -107,6 +111,10 @@ public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
         return false;
     }
 
+    /**
+     * Returns all the non dominated solutions found so far.
+     * @return Map with the non dominated states.
+     */
     public Map<S, Collection<MultiObjectiveNode<S>>> getNonDominatedSolutions() {
         return nonDominated.asMap();
     }
@@ -116,6 +124,13 @@ public class MultiObjectiveLS<S> implements Iterator<MultiObjectiveNode<S>> {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Runs the search over this iterator. After calling this method,
+     * the {@link es.usc.citius.lab.hipster.algorithm.multiobjective.MultiObjectiveLS#hasNext()} will
+     * return false. NOTE: This method might be removed in a future version.
+     *
+     * @return Map with the non dominated solutions.
+     */
     public Map<S, Collection<MultiObjectiveNode<S>>> search() {
         while (this.hasNext()) this.next();
         return getNonDominatedSolutions();

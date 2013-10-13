@@ -20,13 +20,40 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Defines an action that allows a change of state.
+ * <p>A transitions is basically a movement from a state <b>a</b> to an
+ * state <b>b</b>. Transitions are used to explore the search space of
+ * a problem. For example, in a 2D coordinate system, given a 2D point
+ * defined by (x,y) where x and y are integers,
+ * there are eight possible transitions (movements) to different states.
+ * If the initial point is (0,0), the valid transitions are:</p>
+ * <ul>
+ *     <li>(0,0)->(0,1)</li>
+ *     <li>(0,0)->(0,-1)</li>
+ *     <li>(0,0)->(1,0)</li>
+ *     <li>(0,0)->(-1,0)</li>
+ *     <li>(0,0)->(1,1)</li>
+ *     <li>(0,0)->(-1,-1)</li>
+ *     <li>(0,0)->(-1,1)</li>
+ *     <li>(0,0)->(1,-1)</li>
+ * </ul>
+ *
+ * <p>
+ * Each transition can be represented using {@literal new Transition(from,to)}.
+ * For example, following the last example, the transitions can be defined as follows:
+ * </p>
+ * new Transition(new Point(0,0), new Point(0,1));<br/>
+ * new Transition(new Point(0,0), new Point(0,-1));<br/>
+ * ...<br/>
+ *
+ * The fastest way to generate all possible transitions is using the static
+ * method {@link Transition#map(Object, Iterable)}. If all the valid points
+ * are stored in a iterable collection called neighborPoints, the function
+ * {@code Transition.map(new Point(0,0), neighborPoints)} returns all the transitions
+ * using the (0,0) as the origin point.
  *
  * @param <S> class defining the state
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
  */
 public class Transition<S> {
 

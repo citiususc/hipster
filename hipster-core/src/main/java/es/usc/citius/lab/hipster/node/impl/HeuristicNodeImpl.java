@@ -21,8 +21,13 @@ import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- * @param <S>
- * @param <T>
+ * Implementation of a generic HeuristicNode. A Heuristic Node contains a transition, which is the
+ * information about the movement used to reach the new state, the previous node, used to connect
+ * the nodes for retrieving the full path, the cost, which is used to compare the node with other ones,
+ * and the score, which is used to heuristically compare nodes.
+ *
+ * @param <S> type of the state.
+ * @param <T> type of the cost and the score.
  * @author Pablo Rodríguez Mier
  */
 public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<S> implements HeuristicNode<S, T>, Comparable<HeuristicNode<S, T>> {

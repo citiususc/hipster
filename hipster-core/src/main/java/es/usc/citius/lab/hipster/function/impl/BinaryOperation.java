@@ -53,6 +53,11 @@ public class BinaryOperation<E extends Comparable<E>> implements BinaryFunction<
 		return identityElem;
 	}
 
+    /**
+     * Returns a default addition implementation which works with doubles.
+     * For example, {@literal BinaryOperation.doubleAdditionOp().apply(2.5d, 1.0d)} returns 3.5d.
+     * @return
+     */
 	public static BinaryOperation<Double> doubleAdditionOp() {
 		return new BinaryOperation<Double>(new BinaryFunction<Double>() {
 			public Double apply(Double a, Double b) {
@@ -61,6 +66,11 @@ public class BinaryOperation<E extends Comparable<E>> implements BinaryFunction<
 		}, 0d, Double.POSITIVE_INFINITY);
 	}
 
+    /**
+     * Returns a multiplication implementation which works with doubles.
+     * For example, {@literal BinaryOperation.doubleMultiplicationOp.apply(2.5d, 2.0d)} returns 5.0d.
+     * @return
+     */
 	public static BinaryOperation<Double> doubleMultiplicationOp() {
 		return new BinaryOperation<Double>(new BinaryFunction<Double>() {
 
