@@ -43,7 +43,7 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
         this.scale = scale;
     }
 
-    public Iterator<? extends CostNode<S, T>> create() {
+    public Iterator<ADStarNode<S, T>> create() {
 
         NodeFactory<S, ADStarNode<S, T>> defaultBuilder = new ADStarNodeBuilder<S, T>(
                 this.min, this.max);

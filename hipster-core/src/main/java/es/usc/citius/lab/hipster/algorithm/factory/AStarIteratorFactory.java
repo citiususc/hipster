@@ -32,7 +32,7 @@ public class AStarIteratorFactory<S, T extends Comparable<T>> implements
         this.f = componentFactory;
     }
 
-    public Iterator<? extends CostNode<S, T>> create() {
+    public Iterator<HeuristicNode<S, T>> create() {
         NodeFactory<S, HeuristicNode<S, T>> factory = new HeuristicNodeImplFactory<S, T>(
                 f.getCostFunction(), f.getHeuristicFunction(), f.getAccumulator());
 

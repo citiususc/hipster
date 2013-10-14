@@ -22,6 +22,8 @@ import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 
 import java.util.Iterator;
 
@@ -44,7 +46,7 @@ public final class SearchIterators {
      * @return new A-Star iterator that iterates over the {@link CostNode}
      * @see AStar
      */
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> aStar(HeuristicSearchProblem<S, T> problem) {
+    public static <S, T extends Comparable<T>> Iterator<HeuristicNode<S, T>> aStar(HeuristicSearchProblem<S, T> problem) {
         return new AStarIteratorFactory<S, T>(problem).create();
     }
 
@@ -57,7 +59,7 @@ public final class SearchIterators {
      * @return new BellmanFord iterator that iterates over the {@link CostNode}
      * @see BellmanFord
      */
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> bellmanFord(SearchProblem<S, T> problem) {
+    public static <S, T extends Comparable<T>> Iterator<CostNode<S, T>> bellmanFord(SearchProblem<S, T> problem) {
         return new BellmanFordIteratorFactory<S, T>(problem).create();
     }
 
@@ -72,7 +74,7 @@ public final class SearchIterators {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Iterator<? extends CostNode<S, T>> adStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
+    public static <S, T extends Comparable<T>> Iterator<ADStarNode<S, T>> adStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
         return new ADStarIteratorFactory<S, T>(problem, scale, epsilon, min, max).create();
     }
 

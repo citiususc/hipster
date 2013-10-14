@@ -32,7 +32,7 @@ public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
         this.componentFactory = componentFactory;
     }
 
-    public Iterator<? extends CostNode<S, T>> create() {
+    public Iterator<CostNode<S, T>> create() {
         NodeFactory<S, CostNode<S, T>> factory = new HeuristicNodeImplFactory<S, T>(
                 componentFactory.getCostFunction(), componentFactory.getAccumulator())
                 .toCostNodeFactory();

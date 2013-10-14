@@ -47,7 +47,7 @@ import java.util.Queue;
  * @since 26-03-2013
  * @version 1.0
  */
-public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNode<S,T>> {
+public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
     private final Collection<ADStarNode<S, T>> goalNodes;
@@ -182,7 +182,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<HeuristicNod
         return takePromising() != null;
     }
 
-    public HeuristicNode<S,T> next() {
+    public ADStarNode<S,T> next() {
         //First node in OPEN retrieved, not removed
         ADStarNode<S, T> current = takePromising();
         S state = current.transition().to();
