@@ -30,7 +30,7 @@ import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 import java.util.Iterator;
 
 public class AStarIteratorFactory<S, T extends Comparable<T>> implements
-        AlgorithmIteratorFactory<S, T> {
+        AlgorithmIteratorFactory<S, HeuristicNode<S,T>> {
     private final HeuristicSearchProblem<S, T> f;
 
     public AStarIteratorFactory(HeuristicSearchProblem<S, T> problem) {

@@ -28,7 +28,7 @@ import es.usc.citius.lab.hipster.node.CostNode;
 import java.util.Iterator;
 
 public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
-        AlgorithmIteratorFactory<S, T> {
+        AlgorithmIteratorFactory<S, ADStarNode<S,T>> {
     private final HeuristicSearchProblem<S, T> f;
     private ScalarFunction<T> scale;
     private T min;

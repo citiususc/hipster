@@ -24,7 +24,7 @@ import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 import java.util.Iterator;
 
 public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
-        AlgorithmIteratorFactory<S, T> {
+        AlgorithmIteratorFactory<S, CostNode<S,T>> {
     private final SearchProblem<S, T> componentFactory;
 
     public BellmanFordIteratorFactory(

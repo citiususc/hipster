@@ -16,6 +16,7 @@
 package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.Node;
 
 import java.util.Iterator;
 
@@ -25,13 +26,13 @@ import java.util.Iterator;
  * @param <T> type of the cost used by the algorithm
  * @author Pablo Rodríguez Mier
  */
-public interface AlgorithmIteratorFactory<S, T extends Comparable<T>> {
+public interface AlgorithmIteratorFactory<S, N extends Node<S>> {
 
     /**
      * Create a new iterative algorithm
      * @return iterator that iterates over {@link CostNode} nodes
      * TODO: change return type
      */
-    Iterator<? extends CostNode<S, T>> create();
+    Iterator<N> create();
 
 }
