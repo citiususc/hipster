@@ -150,7 +150,7 @@ public class BellmanFordTest {
     } */
 
     private void execute(Mazes.Example example) {
-        Iterator<? extends CostNode<Point, Double>> it = SearchIterators.bellmanFord(new MazeHeuristicSearchProblem(example.getMaze(), false));
+        Iterator<? extends CostNode<Point, Double>> it = Algorithms.createBellmanFord(new MazeHeuristicSearchProblem(example.getMaze(), false));
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.00000001);
     }

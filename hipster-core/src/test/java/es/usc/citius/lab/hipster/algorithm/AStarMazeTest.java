@@ -94,7 +94,7 @@ public class AStarMazeTest {
 
     private void execute(Mazes.Example example, boolean heuristic) {
 
-        Iterator<? extends CostNode<Point, Double>> it = SearchIterators.aStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic));
+        Iterator<? extends CostNode<Point, Double>> it = Algorithms.createAStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic));
         /*
         PriorityFibonacciQueue<HeuristicNode<Point, Double>> q = new PriorityFibonacciQueue<HeuristicNode<Point, Double>>(new HeuristicNodePriorityEvaluator<Point, Double>());
         q.offer(it.getQueue().poll());

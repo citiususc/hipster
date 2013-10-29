@@ -32,7 +32,7 @@ import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
  *
  * @author Pablo Rodríguez Mier
  */
-public class DefaultSearchProblem<S> implements SearchProblem<S, Double> {
+public class DefaultSearchProblem<S> implements HeuristicSearchProblem<S, Double> {
 
     private S initialState;
     private S goalState;
@@ -79,7 +79,11 @@ public class DefaultSearchProblem<S> implements SearchProblem<S, Double> {
 
     @Override
     public BinaryOperation<Double> getAccumulator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return BinaryOperation.doubleAdditionOp();
     }
 
+    @Override
+    public HeuristicFunction<S, Double> getHeuristicFunction() {
+        return this.heuristicFunction;
+    }
 }

@@ -21,7 +21,7 @@ import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.io.GraphMLReader;
-import es.usc.citius.lab.hipster.algorithm.SearchIterators;
+import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.jung.JUNGSearchProblem;
 import es.usc.citius.lab.hipster.jung.JungUtils;
 import es.usc.citius.lab.hipster.node.CostNode;
@@ -109,7 +109,7 @@ public class BigGraphTest {
         System.out.println("Running Hipster Dijkstra on graph with " + testGraph.getVertexCount() + " vertices");
         JUNGSearchProblem<String, String> problem = new JUNGSearchProblem<String, String>(this.testGraph, SOURCE_VERTEX, GOAL_VERTEX);
         for(int i=0; i < reps; i++){
-            Iterator<? extends CostNode<String, Double>> it = SearchIterators.aStar(problem);
+            Iterator<? extends CostNode<String, Double>> it = Algorithms.createAStar(problem);
             Stopwatch w = new Stopwatch().start();
             int pathSize = findPath(it, GOAL_VERTEX).path().size();
             System.out.println("Path size: " + pathSize + " - " + w.stop().toString());
@@ -122,7 +122,7 @@ public class BigGraphTest {
         System.out.println("Running Bellman Ford Dijkstra on graph with " + testGraph.getVertexCount() + " vertices");
         JUNGSearchProblem<String, String> problem = new JUNGSearchProblem<String, String>(this.testGraph, SOURCE_VERTEX, GOAL_VERTEX);
         for(int i=0; i < reps; i++){
-            Iterator<? extends CostNode<String, Double>> it = SearchIterators.bellmanFord(problem);
+            Iterator<? extends CostNode<String, Double>> it = Algorithms.createBellmanFord(problem);
             Stopwatch w = new Stopwatch().start();
             int pathSize = findPath(it, GOAL_VERTEX).path().size();
             System.out.println("Path size: " + pathSize + " - " + w.stop().toString());

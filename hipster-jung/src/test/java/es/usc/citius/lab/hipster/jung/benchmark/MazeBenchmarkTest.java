@@ -19,7 +19,7 @@ package es.usc.citius.lab.hipster.jung.benchmark;
 import com.google.common.base.Stopwatch;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import es.usc.citius.lab.hipster.algorithm.SearchIterators;
+import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.jung.JungEdge;
 import es.usc.citius.lab.hipster.jung.JungMazeHeuristicProblem;
@@ -138,7 +138,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = SearchIterators.aStar(createComponentFactory(maze));
+                it = Algorithms.createAStar(createComponentFactory(maze));
                 goal = maze.getGoalLoc();
             }
 
@@ -153,7 +153,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = SearchIterators.bellmanFord(createComponentFactory(maze));
+                it = Algorithms.createBellmanFord(createComponentFactory(maze));
                 goal = maze.getGoalLoc();
             }
 
@@ -168,7 +168,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = SearchIterators.adStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE);
+                it = Algorithms.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE);
                 //it= MazeUtils.adstar(maze, false);
                 goal = maze.getGoalLoc();
             }

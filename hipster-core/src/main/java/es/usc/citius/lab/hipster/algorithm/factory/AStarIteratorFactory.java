@@ -17,6 +17,11 @@ package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
+import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
+import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
@@ -28,8 +33,47 @@ public class AStarIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, T> {
     private final HeuristicSearchProblem<S, T> f;
 
-    public AStarIteratorFactory(HeuristicSearchProblem<S, T> componentFactory) {
-        this.f = componentFactory;
+    public AStarIteratorFactory(HeuristicSearchProblem<S, T> problem) {
+        this.f = problem;
+    }
+
+    public AStarIteratorFactory(final SearchProblem<S, T> problem) {
+        this.f = new HeuristicSearchProblem<S, T>() {
+            @Override
+            public HeuristicFunction<S, T> getHeuristicFunction() {
+                return new HeuristicFunction<S, T>() {
+                    @Override
+                    public T estimate(S state) {
+                        return problem.getAccumulator().getIdentityElem();
+                    }
+                };
+            }
+
+            @Override
+            public S getInitialState() {
+                return problem.getInitialState();
+            }
+
+            @Override
+            public S getGoalState() {
+                return problem.getGoalState();
+            }
+
+            @Override
+            public TransitionFunction<S> getTransitionFunction() {
+                return problem.getTransitionFunction();
+            }
+
+            @Override
+            public CostFunction<S, T> getCostFunction() {
+                return problem.getCostFunction();
+            }
+
+            @Override
+            public BinaryOperation<T> getAccumulator() {
+                return problem.getAccumulator();
+            }
+        };
     }
 
     public Iterator<HeuristicNode<S, T>> create() {
