@@ -59,4 +59,8 @@ public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<
         return this.score.compareTo(o.getScore());
     }
 
+    @Override
+    public String toString() {
+        return this.getState().toString();
+    }
 }
