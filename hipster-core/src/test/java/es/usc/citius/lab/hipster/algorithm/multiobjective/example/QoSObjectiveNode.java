@@ -45,7 +45,12 @@ public class QoSObjectiveNode<S> extends AbstractNode<S> implements
             return comp;
         } else {
             // Inverted
-            comp = Integer.compare(node.objectives.throughput, this.objectives.throughput);
+            if (node.objectives.throughput == this.objectives.throughput){
+                comp = 0;
+            } else {
+                comp = (node.objectives.throughput < this.objectives.throughput)?-1:1;
+            }
+            //comp = Integer.compare(node.objectives.throughput, this.objectives.throughput); 1.6 incompatible
         }
         return comp;
     }
