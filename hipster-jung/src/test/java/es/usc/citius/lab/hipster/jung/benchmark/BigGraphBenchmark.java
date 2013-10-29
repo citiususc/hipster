@@ -94,7 +94,7 @@ public class BigGraphBenchmark extends Benchmark {
         long pathSize = 0;
         for(int i=0; i<reps; i++){
             JUNGSearchProblem<String, String> problem = new JUNGSearchProblem<String, String>(this.testGraph, SOURCE_VERTEX, GOAL_VERTEX);
-            Iterator<? extends CostNode<String, Double>> it = Algorithms.createAStar(problem);
+            Iterator<? extends CostNode<String, Double>> it = Algorithms.createAStar(problem).iterator();
             //Stopwatch w = new Stopwatch().start();
             pathSize += findPath(it, GOAL_VERTEX).path().size();
         }

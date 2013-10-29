@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
 import es.usc.citius.lab.hipster.util.maze.Mazes;
@@ -94,12 +95,7 @@ public class AStarMazeTest {
 
     private void execute(Mazes.Example example, boolean heuristic) {
 
-        Iterator<? extends CostNode<Point, Double>> it = Algorithms.createAStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic));
-        /*
-        PriorityFibonacciQueue<HeuristicNode<Point, Double>> q = new PriorityFibonacciQueue<HeuristicNode<Point, Double>>(new HeuristicNodePriorityEvaluator<Point, Double>());
-        q.offer(it.getQueue().poll());
-        it.setQueue(q);*/
-
+        Iterator<HeuristicNode<Point,Double>> it = Algorithms.createAStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic)).iterator();
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.0000001);
     }

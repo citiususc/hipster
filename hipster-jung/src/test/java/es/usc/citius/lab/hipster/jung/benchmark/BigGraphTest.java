@@ -109,7 +109,7 @@ public class BigGraphTest {
         System.out.println("Running Hipster Dijkstra on graph with " + testGraph.getVertexCount() + " vertices");
         JUNGSearchProblem<String, String> problem = new JUNGSearchProblem<String, String>(this.testGraph, SOURCE_VERTEX, GOAL_VERTEX);
         for(int i=0; i < reps; i++){
-            Iterator<? extends CostNode<String, Double>> it = Algorithms.createAStar(problem);
+            Iterator<? extends CostNode<String, Double>> it = Algorithms.createAStar(problem).iterator();
             Stopwatch w = new Stopwatch().start();
             int pathSize = findPath(it, GOAL_VERTEX).path().size();
             System.out.println("Path size: " + pathSize + " - " + w.stop().toString());
@@ -122,7 +122,7 @@ public class BigGraphTest {
         System.out.println("Running Bellman Ford Dijkstra on graph with " + testGraph.getVertexCount() + " vertices");
         JUNGSearchProblem<String, String> problem = new JUNGSearchProblem<String, String>(this.testGraph, SOURCE_VERTEX, GOAL_VERTEX);
         for(int i=0; i < reps; i++){
-            Iterator<? extends CostNode<String, Double>> it = Algorithms.createBellmanFord(problem);
+            Iterator<? extends CostNode<String, Double>> it = Algorithms.createBellmanFord(problem).iterator();
             Stopwatch w = new Stopwatch().start();
             int pathSize = findPath(it, GOAL_VERTEX).path().size();
             System.out.println("Path size: " + pathSize + " - " + w.stop().toString());

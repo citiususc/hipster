@@ -138,7 +138,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = Algorithms.createAStar(createComponentFactory(maze));
+                it = Algorithms.createAStar(createComponentFactory(maze)).iterator();
                 goal = maze.getGoalLoc();
             }
 
@@ -153,7 +153,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = Algorithms.createBellmanFord(createComponentFactory(maze));
+                it = Algorithms.createBellmanFord(createComponentFactory(maze)).iterator();
                 goal = maze.getGoalLoc();
             }
 
@@ -168,7 +168,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = Algorithms.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE);
+                it = Algorithms.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE).iterator();
                 //it= MazeUtils.adstar(maze, false);
                 goal = maze.getGoalLoc();
             }

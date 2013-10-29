@@ -212,9 +212,8 @@ public final class EightPuzzleExample {
         // implementation that uses double values.
         DefaultSearchProblem<EightPuzzleState> problem = new DefaultSearchProblem<EightPuzzleState>(initialState, goalState, transition, costFunction);
         // Search!
-        Iterator<HeuristicNode<EightPuzzleState, Double>> it = Algorithms.createAStar(problem);
+        HeuristicNode<EightPuzzleState,Double> solution = Algorithms.createAStar(problem).search();
         // Print solution
-        HeuristicNode<EightPuzzleState, Double> solution = Algorithms.find(it, goalState);
         System.out.println(solution.path());
         System.out.println(solution.getCost());
     }

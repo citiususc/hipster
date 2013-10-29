@@ -17,6 +17,7 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.function.impl.Product;
 import es.usc.citius.lab.hipster.node.CostNode;
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
 import es.usc.citius.lab.hipster.util.maze.Mazes;
@@ -88,7 +89,7 @@ public class ADStarMazeTest {
     }
 
     private void execute(Mazes.Example example, boolean heuristic) {
-        Iterator<? extends CostNode<Point,Double>> it = Algorithms.createADStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), new Product(), 1.0d, 0.0d, Double.MAX_VALUE);
+        Iterator<ADStarNode<Point,Double>> it = Algorithms.createADStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), new Product(), 1.0d, 0.0d, Double.MAX_VALUE).iterator();
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.000000001);
     }

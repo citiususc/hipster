@@ -17,6 +17,7 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.algorithm.factory.ADStarIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.AStarIteratorFactory;
+import es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.BellmanFordIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
@@ -38,6 +39,32 @@ public final class Algorithms {
     private Algorithms() {
     }
 
+    public static final class Search<S, N extends Node<S>> implements Iterable<N>{
+        private AlgorithmIteratorFactory<S, N> factory;
+        private S goal;
+
+        public Search(AlgorithmIteratorFactory<S, N> factory, S goal) {
+            this.factory = factory;
+            this.goal = goal;
+        }
+
+        public N search(){
+            Iterator<N> it = factory.create();
+            while(it.hasNext()){
+                N node = it.next();
+                if (node.transition().to().equals(goal)){
+                    return node;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public Iterator<N> iterator() {
+            return factory.create();
+        }
+    }
+
 
     /**
      * Creates a {@literal A*} search algorithm.
@@ -48,8 +75,8 @@ public final class Algorithms {
      * @return new A-Star iterator that iterates over the {@link CostNode}
      * @see AStar
      */
-    public static <S, T extends Comparable<T>> Iterator<HeuristicNode<S, T>> createAStar(HeuristicSearchProblem<S, T> problem) {
-        return new AStarIteratorFactory<S, T>(problem).create();
+    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createAStar(HeuristicSearchProblem<S, T> problem) {
+        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem), problem.getGoalState());
     }
 
     /**
@@ -59,8 +86,8 @@ public final class Algorithms {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Iterator<HeuristicNode<S, T>> createDijkstra(SearchProblem<S, T> problem) {
-        return new AStarIteratorFactory<S, T>(problem).create();
+    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createDijkstra(SearchProblem<S, T> problem) {
+        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem), problem.getGoalState());
     }
 
     /**
@@ -72,8 +99,8 @@ public final class Algorithms {
      * @return new BellmanFord iterator that iterates over the {@link CostNode}
      * @see BellmanFord
      */
-    public static <S, T extends Comparable<T>> Iterator<CostNode<S, T>> createBellmanFord(SearchProblem<S, T> problem) {
-        return new BellmanFordIteratorFactory<S, T>(problem).create();
+    public static <S, T extends Comparable<T>> Search<S, CostNode<S,T>> createBellmanFord(SearchProblem<S, T> problem) {
+        return new Search<S, CostNode<S,T>>(new BellmanFordIteratorFactory<S, T>(problem), problem.getGoalState());
     }
 
     /**
@@ -87,26 +114,8 @@ public final class Algorithms {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Iterator<ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
-        return new ADStarIteratorFactory<S, T>(problem, scale, epsilon, min, max).create();
-    }
-
-    /**
-     * Find the goal using the provided search iterator.
-     * @param it search iterator to be used.
-     * @param goal goal state to be found.
-     * @param <S> type of the states used.
-     * @return goal node or null if no path was found.
-     * To get the state path from the initial state to the goal state, use {@link es.usc.citius.lab.hipster.node.Node#path()}.
-     */
-    public static <S, N extends Node<S>> N find(Iterator<N> it, S goal){
-        while(it.hasNext()){
-            N node = it.next();
-            if (node.transition().to().equals(goal)){
-                return node;
-            }
-        }
-        return null;
+    public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
+        return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, scale, epsilon, min, max), problem.getGoalState());
     }
 
 }
