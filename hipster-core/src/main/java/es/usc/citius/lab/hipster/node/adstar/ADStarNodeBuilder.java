@@ -20,20 +20,35 @@ import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 02-04-2013
+ * The ADStarNodeBuilder is used for instantiate new {@link es.usc.citius.lab.hipster.node.adstar.ADStarNode}.
+ *
+ * @param <S> class defining the state
+ * @param <T> class defining the cost
+ * 
+ * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public class ADStarNodeBuilder<S, T extends Comparable<T>> implements NodeFactory<S, ADStarNode<S, T>> {
 
     protected T max;
     protected T min;
 
+    /**
+     * Constructor for the ADStarNodeBuilder. Takes the minimum and 
+     * maximum cost values managed by the algorithm to initialize the 
+     * node values properly.
+     * 
+     * @param min minimum node cost
+     * @param max maximum node cost
+     */
     public ADStarNodeBuilder(T min, T max) {
         this.min = min;
         this.max = max;
     }
 
+    /**
+     * Builds a new node taking the parent and the transition used to access the new node.
+     */
     public ADStarNode<S, T> node(ADStarNode<S, T> from, Transition<S> transition) {
         if (from == null) {
             return new ADStarNode<S, T>(transition, null, min, max, new ADStarNode.Key<T>(min, min));
@@ -41,5 +56,4 @@ public class ADStarNodeBuilder<S, T extends Comparable<T>> implements NodeFactor
             return new ADStarNode<S, T>(transition, null, max, max, new ADStarNode.Key<T>(max, max));
         }
     }
-
 }
