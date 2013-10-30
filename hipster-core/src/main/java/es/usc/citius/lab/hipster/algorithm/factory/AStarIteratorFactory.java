@@ -17,13 +17,12 @@ package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.AStar;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
-import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
-import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 
@@ -32,19 +31,21 @@ import java.util.Iterator;
 public class AStarIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, HeuristicNode<S,T>> {
     private final HeuristicSearchProblem<S, T> f;
+    private final BinaryOperation<T> costAccumulator;
 
-    public AStarIteratorFactory(HeuristicSearchProblem<S, T> problem) {
+    public AStarIteratorFactory(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
         this.f = problem;
+        this.costAccumulator = costAccumulator;
     }
 
-    public AStarIteratorFactory(final SearchProblem<S, T> problem) {
+    public AStarIteratorFactory(final InformedSearchProblem<S, T> problem, final BinaryOperation<T> costAccumulator) {
         this.f = new HeuristicSearchProblem<S, T>() {
             @Override
             public HeuristicFunction<S, T> getHeuristicFunction() {
                 return new HeuristicFunction<S, T>() {
                     @Override
                     public T estimate(S state) {
-                        return problem.getAccumulator().getIdentityElem();
+                        return costAccumulator.getIdentityElem();
                     }
                 };
             }
@@ -68,17 +69,13 @@ public class AStarIteratorFactory<S, T extends Comparable<T>> implements
             public CostFunction<S, T> getCostFunction() {
                 return problem.getCostFunction();
             }
-
-            @Override
-            public BinaryOperation<T> getAccumulator() {
-                return problem.getAccumulator();
-            }
         };
+        this.costAccumulator = costAccumulator;
     }
 
     public Iterator<HeuristicNode<S, T>> create() {
         NodeFactory<S, HeuristicNode<S, T>> factory = new HeuristicNodeImplFactory<S, T>(
-                f.getCostFunction(), f.getHeuristicFunction(), f.getAccumulator());
+                f.getCostFunction(), f.getHeuristicFunction(), this.costAccumulator);
 
         AStar<S, T> astar = new AStar<S, T>(f.getInitialState(), f.getTransitionFunction(),
                 factory);

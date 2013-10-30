@@ -21,6 +21,6 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 /**
  * @author Pablo Rodríguez Mier
  */
-public interface HeuristicSearchProblem<S, T extends Comparable<T>> extends SearchProblem<S, T> {
+public interface HeuristicSearchProblem<S, T extends Comparable<T>> extends InformedSearchProblem<S, T> {
     HeuristicFunction<S, T> getHeuristicFunction();
 }

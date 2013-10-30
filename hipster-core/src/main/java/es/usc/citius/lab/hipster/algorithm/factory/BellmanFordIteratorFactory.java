@@ -16,7 +16,8 @@
 package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
-import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
@@ -25,21 +26,23 @@ import java.util.Iterator;
 
 public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, CostNode<S,T>> {
-    private final SearchProblem<S, T> componentFactory;
+    private final InformedSearchProblem<S, T> searchProblem;
+    private final BinaryOperation<T> costAccumulator;
 
     public BellmanFordIteratorFactory(
-            SearchProblem<S, T> componentFactory) {
-        this.componentFactory = componentFactory;
+            InformedSearchProblem<S, T> searchProblem, BinaryOperation<T> costAccumulator) {
+        this.searchProblem = searchProblem;
+        this.costAccumulator = costAccumulator;
     }
 
     public Iterator<CostNode<S, T>> create() {
         NodeFactory<S, CostNode<S, T>> factory = new HeuristicNodeImplFactory<S, T>(
-                componentFactory.getCostFunction(), componentFactory.getAccumulator())
+                searchProblem.getCostFunction(), this.costAccumulator)
                 .toCostNodeFactory();
 
         return new BellmanFord<S, T>(
-                componentFactory.getInitialState(),
-                componentFactory.getTransitionFunction(), factory);
+                searchProblem.getInitialState(),
+                searchProblem.getTransitionFunction(), factory);
 
     }
 

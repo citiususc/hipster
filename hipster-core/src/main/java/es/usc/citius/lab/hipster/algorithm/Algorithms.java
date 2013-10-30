@@ -20,8 +20,11 @@ import es.usc.citius.lab.hipster.algorithm.factory.AStarIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.factory.BellmanFordIteratorFactory;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
+import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
+import es.usc.citius.lab.hipster.function.impl.ScalarOperation;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
@@ -43,6 +46,10 @@ public final class Algorithms {
         private AlgorithmIteratorFactory<S, N> factory;
         private S goal;
 
+        public interface SearchListener<N> {
+            void handle(N node);
+        }
+
         public Search(AlgorithmIteratorFactory<S, N> factory, S goal) {
             this.factory = factory;
             this.goal = goal;
@@ -57,6 +64,13 @@ public final class Algorithms {
                 }
             }
             return null;
+        }
+
+        public void search(SearchListener<N> listener){
+            Iterator<N> it = factory.create();
+            while(it.hasNext()){
+                listener.handle(it.next());
+            }
         }
 
         @Override
@@ -75,8 +89,12 @@ public final class Algorithms {
      * @return new A-Star iterator that iterates over the {@link CostNode}
      * @see AStar
      */
-    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createAStar(HeuristicSearchProblem<S, T> problem) {
-        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem), problem.getGoalState());
+    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createAStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
+        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
+    }
+
+    public static <S> Search<S, HeuristicNode<S,Double>> createAStar(HeuristicSearchProblem<S, Double> problem) {
+        return new Search<S, HeuristicNode<S,Double>>(new AStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
 
     /**
@@ -86,8 +104,12 @@ public final class Algorithms {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createDijkstra(SearchProblem<S, T> problem) {
-        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem), problem.getGoalState());
+    public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createDijkstra(InformedSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
+        return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
+    }
+
+    public static <S> Search<S, HeuristicNode<S,Double>> createDijkstra(InformedSearchProblem<S, Double> problem) {
+        return new Search<S, HeuristicNode<S,Double>>(new AStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
 
     /**
@@ -99,8 +121,12 @@ public final class Algorithms {
      * @return new BellmanFord iterator that iterates over the {@link CostNode}
      * @see BellmanFord
      */
-    public static <S, T extends Comparable<T>> Search<S, CostNode<S,T>> createBellmanFord(SearchProblem<S, T> problem) {
-        return new Search<S, CostNode<S,T>>(new BellmanFordIteratorFactory<S, T>(problem), problem.getGoalState());
+    public static <S, T extends Comparable<T>> Search<S, CostNode<S,T>> createBellmanFord(InformedSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
+        return new Search<S, CostNode<S,T>>(new BellmanFordIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
+    }
+
+    public static <S> Search<S, CostNode<S,Double>> createBellmanFord(InformedSearchProblem<S, Double> problem) {
+        return new Search<S, CostNode<S,Double>>(new BellmanFordIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
 
     /**
@@ -114,8 +140,12 @@ public final class Algorithms {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
-        return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, scale, epsilon, min, max), problem.getGoalState());
+    public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon, T min, T max) {
+        return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon, min, max), problem.getGoalState());
+    }
+
+    public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon, Double min, Double max) {
+        return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon, min, max), problem.getGoalState());
     }
 
 }

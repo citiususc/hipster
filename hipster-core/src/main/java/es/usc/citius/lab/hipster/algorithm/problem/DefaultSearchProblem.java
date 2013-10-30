@@ -78,11 +78,6 @@ public class DefaultSearchProblem<S> implements HeuristicSearchProblem<S, Double
     }
 
     @Override
-    public BinaryOperation<Double> getAccumulator() {
-        return BinaryOperation.doubleAdditionOp();
-    }
-
-    @Override
     public HeuristicFunction<S, Double> getHeuristicFunction() {
         return this.heuristicFunction;
     }

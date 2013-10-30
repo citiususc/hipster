@@ -19,28 +19,30 @@ package es.usc.citius.lab.hipster.algorithm.factory;
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
+import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeBuilder;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
-import es.usc.citius.lab.hipster.node.CostNode;
 
 import java.util.Iterator;
 
 public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, ADStarNode<S,T>> {
     private final HeuristicSearchProblem<S, T> f;
+    private final BinaryOperation<T> costAccumulator;
     private ScalarFunction<T> scale;
     private T min;
     private T max;
     private double epsilon;
 
-    public ADStarIteratorFactory(HeuristicSearchProblem<S, T> problem, ScalarFunction<T> scale, double epsilon, T min, T max) {
+    public ADStarIteratorFactory(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon, T min, T max) {
         this.f = problem;
         this.max = max;
         this.min = min;
         this.epsilon = epsilon;
         this.scale = scale;
+        this.costAccumulator = costAccumulator;
     }
 
     public Iterator<ADStarNode<S, T>> create() {
@@ -49,7 +51,7 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
                 this.min, this.max);
 
         ADStarNodeUpdater<S, T> updater = new ADStarNodeUpdater<S, T>(
-                f.getCostFunction(), f.getHeuristicFunction(), f.getAccumulator(), this.scale,
+                f.getCostFunction(), f.getHeuristicFunction(), this.costAccumulator, this.scale,
                 this.epsilon);
 
         return new ADStar<S, T>(f.getInitialState(), f.getGoalState(),
