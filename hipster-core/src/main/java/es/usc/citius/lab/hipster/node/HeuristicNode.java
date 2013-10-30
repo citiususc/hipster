@@ -13,15 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package es.usc.citius.lab.hipster.node;
 
 /**
- * This interface defines a special type of {@link CostNode} with a method to
- * obtain a score. The score is used by the search algorithms to estimate the distance
- * to the goal.
+ * A heuristic node is a special type of {@link es.usc.citius.lab.hipster.node.CostNode} that 
+ * has associated a score. This value is used by the search algorithms to estimate the distance
+ * to the goal and do a more efficient exploration of the state space.
  *
- * @param <S>
+ * @param <S> class defining the state
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface HeuristicNode<S, T extends Comparable<T>> extends CostNode<S,T> {
-    T getScore();
+    
+	/**
+	 * Retrieves the estimated cost between the current state 
+	 * and the goal.
+	 * 
+	 * @return estimated cost to goal
+	 */
+	T getScore();
+
 }

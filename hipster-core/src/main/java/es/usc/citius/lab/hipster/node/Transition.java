@@ -52,8 +52,10 @@ import java.util.List;
  * using the (0,0) as the origin point.
  *
  * @param <S> class defining the state
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public class Transition<S> {
 
@@ -82,7 +84,7 @@ public class Transition<S> {
     }
 
     /**
-     * Builds a transition with only ending state
+     * Builds a transition with only a ending state.
      *
      * @param to ending state
      */
@@ -91,7 +93,7 @@ public class Transition<S> {
     }
 
     /**
-     * Returns the beginning state.
+     * Retrieves the beginning state of the transition.
      *
      * @return instance of the state
      */
@@ -100,7 +102,7 @@ public class Transition<S> {
     }
 
     /**
-     * Returns the ending state.
+     * Retrieves the ending state of the transition.
      *
      * @return instance of state
      */
@@ -109,10 +111,10 @@ public class Transition<S> {
     }
 
     /**
-     * Obtains a set of Transitions connectig the beginning state and a set of
-     * ending ones.
+     * Obtains a set of {@link es.usc.citius.lab.hipster.node.Transition} connecting the beginning 
+     * state and a set of ending ones.
      *
-     * @param <S>       class defining the state
+     * @param <S> class defining the state
      * @param fromState beginning transition state
      * @param toStates  set of ending transition states
      * @return iterable set of transitions connecting both states
@@ -123,22 +125,6 @@ public class Transition<S> {
             successors.add(new Transition<S>(fromState, state));
         }
         return successors;
-    }
-
-    public static class TransitionTo<S> {
-        private S from;
-
-        private TransitionTo(S from){
-            this.from = from;
-        }
-
-        public Transition<S> to(S to){
-            return new Transition<S>(from, to);
-        }
-    }
-
-    public static <S> TransitionTo from(S from){
-        return new TransitionTo<S>(from);
     }
 
     @Override

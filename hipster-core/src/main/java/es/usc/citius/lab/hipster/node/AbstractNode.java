@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.usc.citius.lab.hipster.node;
 
 import java.util.ArrayList;
@@ -20,23 +21,25 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Implements the basic operations for search nodes:
+ * AbstractNode is an implementation of {@link es.usc.citius.lab.hipster.node.Node} that
+ * adds support for the common operations of search nodes:
  * <ul>
- * <li> obtains the path from current state to the begin
- * <li> obtains the previous node to current
- * <li> obtains the {@link Transition} to following state
+ * 		<li> obtains the path between the beginning state and the current node
+ * 		<li> obtains the previous node to the current
+ * 		<li> obtains the incoming {@link es.usc.citius.lab.hipster.node.Transition} between
+ *			the parent node and the current one
  * </ul>
  *
  * @param <S> class defining the state
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public abstract class AbstractNode<S> implements Node<S> {
 
-    private Transition<S> state;
-    protected Node<S> previousNode = null;
+    protected Transition<S> transition;
+    protected Node<S> previousNode;
 
     /**
      * Default constructor: Requires the previous {@link Node} and the
@@ -47,22 +50,18 @@ public abstract class AbstractNode<S> implements Node<S> {
      */
     protected AbstractNode(Transition<S> transition, Node<S> previousNode) {
         this.previousNode = previousNode;
-        this.state = transition;
+        this.transition = transition;
     }
 
-    /**
-     * Generates the list of nodes from the current node to
-     * the first node.
-     *
-     * @return List with all nodes, where index 0 represents the first node of the path.
-     */
     public List<Node<S>> path() {
         List<Node<S>> path = new ArrayList<Node<S>>();
         Node<S> current = this;
+        //reverse iteration until the head is NULL
         while (current != null) {
             path.add(current);
             current = current.previousNode();
         }
+        //reverse the nodes to have the correct order
         Collections.reverse(path);
         return path;
     }
@@ -72,21 +71,35 @@ public abstract class AbstractNode<S> implements Node<S> {
     }
 
     public Transition<S> transition() {
-        return this.state;
+        return this.transition;
     }
 
+    /**
+     * Same as {@link AbstractNode#transition()}.
+     * 
+     * @return incoming {@link es.usc.citius.lab.hipster.node.Transition} between the parent node and the current one
+     * @deprecated will be removed in the next version
+     */
     public Transition<S> getState() {
-        return state;
+    	//TODO: remove in next version
+        return transition;
     }
 
+    /**
+     * Updates the incoming transition to the current node.
+     * 
+     * @param state new incoming transition to the node
+     */
     public void setState(Transition<S> state) {
-        this.state = state;
+    	//TODO: rename as setTransition()
+        this.transition = state;
     }
 
-    public Node<S> getPreviousNode() {
-        return previousNode;
-    }
-
+    /**
+     * Updates the previous node to the current.
+     * 
+     * @param previousNode new previous node
+     */
     public void setPreviousNode(Node<S> previousNode) {
         this.previousNode = previousNode;
     }
@@ -104,6 +117,7 @@ public abstract class AbstractNode<S> implements Node<S> {
      * @since 26-03-2013
      */
     public static <S> List<S> statesFrom(List<Node<S>> nodeList) {
+    	//TODO: remove this method from AbstractNode and place it in a separate helper
         List<S> stateList = new ArrayList<S>(nodeList.size());
         for (Node<S> node : nodeList) {
             stateList.add(node.transition().to());
