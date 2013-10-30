@@ -24,7 +24,6 @@ import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.jung.JungEdge;
 import es.usc.citius.lab.hipster.jung.JungMazeHeuristicProblem;
 import es.usc.citius.lab.hipster.util.maze.Maze2D;
-import es.usc.citius.lab.hipster.function.impl.Product;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch.Result;
@@ -168,7 +167,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = Algorithms.createADStar(createComponentFactory(maze), new Product(), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE).iterator();
+                it = Algorithms.createADStar(createComponentFactory(maze), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE).iterator();
                 //it= MazeUtils.adstar(maze, false);
                 goal = maze.getGoalLoc();
             }

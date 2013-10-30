@@ -22,8 +22,8 @@ import java.util.Iterator;
 
 /**
  * Factory interface to create iterative algorithm using {@link CostNode}.
- * @param <S> type of the states used by the algorithm
- * @param <T> type of the cost used by the algorithm
+ * @param <S> type of the states used by the algorithm.
+ * @param <N> {@link Node} handled by the algorithm.
  * @author Pablo Rodríguez Mier
  */
 public interface AlgorithmIteratorFactory<S, N extends Node<S>> {

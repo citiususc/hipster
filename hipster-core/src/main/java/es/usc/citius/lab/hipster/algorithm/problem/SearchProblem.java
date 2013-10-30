@@ -16,15 +16,13 @@
 
 package es.usc.citius.lab.hipster.algorithm.problem;
 
-import es.usc.citius.lab.hipster.function.CostFunction;
+
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 
 /**
  * Interface that represents a problem to solve. It defines the initial state,
  * the goal state (if required), the {@link TransitionFunction} used to calculate the
- * available movements from one state, the {@link CostFunction} to calculate the
- * cost of a transition, and the {@link BinaryOperation} used to accumulate the costs.
+ * available movements from each state.
  *
  * @author Pablo Rodríguez Mier
  */
@@ -49,18 +47,5 @@ public interface SearchProblem<S, T extends Comparable<T>> {
      */
     TransitionFunction<S> getTransitionFunction();
 
-    /**
-     * Cost function used to evaluate the cost of a transition
-     * @return cost function used to evaluate transitions
-     */
-    CostFunction<S, T> getCostFunction();
-
-    /**
-     * Accumulator function used to
-     * @return {@link BinaryOperation} used to accumulate the costs. For working
-     * with double numbers as costs, just return a {@link BinaryOperation#doubleAdditionOp()}
-     * TODO: Revise if this function can be moved to a different place
-     */
-    BinaryOperation<T> getAccumulator();
 
 }

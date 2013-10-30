@@ -16,7 +16,6 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
