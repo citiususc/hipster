@@ -17,15 +17,18 @@
 package es.usc.citius.lab.hipster.function;
 
 /**
- * Interface that must implement all heuristic functions to be used in search
- * processes.
+ * A heuristic function estimates the cost from reaching the nearest goal
+ * from the current state. The estimated cost is used by the heuristic-based
+ * search algorithms to do a more efficient exploration of the state space.
+ * A valid heuristic function must not overestimate the value of the real cost
+ * to guarantee that the algorithms will find the optimal solution.
  *
  * @param <S> class defining the state
  * @param <T> class defining the cost
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface HeuristicFunction<S, T> {
 

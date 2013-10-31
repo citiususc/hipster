@@ -21,35 +21,37 @@ import java.util.List;
 /**
  * Basic search structure. A node encapsulates a search state,
  * adding information about the transition used to reach the state
- * and the previous node. To retrieve the state associated with
- * the node, use {@code transition().to()}
+ * and the previous node. The state associated to the current node can 
+ * be retrieved using the method {@link #transition()}{@code .to()}. The methods
+ * {@link #previousNode()} and {@link #transition()}{@code .from()} can be used equally.
  *
  * @param <S> class defining the state
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface Node<S> {
 
     /**
-     * Builds the path from the begining state to the current one.
+     * Generates the ordered list of nodes with the path between the beginning state
+     * and the current node.
      *
-     * @return list of nodes that forms the path
+     * @return ordered List the nodes of the path
      */
     public List<Node<S>> path();
 
     /**
-     * Returns the previous node to the current
+     * Returns the previous node to the current.
      *
-     * @return instance of {@link Node}
+     * @return instance of {@link es.usc.citius.lab.hipster.node.Node}
      */
     public Node<S> previousNode();
 
     /**
-     * Returns the transition to access this node
-     *
-     * @return instance of {@link Transition}
+     * Retrieves the incoming transition of the current node.
+     * 
+     * @return incoming {@link es.usc.citius.lab.hipster.node.Transition} between the parent node and the current one
      */
     public Transition<S> transition();
 }

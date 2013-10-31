@@ -41,10 +41,10 @@ import es.usc.citius.lab.hipster.node.Transition;
  * </pre>
  *
  * @param <S> type of the state
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface TransitionFunction<S> {
 

@@ -17,25 +17,25 @@
 package es.usc.citius.lab.hipster.node;
 
 /**
- * Interface defining the factory to create instances
- * of {@link Node}.
+ * This interface defines the factory to instantiate {@link es.usc.citius.lab.hipster.node.Node} 
+ * elements. This allows different initializations for the same definition of node.
  *
  * @param <S> class defining the state
  * @param <N> class defining the node
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface NodeFactory<S, N extends Node<S>> {
 
     /**
-     * Builds a node from the current one and the incoming action
+     * Instantiates a node from the current one and the incoming action
      * to reach it.
      *
-     * @param from       incoming node
+     * @param from incoming node
      * @param transition incoming transition
-     * @return
+     * @return instantiated node
      */
     public N node(N from, Transition<S> transition);
 }

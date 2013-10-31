@@ -13,16 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package es.usc.citius.lab.hipster.node;
 
-import es.usc.citius.lab.hipster.node.Node;
-
 /**
- * Interface CostNode is a special type of node that defines a function
- * to retrieve the cost associated with it.
+ * This interface is a special type of {@link es.usc.citius.lab.hipster.node.Node} that
+ * stores the cost of accessing it from the beginning state.
  *
- * @param <S> State type
+ * @param <S> class defining the state
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface CostNode<S, T extends Comparable<T>> extends Node<S> {
+	
+	/**
+	 * Retrieves the accumulated cost between the beginning state and
+	 * the current node.
+	 * 
+	 * @return cost from start
+	 */
     T getCost();
+    
 }
