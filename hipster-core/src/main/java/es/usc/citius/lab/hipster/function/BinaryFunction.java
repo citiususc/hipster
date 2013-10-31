@@ -17,16 +17,44 @@
 package es.usc.citius.lab.hipster.function;
 
 /**
- * Defines a binary operation. The binary operation interface is
- * useful for defining abstract functions such as arithmetic functions
- * for the search algorithms. It takes two elements
- * and obtains a result of the same type.
+ * A binary operation takes two elements of the same type
+ * and combines them returning an element of the same type. 
+ * </p>
+ * This interface is useful to define abstract arithmetic functions 
+ * used by the search algorithms (i. e. cost addition) and avoid the explicit
+ * definition of the operations in the algorithm. When the cost definition changes,
+ * the binary function can be changed without modifying the implementation
+ * of the algorithms.
+ * </p>
+ * The abstract definition of binary operations requires to complete the method
+ * {@link #apply(Object, Object)}, which returns an object of the same type. Here is 
+ * an example for the {@link Double} addition operation:
+ * <pre>
+ *     {@code 
+ *     new BinaryFunction<Double>(){
+ *              Double apply(Double a, Double b){
+ *                  return a + b;
+ *              }
+ *          }
+ *     }
+ * </pre>
+ * 
+ * @param <T> type of the domain of the function
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- *
- * @param <T> operator class
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface BinaryFunction<T> {
+	
+	/**
+	 * Combination of two elements of the same type,
+	 * returning an element of the same type.
+	 * 
+	 * @param a first element
+	 * @param b second element
+	 * @return result of the combination
+	 */
     T apply(T a, T b);
+    
 }

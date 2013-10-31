@@ -19,21 +19,22 @@ package es.usc.citius.lab.hipster.function;
 import es.usc.citius.lab.hipster.node.Transition;
 
 /**
- * Interface that defines the function cost used to evaluate the cost of a
- * transition from {@code a} to {@code b}.
+ * The cost function evaluates a {@link es.usc.citius.lab.hipster.node.Transition}
+ * between states. A search algorithm will find the solution that minimizes the
+ * total cost of the function defined here.
  *
  * @param <S> class defining the state
  * @param <T> class defining the cost
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface CostFunction<S, T> {
 
     /**
-     * Calculates the cost of moving from the current state to the goal using a
-     * given<code>Transition</code>.
+     * Calculates the cost of a single change of state defined by 
+     * the {@link es.usc.citius.lab.hipster.node.Transition} between them.
      *
      * @param transition action to perform
      * @return cost of the change of state

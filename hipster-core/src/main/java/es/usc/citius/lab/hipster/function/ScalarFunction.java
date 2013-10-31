@@ -16,9 +16,19 @@
 package es.usc.citius.lab.hipster.function;
 
 /**
- * This interface is used to define abstract scalar functions.Example:
+ * A scalar function takes an object and modifies its magnitude by a 
+ * numeric factor without changing its type.
+ * </p>
+ * This interface can be used to do abstract definitions of the scaling
+ * operation for algorithms that need it without explicitly defining them
+ * inside the algorithms, making them easily replaceable when the cost definition
+ * changes.
+ * </p>
+ * The definition of scalar functions requires the implementation of the {@link #scale(Object, double)}.
+ * Here is an example for the {@link Double} scaling operation:
  * <pre>
- *     {@code new ScalarFunction<Double>(){
+ *     {@code 
+ *     new ScalarFunction<Double>(){
  *              Double scale(Double a, double b){
  *                  return a*b;
  *              }
@@ -29,8 +39,11 @@ package es.usc.citius.lab.hipster.function;
  * To create a default scalar function to operate with doubles,
  * simple use {@link es.usc.citius.lab.hipster.function.impl.Product}.
  *
- * @param <T> type of the domain of the function.
- * @author Pablo Rodríguez Mier
+ * @param <T> type of the domain of the function
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface ScalarFunction<T> {
     /**
