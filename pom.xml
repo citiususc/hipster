@@ -111,12 +111,28 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
+                    <docletArtifact>
+                        <groupId>com.google.doclava</groupId>
+                        <artifactId>doclava</artifactId>
+                        <version>1.0.5</version>
+                    </docletArtifact>
+                    <doclet>com.google.doclava.Doclava</doclet>
                     <!--
-                        Use a custom stylesheet. The stylesheet is an adaptation
-                        of the original JDK 7 stylesheet, copying some key designs from
-                        Mockito css http://github.com/mockito/mockito
+                      | bootclasspath required by Sun's JVM
                     -->
-                    <stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>
+                    <bootclasspath>${sun.boot.class.path}</bootclasspath>
+                    <additionalparam>
+                        -quiet
+                        -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+                        -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+                        -hdf project.name "${project.name}"
+                        -d ${project.build.directory}/apidocs
+                    </additionalparam>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <!--
+                      | Apple's JVM sometimes requires more memory
+                    -->
+                    <additionalJOption>-J-Xmx1024m</additionalJOption>
                 </configuration>
                 <executions>
                     <execution>
@@ -126,6 +142,12 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Plugin to generate reports of test coverage -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
             </plugin>
         </plugins>
     </build>
