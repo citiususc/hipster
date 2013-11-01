@@ -217,13 +217,6 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
         this.queue = queue;
     }
 
-
-    /**
-     * Returns the {@link NodeFactory} used by the algorithm to create
-     * new
-     *
-     * @return
-     */
     public NodeFactory<S, HeuristicNode<S, T>> getFactory() {
         return factory;
     }
