@@ -35,11 +35,14 @@ import java.util.Iterator;
 /**
  * Methods to obtain a search algorithm given the definition of the problem
  * to solve.
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
  * @see SearchProblem
  */
 public final class Algorithms {
 
     private Algorithms() {
+        throw new RuntimeException("Use the static methods of this class to create search algorithms instead");
     }
 
     public static final class Search<S, N extends Node<S>> implements Iterable<N>{
@@ -86,13 +89,22 @@ public final class Algorithms {
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
      * @param <S> state class
      * @param <T> cost type (for example, {@link Double}).
-     * @return new A-Star iterator that iterates over the {@link CostNode}
+     * @return new A-Star iterator that iterates over the {@link HeuristicNode}
      * @see AStar
      */
     public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createAStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
         return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
     }
 
+    /**
+     * Creates a {@literal A*} search algorithm using Doubles as the default cost type. This method is recommended
+     * for most cases.
+     *
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param <S> state class
+     * @return new A-Star search {@link Search} that iterates over the {@link HeuristicNode}.
+     * @see AStar
+     */
     public static <S> Search<S, HeuristicNode<S,Double>> createAStar(HeuristicSearchProblem<S, Double> problem) {
         return new Search<S, HeuristicNode<S,Double>>(new AStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
@@ -102,12 +114,19 @@ public final class Algorithms {
      * @param problem {@link SearchProblem} describing the elements of the search problem.
      * @param <S> state class
      * @param <T> cost type (for example, {@link Double}).
-     * @return
+     * @return new A-Star search {@link Search} that iterates over the {@link HeuristicNode}.
      */
     public static <S, T extends Comparable<T>> Search<S, HeuristicNode<S,T>> createDijkstra(InformedSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
         return new Search<S, HeuristicNode<S,T>>(new AStarIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
     }
 
+    /**
+     * Creates a Dijkstra algorithm using the same implementation of the {@literal A*} without heuristics, using
+     * double cost types.
+     * @param problem {@link SearchProblem} describing the elements of the search problem.
+     * @param <S> state class
+     * @return new Dijkstra search {@link Search} that iterates over the {@link HeuristicNode}.
+     */
     public static <S> Search<S, HeuristicNode<S,Double>> createDijkstra(InformedSearchProblem<S, Double> problem) {
         return new Search<S, HeuristicNode<S,Double>>(new AStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
@@ -118,13 +137,22 @@ public final class Algorithms {
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
      * @param <S> state class
      * @param <T> cost type (for example, {@link Double}).
-     * @return new BellmanFord iterator that iterates over the {@link CostNode}
+     * @return new BellmanFord {@link Search} that iterates over the {@link CostNode}
      * @see BellmanFord
      */
     public static <S, T extends Comparable<T>> Search<S, CostNode<S,T>> createBellmanFord(InformedSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator) {
         return new Search<S, CostNode<S,T>>(new BellmanFordIteratorFactory<S, T>(problem, costAccumulator), problem.getGoalState());
     }
 
+    /**
+     * Creates a <a href="en.wikipedia.org/wiki/Bellman–Ford_algorithm">Bellman-Ford</a> algorithm
+     * using double cost types.
+     *
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param <S> state class
+     * @return new BellmanFord {@link Search} that iterates over the {@link CostNode}
+     * @see BellmanFord
+     */
     public static <S> Search<S, CostNode<S,Double>> createBellmanFord(InformedSearchProblem<S, Double> problem) {
         return new Search<S, CostNode<S,Double>>(new BellmanFordIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
@@ -144,6 +172,15 @@ public final class Algorithms {
         return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon, min, max), problem.getGoalState());
     }
 
+    /**
+     * Creates an AD-Star algorithm using double cost types.
+     * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
+     * @param epsilon
+     * @param min
+     * @param max
+     * @param <S> state class
+     * @return
+     */
     public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon, Double min, Double max) {
         return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon, min, max), problem.getGoalState());
     }
