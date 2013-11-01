@@ -21,12 +21,14 @@ import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 public final class EightPuzzleExample {
 
@@ -167,6 +169,30 @@ public final class EightPuzzleExample {
         public String toString() {
             return Arrays.toString(this.positions);
         }
+
+    }
+
+    public static String getPrettyPath(List<EightPuzzleState> path){
+        // Print each row of all states
+        StringBuffer output = new StringBuffer();
+        for(int i=0; i < 3; i++){
+            String irow = "";
+            for(EightPuzzleState state : path){
+                irow += "| " + getTile(state, 0+i*3) + " " + getTile(state,1+i*3) + " " + getTile(state,2+i*3) + " |   ";
+            }
+            irow += "\n";
+            output.append(irow);
+        }
+        return output.toString();
+    }
+
+    public static String getTile(EightPuzzleState state, int position){
+        int number = state.positions[position];
+        if (number == 0){
+            return " ";
+        } else {
+            return new Integer(number).toString();
+        }
     }
 
     public static void main(String[] args){
@@ -213,7 +239,7 @@ public final class EightPuzzleExample {
         // Search!
         HeuristicNode<EightPuzzleState,Double> solution = Algorithms.createAStar(problem).search();
         // Print solution
-        System.out.println(solution.path());
-        System.out.println(solution.getCost());
+        System.out.println(getPrettyPath(AbstractNode.statesFrom(solution.path())));
+        System.out.println("Total movements: " + solution.getCost());
     }
 }
