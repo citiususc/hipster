@@ -8,8 +8,8 @@ def:default_search_box() ?>
                 <tr>
                   <td class="gsc-input">
                     <input id="search_autocomplete" class="gsc-input" type="text" size="33" autocomplete="off"
-                      title="search hipster docs" name="q"
-                      value="search hipster docs"
+                      title="search developer docs" name="q"
+                      value="search developer docs"
                       onFocus="search_focus_changed(this, true)"
                       onBlur="search_focus_changed(this, false)"
                       onkeydown="return search_changed(event, true, '<?cs var:toroot?>')"
