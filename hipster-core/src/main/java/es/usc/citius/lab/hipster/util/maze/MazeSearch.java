@@ -98,9 +98,9 @@ public final class MazeSearch {
             steps++;
             List<Node<Point>> nodePath = currentNode.path();
             List<Point> statePath = AbstractNode.statesFrom(nodePath);
-            clearOutput(20);
+            //clearOutput(20);
             System.out.println(getMazeStringSolution(maze, explored, statePath));
-            Thread.sleep(100);
+            Thread.sleep(50);
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
                 Double cost = currentNode.getCost();
                 r = new Result(statePath, cost);
