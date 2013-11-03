@@ -52,6 +52,10 @@ th {
     color: transparent;
 }
 
+#search-button:hover {
+    background-position: 0 -28px;
+}
+
 /* Scrollbar replacement. Original snippet from https://gist.github.com/devinrhode2/2573411 */
 ::-webkit-scrollbar {
     height: 5px;
