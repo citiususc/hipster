@@ -236,10 +236,12 @@ public final class EightPuzzleExample {
         // Create a search problem using all these elements. We can use the DefaultSearchProblem
         // implementation that uses double values.
         DefaultSearchProblem<EightPuzzleState> problem = new DefaultSearchProblem<EightPuzzleState>(initialState, goalState, transition, costFunction);
-        // Search!
-        HeuristicNode<EightPuzzleState,Double> solution = Algorithms.createAStar(problem).search();
+        // Search!.
+        Algorithms.Search.Result result = Algorithms.createAStar(problem).search();
         // Print solution
-        System.out.println(getPrettyPath(AbstractNode.statesFrom(solution.path())));
-        System.out.println("Total movements: " + solution.getCost());
+        System.out.println(getPrettyPath(result.getOptimalPath()));
+        System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
+        System.out.println("Total iterations: " + result.getIterations());
+        System.out.println("Total time: " + result.getStopwatch().toString());
     }
 }

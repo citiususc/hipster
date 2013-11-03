@@ -15,6 +15,7 @@
  */
 package es.usc.citius.lab.hipster.algorithm;
 
+import com.google.common.base.Stopwatch;
 import es.usc.citius.lab.hipster.algorithm.factory.*;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
@@ -44,10 +45,70 @@ public final class Algorithms {
         throw new RuntimeException("Use the static methods of this class to create search algorithms instead");
     }
 
+    /**
+     * Search class uses a {@link AlgorithmIteratorFactory} to cr
+     * @param <S>
+     * @param <N>
+     */
     public static final class Search<S, N extends Node<S>> implements Iterable<N>{
         private AlgorithmIteratorFactory<S, N> factory;
         private S goal;
 
+        /**
+         * Holds information about the search process.
+         */
+        public final class Result {
+            Stopwatch stopwatch;
+            int iterations;
+            N goalNode;
+            List<S> optimalPath;
+
+            public Result(N goalNode, List<S> optimalPath, int iterations, Stopwatch stopwatch) {
+                this.goalNode = goalNode;
+                this.optimalPath = optimalPath;
+                this.iterations = iterations;
+                this.stopwatch = stopwatch;
+            }
+
+            /**
+             * Returns a stopped {@link Stopwatch} with the total search time.
+             * Use stopwatch.toString() to print the formatted time.
+             * @return stopwatch with the total search time.
+             */
+            public Stopwatch getStopwatch() {
+                return stopwatch;
+            }
+
+            /**
+             * Number of iterations performed by the search algorithm.
+             * @return number of iterations.
+             */
+            public int getIterations() {
+                return iterations;
+            }
+
+            /**
+             * Last node expanded with the goal state. Use
+             * {@link es.usc.citius.lab.hipster.node.Node#path()} to obtain the
+             * full path from the initial node.
+             *
+             * @return goal node.
+             */
+            public N getGoalNode() {
+                return goalNode;
+            }
+
+            public List<S> getOptimalPath() {
+                return optimalPath;
+            }
+        }
+
+        /**
+         * Interface to listen the nodes explored during the search process.
+         * Use this interface with {@link Search#search(es.usc.citius.lab.hipster.algorithm.Algorithms.Search.SearchListener)}.
+         * @see Search#search(es.usc.citius.lab.hipster.algorithm.Algorithms.Search.SearchListener)
+         * @param <N>
+         */
         public interface SearchListener<N> {
             void handle(N node);
         }
@@ -57,26 +118,60 @@ public final class Algorithms {
             this.goal = goal;
         }
 
-        private N search(Iterator<N> it){
+        private Result search(Iterator<N> it){
+            int iteration = 0;
+            Stopwatch w = new Stopwatch().start();
+            N goal = null;
             while(it.hasNext()){
+                iteration++;
                 N node = it.next();
-                if (node.transition().to().equals(goal)){
-                    return node;
+                if (node.transition().to().equals(this.goal)){
+                    goal = node;
+                    break;
                 }
             }
-            return null;
+            w.stop();
+            return new Result(goal, AbstractNode.statesFrom(goal.path()), iteration, w);
         }
 
+        /**
+         * Runs the search and returns shortest path from
+         * the initial state to the goal state.
+         * @return list with states representing the path from the origin to goal state.
+         */
         public List<S> getOptimalPath(){
             Iterator<N> it = factory.create();
-            return AbstractNode.statesFrom(search(it).path());
+            return AbstractNode.statesFrom(search(it).goalNode.path());
         }
 
-        public N search(){
+        /**
+         * Executes the search algorithm and returns a {@link Result} class
+         * with the information of the search.
+         * @see Result
+         * @return Result instance with the search information.
+         */
+        public Result search(){
             Iterator<N> it = factory.create();
             return search(it);
         }
 
+        /**
+         * Executes the search algorithm and invokes the method
+         * {@link SearchListener#handle(Object)} passing the current
+         * explored node to the listener.
+         *
+         * <pre>
+         * {@code Search<String, Node<String>> searchAlgorithm;
+         *     searchAlgorithm.search(new SearchListener<String>(){
+         *          void handle(Node<String> node){
+         *              System.out.println("Current state: " + node.transition().to());
+         *          }
+         *     });
+         * }
+         * </pre>
+         *
+         * @param listener listener used to receive the explored nodes.
+         */
         public void search(SearchListener<N> listener){
             Iterator<N> it = factory.create();
             while(it.hasNext()){
