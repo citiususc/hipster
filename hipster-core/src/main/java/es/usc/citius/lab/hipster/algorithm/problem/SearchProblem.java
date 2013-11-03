@@ -26,7 +26,7 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
  *
  * @author Pablo Rodríguez Mier
  */
-public interface SearchProblem<S, T extends Comparable<T>> {
+public interface SearchProblem<S> {
 
     /**
      * Initial state (state used to start the search)
