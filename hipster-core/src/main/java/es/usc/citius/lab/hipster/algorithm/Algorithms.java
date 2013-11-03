@@ -15,10 +15,7 @@
  */
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.algorithm.factory.ADStarIteratorFactory;
-import es.usc.citius.lab.hipster.algorithm.factory.AStarIteratorFactory;
-import es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory;
-import es.usc.citius.lab.hipster.algorithm.factory.BellmanFordIteratorFactory;
+import es.usc.citius.lab.hipster.algorithm.factory.*;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
@@ -98,7 +95,7 @@ public final class Algorithms {
      * Creates a {@literal A*} search algorithm.
      *
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
-     * @param <S> state class
+     * @param <S> state type
      * @param <T> cost type (for example, {@link Double}).
      * @return new A-Star iterator that iterates over the {@link HeuristicNode}
      * @see AStar
@@ -112,7 +109,7 @@ public final class Algorithms {
      * for most cases.
      *
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
-     * @param <S> state class
+     * @param <S> state type
      * @return new A-Star search {@link Search} that iterates over the {@link HeuristicNode}.
      * @see AStar
      */
@@ -123,7 +120,7 @@ public final class Algorithms {
     /**
      * Creates a Dijkstra algorithm using the same implementation of the {@literal A*} without heuristics.
      * @param problem {@link SearchProblem} describing the elements of the search problem.
-     * @param <S> state class
+     * @param <S> state type
      * @param <T> cost type (for example, {@link Double}).
      * @return new A-Star search {@link Search} that iterates over the {@link HeuristicNode}.
      */
@@ -135,7 +132,7 @@ public final class Algorithms {
      * Creates a Dijkstra algorithm using the same implementation of the {@literal A*} without heuristics, using
      * double cost types.
      * @param problem {@link SearchProblem} describing the elements of the search problem.
-     * @param <S> state class
+     * @param <S> state type
      * @return new Dijkstra search {@link Search} that iterates over the {@link HeuristicNode}.
      */
     public static <S> Search<S, HeuristicNode<S,Double>> createDijkstra(InformedSearchProblem<S, Double> problem) {
@@ -160,7 +157,7 @@ public final class Algorithms {
      * using double cost types.
      *
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
-     * @param <S> state class
+     * @param <S> state type
      * @return new BellmanFord {@link Search} that iterates over the {@link CostNode}
      * @see BellmanFord
      */
@@ -175,7 +172,7 @@ public final class Algorithms {
      * @param epsilon
      * @param min
      * @param max
-     * @param <S> state class
+     * @param <S> state type
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
@@ -189,11 +186,22 @@ public final class Algorithms {
      * @param epsilon
      * @param min
      * @param max
-     * @param <S> state class
+     * @param <S> state type
      * @return
      */
     public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon, Double min, Double max) {
         return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon, min, max), problem.getGoalState());
+    }
+
+    /**
+     * Creates a <a href="http://en.wikipedia.org/wiki/Depth-first_search">Depth First Search algorithm (DFS)</a>. The DFS is an uninformed algorithm.
+     * DFS is complete (it always find a solution if exists)
+     * @param problem simple problem description using the initial state and the transition function.
+     * @param <S> state type.
+     * @return
+     */
+    public static <S> Search<S, Node<S>> createDepthFirstSearch(SearchProblem<S> problem) {
+        return new Search<S, Node<S>>(new DepthFirstSearchIteratorFactory<S>(problem), problem.getGoalState());
     }
 
 }

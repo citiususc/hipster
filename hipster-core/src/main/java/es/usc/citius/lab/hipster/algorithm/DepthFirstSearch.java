@@ -18,10 +18,13 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
+import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.node.impl.SimpleNode;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 
 
@@ -34,25 +37,96 @@ import java.util.Stack;
 public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
     private Stack<Node<S>> stack = new Stack<Node<S>>();
+    private Map<S, Node<S>> visited = new HashMap<S, Node<S>>();
     private TransitionFunction<S> successors;
+    private NodeFactory<S, Node<S>> factory;
+    private Node<S> next = null;
 
-    // required: Successors function
-    public DepthFirstSearch(final S initialState, TransitionFunction<S> successors) {
-        stack.add(new SimpleNode<S>(new Transition<S>(null, initialState), null));
+    public DepthFirstSearch(final S initialState, TransitionFunction<S> successors, NodeFactory<S, Node<S>> factory) {
+        Node<S> initialNode = factory.node(null, new Transition<S>(initialState));
         this.successors = successors;
+        this.factory = factory;
+        // Initialize data structures
+        stack.add(initialNode);
+        next = initialNode;
+    }
+
+    public DepthFirstSearch(final S initialState, TransitionFunction<S> successors) {
+        this.successors = successors;
+        this.factory = new NodeFactory<S, Node<S>>() {
+            @Override
+            public Node<S> node(Node<S> from, Transition<S> transition) {
+                return new SimpleNode<S>(transition, from);
+            }
+        };
+        Node<S> initialNode = factory.node(null, new Transition<S>(initialState));
+        // Initialize data structures
+        stack.add(initialNode);
+        next = initialNode;
     }
 
     public boolean hasNext() {
-        return !stack.isEmpty();
+        // If there is a valid next, return true
+        if (this.next != null){
+            return true;
+        } else {
+            // If next is not calculated, compute the next valid
+            Node<S> next = popNextUnvisitedNode();
+            this.next = next;
+            return next != null;
+        }
+    }
+
+    private Node<S> popNextUnvisitedNode(){
+        if (!stack.isEmpty()){
+            Node<S> next = stack.pop();
+            // Pop nodes if visited
+            while(visited.containsKey(next.transition().to())){
+                if (!stack.isEmpty()){
+                    next = stack.pop();
+                } else {
+                    return null;
+                }
+            }
+            return next;
+        }
+        return null;
+    }
+
+    private Node<S> popUnvisited(){
+        if (this.next != null){
+            Node<S> next = this.next;
+            // Put next to null to indicate that
+            // this node was consumed. Next call
+            // to hasNext has to compute the next
+            // node beforehand to check if there is
+            // another one valid.
+            this.next = null;
+            return next;
+        } else {
+            this.next = popNextUnvisitedNode();
+            return this.next;
+        }
     }
 
     public Node<S> next() {
-        Node<S> current = stack.pop();
-        for (Transition<S> successor : this.successors.from(current.transition().to())) {
-            stack.add(new SimpleNode<S>(successor, current));
+        // Take the next node from the stack.
+        Node<S> current = popUnvisited();
+        // Take the associated state
+        S currentState = current.transition().to();
+        // Explore the adjacent neighbors
+        for(Transition<S> successor : this.successors.from(currentState)){
+            // If the neighbor is still unexplored
+            if (!this.visited.containsKey(successor.to())){
+                // Create the associated neighbor
+                Node<S> successorNode = factory.node(current, successor);
+                this.stack.push(successorNode);
+            }
         }
+        this.visited.put(currentState, current);
         return current;
     }
+
 
     public void remove() {
         throw new UnsupportedOperationException();
