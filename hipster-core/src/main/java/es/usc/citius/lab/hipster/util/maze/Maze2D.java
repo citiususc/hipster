@@ -144,6 +144,12 @@ public class Maze2D {
         }
     }
 
+    /**
+     * Read a maze from a file in plain text.
+     * @param file file with the plain ascii text.
+     * @return a new Maze2D.
+     * @throws IOException
+     */
     public static Maze2D read(File file) throws IOException {
         ArrayList<String> array = new ArrayList<String>();
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -210,6 +216,12 @@ public class Maze2D {
         this.maze[row][column] = symbol.value();
     }
 
+    /**
+     * Replace all tiles inside the rectangle with the provided symbol.
+     * @param a point a of the rectangle.
+     * @param b point b of the rectangle.
+     * @param symbol symbol to be inserted in each tile.
+     */
     public void updateRectangle(Point a, Point b, Symbol symbol) {
         int xfrom = (a.x < b.x) ? a.x : b.x;
         int xto = (a.x > b.x) ? a.x : b.x;
@@ -222,22 +234,46 @@ public class Maze2D {
         }
     }
 
+    /**
+     * Puts a {@link Symbol#OCCUPIED} in the indicated point.
+     * @param p point to put an obstacle in.
+     */
     public void putObstacle(Point p) {
         updateLocation(p, Symbol.OCCUPIED);
     }
 
+    /**
+     * Puts a {@link Symbol#EMPTY} character in the indicated point.
+     * @param p point to be free.
+     */
     public void removeObstacle(Point p) {
         updateLocation(p, Symbol.EMPTY);
     }
 
+    /**
+     * Fill a rectangle defined by points a and b with occupied tiles.
+     * @param a point a of the rectangle.
+     * @param b point b of the rectangle.
+     */
     public void putObstacleRectangle(Point a, Point b) {
         updateRectangle(a, b, Symbol.OCCUPIED);
     }
 
+    /**
+     * Fill a rectangle defined by points a and b with empty tiles.
+     * @param a point a of the rectangle.
+     * @param b point b of the rectangle.
+     */
     public void removeObstacleRectangle(Point a, Point b) {
         updateRectangle(a, b, Symbol.EMPTY);
     }
 
+    /**
+     * Generates a string representation of this maze but replacing all the indicated
+     * points with the characters provided.
+     * @param replacements list with maps of point-character replacements.
+     * @return String representation of the maze with the replacements.
+     */
     public String getReplacedMazeString(List<Map<Point, Character>> replacements) {
         String[] stringMaze = toStringArray();
         for (Map<Point, Character> replacement : replacements) {
@@ -254,6 +290,13 @@ public class Maze2D {
         return output;
     }
 
+    /**
+     * Generates a string representation of this maze, with the indicated points replaced
+     * with the symbol provided.
+     * @param points points of the maze.
+     * @param symbol symbol to be inserted in each point.
+     * @return the string representation of the maze with the points changed.
+     */
     public String getStringMazeFilled(Collection<Point> points, char symbol) {
         Map<Point, Character> replacements = new HashMap<Point, Character>();
         for (Point p : points) {
@@ -268,6 +311,11 @@ public class Maze2D {
         return l.toString();
     }
 
+    /**
+     * Calculates whether a location is empty or not.
+     * @param loc point location to be tested.
+     * @return true if point is filled with {@link Symbol#EMPTY}. False otherwise.
+     */
     public boolean validLocation(Point loc) {
         try {
             return isFree(loc);
@@ -276,10 +324,20 @@ public class Maze2D {
         }
     }
 
+    /**
+     * Check if the provided point is in the maze bounds or outside.
+     * @param loc point to be tested.
+     * @return true if the point is in the maze.
+     */
     public boolean pointInBounds(Point loc) {
         return loc.x < this.columns && loc.y < this.rows;
     }
 
+    /**
+     * Return all neighbor empty points from a specific location point.
+     * @param loc source point
+     * @return collection of empty neighbor points.
+     */
     public Collection<Point> validLocationsFrom(Point loc) {
         Collection<Point> validMoves = new HashSet<Point>();
         // Check for all valid movements
@@ -328,6 +386,12 @@ public class Maze2D {
         return output;
     }
 
+    /**
+     * Returns a set of points that are different with respect this maze.
+     * Both mazes must have same size.
+     * @param to maze to be compared.
+     * @return set of different points.
+     */
     public Set<Point> diff(Maze2D to) {
         char[][] maze1 = this.toCharArray();
         char[][] maze2 = to.toCharArray();
@@ -342,18 +406,35 @@ public class Maze2D {
         return differentLocations;
     }
 
+    /**
+     * Get this maze as a byte array.
+     * @return
+     */
     public byte[][] getMaze() {
         return maze;
     }
 
+    /**
+     * Get the initial point (the point with the symbol {@link Symbol#START}) in this maze.
+     * @return
+     */
     public Point getInitialLoc() {
         return initialLoc;
     }
 
+    /**
+     * Get the goal point (the point with the symbol {@link Symbol#GOAL}) in this maze.
+     * @return
+     */
     public Point getGoalLoc() {
         return goalLoc;
     }
 
+    /**
+     * Generate an empty squared maze of the indicated size.
+     * @param size maze size.
+     * @return empty maze.
+     */
     public static Maze2D empty(int size) {
         byte[][] maze = new byte[size][size];
         for (int i = 0; i < size; i++) {

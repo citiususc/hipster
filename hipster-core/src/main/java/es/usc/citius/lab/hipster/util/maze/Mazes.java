@@ -1,13 +1,21 @@
 package es.usc.citius.lab.hipster.util.maze;
 
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
 
 /**
+ * Defines a set of maze examples.
+ *
  * @author Pablo Rodríguez Mier
  */
 public final class Mazes {
 
+    private Mazes(){
+
+    }
+
     // Minimal path: 5.656854249492381
+    /**
+     * 6x9 small maze with a shortest path distance of 5.656854249492381
+     */
     public static String[] testMaze1 = new String[]{
             "        ",
             "    X   ",
@@ -17,6 +25,9 @@ public final class Mazes {
             "        "};
 
     // Minimal path: 81.69848480983497
+    /**
+     * 20x32 maze with a shortest path distance of 81.69848480983497
+     */
     public static String[] testMaze2 = new String[]{
             "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
@@ -40,6 +51,9 @@ public final class Mazes {
             "XXXXXX            XXXXXXXXXXXXXX"};
 
     // Minimal path: 15.55634918610405
+    /**
+     * 13x33 maze with a shortest path distance of 15.55634918610405
+     */
     public static String[] testMaze3 = new String[]{
             "                      O          ",
             "                                 ",
@@ -56,6 +70,9 @@ public final class Mazes {
             "                                 "};
 
     // Minimal cost: 27.07106781186548
+    /**
+     * 13x33 maze with a shortest path distance of 27.07106781186548
+     */
     public static String[] testMaze4 = new String[]{
             "                      O          ",
             "                                 ",
@@ -71,6 +88,9 @@ public final class Mazes {
             "           @                     ",
             "                                 "};
     // Minimal cost: 34.14213562373095
+    /**
+     * 13x33 maze with a shortest path distance of 34.14213562373095
+     */
     public static String[] testMaze5 = new String[]{
             "                  X   O          ",
             "                  X              ",
@@ -86,7 +106,9 @@ public final class Mazes {
             "           @                     ",
             "                                 "};
 
-
+    /**
+     * ASCII Maze examples with the shortest path distance.
+     */
     public enum Example {
         MAZE1(new Maze2D(testMaze1),5.656854249492381),
         MAZE2(new Maze2D(testMaze2),81.69848480983497),
