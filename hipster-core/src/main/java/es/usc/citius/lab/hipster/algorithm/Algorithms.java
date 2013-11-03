@@ -25,12 +25,14 @@ import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.function.impl.ScalarOperation;
+import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Methods to obtain a search algorithm given the definition of the problem
@@ -58,8 +60,7 @@ public final class Algorithms {
             this.goal = goal;
         }
 
-        public N search(){
-            Iterator<N> it = factory.create();
+        private N search(Iterator<N> it){
             while(it.hasNext()){
                 N node = it.next();
                 if (node.transition().to().equals(goal)){
@@ -67,6 +68,16 @@ public final class Algorithms {
                 }
             }
             return null;
+        }
+
+        public List<S> getOptimalPath(){
+            Iterator<N> it = factory.create();
+            return AbstractNode.statesFrom(search(it).path());
+        }
+
+        public N search(){
+            Iterator<N> it = factory.create();
+            return search(it);
         }
 
         public void search(SearchListener<N> listener){
