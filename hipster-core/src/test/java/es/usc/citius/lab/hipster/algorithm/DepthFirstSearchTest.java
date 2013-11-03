@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DepthFirstSearchTest {
 
@@ -50,7 +52,27 @@ public class DepthFirstSearchTest {
         tree.get("B").addAll(Arrays.asList("E","F"));
         tree.get("E").add("G");
         tree.get("C").add("H");
-        run(tree, "A", new String[]{"A","B","E","G","F","C","H","D"});
+        validate(dfs(tree, "A"), new String[]{"A", "B", "E", "G", "F", "C", "H", "D"});
+    }
+
+    @Test
+    public void consistentHasNext(){
+        final ListMultimap<String, String> graph = ArrayListMultimap.create();
+        graph.get("A").add("B");
+        DepthFirstSearch<String> dfs = dfs(graph, "A");
+        assertTrue(dfs.hasNext());
+        dfs.next();
+        assertTrue(dfs.hasNext());
+        dfs.next();
+        assertFalse(dfs.hasNext());
+    }
+
+    @Test
+    public void noSuccessors(){
+        final ListMultimap<String, String> graph = ArrayListMultimap.create();
+        DepthFirstSearch<String> dfs = dfs(graph, "A");
+        dfs.next();
+        assertFalse(dfs.hasNext());
     }
 
     @Test
@@ -63,10 +85,10 @@ public class DepthFirstSearchTest {
         graph.get("C").addAll(Arrays.asList("D","A"));
         graph.get("D").addAll(Arrays.asList("A","C","G"));
         graph.get("G").add("D");
-        run(graph, "A", new String[]{"A","B","E","F","C","D","G"});
+        validate(dfs(graph, "A"), new String[]{"A", "B", "E", "F", "C", "D", "G"});
     }
 
-    private void run(final Multimap<String, String> graph, String initial, String[] expected){
+    private DepthFirstSearch<String> dfs(final Multimap<String, String> graph, String initial){
         TransitionFunction<String> tf = new TransitionFunction<String>() {
             @Override
             public Iterable<? extends Transition<String>> from(String current) {
@@ -78,7 +100,10 @@ public class DepthFirstSearchTest {
             }
         };
 
-        DepthFirstSearch<String> dfs = new DepthFirstSearch<String>(initial, tf);
+        return new DepthFirstSearch<String>(initial, tf);
+    }
+
+    private void validate(DepthFirstSearch<String> dfs,String[] expected){
         int i = 0;
         while(dfs.hasNext()){
             Node<String> node = dfs.next();
