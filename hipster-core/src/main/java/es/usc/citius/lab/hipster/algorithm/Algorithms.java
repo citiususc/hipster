@@ -271,8 +271,8 @@ public final class Algorithms {
      * @param <T> cost type (for example, {@link Double}).
      * @return
      */
-    public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon, T min, T max) {
-        return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon, min, max), problem.getGoalState());
+    public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon) {
+        return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon), problem.getGoalState());
     }
 
     /**
@@ -284,8 +284,8 @@ public final class Algorithms {
      * @param <S> state type
      * @return
      */
-    public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon, Double min, Double max) {
-        return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon, min, max), problem.getGoalState());
+    public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon) {
+        return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon), problem.getGoalState());
     }
 
     /**

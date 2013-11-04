@@ -88,7 +88,7 @@ public class ADStarMazeTest {
     }
 
     private void execute(Mazes.Example example, boolean heuristic) {
-        Iterator<ADStarNode<Point,Double>> it = Algorithms.createADStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), 1.0d, 0.0d, Double.MAX_VALUE).iterator();
+        Iterator<ADStarNode<Point,Double>> it = Algorithms.createADStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), 1.0d).iterator();
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
         assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.000000001);
     }
