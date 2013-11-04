@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <name>hipster</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>https://bitbucket.org/hipster/hipster/</url>
+    <url>http://github.com/pablormier/hipster</url>
     <modules>
         <module>hipster-collections</module>
         <module>hipster-core</module>
@@ -26,8 +26,8 @@
         <url>http://citius.usc.es</url>
     </organization>
     <issueManagement>
-        <system>bitbucket.org</system>
-        <url>https://bitbucket.org/adrian_gonzalez/hipster</url>
+        <system>GitHub</system>
+        <url>http://github.com/pablormier/hipster/issues</url>
     </issueManagement>
     <inceptionYear>2013</inceptionYear>
     <licenses>
@@ -41,9 +41,9 @@
         <maven>3.0.3</maven>
     </prerequisites>
     <scm>
-        <connection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</connection>
-        <developerConnection>scm:git:ssh://git@bitbucket.org:hipster/hipster.git</developerConnection>
-        <url>https://hipster@bitbucket.org/hipster/hipster.git</url>
+        <connection>scm:git:git@github.com:pablormier/hipster.git</connection>
+        <developerConnection>scm:git:git@github.com:pablormier/hipster.git</developerConnection>
+        <url>scm:git:git@github.com:pablormier/hipster.git</url>
     </scm>
     <developers>
         <developer>
