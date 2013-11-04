@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.usc.citius.lab.hipster.algorithm;
 
 import com.google.common.base.Stopwatch;
@@ -35,6 +36,7 @@ import java.util.List;
 /**
  * Methods to obtain a search algorithm given the definition of the problem
  * to solve.
+ * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @since 0.1.0
  * @see SearchProblem
@@ -106,6 +108,7 @@ public final class Algorithms {
         /**
          * Interface to listen the nodes explored during the search process.
          * Use this interface with {@link Search#search(es.usc.citius.lab.hipster.algorithm.Algorithms.Search.SearchListener)}.
+         * 
          * @see Search#search(es.usc.citius.lab.hipster.algorithm.Algorithms.Search.SearchListener)
          * @param <N>
          */
@@ -137,6 +140,7 @@ public final class Algorithms {
         /**
          * Runs the search and returns shortest path from
          * the initial state to the goal state.
+         * 
          * @return list with states representing the path from the origin to goal state.
          */
         public List<S> getOptimalPath(){
@@ -147,6 +151,7 @@ public final class Algorithms {
         /**
          * Executes the search algorithm and returns a {@link Result} class
          * with the information of the search.
+         * 
          * @see Result
          * @return Result instance with the search information.
          */
@@ -264,12 +269,11 @@ public final class Algorithms {
      * Creates an AD-Star algorithm.
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
      * @param scale {@link ScalarFunction} used to perform internal scale operations to scale the cost type used
-     * @param epsilon
-     * @param min
-     * @param max
+     * @param epsilon heuristic inflation parameter
+     * 
      * @param <S> state type
      * @param <T> cost type (for example, {@link Double}).
-     * @return
+     * @return ADStar iterator with custom cost definition
      */
     public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon) {
         return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon), problem.getGoalState());
@@ -277,12 +281,11 @@ public final class Algorithms {
 
     /**
      * Creates an AD-Star algorithm using double cost types.
+     * 
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
      * @param epsilon
-     * @param min
-     * @param max
-     * @param <S> state type
-     * @return
+     * @param <S> class defining the state
+     * @return ADStar iterator with Double cost
      */
     public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon) {
         return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon), problem.getGoalState());
@@ -291,9 +294,10 @@ public final class Algorithms {
     /**
      * Creates a <a href="http://en.wikipedia.org/wiki/Depth-first_search">Depth First Search algorithm (DFS)</a>. The DFS is an uninformed algorithm.
      * DFS is complete (it always find a solution if exists)
+     * 
      * @param problem simple problem description using the initial state and the transition function.
-     * @param <S> state type.
-     * @return
+     * @param <S> class defining the state
+     * @return 
      */
     public static <S> Search<S, Node<S>> createDepthFirstSearch(SearchProblem<S> problem) {
         return new Search<S, Node<S>>(new DepthFirstSearchIteratorFactory<S>(problem), problem.getGoalState());

@@ -27,12 +27,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
-
 /**
- * Very basic implementation of the Depth-First-Search (DFS) algorithm using
+ * Implementation of the Depth-First-Search (DFS) algorithm using
  * a {@link Stack} as the underlying data structure.
  *
- * @param <S> state type.
+ * @param <S> class defining the state
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
  */
 public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
@@ -42,6 +44,13 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
     private NodeFactory<S, Node<S>> factory;
     private Node<S> next = null;
 
+    /**
+     * Constructor for DFS using a custom node factory.
+     * 
+     * @param initialState state used as root of the exploration
+     * @param successors function to generate the successors of a state
+     * @param factory component to generate node instances from states
+     */
     public DepthFirstSearch(final S initialState, TransitionFunction<S> successors, NodeFactory<S, Node<S>> factory) {
         Node<S> initialNode = factory.node(null, new Transition<S>(initialState));
         this.successors = successors;
@@ -51,6 +60,13 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         next = initialNode;
     }
 
+    /**
+     * Constructor for DFS when the node factory is not specified. A execution based on
+     * {@link SimpleNode} is used in this case.
+     * 
+     * @param initialState state used as root of the exploration
+     * @param successors function to generate the successors of a state
+     */
     public DepthFirstSearch(final S initialState, TransitionFunction<S> successors) {
         this.successors = successors;
         this.factory = new NodeFactory<S, Node<S>>() {
@@ -65,6 +81,10 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         next = initialNode;
     }
 
+    /**
+     * Returns true if there are unvisited nodes in the graph.
+     */
+    @Override
     public boolean hasNext() {
         // If there is a valid next, return true
         if (this.next != null){
@@ -77,6 +97,11 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         }
     }
 
+    /**
+     * Returns the next unvisited node of the graph.
+     * 
+     * @return next node to visit
+     */
     private Node<S> popNextUnvisitedNode(){
         if (!stack.isEmpty()){
             Node<S> next = stack.pop();
@@ -93,6 +118,11 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         return null;
     }
 
+    /**
+     * Returns the current unvisited node of the graph.
+     * 
+     * @return current node
+     */
     private Node<S> popUnvisited(){
         if (this.next != null){
             Node<S> next = this.next;
@@ -127,7 +157,10 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         return current;
     }
 
-
+    /**
+     * Unsupported operation.
+     */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException();
     }

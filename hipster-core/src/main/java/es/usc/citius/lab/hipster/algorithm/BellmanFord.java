@@ -32,9 +32,11 @@ import java.util.Queue;
  * the shortest path from a source node to all reachable nodes. This is
  * the preferred algorithm when negative weights are allowed.
  *
- * @param <S> state type
- * @param <T> cost type used to compare different nodes
- * @author Pablo Rodríguez Mier
+ * @param <S> class defining the state
+ * @param <T> class defining the cost
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
  */
 public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNode<S, T>> {
 
@@ -43,7 +45,12 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
     private Queue<S> queue;
     private Map<S, CostNode<S, T>> explored;
 
-
+    /**
+     * 
+     * @param initialState
+     * @param transition
+     * @param builder
+     */
     public BellmanFord(S initialState, TransitionFunction<S> transition, NodeFactory<S, CostNode<S, T>> builder) {
         this.factory = builder;
         this.transition = transition;
@@ -54,10 +61,19 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
         this.explored.put(initialState, initialNode);
     }
 
+    /**
+     * Returns true if the node processing queue is not empty.
+     */
     public boolean hasNext() {
         return !this.queue.isEmpty();
     }
 
+    /**
+     * Assigns a node to the processing queue and adds it to the 
+     * explored set of nodes.
+     *  
+     * @param node node to update the queue status
+     */
     private void enqueue(CostNode<S, T> node) {
         S state = node.transition().to();
         if (!this.queue.contains(state)) {
@@ -66,6 +82,12 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
         this.explored.put(state, node);
     }
 
+    /**
+     * Removes the head of the processing queue and
+     * returns the corresponding node.
+     * 
+     * @return node of the processing queue head
+     */
     private CostNode<S, T> dequeue() {
         S state = this.queue.poll();
         return this.explored.get(state);
@@ -97,6 +119,9 @@ public class BellmanFord<S, T extends Comparable<T>> implements Iterator<CostNod
         return current;
     }
 
+    /**
+     * Operation not supported.
+     */
     public void remove() {
         throw new UnsupportedOperationException();
     }

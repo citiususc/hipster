@@ -33,18 +33,30 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
- * <p>Iterative implementation of the Anytime Dynamic A* (AD*) search algorithm.</p>
+ * <p>Iterative implementation of the forward Anytime Dynamic A* (AD*-f) search algorithm.</p>
  *
- * <a href="http://www-cgi.cs.cmu.edu/afs/cs.cmu.edu/Web/People/maxim/files/ad_icaps05.pdf">Original paper</a>:
- * Maxim Likhachev, David Ferguson, Geoffrey Gordon, Anthony (Tony) Stentz, and Sebastian Thrun,
- * <b>"Anytime Dynamic A*: An Anytime, Replanning Algorithm"</b>
- * <i>Proceedings of the International Conference on Automated Planning and Scheduling (ICAPS), June, 2005.</i>
+ * <p>AD* is an anytime, dynamic search algorithm. It is able to obtain suboptimal-bounded solutions, 
+ * tuning the quality of the solution based on the available search time (this is done by adjusting
+ * the heuristic inflation parameter, epsilon). This algorithm is executed
+ * iteratively improving the quality of the solution and reusing previous search efforts. The algorithm
+ * also takes into account the changes produced over the graph arc costs to incrementally repair
+ * the previous solution. AD* provides anytime results and an efficient
+ * way to solve dynamic search problems.</p>
+ * 
+ * <p>This is the forward implementation of AD*, the algorithm starts exploring the state space
+ * from the beginning state and trying to reach a goal state (or multiple ones).</p>
  *
- * @author Adrián González Sieira
- * @param <S> class that defines the states
- * @param <T> cost type used to compute the costs.
- * @since 26-03-2013
- * @version 1.0
+ * <p><u>Reference</u>:
+ * </br>Maxim Likhachev, David Ferguson, Geoffrey Gordon, Anthony (Tony) Stentz, and Sebastian Thrun,
+ * <b><a href="http://www-cgi.cs.cmu.edu/afs/cs.cmu.edu/Web/People/maxim/files/ad_icaps05.pdf">
+ * "Anytime Dynamic A*: An Anytime, Replanning Algorithm"</a></b>
+ * <i>Proceedings of the International Conference on Automated Planning and Scheduling (ICAPS), June, 2005.</i></p>
+ *
+ * @param <S> class defining the state
+ * @param <T> class defining the cost
+ *
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
 
@@ -62,14 +74,33 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     private Map<S, ADStarNode<S, T>> incons;
     private Queue<ADStarNode<S, T>> queue;
 
-    
+    /**
+     * Constructor to instantiate ADStar with a single goal state.
+     * 
+     * @param begin beginning state
+     * @param goal goal state
+     * @param successors function that generates the successors of a state
+     * @param predecessors function that generates the predecessors of a state
+     * @param builder component to obtain instances of nodes
+     * @param updater component to update the cost values of nodes already created
+     */
     public ADStar(S begin, S goal, TransitionFunction<S> successors, 
     		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
     		ADStarNodeUpdater<S, T> updater) {
     	this(begin, Collections.singleton(goal), successors, predecessors, builder, updater);
     }
     
-    
+    /**
+     * Constructor to instantiate ADStar with multiple goal states. The algorithm will find first the 
+     * path between the begin and the nearest goal.
+     * 
+     * @param begin beginning state
+     * @param goals collection of goal states
+     * @param successors function that generates the successors of a state
+     * @param predecessors function that generates the predecessors of a state
+     * @param builder component to obtain instances of nodes
+     * @param updater component to update the cost values of nodes already created
+     */
     public ADStar(S begin, Collection<S> goals, TransitionFunction<S> successors, 
     		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
     		ADStarNodeUpdater<S, T> updater) {
@@ -154,9 +185,11 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     }
     
     /**
+     * Retrieves a map with the predecessors states and the node associated
+     * to each predecessor state.
      * 
-     * @param state
-     * @return 
+     * @param state current state to calculate predecessors of
+     * @return map pairs of <state, node> with the prececessors of the state
      */
     private Map<Transition<S>, ADStarNode<S, T>> predecessorsMap(S state){
         //Map<Transition, Node> containing predecessors relations

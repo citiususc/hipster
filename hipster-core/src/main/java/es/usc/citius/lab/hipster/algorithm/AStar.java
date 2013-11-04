@@ -38,7 +38,9 @@ import java.util.*;
  *
  * @param <S> state type
  * @param <T> cost type
- * @author Pablo Rodríguez Mier
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
  */
 public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode<S, T>>, Iterator<HeuristicNode<S, T>> {
 
@@ -49,7 +51,14 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
     private TransitionFunction<S> successors;
     private NodeFactory<S, HeuristicNode<S, T>> factory;
 
-
+    /**
+     * Default constructor for ADStar. Requires the initial state, the successor function to generate
+     * the neighbor states of a current one and the factory to instantiate new nodes.
+     * 
+     * @param initialState state used as start
+     * @param transitionFunction function that retrieves the neighbors of a state
+     * @param factory component to obtain the instance of a node from a state
+     */
     public AStar(S initialState, TransitionFunction<S> transitionFunction, NodeFactory<S, HeuristicNode<S, T>> factory) {
         this.initialState = initialState;
         this.open = new HashMap<S, HeuristicNode<S, T>>();
@@ -62,6 +71,9 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
         this.open.put(this.initialState, initialNode);
     }
 
+    /**
+     * Returns true if open queue is not empty.
+     */
     public boolean hasNext() {
         return !open.values().isEmpty();
     }
