@@ -167,7 +167,7 @@ public class MazeBenchmarkTest {
             Point goal;
 
             public void initialize(Maze2D maze) {
-                it = Algorithms.createADStar(createComponentFactory(maze), 1.0d, Double.MIN_VALUE, Double.MAX_VALUE).iterator();
+                it = Algorithms.createADStar(createComponentFactory(maze), 1.0d).iterator();
                 //it= MazeUtils.adstar(maze, false);
                 goal = maze.getGoalLoc();
             }
