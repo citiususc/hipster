@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.usc.citius.lab.hipster.algorithm.factory;
 
+package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.ADStar;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
@@ -27,6 +27,17 @@ import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 
 import java.util.Iterator;
 
+/**
+ * This class is an implementation of {@link es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory}
+ * to obtain the the {@link es.usc.citius.lab.hipster.algorithm.ADStar} iterator to solve a search problem
+ * given its definition.
+ *
+ * @param <S> class defining the state
+ * @param <T> class defining the cost
+ * 
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
+ */
 public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, ADStarNode<S,T>> {
     private final HeuristicSearchProblem<S, T> f;
@@ -36,10 +47,20 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
     private T max;
     private double epsilon;
 
-    public ADStarIteratorFactory(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon, T min, T max) {
+    /**
+     * Main constructor for ADStar factory that takes the definition of a heuristic problem
+     * the accumulation operation and the scaling operations for the cost type and the sub-optimal
+     * bounded value to do the search.
+     * 
+     * @param problem heuristic problem definition
+     * @param costAccumulator accumulation operation for the cost type
+     * @param scale scaling operation for the cost type
+     * @param epsilon sub-optimal bounded value to do the search
+     */
+    public ADStarIteratorFactory(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon) {
         this.f = problem;
-        this.max = max;
-        this.min = min;
+        this.max = costAccumulator.getMaxElem();
+        this.min = costAccumulator.getIdentityElem();
         this.epsilon = epsilon;
         this.scale = scale;
         this.costAccumulator = costAccumulator;
