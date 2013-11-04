@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <name>hipster</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>https://bitbucket.org/hipster/hipster/</url>
+    <url>http://github.com/pablormier/hipster</url>
     <modules>
         <module>hipster-collections</module>
         <module>hipster-core</module>
