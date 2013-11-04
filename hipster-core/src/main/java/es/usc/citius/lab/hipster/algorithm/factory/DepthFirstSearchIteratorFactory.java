@@ -16,7 +16,6 @@
 
 package es.usc.citius.lab.hipster.algorithm.factory;
 
-
 import es.usc.citius.lab.hipster.algorithm.DepthFirstSearch;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.node.Node;
@@ -26,9 +25,25 @@ import es.usc.citius.lab.hipster.node.impl.SimpleNode;
 
 import java.util.Iterator;
 
+/**
+ * Implementation of {@link es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory}
+ * to obtain iterators of {@link es.usc.citius.lab.hipster.algorithm.DepthFirstSearch}. As the algorithm
+ * does not involve cost operations only requires the basic definition of the search problem.
+ * 
+ * @param <S> class defining the state
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
+ */
 public class DepthFirstSearchIteratorFactory<S> implements AlgorithmIteratorFactory<S,Node<S>> {
     private SearchProblem<S> problem;
 
+    /**
+     * Default constructor for the Depth First Search factory. Only the definition of the problem is
+     * needed to instantiate the iterator.
+     * 
+     * @param problem search problem definition
+     */
     public DepthFirstSearchIteratorFactory(SearchProblem<S> problem){
         this.problem = problem;
     }

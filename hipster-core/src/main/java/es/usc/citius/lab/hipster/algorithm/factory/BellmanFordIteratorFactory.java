@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.usc.citius.lab.hipster.algorithm.factory;
 
 import es.usc.citius.lab.hipster.algorithm.BellmanFord;
@@ -24,11 +25,28 @@ import es.usc.citius.lab.hipster.node.impl.HeuristicNodeImplFactory;
 
 import java.util.Iterator;
 
+/**
+ * Implementation of {@link es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory}
+ * to obtain {@link es.usc.citius.lab.hipster.algorithm.BellmanFord} iterator instances. 
+ * 
+ * @param <S> class defining the state
+ * @param <T> class defining the cost
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @since 0.1.0
+ */
 public class BellmanFordIteratorFactory<S, T extends Comparable<T>> implements
         AlgorithmIteratorFactory<S, CostNode<S,T>> {
     private final InformedSearchProblem<S, T> searchProblem;
     private final BinaryOperation<T> costAccumulator;
 
+    /**
+     * Default constructor for the Bellman-Ford factory that takes the definition of a informed
+     * search problem and the accumulation operation for the cost type.
+     * 
+     * @param searchProblem informed search problem definition
+     * @param costAccumulator accumulation operation for the cost type
+     */
     public BellmanFordIteratorFactory(
             InformedSearchProblem<S, T> searchProblem, BinaryOperation<T> costAccumulator) {
         this.searchProblem = searchProblem;

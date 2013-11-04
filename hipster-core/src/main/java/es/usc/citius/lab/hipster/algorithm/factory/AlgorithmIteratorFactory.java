@@ -21,16 +21,23 @@ import es.usc.citius.lab.hipster.node.Node;
 import java.util.Iterator;
 
 /**
- * Factory interface to create iterative algorithm using {@link CostNode}.
- * @param <S> type of the states used by the algorithm.
- * @param <N> {@link Node} handled by the algorithm.
- * @author Pablo Rodríguez Mier
+ * Factory interface to easily instantiate iterative algorithms using {@link CostNode}.
+ * The usage of the factory will hide the unnecessary complexity instantiation for typical problems where
+ * low-level customizations supported by the library are not used.
+ * 
+ * @param <S> class defining the state
+ * @param <N> subclass of {@link es.usc.citius.lab.hipster.node.Node} handled by the algorithm
+ * 
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @since 0.1.0
  */
 public interface AlgorithmIteratorFactory<S, N extends Node<S>> {
 
     /**
-     * Create a new iterative algorithm
-     * @return iterator that iterates over {@link CostNode} nodes
+     * Instantiates a new iterative search algorithm with the passed arguments.
+     * 
+     * @return search iterator over {@link es.usc.citius.lab.hipster.node.Node}
      * TODO: change return type
      */
     Iterator<N> create();
