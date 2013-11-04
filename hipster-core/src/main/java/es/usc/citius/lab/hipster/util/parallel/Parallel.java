@@ -151,15 +151,15 @@ public final class Parallel {
     }
 
     /**
-     * @param <E>
-     * @param <V>
+     * Class to generate a parallelized version of the for each loop.
+     * @param <E> elements to iterate over.
+     * @param <V> processed element type result.
      */
     public static class ForEach<E, V> implements F<F<E, V>, TaskHandler<V>> {
         // Source elements
         private Iterable<E> elements;
         // Executor used to invoke concurrent tasks. By default it uses as many
-        // threads
-        // as processors available
+        // threads as processors available
         private ExecutorService executor = Executors.newFixedThreadPool(Runtime
                 .getRuntime().availableProcessors());
 
@@ -258,7 +258,8 @@ public final class Parallel {
     }
 
     /**
-     * Perform a parallel iteration, similar to a for(i=from;i<to;i++).
+     * Perform a parallel iteration, similar to {@code for(i=from;i<to;i++)}
+     * but launching one thread per iteration.
      *
      * @param from   starting index
      * @param to     upper bound
