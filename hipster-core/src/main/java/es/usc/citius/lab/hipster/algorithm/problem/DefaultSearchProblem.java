@@ -81,4 +81,28 @@ public class DefaultSearchProblem<S> implements HeuristicSearchProblem<S, Double
     public HeuristicFunction<S, Double> getHeuristicFunction() {
         return this.heuristicFunction;
     }
+
+    public void setInitialState(S initialState) {
+        this.initialState = initialState;
+    }
+
+    public void setGoalState(S goalState) {
+        this.goalState = goalState;
+    }
+
+    public void setTransitionFunction(TransitionFunction<S> transitionFunction) {
+        this.transitionFunction = transitionFunction;
+    }
+
+    public void setCostFunction(CostFunction<S, Double> costFunction) {
+        this.costFunction = costFunction;
+    }
+
+    public void setNodeFactory(NodeFactory<S, HeuristicNode<S, Double>> nodeFactory) {
+        this.nodeFactory = nodeFactory;
+    }
+
+    public void setHeuristicFunction(HeuristicFunction<S, Double> heuristicFunction) {
+        this.heuristicFunction = heuristicFunction;
+    }
 }
