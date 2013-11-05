@@ -39,7 +39,7 @@ import java.util.concurrent.*;
  * </pre>
  *
  * @author Pablo Rodríguez Mier
- * @version 13.01, 26 Jan 2013
+ * @since 0.1.0
  */
 public final class Parallel {
 
@@ -193,19 +193,20 @@ public final class Parallel {
         }
 
         /**
+         *
          * Encapsulates the ForEach instance into a Callable that retrieves a
-         * TaskHandler with the invoked tasks. <br>
-         * Example: <br>
-         * <p/>
+         * TaskHandler with the invoked tasks. Example:
+         *
          * <pre>
-         * Collection&lt;Double&gt; numbers = new Collection&lt;Double&gt;(...);
-         * Callable&lt;TaskHandler&lt;V&gt;&gt; forEach = new ForEach&lt;Double, String&gt;(numbers)
-         * 		.prepare(new F&lt;Double, String&gt;() {
-         * 			String apply(Double e) {
-         * 				return e.toString();
-         *            }
-         *        });
-         * forEach.call().values();
+         *     {@code Collection<Double> numbers = new Collection<Double>(...);
+         *       Callable<TaskHandler<V>> forEach = new ForEach<Double, String>(numbers)
+         *              .prepare(new F<Double, String>() {
+         *                  String apply(Double e) {
+         *                      return e.toString();
+         *                  }
+         *              });
+         *     forEach.call().values();
+         *     }
          * </pre>
          *
          * @param f
