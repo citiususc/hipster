@@ -7,4 +7,3 @@ branches:
     - master
     - development
 before_install: 'mvn -version'
-install: 'mvn clean install -DskipTests'
