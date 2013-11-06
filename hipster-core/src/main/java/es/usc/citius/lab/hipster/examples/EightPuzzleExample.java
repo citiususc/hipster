@@ -20,228 +20,225 @@ package es.usc.citius.lab.hipster.examples;
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
+import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public final class EightPuzzleExample {
 
-    static final class EightPuzzleState {
-        private int[] positions = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    static final class Puzzle {
 
-        EightPuzzleState(int[] positions) {
-            this.positions = positions;
+        private int[] plainBoard = {0,1,2,3,4,5,6,7,8};
+
+        // Matrix board
+        Puzzle(int[][] board){
+            // Check if the board is square
+            int size = board.length;
+            if (!isSquare(board)){
+                throw new IllegalArgumentException("Board is not square");
+            }
+            this.plainBoard = new int[size*size];
+            for(int x=0; x<size; x++){
+                for(int y=0; y<size; y++){
+                    this.plainBoard[x*size+y]=board[x][y];
+                }
+            }
         }
 
-        public int getGapPosition(){
-            int position = -1;
-            for (int i = 0; i < positions.length; i++) {
-                if (positions[i] == 0) {
-                    if (position < 0){
-                        position = i;
-                    } else {
-                        throw new IllegalStateException("Invalid 3x3 game state. More than one gap found");
+        static int[][] matrixBoard(int[] plainBoard){
+            // Generate a squared board. If the array size is not
+            // a perfect square, truncate size.
+            int size = (int)Math.sqrt(plainBoard.length);
+            int[][] board = new int[size][size];
+            for(int x=0;x<size;x++){
+                for(int y=0;y<size;y++){
+                    board[x][y]= plainBoard[x*size+y];
+                }
+            }
+            return board;
+        }
+
+        int[][] matrixBoard(){
+            return matrixBoard(this.plainBoard);
+        }
+
+        // Plain board representation {0,1,2,3,4,5,6,7,8}
+        Puzzle(int[] plainBoard){
+            this.plainBoard = plainBoard;
+        }
+
+        boolean isSquare(int[][] board){
+            int rows = board.length;
+            for(int row = 0; row < rows; row++){
+                if (board[row].length!=rows){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        Point getTile(int number){
+            int[][] matrixBoard = this.matrixBoard();
+            int size = matrixBoard.length;
+            for(int x=0; x<size; x++){
+                for(int y=0; y<size; y++){
+                    if (matrixBoard[x][y]==number){
+                        return new Point(x,y);
                     }
                 }
             }
-            if (position < 0){
-                throw new IllegalStateException("The positions of the tiles in this state are not valid: " + positions.toString());
-            }
-            return position;
+            return null;
         }
 
-        /**
-         * Calculates the available tile movements from this concrete
-         * state. For example, if the gap is in the first position
-         * {0,1,2,3,4,5,6,7,8}
-         * |   1 2 |
-         * | 3 4 5 |
-         * | 6 7 8 |
-         *
-         * the available movements are:
-         *
-         * {1,0,2,3,4,5,6,7,8}
-         * | 1   2 |
-         * | 3 4 5 |
-         * | 6 7 8 |
-         *
-         * and
-         *
-         * {3,1,2,0,4,5,6,7,8}
-         * | 3 1 2 |
-         * |   4 5 |
-         * | 6 7 8 |
-         *
-         * @return all valid states.
-         */
-        public Collection<EightPuzzleState> getNeighborStates(){
-            // Now, get the indexes of the tiles that are next to the gap.
-            int[] swapTiles = getSwapTiles();
-            Collection<EightPuzzleState> successors = new HashSet<EightPuzzleState>();
-
-            for(int i : swapTiles){
-                // Create a copy of the positions of this state.
-                int[] successor = Arrays.copyOf(this.positions, this.positions.length);
-                int value = successor[i];
-                // Swap locations
-                successor[i] = 0;
-                successor[this.getGapPosition()] = value;
-                successors.add(new EightPuzzleState(successor));
-            }
-            return successors;
-        }
-
-        /**
-         * Get the indexes of the tiles that can be moved to the gap position.
-         * Example:
-         * indexes:  0 1 2 3 4 5 6 7 8
-         * array  : {3,4,5,4,0,2,6,8,7}:
-         *
-         * representation:
-         *
-         * | 3 5 1 |
-         * | 4   2 |
-         * | 6 8 7 |
-         *
-         * Available movements:
-         *  - 4 can be moved to right.
-         *  - 5 can be moved one position down.
-         *  - 8 can be moved one position top.
-         *  - 2 can be moved to left.
-         *
-         *  The gap is codified in the position 4 of the array. To represent
-         *  the movement of the number 4 to the gap, we have to swap positions
-         *  1 (number 4) and 4 (number 0) in the array.
-         *
-         * @return
-         */
-        private int[] getSwapTiles(){
-            int gapTile = getGapPosition();
-            // Hard-coded tile positions
-            switch (gapTile) {
-                case 0:
-                    return new int[] { 1, 3 };
-                case 1:
-                    return new int[] { 0, 2, 4 };
-                case 2:
-                    return new int[] { 1, 5 };
-                case 3:
-                    return new int[] { 0, 4, 6 };
-                case 4:
-                    return new int[] { 1, 3, 5, 7 };
-                case 5:
-                    return new int[] { 2, 4, 8 };
-                case 6:
-                    return new int[] { 3, 7 };
-                case 7:
-                    return new int[] { 6, 4, 8 };
-                case 8:
-                    return new int[] { 7, 5 };
-                default:
-                    throw new IllegalStateException("Invalid state");
-            }
-        }
+        // IMPORTANT NOTE: Since we are creating a state class (the basic unit search)
+        // we have to override equals & hashcode to guarantee that two states with
+        // the same tiles in the same position ARE EQUAL.
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            EightPuzzleState that = (EightPuzzleState) o;
+            Puzzle puzzle = (Puzzle) o;
 
-            if (!Arrays.equals(positions, that.positions)) return false;
+            if (!Arrays.equals(plainBoard, puzzle.plainBoard)) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(positions);
+            return Arrays.hashCode(plainBoard);
         }
-
-        @Override
-        public String toString() {
-            return Arrays.toString(this.positions);
-        }
-
     }
 
-    public static String getPrettyPath(List<EightPuzzleState> path){
+
+    public static String getPrettyPath(List<Puzzle> path, int size){
         // Print each row of all states
         StringBuffer output = new StringBuffer();
-        for(int i=0; i < 3; i++){
-            String irow = "";
-            for(EightPuzzleState state : path){
-                irow += "| " + getTile(state, 0+i*3) + " " + getTile(state,1+i*3) + " " + getTile(state,2+i*3) + " |   ";
+        for(int y=0; y < size; y++){
+            String row = "";
+            for(Puzzle state : path){
+                int[][] board = state.matrixBoard();
+                row += "| ";
+                for(int x=0; x<size; x++){
+                    row += board[y][x] + " ";
+                }
+                row += "|  ";
             }
-            irow += "\n";
-            output.append(irow);
+            row += "\n";
+            output.append(row);
         }
         return output.toString();
     }
-
-    public static String getTile(EightPuzzleState state, int position){
-        int number = state.positions[position];
-        if (number == 0){
-            return " ";
-        } else {
-            return new Integer(number).toString();
-        }
-    }
-
     public static void main(String[] args){
-        // First, define the states of the game. We can use a simple
-        // int[] = {0,1,2,3,4,5,6,7,8} where the 0 number represents
-        // the gap that can be used to move the tiles:
 
-        // |   1 2 |
-        // | 3 4 5 |
-        // | 6 7 8 |
-        //
-        // This can be our starting point to define the 3x3 puzzle game. To make the things
-        // easier, we can create a new class representing the states
-        // (EightPuzzleState class). Note that a state has to
-        // implement equals & hashCode properly, so two different
-        // EightPuzzleState instances with the same positions are equal.
+        final Puzzle initialState = new Puzzle(new int[]{8,1,7,4,5,6,2,0,3});
+        final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
+        final int[][] goal = goalState.matrixBoard();
 
-        // Initial state: {8 1 7 4 5 6 2 0 3}:
-        // | 8 1 7 |
-        // | 4 5 6 |
-        // | 2   3 |
-        EightPuzzleState initialState = new EightPuzzleState(new int[]{8,1,7,4,5,6,2,0,3});
-        // Goal state: {0 1 2 3 4 5 6 7 8}
-        EightPuzzleState goalState = new EightPuzzleState(new int[]{0,1,2,3,4,5,6,7,8});
-        // Transition function. Returns a set of transitions (originState->destinationState)
-        // from the current state. For example {8 1 7 4 5 6 2 0 3}->{8 1 7 4 5 6 2 3 0}.
-        TransitionFunction<EightPuzzleState> transition = new TransitionFunction<EightPuzzleState>() {
+
+        TransitionFunction<Puzzle> tf = new TransitionFunction<Puzzle>() {
             @Override
-            public Iterable<? extends Transition<EightPuzzleState>> from(EightPuzzleState current) {
-                return Transition.map(current, current.getNeighborStates());
+            public Iterable<? extends Transition<Puzzle>> from(Puzzle current) {
+                // Compute the movements
+                Point gap = current.getTile(0);
+                // There are always maximum 4 tiles around the gap (left, right, top, bottom)
+                Set<Point> points = new HashSet<Point>();
+                // Left
+                points.add(new Point(gap.x-1,gap.y));
+                // Right
+                points.add(new Point(gap.x+1,gap.y));
+                // Top
+                points.add(new Point(gap.x,gap.y-1));
+                // Bottom
+                points.add(new Point(gap.x,gap.y+1));
+
+                Set<Puzzle> states = new HashSet<Puzzle>();
+                // Now, we generate the boards (states) resulting from
+                // moving one tile to the gap. We have max 4 possible new
+                // states (depending on the gap position).
+                for(Point movement : points){
+                    // The tiles that can be moved are those around the gap.
+                    int[][] board = current.matrixBoard();
+                    // Generate the new boards (states) with the tiles moved.
+                    int size = board.length;
+                    // Check if the point is in the board or not!
+                    if (movement.x >=0 && movement.x < size && movement.y >=0 && movement.y < size){
+                        // Generate a new board, replacing the gap with the number at that point
+                        int numberTile = board[movement.x][movement.y];
+                        // Replace gap
+                        board[gap.x][gap.y]=numberTile;
+                        // Fill the tile with the gap
+                        board[movement.x][movement.y] = 0;
+                        // Create the new board state
+                        states.add(new Puzzle(board));
+                    }
+                }
+                // Generate the transitions
+                return Transition.map(current, states);
             }
         };
-        // Cost function. Each tile movement counts as one unit. In this case, we define a
-        // CostFunction that computes a double value for a given EightPuzzleState.
-        CostFunction<EightPuzzleState, Double> costFunction = new CostFunction<EightPuzzleState, Double>() {
+
+        CostFunction<Puzzle, Double> cf = new CostFunction<Puzzle, Double>() {
             @Override
-            public Double evaluate(Transition<EightPuzzleState> transition) {
+            public Double evaluate(Transition<Puzzle> transition) {
                 return 1d;
             }
         };
+
+        HeuristicFunction<Puzzle, Double> hf = new HeuristicFunction<Puzzle, Double>() {
+            @Override
+            public Double estimate(Puzzle state) {
+                // Compute the manhattan distance
+                int mdistance = 0;
+                int[][] board = state.matrixBoard();
+                int size = board.length;
+                for (int x = 0; x < size; x++)
+                    for (int y = 0; y < size; y++) {
+                        int value = board[x][y];
+                        Point goalTile = goalState.getTile(value);
+                        // Compute diff
+                        if (value != 0) {
+                            int dx = x - goalTile.x;
+                            int dy = y - goalTile.y;
+                            mdistance += Math.abs(dx) + Math.abs(dy);
+                        }
+                    }
+                return Double.valueOf(mdistance);
+            }
+        };
+
         // Create a search problem using all these elements. We can use the DefaultSearchProblem
         // implementation that uses double values.
-        DefaultSearchProblem<EightPuzzleState> problem = new DefaultSearchProblem<EightPuzzleState>(initialState, goalState, transition, costFunction);
-        // Search!.
-        Algorithms.Search.Result result = Algorithms.createAStar(problem).search();
+        DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf);
+        // Search without heuristic using dijkstra
+        Algorithms.Search.Result result = Algorithms.createDijkstra(problem).search();
         // Print solution
-        System.out.println(getPrettyPath(result.getOptimalPath()));
+        System.out.println("Solution without heuristics");
+        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), goal.length));
         System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
         System.out.println("Total iterations: " + result.getIterations());
         System.out.println("Total time: " + result.getStopwatch().toString());
+        System.out.println();
+
+        System.out.println("Solution using Manhattan Distance");
+        // Now, search using manhattan distance as the heuristic function
+        problem.setHeuristicFunction(hf);
+        // Search without heuristic using dijkstra
+        result = Algorithms.createAStar(problem).search();
+        // Print solution
+        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), goal.length));
+        System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
+        System.out.println("Total iterations: " + result.getIterations());
+        System.out.println("Total time: " + result.getStopwatch().toString());
+
     }
 }
