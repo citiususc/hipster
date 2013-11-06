@@ -21,8 +21,7 @@
         </test.jvm.argLine>
     </properties>
     <organization>
-        <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela
-        </name>
+        <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
         <url>http://citius.usc.es</url>
     </organization>
     <issueManagement>
@@ -111,6 +110,10 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <charset>UTF-8</charset>
+                    <!-- Doclava specific configuration -->
                     <docletArtifact>
                         <groupId>com.google.doclava</groupId>
                         <artifactId>doclava</artifactId>
