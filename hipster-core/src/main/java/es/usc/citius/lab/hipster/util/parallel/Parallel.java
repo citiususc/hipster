@@ -23,19 +23,18 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * <p/>
  * This class contains some useful classes and methods to parallelize code in an
  * easy and fluent way. Parallel class is self-contained to enable an easier
- * integration and reuse in different java projects.<br>
- * <p/>
- * Code example:<br>
- * <p/>
+ * integration and reuse in different java projects. Example:
  * <pre>
- * new ForEach&lt;String, String&gt;(elements).apply(new Function&lt;String&gt;() {
- * 	public String apply(String element) {
- * 		System.out.println(element);
- *    }
- * }).values();
+ *     {@code new ForEach<String,String>(elements)
+ *                  .apply(new Function<String>(){
+ *                       public String apply(String element){
+ *                             System.out.println(element);
+ *                             return element;
+ *                       }
+ *                   }).values();
+ *     }
  * </pre>
  *
  * @author Pablo Rodríguez Mier
