@@ -97,6 +97,7 @@
                     </descriptorRefs>
                 </configuration>
                 <!-- Generate a jar with the dependencies in the package phase -->
+                <!--
                 <executions>
                     <execution>
                         <id>make-assembly</id>
@@ -105,7 +106,7 @@
                             <goal>single</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
