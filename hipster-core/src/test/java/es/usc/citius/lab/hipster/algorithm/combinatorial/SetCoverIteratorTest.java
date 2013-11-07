@@ -18,15 +18,38 @@ package es.usc.citius.lab.hipster.algorithm.combinatorial;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class SetCoverIteratorTest {
 
     @Test
-    public void testIterativeSetCover01() {
+    public void testOneElement(){
+        Set<Set<String>> sets = new HashSet<Set<String>>();
+        sets.add(Collections.singleton("A"));
+        SetCoverIterator<String> it = new SetCoverIterator<String>(sets);
+        assertTrue(it.hasNext());
+        assertEquals(1, it.next().size());
+    }
+
+    @Test
+    public void testTwoElements(){
+        Set<Set<String>> sets = new HashSet<Set<String>>();
+        sets.add(Collections.singleton("A"));
+        sets.add(Collections.singleton("B"));
+        SetCoverIterator<String> it = new SetCoverIterator<String>(sets);
+        assertTrue(it.hasNext());
+        assertEquals(2, it.next().size());
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testOneSingleSolution() {
         // Single solution [1,2],[3,4],[5,6]
         Set<Set<String>> solution = new HashSet<Set<String>>();
         solution.add(new HashSet<String>(Arrays.asList("1", "2")));
@@ -51,7 +74,7 @@ public class SetCoverIteratorTest {
     }
 
     @Test
-    public void testIterativeSetCover02() {
+    public void testMultipleSolutions() {
 
         Set<Set<String>> sets = new HashSet<Set<String>>();
         sets.add(new HashSet<String>(Arrays.asList("3", "7")));

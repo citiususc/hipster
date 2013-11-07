@@ -59,23 +59,22 @@ import java.util.concurrent.ExecutionException;
  */
 public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
 
-    // Ordered map (descending by key) with the available sets
-    // ordered by size and mapped back to their bitset representation
-    private final TreeMap<Set<E>, BitSet> orderedSets;
+
+
     // Maps bitset with their set representation
-    private final Map<BitSet, Set<E>> bitsetMap;
+    private final Map<BitSet, Set<E>> bitsetMap = new HashMap<BitSet, Set<E>>();
     // List of subsets, ordered by size
     private final List<BitSet> bitsetList;
     // Holds an ordered list with all possible elements
-    private final List<E> elements;
+    private List<E> elements;
     // Bit size used to store the information of all elements
     private int size;
-    // This collection stores the solutions found
-    private List<Set<Set<E>>> solutions;
+    // Buffer queue with the non-consumed solutions
+    private Queue<Set<Set<E>>> buffer = new LinkedList<Set<Set<E>>>();
+    // List with all solutions. This list is required in order to test dominance
+    private final List<Set<Set<E>>> solutions = new LinkedList<Set<Set<E>>>();
     // Queue used for BFS. A synchronized queue is not required
-    private Queue<State> queue;
-    // Next element index
-    private int nextElementIndex = 0;
+    private final Queue<State> queue = new LinkedList<State>();
     private Set<Set<E>> nextElement = null;
     // Use parallelization
     private boolean parallelized = false;
@@ -168,17 +167,33 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
             return candidateStates;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            State state = (State) o;
+
+            if (previous != null ? !previous.equals(state.previous) : state.previous != null) return false;
+            if (!selected.equals(state.selected)) return false;
+            if (!statebits.equals(state.statebits)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = previous != null ? previous.hashCode() : 0;
+            result = 31 * result + selected.hashCode();
+            result = 31 * result + statebits.hashCode();
+            return result;
+        }
     }
 
     public SetCoverIterator(Set<Set<E>> sets) {
-
-        this.solutions = new LinkedList<Set<Set<E>>>();
-        // Obtain the elements from the sets
-        this.elements = elements(sets);
-        this.bitsetList = new ArrayList<BitSet>();
-        this.size = this.elements.size();
-        // Sort the collection of sets by the their size
-        this.orderedSets = new TreeMap<Set<E>, BitSet>(
+        // Ordered map (descending by key) with the available sets
+        // ordered by size and mapped back to their bitset representation
+        TreeMap<Set<E>, BitSet> orderedSets = new TreeMap<Set<E>, BitSet>(
                 new Comparator<Set<E>>() {
                     public int compare(Set<E> o1, Set<E> o2) {
                         if (o2.size() > o1.size()) {
@@ -187,8 +202,9 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
                         return -1;
                     }
                 });
-
-        this.bitsetMap = new HashMap<BitSet, Set<E>>();
+        // Obtain the elements from the sets
+        this.elements = elements(sets);
+        this.size = this.elements.size();
 
         // Initialize the values of the bitset list (there are m sets)
         for (Set<E> set : sets) {
@@ -198,17 +214,18 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
                 // b(j)=1 if the element j appears on set(i)
                 b.set(j, set.contains(this.elements.get(j)));
             }
-            this.orderedSets.put(set, b);
+            orderedSets.put(set, b);
             this.bitsetMap.put(b, set);
         }
-
+        // TODO; Make unmodifiable
+        this.bitsetList = new ArrayList<BitSet>(orderedSets.size());
         // Insert ordered bitsets into a list
-        for (Entry<Set<E>, BitSet> entry : this.orderedSets.entrySet()) {
-            this.bitsetList.add(entry.getValue());
+        while(!orderedSets.isEmpty()){
+            this.bitsetList.add(orderedSets.pollFirstEntry().getValue());
         }
-
         // Initialize the queue and put the first states to explore
-        this.queue = new LinkedList<State>(new State().candidates());
+        this.queue.add(new State());
+        //this.queue.addAll(new State().candidates());
 
     }
 
@@ -274,26 +291,16 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
         return new ArrayList<E>(universe);
     }
 
-    /**
-     * Parallelized version of the Iterative Set Cover
-     *
-     * @return Iterator with all combinations of sets
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
-
-    public boolean hasNext() {
-
-        // Breadth-First-Search, parallelized and synchronized by levels.
-        // In each step, take all states in the same level, process them and
-        // collect all new candidate states to process in the next step
-
-        while (this.solutions.size() <= this.nextElementIndex
-                && !this.queue.isEmpty()) {
-
+    private void compute(){
+        // Start processing until queue is empty or there are solutions in the buffer
+        while(!this.queue.isEmpty() && this.buffer.isEmpty()){
+            // Process all elements in the queue without removing them
             Collection<Result> nextLevel = null;
             if (parallelized) {
                 try {
+                    // Breadth-First-Search, parallelized and synchronized by levels.
+                    // In each step, take all states in the same level, process them and
+                    // collect all new candidate states to process in the next step
                     nextLevel = parallelSearch();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -303,36 +310,59 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
             } else {
                 nextLevel = sequentialSearch();
             }
-
-
-            // Empty the queue
+            // Elements in the queue were processed. Clear it
             queue.clear();
-
-            // Take the results obtained by each thread
+            // Take the results obtained
             for (Result result : nextLevel) {
+                // Add the candidates for the next level to the queue
                 this.queue.addAll(result.candidates);
+                // Fill the buffer with the solutions
+                this.buffer.addAll(result.solutions);
                 this.solutions.addAll(result.solutions);
             }
         }
-        // Get the next solution
-        if (this.nextElementIndex < solutions.size()) {
-            this.nextElement = solutions.get(this.nextElementIndex);
-            this.nextElementIndex++;
-        } else {
-            this.nextElement = null;
-        }
+    }
 
-        return this.nextElement != null;
+    public Set<Set<E>> next() {
+        // Check buffer
+        if (!this.buffer.isEmpty()){
+            return this.buffer.poll();
+        } else {
+            // Compute and return
+            compute();
+            // Can be null!
+            return this.buffer.poll();
+        }
+    }
+
+    public boolean hasNext() {
+        // Check if the is a non consumed solution
+        if (this.nextElement != null){
+            return true;
+        }
+        // Check if there are more solutions in the buffer
+        if (!this.buffer.isEmpty()){
+            return true;
+        }
+        // At this point there are no solutions, we have to process the node queue
+        // to find new solutions. If the queue is empty, process is over.
+        if (this.queue.isEmpty()){
+            return false;
+        }
+        // To answer the hasNext question, we have to check if there are more
+        // solutions or not.
+        compute();
+        return !this.buffer.isEmpty();
     }
 
     private Collection<Result> sequentialSearch() {
-        Collection<Result> results = new ArrayList<Result>(queue.size());
+        Collection<Result> results = new ArrayList<Result>(this.queue.size());
         for (State state : this.queue) {
             Set<State> candidates = new HashSet<State>();
             Collection<Set<Set<E>>> localSolutions = new HashSet<Set<Set<E>>>();
             for (State candidate : state.candidates()) {
                 Set<Set<E>> candidateSets = candidate.stateSets();
-                if (!isDominated(solutions, candidateSets)) {
+                if (!isDominated(this.solutions, candidateSets)) {
                     if (candidate.isFinal()) {
                         localSolutions.add(candidateSets);
                     } else {
@@ -368,9 +398,7 @@ public class SetCoverIterator<E> implements Iterator<Set<Set<E>>> {
                 }).values();
     }
 
-    public Set<Set<E>> next() {
-        return this.nextElement;
-    }
+
 
     public void remove() {
         throw new UnsupportedOperationException();
