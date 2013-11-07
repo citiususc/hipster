@@ -78,6 +78,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
         return !open.values().isEmpty();
     }
 
+
     private HeuristicNode<S, T> takePromising() {
         // Poll until a valid state is found
         HeuristicNode<S, T> node = queue.poll();
@@ -96,9 +97,10 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
      * @see HeuristicNode
      */
     public HeuristicNode<S, T> next() {
-
-        HeuristicNode<S, T> current = takePromising();
+        // Get and remove the best node in the queue
+        HeuristicNode<S, T> current = queue.poll();
         S currentState = current.transition().to();
+        // Remove from open as well
         open.remove(currentState);
 
         // Analyze the cost of each movement from the current node
@@ -107,7 +109,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
             HeuristicNode<S, T> successorNode = this.factory.node(current, successor);
             HeuristicNode<S, T> successorOpen = open.get(successor.to());
             if (successorOpen != null) {
-                if (successorOpen.getCost().compareTo(successorNode.getCost()) <= 0) {
+                if (successorOpen.getScore().compareTo(successorNode.getScore()) <= 0) {
                     // Keep analyzing the other movements, discard this movement
                     continue;
                 }
@@ -116,28 +118,14 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
             HeuristicNode<S, T> successorClose = closed.get(successor.to());
             if (successorClose != null) {
                 // Check if this path improves the cost of a closed neighbor.
-                if (successorClose.getCost().compareTo(successorNode.getCost()) <= 0) {
+                if (successorClose.getScore().compareTo(successorNode.getScore()) <= 0) {
                     continue;
                 }
             }
 
-            if (successorOpen != null) {
-                open.remove(successor.to());
-                // Don't remove from queue, for performance purposes use
-                // function takePromising() and do not use queue.poll
-            }
-
-            // If it is in the close list, then take it from that list
-            if (successorClose != null) {
-                closed.remove(successor.to());
-            }
-
-            // Add the new successor to the open list to explore later
-            HeuristicNode<S, T> result = open.put(successor.to(), successorNode);
-            // If this state is not duplicated, enqueue
-            if (result == null) {
-                queue.add(successorNode);
-            }
+            // In any other case, add the new successor to the open list to explore later
+            open.put(successor.to(), successorNode);
+            queue.add(successorNode);
         }
         // Once analyzed, the current node moves to the closed list
         closed.put(currentState, current);
