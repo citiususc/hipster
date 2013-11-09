@@ -140,7 +140,7 @@ public final class EightPuzzleExample {
     }
     public static void main(String[] args){
 
-        final Puzzle initialState = new Puzzle(new int[]{8,1,7,4,5,6,2,0,3});
+        final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
         final int[][] goal = goalState.matrixBoard();
 
