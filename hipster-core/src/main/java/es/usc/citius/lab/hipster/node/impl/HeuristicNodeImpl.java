@@ -34,11 +34,13 @@ public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<
 
     private T cost;
     private T score;
+    private T estimation;
 
-    public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost, T score) {
+    public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost, T estimation, T score) {
         super(transition, previousNode);
         this.cost = cost;
         this.score = score;
+        this.estimation = estimation;
     }
 
     public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost) {
@@ -53,6 +55,11 @@ public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<
 
     public T getScore() {
         return this.score;
+    }
+
+    @Override
+    public T getEstimation() {
+        return this.estimation;
     }
 
     public int compareTo(HeuristicNode<S, T> o) {

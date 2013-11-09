@@ -30,11 +30,18 @@ package es.usc.citius.lab.hipster.node;
 public interface HeuristicNode<S, T extends Comparable<T>> extends CostNode<S,T> {
     
 	/**
-	 * Retrieves the estimated cost between the current state 
-	 * and the goal.
+	 * Retrieves the total cost (typically f = g + h) of this node,
+     * where g = {@link es.usc.citius.lab.hipster.node.HeuristicNode#getCost()} and
+     * h = {@link es.usc.citius.lab.hipster.node.HeuristicNode#getEstimation()}
 	 * 
-	 * @return estimated cost to goal
+	 * @return total cost (f function).
 	 */
 	T getScore();
+
+    /**
+     * Return the estimated cost to goal state from the current state.
+     * @return cost estimation.
+     */
+    T getEstimation();
 
 }

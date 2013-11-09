@@ -96,6 +96,11 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
 		return this.v;
 	}
 
+    @Override
+    public T getEstimation() {
+        return this.v;
+    }
+
     public void setG(T g) {
         this.g = g;
     }
