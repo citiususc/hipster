@@ -93,4 +93,43 @@ public class SetCoverIteratorTest {
         }
 
     }
+
+    @Test
+    public void testTwoSolution(){
+        Set<Set<String>> sets = new HashSet<Set<String>>();
+        // CD
+        sets.add(new HashSet<String>(Arrays.asList("2", "3", "5", "6", "7")));
+        // A
+        sets.add(new HashSet<String>(Arrays.asList("1", "2")));
+        // I
+        sets.add(new HashSet<String>(Arrays.asList("4", "8")));
+        sets.add(new HashSet<String>(Arrays.asList("5")));
+        // EFGH
+        sets.add(new HashSet<String>(Arrays.asList("3")));
+        // J
+        sets.add(new HashSet<String>(Arrays.asList("4")));
+        // K
+        sets.add(new HashSet<String>(Arrays.asList("7")));
+        // B
+        sets.add(new HashSet<String>(Arrays.asList("1")));
+        SetCoverIterator<String> it = new SetCoverIterator<String>(sets);
+        Set<Set<Set<String>>> expected = new HashSet<Set<Set<String>>>();
+        Set<Set<String>> sol1 = new HashSet<Set<String>>();
+        sol1.add(new HashSet<String>(Arrays.asList("2","3","5","6","7")));
+        sol1.add(new HashSet<String>(Arrays.asList("2","1")));
+        sol1.add(new HashSet<String>(Arrays.asList("4","8")));
+        Set<Set<String>> sol2 = new HashSet<Set<String>>();
+        sol2.add(new HashSet<String>(Arrays.asList("2","3","5","6","7")));
+        sol2.add(new HashSet<String>(Arrays.asList("1")));
+        sol2.add(new HashSet<String>(Arrays.asList("4","8")));
+        expected.add(sol1);
+        expected.add(sol2);
+
+        int i=0;
+        while (it.hasNext()) {
+            assertTrue(expected.contains(it.next()));
+            i++;
+        }
+        assertEquals(2, i);
+    }
 }
