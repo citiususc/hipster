@@ -18,14 +18,12 @@ package es.usc.citius.lab.hipster.algorithm;
 
 
 import com.google.common.collect.*;
-import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -95,11 +93,10 @@ public class DepthFirstSearchTest {
                 List<Transition<String>> transitions = Lists.newArrayList(Transition.map(current, graph.get(current)));
                 // By default, this DFS implementation iterates from right to left.
                 // Inverting the order of the successors makes the algorithm iterate from left to right
-                Collections.reverse(transitions);
+                //Collections.reverse(transitions);
                 return transitions;
             }
         };
-
         return new DepthFirstSearch<String>(initial, tf);
     }
 
@@ -107,6 +104,7 @@ public class DepthFirstSearchTest {
         int i = 0;
         while(dfs.hasNext()){
             Node<String> node = dfs.next();
+            //System.out.println(node.transition().to());
             assertEquals(expected[i++], node.transition().to());
         }
     }

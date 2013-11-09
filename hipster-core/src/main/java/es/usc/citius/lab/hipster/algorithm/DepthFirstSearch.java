@@ -1,20 +1,21 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS).
+ * Copyright 2013 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package es.usc.citius.lab.hipster.algorithm;
+
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
@@ -28,28 +29,29 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
- * Implementation of the Depth-First-Search (DFS) algorithm using
- * a {@link Stack} as the underlying data structure.
+ * Iterative implementation of the Depth First Search (DFS) algorithm
+ * (left to right) using a {@link Stack}. DFS algorithm does not guarantee
+ * to obtain the best solution.
  *
- * @param <S> class defining the state
- * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @since 0.1.0
+ * @param <S> state type.
  */
 public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
     private Stack<Node<S>> stack = new Stack<Node<S>>();
+    // Mark states visited to avoid cycles
     private Map<S, Node<S>> visited = new HashMap<S, Node<S>>();
     private TransitionFunction<S> successors;
     private NodeFactory<S, Node<S>> factory;
     private Node<S> next = null;
 
     /**
-     * Constructor for DFS using a custom node factory.
-     * 
-     * @param initialState state used as root of the exploration
-     * @param successors function to generate the successors of a state
-     * @param factory component to generate node instances from states
+     * Creates a new iterative depth first search algorithm.
+     *
+     * @param initialState state used as root of the exploration.
+     * @param successors function to generate the successors of a state.
+     * @param factory component to generate node instances from states.
      */
     public DepthFirstSearch(final S initialState, TransitionFunction<S> successors, NodeFactory<S, Node<S>> factory) {
         Node<S> initialNode = factory.node(null, new Transition<S>(initialState));
@@ -62,8 +64,8 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
 
     /**
      * Constructor for DFS when the node factory is not specified. A execution based on
-     * {@link SimpleNode} is used in this case.
-     * 
+     * {@link es.usc.citius.lab.hipster.node.impl.SimpleNode} is used in this case.
+     *
      * @param initialState state used as root of the exploration
      * @param successors function to generate the successors of a state
      */
@@ -78,88 +80,91 @@ public class DepthFirstSearch<S> implements Iterator<Node<S>> {
         Node<S> initialNode = factory.node(null, new Transition<S>(initialState));
         // Initialize data structures
         stack.add(initialNode);
-        next = initialNode;
     }
 
-    /**
-     * Returns true if there are unvisited nodes in the graph.
-     */
     @Override
     public boolean hasNext() {
-        // If there is a valid next, return true
-        if (this.next != null){
-            return true;
+        if (next == null){
+            // Compute next
+            next = nextUnvisited();
+            if (next == null) return false;
+        }
+        return true;
+    }
+
+    public Node<S> next(){
+        if (next != null){
+            Node<S> e = next;
+            next = nextUnvisited();
+            return e;
         } else {
-            // If next is not calculated, compute the next valid
-            Node<S> next = popNextUnvisitedNode();
-            this.next = next;
-            return next != null;
+            return nextUnvisited();
         }
     }
 
     /**
-     * Returns the next unvisited node of the graph.
-     * 
-     * @return next node to visit
+     * Compute the next unvisited node. If there are no
+     * unvisited nodes, return null.
+     *
+     * @return next unvisited node or null.
      */
-    private Node<S> popNextUnvisitedNode(){
-        if (!stack.isEmpty()){
-            Node<S> next = stack.pop();
-            // Pop nodes if visited
-            while(visited.containsKey(next.transition().to())){
-                if (!stack.isEmpty()){
-                    next = stack.pop();
-                } else {
-                    return null;
-                }
-            }
-            return next;
+    private Node<S> nextUnvisited(){
+        Node<S> next;
+        // Perform backtrack (skipping all visited nodes in the stack)
+        do {
+            next = processNext();
+        } while(next!=null && visited.containsKey(next.transition().to()));
+
+        if (next != null){
+            // Mark as visited
+            visited.put(next.transition().to(), next);
         }
-        return null;
+
+        return next;
     }
 
     /**
-     * Returns the current unvisited node of the graph.
-     * 
-     * @return current node
+     * Calculate the next node (if the stack is not empty) and expand next
+     * unvisited successors.
+     *
+     * @return next processed node (can be a visited node) or null.
      */
-    private Node<S> popUnvisited(){
-        if (this.next != null){
-            Node<S> next = this.next;
-            // Put next to null to indicate that
-            // this node was consumed. Next call
-            // to hasNext has to compute the next
-            // node beforehand to check if there is
-            // another one valid.
-            this.next = null;
-            return next;
-        } else {
-            this.next = popNextUnvisitedNode();
-            return this.next;
-        }
-    }
-
-    public Node<S> next() {
-        // Take the next node from the stack.
-        Node<S> current = popUnvisited();
+    private Node<S> processNext() {
+        // Take the next (unvisited) node from the stack but don't remove it
+        if (stack.isEmpty()) return null;
+        Node<S> current = stack.peek();
         // Take the associated state
         S currentState = current.transition().to();
+        // Mark as visited
+        //visited.put(currentState, current);
         // Explore the adjacent neighbors
+        Node<S> toStack = null;
+        boolean completed = true;
         for(Transition<S> successor : this.successors.from(currentState)){
             // If the neighbor is still unexplored
             if (!this.visited.containsKey(successor.to())){
                 // Create the associated neighbor
                 Node<S> successorNode = factory.node(current, successor);
-                this.stack.push(successorNode);
+                // Select the neighbor to stack
+                if (toStack==null){
+                    toStack = successorNode;
+                } else {
+                    // This neighbor is unexplored, thus the current
+                    // node is still not fully processed and
+                    // will be eventually expanded again to retrieve the
+                    // next successors.
+                    completed = false;
+                    break;
+                }
             }
         }
-        this.visited.put(currentState, current);
+        // If this node is processed (no more successors) remove from stack
+        if (completed) stack.pop();
+        // Push the new successor to expand next.
+        if (toStack != null) stack.push(toStack);
         return current;
     }
 
-    /**
-     * Unsupported operation.
-     */
     @Override
     public void remove() {
         throw new UnsupportedOperationException();

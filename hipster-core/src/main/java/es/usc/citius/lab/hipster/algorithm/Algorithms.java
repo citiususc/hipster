@@ -48,7 +48,7 @@ public final class Algorithms {
     }
 
     /**
-     * Search class uses a {@link AlgorithmIteratorFactory} to cr
+     * Helper class.
      * @param <S>
      * @param <N>
      */

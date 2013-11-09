@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.algorithm.factory;
 
-import es.usc.citius.lab.hipster.algorithm.DepthFirstSearch;
+import es.usc.citius.lab.hipster.algorithm.BreadthFirstSearch;
 import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.NodeFactory;
@@ -50,7 +50,7 @@ public class BreadthFirstSearchIteratorFactory<S> implements AlgorithmIteratorFa
 
     @Override
     public Iterator<Node<S>> create() {
-        return new DepthFirstSearch<S>(problem.getInitialState(), problem.getTransitionFunction(), new NodeFactory<S, Node<S>>() {
+        return new BreadthFirstSearch<S>(problem.getInitialState(), problem.getTransitionFunction(), new NodeFactory<S, Node<S>>() {
             @Override
             public Node<S> node(Node<S> from, Transition<S> transition) {
                 return new SimpleNode<S>(transition, from);
