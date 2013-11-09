@@ -303,4 +303,8 @@ public final class Algorithms {
         return new Search<S, Node<S>>(new DepthFirstSearchIteratorFactory<S>(problem), problem.getGoalState());
     }
 
+    public static <S> Search<S, Node<S>> createBreadthFirstSearch(SearchProblem<S> problem) {
+        return new Search<S, Node<S>>(new BreadthFirstSearchIteratorFactory<S>(problem), problem.getGoalState());
+    }
+
 }
