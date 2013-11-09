@@ -84,35 +84,21 @@ public final class MazeSearch {
         }
     }
 
-    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, Double>> it, Maze2D maze) throws InterruptedException {
-        return executePrintIteratorSearch(it, maze, true);
-    }
 
-    public static Result executePrintIteratorSearch(Iterator<? extends CostNode<Point, Double>> it, Maze2D maze, boolean exitWhenGoalReached) throws InterruptedException {
-        int steps = 0;
-        Result r = null;
+    public static void executePrintIteratorSearch(Iterator<? extends Node<Point>> it, Maze2D maze) throws InterruptedException {
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
-            CostNode<Point, Double> currentNode = it.next();
+            Node<Point> currentNode = it.next();
             explored.add(currentNode.transition().to());
-            steps++;
             List<Node<Point>> nodePath = currentNode.path();
             List<Point> statePath = AbstractNode.statesFrom(nodePath);
             //clearOutput(20);
             System.out.println(getMazeStringSolution(maze, explored, statePath));
             Thread.sleep(50);
             if (currentNode.transition().to().equals(maze.getGoalLoc())) {
-                Double cost = currentNode.getCost();
-                r = new Result(statePath, cost);
-                if (exitWhenGoalReached) {
-                    return r;
-                }
+                return;
             }
         }
-        if (r == null) {
-            return Result.NO_RESULT;
-        }
-        return r;
     }
 
     public static void clearOutput(int newlines) {
