@@ -2,6 +2,19 @@
 
 A powerful, easy to use heuristic search library implemented in pure java.
 
+
+## Usage
+
+Maven users can include Hipster as a dependency using the following snippet:
+
+````xml
+<dependency>
+    <groupId>es.usc.citius</groupId>
+    <artifactId>hipster</artifactId>
+    <version>${hipster.version}</version>
+</dependency>
+````
+
 ## License
 
 This software is licensed under the Apache 2 license, quoted below.
@@ -20,3 +33,6 @@ This software is licensed under the Apache 2 license, quoted below.
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+    
+    
+
