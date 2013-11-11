@@ -18,6 +18,7 @@ package es.usc.citius.lab.hipster.examples;
 
 
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
+import es.usc.citius.lab.hipster.algorithm.RecursiveIDA;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
@@ -140,7 +141,8 @@ public final class EightPuzzleExample {
     }
     public static void main(String[] args){
 
-        final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
+        //final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
+        final Puzzle initialState = new Puzzle(new int[]{1,2,3,4,5,0,6,7,8});
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
         final int[][] goal = goalState.matrixBoard();
 
@@ -219,6 +221,16 @@ public final class EightPuzzleExample {
         // Create a search problem using all these elements. We can use the DefaultSearchProblem
         // implementation that uses double values.
         DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf);
+
+
+        //countdown();
+
+        DefaultSearchProblem<Puzzle> p = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf, hf);
+        RecursiveIDA<Puzzle, Double> ida = new RecursiveIDA<Puzzle, Double>(initialState, tf, p.getNodeFactory());
+        System.out.println("Launching recursive IDA");
+        HeuristicNode<Puzzle, Double> dfsGoal = ida.search(goalState);
+        System.out.println(dfsGoal.getCost());
+
         // Search without heuristic using dijkstra
         Algorithms.Search.Result result = Algorithms.createDijkstra(problem).search();
         // Print solution
@@ -229,6 +241,7 @@ public final class EightPuzzleExample {
         System.out.println("Total time: " + result.getStopwatch().toString());
         System.out.println();
 
+        countdown();
         System.out.println("Solution using Manhattan Distance");
         // Now, search using manhattan distance as the heuristic function
         problem.setHeuristicFunction(hf);
@@ -239,6 +252,18 @@ public final class EightPuzzleExample {
         System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
         System.out.println("Total iterations: " + result.getIterations());
         System.out.println("Total time: " + result.getStopwatch().toString());
+    }
 
+    private static void countdown(){
+        int s=20;
+        while(s>0){
+            System.out.println("Starting in " + s + " seconds");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            s--;
+        }
     }
 }
