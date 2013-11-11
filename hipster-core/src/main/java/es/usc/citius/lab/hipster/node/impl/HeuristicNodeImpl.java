@@ -43,6 +43,16 @@ public class HeuristicNodeImpl<S, T extends Comparable<T>> extends AbstractNode<
         this.estimation = estimation;
     }
 
+    public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost, T estimation, T score, boolean track) {
+        super(transition);
+        if (track){
+            this.previousNode = previousNode;
+        }
+        this.cost = cost;
+        this.score = score;
+        this.estimation = estimation;
+    }
+
     public HeuristicNodeImpl(Transition<S> transition, HeuristicNode<S, T> previousNode, T cost) {
         super(transition, previousNode);
         this.cost = cost;

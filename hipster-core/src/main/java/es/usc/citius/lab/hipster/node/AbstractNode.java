@@ -53,6 +53,10 @@ public abstract class AbstractNode<S> implements Node<S> {
         this.transition = transition;
     }
 
+    protected AbstractNode(Transition<S> transition) {
+        this.transition = transition;
+    }
+
     public List<Node<S>> path() {
         List<Node<S>> path = new ArrayList<Node<S>>();
         Node<S> current = this;
