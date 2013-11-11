@@ -50,13 +50,14 @@ public class HeuristicNodeImplFactory<S, T extends Comparable<T>> implements Nod
                                     Transition<S> transition) {
         T cost, estimatedDistance, score;
 
-        if (from == null) {
-            cost = estimatedDistance = score = accumulator.getIdentityElem();
+        if (from == null){
+            cost = accumulator.getIdentityElem();
         } else {
             cost = accumulator.apply(from.getCost(), this.gf.evaluate(transition));
-            estimatedDistance = this.hf.estimate(transition.to());
-            score = accumulator.apply(cost, estimatedDistance);
         }
+        estimatedDistance = this.hf.estimate(transition.to());
+        score = accumulator.apply(cost, estimatedDistance);
+
         return new HeuristicNodeImpl<S, T>(transition, from, cost, estimatedDistance, score);
     }
 

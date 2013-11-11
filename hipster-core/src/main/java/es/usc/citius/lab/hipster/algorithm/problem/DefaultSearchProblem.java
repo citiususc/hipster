@@ -57,6 +57,17 @@ public class DefaultSearchProblem<S> implements HeuristicSearchProblem<S, Double
                 BinaryOperation.doubleAdditionOp());
     }
 
+    public DefaultSearchProblem(S initialState, S goalState, TransitionFunction<S> transitionFunction, CostFunction<S, Double> costFunction, HeuristicFunction<S, Double> hf) {
+        this.initialState = initialState;
+        this.goalState = goalState;
+        this.transitionFunction = transitionFunction;
+        this.costFunction = costFunction;
+        this.heuristicFunction = hf;
+        this.nodeFactory = new HeuristicNodeImplFactory<S, Double>(this.costFunction,
+                this.heuristicFunction,
+                BinaryOperation.doubleAdditionOp());
+    }
+
     @Override
     public S getInitialState() {
         return this.initialState;
@@ -105,4 +116,9 @@ public class DefaultSearchProblem<S> implements HeuristicSearchProblem<S, Double
     public void setHeuristicFunction(HeuristicFunction<S, Double> heuristicFunction) {
         this.heuristicFunction = heuristicFunction;
     }
+
+    public NodeFactory<S, HeuristicNode<S, Double>> getNodeFactory() {
+        return nodeFactory;
+    }
+
 }
