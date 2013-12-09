@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.examples;
 
 
+import com.google.common.base.Stopwatch;
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.RecursiveIDA;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
@@ -36,7 +37,8 @@ public final class EightPuzzleExample {
 
     static final class Puzzle {
 
-        private int[] plainBoard = {0,1,2,3,4,5,6,7,8};
+        private final int[] plainBoard;
+        private int[][] matrix = null;
 
         // Matrix board
         Puzzle(int[][] board){
@@ -51,9 +53,10 @@ public final class EightPuzzleExample {
                     this.plainBoard[x*size+y]=board[x][y];
                 }
             }
+            this.matrix = board;
         }
 
-        static int[][] matrixBoard(int[] plainBoard){
+        int[][] matrixBoard(int[] plainBoard){
             // Generate a squared board. If the array size is not
             // a perfect square, truncate size.
             int size = (int)Math.sqrt(plainBoard.length);
@@ -66,8 +69,15 @@ public final class EightPuzzleExample {
             return board;
         }
 
-        int[][] matrixBoard(){
+        int[][] copyBoard(){
             return matrixBoard(this.plainBoard);
+        }
+
+        int[][] getMatrixBoard(){
+            if (matrix == null){
+                matrix = matrixBoard(this.plainBoard);
+            }
+            return matrix;
         }
 
         // Plain board representation {0,1,2,3,4,5,6,7,8}
@@ -86,7 +96,7 @@ public final class EightPuzzleExample {
         }
 
         Point getTile(int number){
-            int[][] matrixBoard = this.matrixBoard();
+            int[][] matrixBoard = this.getMatrixBoard();
             int size = matrixBoard.length;
             for(int x=0; x<size; x++){
                 for(int y=0; y<size; y++){
@@ -127,7 +137,7 @@ public final class EightPuzzleExample {
         for(int y=0; y < size; y++){
             String row = "";
             for(Puzzle state : path){
-                int[][] board = state.matrixBoard();
+                int[][] board = state.getMatrixBoard();
                 row += "| ";
                 for(int x=0; x<size; x++){
                     row += board[y][x] + " ";
@@ -141,10 +151,10 @@ public final class EightPuzzleExample {
     }
     public static void main(String[] args){
 
-        //final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
-        final Puzzle initialState = new Puzzle(new int[]{1,2,3,4,5,0,6,7,8});
+        final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
+        //final Puzzle initialState = new Puzzle(new int[]{1,2,3,4,5,0,6,7,8});
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
-        final int[][] goal = goalState.matrixBoard();
+        final int[][] goal = goalState.getMatrixBoard();
 
 
         TransitionFunction<Puzzle> tf = new TransitionFunction<Puzzle>() {
@@ -169,7 +179,7 @@ public final class EightPuzzleExample {
                 // states (depending on the gap position).
                 for(Point movement : points){
                     // The tiles that can be moved are those around the gap.
-                    int[][] board = current.matrixBoard();
+                    int[][] board = current.copyBoard();
                     // Generate the new boards (states) with the tiles moved.
                     int size = board.length;
                     // Check if the point is in the board or not!
@@ -201,7 +211,7 @@ public final class EightPuzzleExample {
             public Double estimate(Puzzle state) {
                 // Compute the manhattan distance
                 int mdistance = 0;
-                int[][] board = state.matrixBoard();
+                int[][] board = state.getMatrixBoard();
                 int size = board.length;
                 for (int x = 0; x < size; x++)
                     for (int y = 0; y < size; y++) {
@@ -223,13 +233,15 @@ public final class EightPuzzleExample {
         DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf);
 
 
-        //countdown();
+        countdown();
 
+        Stopwatch w = Stopwatch.createStarted();
         DefaultSearchProblem<Puzzle> p = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf, hf);
         RecursiveIDA<Puzzle, Double> ida = new RecursiveIDA<Puzzle, Double>(initialState, tf, p.getNodeFactory());
         System.out.println("Launching recursive IDA");
         HeuristicNode<Puzzle, Double> dfsGoal = ida.search(goalState);
         System.out.println(dfsGoal.getCost());
+        System.out.println(w.stop().toString());
 
         // Search without heuristic using dijkstra
         Algorithms.Search.Result result = Algorithms.createDijkstra(problem).search();
