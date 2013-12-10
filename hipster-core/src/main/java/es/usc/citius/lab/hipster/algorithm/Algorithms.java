@@ -217,6 +217,10 @@ public final class Algorithms {
         return new Search<S, HeuristicNode<S,Double>>(new AStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
     }
 
+    public static <S> Search<S, HeuristicNode<S,Double>> createIDAStar(HeuristicSearchProblem<S, Double> problem) {
+        return new Search<S, HeuristicNode<S,Double>>(new IDAStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp()), problem.getGoalState());
+    }
+
     /**
      * Creates a Dijkstra algorithm using the same implementation of the {@literal A*} without heuristics.
      * @param problem {@link SearchProblem} describing the elements of the search problem.
