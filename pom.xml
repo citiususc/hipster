@@ -64,6 +64,21 @@
             </roles>
         </developer>
     </developers>
+
+    <!-- Deployment to the internal nexus server -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Internal Releases</name>
+            <url>http://tec.citius.usc.es/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Internal Snapshots</name>
+            <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <!-- Test dependencies -->
         <dependency>
