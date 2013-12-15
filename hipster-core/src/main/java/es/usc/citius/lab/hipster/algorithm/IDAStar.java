@@ -121,7 +121,7 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
                 // Reinitialize
                 if (minfLimit != null && minfLimit.compareTo(fLimit)>0){
                     fLimit = minfLimit;
-                    System.out.println("Reinitializing, new bound: " + fLimit);
+                    //System.out.println("Reinitializing, new bound: " + fLimit);
                     HeuristicNode<S, T> initialNode = this.factory.node(null, new Transition<S>(initialState));
                     minfLimit = null;
                     stack.add(new IDAStackNode(initialNode));
