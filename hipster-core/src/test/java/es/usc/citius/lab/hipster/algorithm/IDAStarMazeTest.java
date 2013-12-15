@@ -69,49 +69,11 @@ public class IDAStarMazeTest {
     }
 
     @Test
-    public void Dijkstra_Maze1() throws InterruptedException {
-        execute(Mazes.Example.MAZE1, false);
-    }
-
-    @Test
-    public void IDAStar_Maze2() throws InterruptedException {
-        execute(Mazes.Example.MAZE2, true);
-    }
-
-    @Test
-    public void Dijkstra_Maze2() throws InterruptedException {
-        execute(Mazes.Example.MAZE2, false);
-    }
-
-    @Test
     public void IDAStar_Maze3() throws InterruptedException {
         execute(Mazes.Example.MAZE3, true);
     }
 
-    @Test
-    public void Dijkstra_Maze3() throws InterruptedException {
-        execute(Mazes.Example.MAZE3, false);
-    }
 
-    @Test
-    public void IDAStar_Maze4() throws InterruptedException {
-        execute(Mazes.Example.MAZE4, true);
-    }
-
-    @Test
-    public void Dijkstra_Maze4() throws InterruptedException {
-        execute(Mazes.Example.MAZE4, false);
-    }
-
-    @Test
-    public void IDAStar_Maze5() throws InterruptedException {
-        execute(Mazes.Example.MAZE5, true);
-    }
-
-    @Test
-    public void Dijkstra_Maze5() throws InterruptedException {
-        execute(Mazes.Example.MAZE5, false);
-    }
 
     private void search(final Multimap<String, String> graph, String initial, String goal){
         TransitionFunction<String> tf = new TransitionFunction<String>() {
