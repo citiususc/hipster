@@ -16,7 +16,8 @@
 
 package es.usc.citius.lab.hipster.algorithm.combinatorial;
 
-import es.usc.citius.lab.hipster.util.parallel.Parallel;
+
+import es.usc.citius.common.parallel.Parallel;
 
 import java.util.*;
 import java.util.Map.Entry;
