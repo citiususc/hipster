@@ -13,12 +13,7 @@
         <module>hipster-jung</module>
     </modules>
     <properties>
-        <gpg.skip>true</gpg.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <test.jvm.argLine>
-            -server
-            -XX:+AggressiveOpts
-        </test.jvm.argLine>
     </properties>
     <organization>
         <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
