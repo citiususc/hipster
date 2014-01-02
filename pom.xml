@@ -12,6 +12,7 @@
         <module>hipster-core</module>
         <module>hipster-jung</module>
         <module>hipster-examples</module>
+        <module>hipster-all</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
