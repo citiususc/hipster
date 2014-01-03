@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ * Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.collections.adapters;
+package es.usc.citius.lab.hipster.collections.adapter;
 
-import es.usc.citius.lab.hipster.collections.JGraphTFibonacciHeap;
+import es.usc.citius.lab.hipster.collections.FibonacciHeap;
 
 import java.util.AbstractQueue;
 import java.util.Iterator;
@@ -24,11 +24,11 @@ import java.util.Iterator;
 /**
  * @author Pablo Rodríguez Mier
  */
-public class JGraphTFibonacciQueue<E> extends AbstractQueue<E> {
-    private JGraphTFibonacciHeap<E> heap = new JGraphTFibonacciHeap<E>();
+public class PriorityFibonacciQueue<E> extends AbstractQueue<E> {
+    private final FibonacciHeap<E> heap = new FibonacciHeap<E>();
     private PriorityEvaluator<E> evaluator;
 
-    public JGraphTFibonacciQueue(PriorityEvaluator<E> evaluator) {
+    public PriorityFibonacciQueue(PriorityEvaluator<E> evaluator) {
         this.evaluator = evaluator;
     }
 
@@ -42,7 +42,7 @@ public class JGraphTFibonacciQueue<E> extends AbstractQueue<E> {
 
             @Override
             public E next() {
-                return heap.min().getData();
+                return heap.dequeueMin().getValue();
             }
 
             @Override
@@ -59,20 +59,17 @@ public class JGraphTFibonacciQueue<E> extends AbstractQueue<E> {
 
     @Override
     public boolean offer(E e) {
-        double priority = this.evaluator.getPriority(e);
-        JGraphTFibonacciHeap.FibonacciHeapNode<E> node =
-                new JGraphTFibonacciHeap.FibonacciHeapNode<E>(e, priority);
-        heap.insert(node, priority);
+        heap.enqueue(e, this.evaluator.getPriority(e));
         return true;
     }
 
     @Override
     public E poll() {
-        return heap.removeMin().getData();
+        return heap.dequeueMin().getValue();
     }
 
     @Override
     public E peek() {
-        return heap.min().getData();
+        return heap.min().getValue();
     }
 }

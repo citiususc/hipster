@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.collection;
 
 
+import es.usc.citius.lab.hipster.collections.HashQueue;
 import org.junit.Test;
 
 import java.util.Iterator;

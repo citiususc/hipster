@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ * Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -69,6 +69,11 @@ package es.usc.citius.lab.hipster.collections;
  * we can implement delete by decreasing a key to -\infty, then calling
  * dequeueMin to extract it.
  *
+ */
+
+/**
+ * DISCLAIMER:
+ * This implementation was taken from http://www.keithschwarz.com/interesting/code/?dir=fibonacci-heap
  */
 
 import java.util.ArrayList;
@@ -183,7 +188,7 @@ public final class FibonacciHeap<T> {
      * empty.
      *
      * @return The smallest element of the heap.
-     * @throws NoSuchElementException If the heap is empty.
+     * @throws java.util.NoSuchElementException If the heap is empty.
      */
     public Entry<T> min() {
         if (isEmpty())
@@ -248,7 +253,7 @@ public final class FibonacciHeap<T> {
      * heap is empty, this throws a NoSuchElementException.
      *
      * @return The smallest element of the Fibonacci heap.
-     * @throws NoSuchElementException If the heap is empty.
+     * @throws java.util.NoSuchElementException If the heap is empty.
      */
     public Entry<T> dequeueMin() {
         /* Check for whether we're empty. */

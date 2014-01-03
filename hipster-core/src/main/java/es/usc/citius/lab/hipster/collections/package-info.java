@@ -15,7 +15,6 @@
  */
 
 /**
- * Custom collections and data structures. For more advanced collections
- * use the hipster-collections module.
+ * Custom collections and data structures.
  */
-package es.usc.citius.lab.hipster.collection;
+package es.usc.citius.lab.hipster.collections;

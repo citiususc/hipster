@@ -1,4 +1,4 @@
-package es.usc.citius.lab.hipster.collection;
+package es.usc.citius.lab.hipster.collections;
 
 import java.util.AbstractQueue;
 import java.util.Iterator;

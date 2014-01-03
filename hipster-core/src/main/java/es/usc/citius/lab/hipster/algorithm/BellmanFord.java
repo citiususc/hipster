@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.collection.HashQueue;
+import es.usc.citius.lab.hipster.collections.HashQueue;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.NodeFactory;
 import es.usc.citius.lab.hipster.node.Transition;
