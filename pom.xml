@@ -8,11 +8,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <url>http://github.com/pablormier/hipster</url>
     <modules>
-        <module>hipster-collections</module>
         <module>hipster-core</module>
         <module>hipster-jung</module>
         <module>hipster-examples</module>
         <module>hipster-all</module>
+        <module>hipster-test</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
