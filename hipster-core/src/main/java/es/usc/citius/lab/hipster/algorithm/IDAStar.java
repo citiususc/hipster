@@ -33,15 +33,15 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
 
     private final S initialState;
     private TransitionFunction<S> transitionFunction;
-    private Stack<IDAStackNode> stack = new Stack<IDAStackNode>();
+    private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
     private NodeFactory<S, HeuristicNode<S, T>> factory;
 
     private T fLimit;
     private T minfLimit;
     private int reinitialization = 0;
-    private IDAStackNode next;
+    private StackFrameNode next;
 
-    private class IDAStackNode {
+    private class StackFrameNode {
         // Iterable used to compute neighbors of the current node
         Iterator<? extends Transition<S>> successors;
         // Current search node
@@ -53,12 +53,12 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
         boolean processed = false;
 
 
-        IDAStackNode(Iterator<? extends Transition<S>> successors, HeuristicNode<S, T> node) {
+        StackFrameNode(Iterator<? extends Transition<S>> successors, HeuristicNode<S, T> node) {
             this.successors = successors;
             this.node = node;
         }
 
-        IDAStackNode(HeuristicNode<S, T> node) {
+        StackFrameNode(HeuristicNode<S, T> node) {
             this.node = node;
             this.successors = transitionFunction.from(node.transition().to()).iterator();
         }
@@ -72,7 +72,7 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
         // Set initial bound
         fLimit = initialNode.getEstimation();
         minfLimit = null;
-        this.stack.add(new IDAStackNode(initialNode));
+        this.stack.add(new StackFrameNode(initialNode));
     }
 
     @Override
@@ -88,14 +88,14 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
     @Override
     public HeuristicNode<S,T> next(){
         if (next != null){
-            IDAStackNode e = next;
+            StackFrameNode e = next;
             // Compute the next one
             next = null;
             // Return current node
             return e.node;
         }
         // Compute next
-        IDAStackNode nextUnvisited = nextUnvisited();
+        StackFrameNode nextUnvisited = nextUnvisited();
         if (nextUnvisited!=null){
             return nextUnvisited.node;
         }
@@ -113,18 +113,19 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
         }
     }
 
-    private IDAStackNode nextUnvisited(){
-        IDAStackNode nextNode = null;
+    private StackFrameNode nextUnvisited(){
+        StackFrameNode nextNode;
         do {
             nextNode = processNextNode();
             if (nextNode == null){
                 // Reinitialize
                 if (minfLimit != null && minfLimit.compareTo(fLimit)>0){
                     fLimit = minfLimit;
+                    reinitialization++;
                     //System.out.println("Reinitializing, new bound: " + fLimit);
                     HeuristicNode<S, T> initialNode = this.factory.node(null, new Transition<S>(initialState));
                     minfLimit = null;
-                    stack.add(new IDAStackNode(initialNode));
+                    stack.add(new StackFrameNode(initialNode));
                     nextNode = processNextNode();
                 }
             }
@@ -137,7 +138,7 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
     }
 
 
-    private IDAStackNode processNextNode(){
+    private StackFrameNode processNextNode(){
         // Get and process the current node. Cases:
         //   1 - empty stack, return null
         //   2 - node exceeds the bound: update minfLimit, pop and skip.
@@ -151,7 +152,7 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
         if (stack.isEmpty()) return null;
 
         // Take current node in the stack but do not remove
-        IDAStackNode current = stack.peek();
+        StackFrameNode current = stack.peek();
 
         // 2 - Check if the current node exceeds the limit bound
         T fCurrent = current.node.getScore();
@@ -170,7 +171,7 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
             Transition<S> t = current.successors.next();
             // Create the neighbor and push the node
             HeuristicNode<S, T> neighbor = factory.node(current.node, t);
-            stack.add(new IDAStackNode(neighbor));
+            stack.add(new StackFrameNode(neighbor));
             return current;
 
         } else {
@@ -183,9 +184,24 @@ public class IDAStar<S, T extends Comparable<T>> implements Iterator<HeuristicNo
 
     }
 
+    public Stack<StackFrameNode> getStack() {
+        return stack;
+    }
+
+    public T getfLimit() {
+        return fLimit;
+    }
+
+    public T getMinfLimit() {
+        return minfLimit;
+    }
+
+    public int getReinitialization() {
+        return reinitialization;
+    }
 
     @Override
     public void remove() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException();
     }
 }
