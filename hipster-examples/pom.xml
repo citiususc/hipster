@@ -27,5 +27,11 @@
 
     <artifactId>hipster-examples</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>es.usc.citius.lab</groupId>
+            <artifactId>hipster-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

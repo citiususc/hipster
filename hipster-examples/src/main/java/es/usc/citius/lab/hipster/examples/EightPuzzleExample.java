@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ * Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,28 +17,41 @@
 package es.usc.citius.lab.hipster.examples;
 
 
-import com.google.common.base.Stopwatch;
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.RecursiveIDA;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.AbstractNode;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Transition;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
 
 public final class EightPuzzleExample {
 
+    /**
+     * Puzzle class represents the state codification for this game. Note that
+     * the performance of the search algorithm strongly depends
+     * on the chosen representation of the state, as well as
+     * the performance of the transition and evaluation functions.
+     * This representation for a state of the 8-puzzle problem is not
+     * the most efficient one, but enough to solve the problem fast
+     * and clearly enough.
+     */
     static final class Puzzle {
 
+        // This is the attribute used to compute
+        // the hash and the equality test between puzzles.
         private final int[] plainBoard;
+
         private int[][] matrix = null;
+        // Used to optimize the search
+        private Puzzle previousBoard;
 
         // Matrix board
         Puzzle(int[][] board){
@@ -108,6 +121,14 @@ public final class EightPuzzleExample {
             return null;
         }
 
+        public Puzzle getPreviousBoard() {
+            return previousBoard;
+        }
+
+        public void setPreviousBoard(Puzzle previousBoard) {
+            this.previousBoard = previousBoard;
+        }
+
         // IMPORTANT NOTE: Since we are creating a state class (the basic unit search)
         // we have to override equals & hashcode to guarantee that two states with
         // the same tiles in the same position ARE EQUAL.
@@ -131,6 +152,12 @@ public final class EightPuzzleExample {
     }
 
 
+    /**
+     * Prints a search path in a readable form.
+     * @param path List of puzzle states of the path.
+     * @param size Size of the puzzle state (8 for 8-puzzle)
+     * @return String representing all the transitions from initial to goal.
+     */
     public static String getPrettyPath(List<Puzzle> path, int size){
         // Print each row of all states
         StringBuffer output = new StringBuffer();
@@ -149,10 +176,10 @@ public final class EightPuzzleExample {
         }
         return output.toString();
     }
+
     public static void main(String[] args){
 
         final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
-        //final Puzzle initialState = new Puzzle(new int[]{1,2,3,4,5,0,6,7,8});
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
         final int[][] goal = goalState.getMatrixBoard();
 
@@ -177,6 +204,10 @@ public final class EightPuzzleExample {
                 // Now, we generate the boards (states) resulting from
                 // moving one tile to the gap. We have max 4 possible new
                 // states (depending on the gap position).
+
+                // For optimization purposes, we avoid to take an action that leads to
+                // the previous state.
+                Puzzle previousBoard = current.getPreviousBoard();
                 for(Point movement : points){
                     // The tiles that can be moved are those around the gap.
                     int[][] board = current.copyBoard();
@@ -191,9 +222,14 @@ public final class EightPuzzleExample {
                         // Fill the tile with the gap
                         board[movement.x][movement.y] = 0;
                         // Create the new board state
-                        states.add(new Puzzle(board));
+                        Puzzle newState = new Puzzle(board);
+                        if (!(previousBoard != null && previousBoard.equals(newState))){
+                            newState.setPreviousBoard(current);
+                            states.add(newState);
+                        }
                     }
                 }
+
                 // Generate the transitions
                 return Transition.map(current, states);
             }
@@ -230,52 +266,38 @@ public final class EightPuzzleExample {
 
         // Create a search problem using all these elements. We can use the DefaultSearchProblem
         // implementation that uses double values.
-        DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf);
+        DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf, hf);
+        solveWithDijkstra(problem);
+        solveWithAStar(problem);
+        solveWithIterativeIDA(problem);
+    }
 
+    public static void solveWithAStar(DefaultSearchProblem<Puzzle> problem){
+        System.out.println("Solving puzzle with A* + Manhattan distance...");
+        printSearchResult(Algorithms.createAStar(problem).search(), problem.getInitialState().matrix.length);
+    }
 
-        countdown();
+    public static void solveWithDijkstra(DefaultSearchProblem<Puzzle> problem){
+        System.out.println("Solving puzzle with Dijkstra...");
+        printSearchResult(Algorithms.createDijkstra(problem).search(), problem.getInitialState().matrix.length);
+    }
 
-        Stopwatch w = Stopwatch.createStarted();
-        DefaultSearchProblem<Puzzle> p = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf, hf);
-        RecursiveIDA<Puzzle, Double> ida = new RecursiveIDA<Puzzle, Double>(initialState, tf, p.getNodeFactory());
+    public static void solveWithRecursiveIDA(DefaultSearchProblem<Puzzle> problem){
+        RecursiveIDA<Puzzle, Double> ida = new RecursiveIDA<Puzzle, Double>(problem.getInitialState(), problem.getTransitionFunction(), problem.getNodeFactory());
         System.out.println("Launching recursive IDA");
-        HeuristicNode<Puzzle, Double> dfsGoal = ida.search(goalState);
-        System.out.println(dfsGoal.getCost());
-        System.out.println(w.stop().toString());
+        ida.search(problem.getGoalState());
+    }
 
-        // Search without heuristic using dijkstra
-        Algorithms.Search.Result result = Algorithms.createDijkstra(problem).search();
-        // Print solution
-        System.out.println("Solution without heuristics");
-        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), goal.length));
+    public static void solveWithIterativeIDA(DefaultSearchProblem<Puzzle> problem){
+        System.out.println("Solving puzzle with IDA* + manhattan distance (iterative implementation)...");
+        printSearchResult(Algorithms.createIDAStar(problem).search(), problem.getInitialState().matrix.length);
+    }
+
+    public static void printSearchResult(Algorithms.Search.Result result, int boardSize){
+        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), boardSize));
         System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
         System.out.println("Total iterations: " + result.getIterations());
         System.out.println("Total time: " + result.getStopwatch().toString());
         System.out.println();
-
-        countdown();
-        System.out.println("Solution using Manhattan Distance");
-        // Now, search using manhattan distance as the heuristic function
-        problem.setHeuristicFunction(hf);
-        // Search without heuristic using dijkstra
-        result = Algorithms.createAStar(problem).search();
-        // Print solution
-        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), goal.length));
-        System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
-        System.out.println("Total iterations: " + result.getIterations());
-        System.out.println("Total time: " + result.getStopwatch().toString());
-    }
-
-    private static void countdown(){
-        int s=20;
-        while(s>0){
-            System.out.println("Starting in " + s + " seconds");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-            s--;
-        }
     }
 }
