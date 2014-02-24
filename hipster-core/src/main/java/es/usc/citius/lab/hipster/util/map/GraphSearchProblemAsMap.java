@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- *
+ * Definition for a generic graph-based problem, where the connectivity is defined using a Map<S, Iterable<S>>,
+ * the costs are defined with a Map<S, Map<S, Double>> and the heuristic (optional) is defined as a Map<S, Double>.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 24/02/2014
