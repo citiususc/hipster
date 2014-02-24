@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/DECORATION/1.3.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd">
+
+    <skin>
+        <groupId>lt.velykis.maven.skins</groupId>
+        <artifactId>reflow-maven-skin</artifactId>
+        <version>1.0.0</version>
+    </skin>
+
+    <custom>
+        <reflowSkin>
+            <smoothScroll>true</smoothScroll>
+            <theme>default</theme>
+            <highlightJs>true</highlightJs>
+            <highlightJsTheme>github</highlightJsTheme>
+            <brand>
+                <name>Hipster</name>
+                <href>http://github.com/pablormier/hipster</href>
+            </brand>
+            <slogan>Heuristic Search Library for Java</slogan>
+            <titleTemplate>%2$s | %1$s</titleTemplate>
+            <!-- Use Table of Contents at the top of the page (max 6 elements) -->
+            <toc>top</toc>
+            <tocTopMax>6</tocTopMax>
+            <!-- Include the documentation and tools in the top navigation (in addition to links) -->
+            <topNav>Download|reports</topNav>
+            <bottomNav maxSpan="9">
+                <column>Main|Download</column>
+                <column>Documentation</column>
+                <!--<column>reports</column>-->
+            </bottomNav>
+            <bottomDescription>
+                The Open Source Heuristic Search Library implemented in pure Java.
+            </bottomDescription>
+            <pages>
+                <index project="project-id">
+                    <shortTitle>Welcome</shortTitle>
+                    <breadcrumbs>false</breadcrumbs>
+                    <toc>false</toc>
+                    <sections>
+                        <carousel />
+                        <body />
+                        <sidebar />
+                        <thumbs>2</thumbs>
+                        <columns>3</columns>
+                    </sections>
+                </index>
+                <developer-info>
+                    <toc>sidebar</toc>
+                </developer-info>
+            </pages>
+        </reflowSkin>
+    </custom>
+
+    <!--
+    <bannerLeft>
+        <name></name>
+        <src>images/logo.png</src>
+        <height>475</height>
+        <width>263</width>
+        <href></href>
+    </bannerLeft>
+    -->
+
+    <body>
+        <menu name="Modules" ref="modules"/>
+        <menu name="Reports" ref="reports"/>
+    </body>
+
+</project>
