@@ -30,7 +30,7 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 
-public class MazeShortestPathExample {
+public class MazeShortestPath {
 
     public static void main(String[] args) throws InterruptedException {
         // First, create a maze. There is a class called Maze2D
