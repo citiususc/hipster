@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
+import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.NodeFactory;
@@ -299,4 +300,28 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     public void remove() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * AD* uses the OPEN queue to order the most promising nodes to be expanded by the
+     * algorithm. This method retrieves the original map (not a copy) that contains
+     * the pairs of <State, Node>
+     *
+     * @return open map with the unexplored nodes and states.
+     */
+    public Map<S, ADStarNode<S, T>> getOpen() {
+        return open;
+    }
+
+    /**
+     * Get the internal map used by the algorithm to keep the relations between
+     * explored states and nodes. Modifications to the map can alter the normal
+     * function of the algorithm.
+     *
+     * @return closed map with the explored nodes and states
+     */
+    public Map<S, ADStarNode<S, T>> getClosed() {
+        return closed;
+    }
+
+    public Map<S, ADStarNode<S, T>> getIncons() { return incons; }
 }
