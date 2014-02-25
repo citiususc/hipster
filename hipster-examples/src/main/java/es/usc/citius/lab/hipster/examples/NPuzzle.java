@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class EightPuzzleExample {
+public final class NPuzzle {
 
     /**
      * Puzzle class represents the state codification for this game. Note that
