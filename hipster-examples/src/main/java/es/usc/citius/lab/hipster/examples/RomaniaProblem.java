@@ -6,14 +6,8 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
-import es.usc.citius.lab.hipster.algorithm.problem.SearchProblem;
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.map.GraphSearchProblemAsMap;
+import es.usc.citius.lab.hipster.util.map.MapBasedGraphSearchProblem;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -62,7 +56,7 @@ public class RomaniaProblem {
         City begin = City.Lugoj;
         City goal = City.Bucharest;
         //We instantiate the search problem using the graph-based implementation provided in Hipster.
-        HeuristicSearchProblem<City, Double> problem = new GraphSearchProblemAsMap<City>(begin, goal, transitions(), costs(), heuristics());
+        HeuristicSearchProblem<City, Double> problem = new MapBasedGraphSearchProblem<City>(begin, goal, transitions(), costs(), heuristics());
         List<City> path = Algorithms.createAStar(problem).getOptimalPath();
         System.out.println("Solution path: " + path);
     }

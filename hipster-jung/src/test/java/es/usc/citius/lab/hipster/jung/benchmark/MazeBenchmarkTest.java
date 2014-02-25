@@ -161,8 +161,8 @@ public class MazeBenchmarkTest {
             }
         });
 
-        // ADStar
-        bench.add("Hipster-ADStar", new Algorithm() {
+        // ADStarForward
+        bench.add("Hipster-ADStarForward", new Algorithm() {
             Iterator<? extends CostNode<Point, Double>> it;
             Point goal;
 

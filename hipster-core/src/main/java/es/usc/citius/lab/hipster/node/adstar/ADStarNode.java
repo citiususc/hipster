@@ -26,7 +26,7 @@ import es.usc.citius.lab.hipster.node.Transition;
 
 /**
  * Implementation of {@link es.usc.citius.lab.hipster.node.HeuristicNode} to be used with 
- * the {@link es.usc.citius.lab.hipster.algorithm.ADStar} algorithm. The ADStar node defines the cost
+ * the {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} algorithm. The ADStarForward node defines the cost
  * (called G) and the score (called V) to keep the nomenclature introduced in the 
  * <a href="http://www.cis.upenn.edu/~maximl/files/ad_icaps05.pdf">article describing
  * the algorithm</a>. This type of node also includes a method to calculate the key for a node, which
@@ -138,7 +138,7 @@ public class ADStarNode<S, T extends Comparable<T>> extends AbstractNode<S> impl
     
     /**
      * Inner class defining the key of the node, which depends on the values of G and V. The
-     * key of the node is the comparison criterion for ADStar to order the open queue.
+     * key of the node is the comparison criterion for ADStarForward to order the open queue.
      */
     public static class Key<T extends Comparable<T>> implements Comparable<Key<T>> {
 

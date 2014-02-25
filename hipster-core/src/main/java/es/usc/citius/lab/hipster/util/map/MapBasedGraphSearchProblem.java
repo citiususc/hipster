@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 24/02/2014
  */
-public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Double> {
+public class MapBasedGraphSearchProblem<S> implements HeuristicSearchProblem<S, Double> {
 
     private S begin;
     private S goal;
@@ -26,7 +26,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
     private HeuristicFunction<S, Double> heuristicFunction;
 
     /**
-     * Default constructor for GraphSearchProblemAsMap. The problem is defined as a set
+     * Default constructor for MapBasedGraphSearchProblem. The problem is defined as a set
      * of connections (which defines the transition function) and a map of costs between
      * states (which defines the cost function).
      *
@@ -35,7 +35,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param connectivity map defining the set of neighbor states per state in the graph
      * @param costs map containing for each pair of states the corresponding cost
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs){
+    public MapBasedGraphSearchProblem(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs){
         //assign begin and ending states
         this.begin = begin;
         this.goal = goal;
@@ -63,8 +63,8 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param costs table containing for each pair of states the corresponding cost
      * @param heuristics map containing the heuristic value per state
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs,
-                                   Map<S, Double> heuristics){
+    public MapBasedGraphSearchProblem(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs,
+                                      Map<S, Double> heuristics){
         this(begin, goal, connectivity, costs);
         //assign heuristic function
         this.heuristicFunction = heuristicFunction(heuristics);

@@ -17,7 +17,6 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.node.adstar.ADStarNodeUpdater;
 import es.usc.citius.lab.hipster.node.NodeFactory;
@@ -59,7 +58,7 @@ import java.util.Queue;
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  * @since 0.1.0
  */
-public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
+public class ADStarForward<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
     private final Collection<ADStarNode<S, T>> goalNodes;
@@ -76,7 +75,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     private Queue<ADStarNode<S, T>> queue;
 
     /**
-     * Constructor to instantiate ADStar with a single goal state.
+     * Constructor to instantiate ADStarForward with a single goal state.
      * 
      * @param begin beginning state
      * @param goal goal state
@@ -85,14 +84,14 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
      * @param builder component to obtain instances of nodes
      * @param updater component to update the cost values of nodes already created
      */
-    public ADStar(S begin, S goal, TransitionFunction<S> successors, 
-    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
-    		ADStarNodeUpdater<S, T> updater) {
+    public ADStarForward(S begin, S goal, TransitionFunction<S> successors,
+                         TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder,
+                         ADStarNodeUpdater<S, T> updater) {
     	this(begin, Collections.singleton(goal), successors, predecessors, builder, updater);
     }
     
     /**
-     * Constructor to instantiate ADStar with multiple goal states. The algorithm will find first the 
+     * Constructor to instantiate ADStarForward with multiple goal states. The algorithm will find first the
      * path between the begin and the nearest goal.
      * 
      * @param begin beginning state
@@ -102,9 +101,9 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
      * @param builder component to obtain instances of nodes
      * @param updater component to update the cost values of nodes already created
      */
-    public ADStar(S begin, Collection<S> goals, TransitionFunction<S> successors, 
-    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
-    		ADStarNodeUpdater<S, T> updater) {
+    public ADStarForward(S begin, Collection<S> goals, TransitionFunction<S> successors,
+                         TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder,
+                         ADStarNodeUpdater<S, T> updater) {
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;

@@ -31,9 +31,9 @@ import static org.junit.Assert.assertEquals;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  */
-public class ADStarMazeTest {
+public class ADStarForwardMazeTest {
 
-    public ADStarMazeTest() {
+    public ADStarForwardMazeTest() {
     }
 
 
