@@ -7,6 +7,7 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -34,7 +35,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param connectivity map defining the set of neighbor states per state in the graph
      * @param costs map containing for each pair of states the corresponding cost
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Iterable<S>> connectivity, Map<S, Map<S, Double>> costs){
+    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs){
         //assign begin and ending states
         this.begin = begin;
         this.goal = goal;
@@ -62,7 +63,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param costs table containing for each pair of states the corresponding cost
      * @param heuristics map containing the heuristic value per state
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Iterable<S>> connectivity, Map<S, Map<S, Double>> costs,
+    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs,
                                    Map<S, Double> heuristics){
         this(begin, goal, connectivity, costs);
         //assign heuristic function
@@ -102,7 +103,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param <S> class defining the state
      * @return transition function according to the definition of the connectivity taken as input
      */
-    public static <S> TransitionFunction<S> transitionFunction(final Map<S, Iterable<S>> connectivity){
+    public static <S> TransitionFunction<S> transitionFunction(final Map<S, Collection<S>> connectivity){
         return new TransitionFunction<S>() {
             @Override
             public Iterable<? extends Transition<S>> from(S current) {
