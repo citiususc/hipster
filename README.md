@@ -2,6 +2,10 @@
 
 A powerful, easy to use heuristic search library implemented in pure java.
 
+## Goals
+
+The aim of Hipster is to provide an easy to use yet powerful and flexible Java library for heuristic search. 
+Hipster relies on a flexible model with generic operators to change the behavior without modifying the internals. All algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory. 
 
 ## Usage
 
