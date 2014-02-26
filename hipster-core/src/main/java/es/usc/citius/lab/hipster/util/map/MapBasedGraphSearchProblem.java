@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Definition for a generic graph-based problem, where the connectivity is defined using a Map<S, Iterable<S>>,
+ * Definition for a generic graph-based problem, where the connectivity is defined using a Map<S, Collection<S>>,
  * the costs are defined with a Map<S, Map<S, Double>> and the heuristic (optional) is defined as a Map<S, Double>.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
