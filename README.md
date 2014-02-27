@@ -42,13 +42,13 @@ Maven users can include the library using the following snippet:
 #### Snapshots
 
 ````xml
-    <distributionManagement>
-        <snapshotRepository>
+    <repositories>
+        <repository>
             <id>snapshots</id>
-            <name>Internal Snapshots</name>
+            <name>CITIUS Snapshots</name>
             <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+        </repository>
+    </repositories>
 
     <dependencies>
        ...
