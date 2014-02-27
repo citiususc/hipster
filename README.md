@@ -54,7 +54,7 @@ Maven users can include the library using the following snippet:
        ...
        <dependency>
           <groupId>es.usc.citius.lab</groupId>
-          <artifactId>hipster</artifactId>
+          <artifactId>hipster-all</artifactId>
           <version>0.0.1-SNAPSHOT</version>
        </dependency>
     </dependencies>
