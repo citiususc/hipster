@@ -58,7 +58,7 @@ import java.util.Queue;
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  * @since 0.1.0
  */
-public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
+public class ADStarForward<S, T extends Comparable<T>> implements Iterator<ADStarNode<S,T>> {
 
     private final ADStarNode<S, T> beginNode;
     private final Collection<ADStarNode<S, T>> goalNodes;
@@ -75,7 +75,7 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     private Queue<ADStarNode<S, T>> queue;
 
     /**
-     * Constructor to instantiate ADStar with a single goal state.
+     * Constructor to instantiate ADStarForward with a single goal state.
      * 
      * @param begin beginning state
      * @param goal goal state
@@ -84,14 +84,14 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
      * @param builder component to obtain instances of nodes
      * @param updater component to update the cost values of nodes already created
      */
-    public ADStar(S begin, S goal, TransitionFunction<S> successors, 
-    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
-    		ADStarNodeUpdater<S, T> updater) {
+    public ADStarForward(S begin, S goal, TransitionFunction<S> successors,
+                         TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder,
+                         ADStarNodeUpdater<S, T> updater) {
     	this(begin, Collections.singleton(goal), successors, predecessors, builder, updater);
     }
     
     /**
-     * Constructor to instantiate ADStar with multiple goal states. The algorithm will find first the 
+     * Constructor to instantiate ADStarForward with multiple goal states. The algorithm will find first the
      * path between the begin and the nearest goal.
      * 
      * @param begin beginning state
@@ -101,9 +101,9 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
      * @param builder component to obtain instances of nodes
      * @param updater component to update the cost values of nodes already created
      */
-    public ADStar(S begin, Collection<S> goals, TransitionFunction<S> successors, 
-    		TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder, 
-    		ADStarNodeUpdater<S, T> updater) {
+    public ADStarForward(S begin, Collection<S> goals, TransitionFunction<S> successors,
+                         TransitionFunction<S> predecessors, NodeFactory<S, ADStarNode<S, T>> builder,
+                         ADStarNodeUpdater<S, T> updater) {
         this.builder = builder;
         this.updater = updater;
         this.successorFunction = successors;
@@ -299,4 +299,28 @@ public class ADStar<S, T extends Comparable<T>> implements Iterator<ADStarNode<S
     public void remove() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * AD* uses the OPEN queue to order the most promising nodes to be expanded by the
+     * algorithm. This method retrieves the original map (not a copy) that contains
+     * the pairs of <State, Node>
+     *
+     * @return open map with the unexplored nodes and states.
+     */
+    public Map<S, ADStarNode<S, T>> getOpen() {
+        return open;
+    }
+
+    /**
+     * Get the internal map used by the algorithm to keep the relations between
+     * explored states and nodes. Modifications to the map can alter the normal
+     * function of the algorithm.
+     *
+     * @return closed map with the explored nodes and states
+     */
+    public Map<S, ADStarNode<S, T>> getClosed() {
+        return closed;
+    }
+
+    public Map<S, ADStarNode<S, T>> getIncons() { return incons; }
 }

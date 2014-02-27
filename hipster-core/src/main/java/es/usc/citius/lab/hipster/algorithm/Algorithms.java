@@ -277,7 +277,7 @@ public final class Algorithms {
      * 
      * @param <S> state type
      * @param <T> cost type (for example, {@link Double}).
-     * @return ADStar iterator with custom cost definition
+     * @return ADStarForward iterator with custom cost definition
      */
     public static <S, T extends Comparable<T>> Search<S, ADStarNode<S, T>> createADStar(HeuristicSearchProblem<S, T> problem, BinaryOperation<T> costAccumulator, ScalarFunction<T> scale, double epsilon) {
         return new Search<S, ADStarNode<S, T>>(new ADStarIteratorFactory<S, T>(problem, costAccumulator, scale, epsilon), problem.getGoalState());
@@ -289,7 +289,7 @@ public final class Algorithms {
      * @param problem description of the heuristic problem (see {@link HeuristicSearchProblem})
      * @param epsilon
      * @param <S> class defining the state
-     * @return ADStar iterator with Double cost
+     * @return ADStarForward iterator with Double cost
      */
     public static <S> Search<S, ADStarNode<S, Double>> createADStar(HeuristicSearchProblem<S, Double> problem, double epsilon) {
         return new Search<S, ADStarNode<S, Double>>(new ADStarIteratorFactory<S, Double>(problem, BinaryOperation.doubleAdditionOp(), ScalarOperation.doubleMultiplicationOp(), epsilon), problem.getGoalState());

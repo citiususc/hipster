@@ -52,7 +52,7 @@ public class AStar<S, T extends Comparable<T>> implements Iterable<HeuristicNode
     private NodeFactory<S, HeuristicNode<S, T>> factory;
 
     /**
-     * Default constructor for ADStar. Requires the initial state, the successor function to generate
+     * Default constructor for ADStarForward. Requires the initial state, the successor function to generate
      * the neighbor states of a current one and the factory to instantiate new nodes.
      * 
      * @param initialState state used as start

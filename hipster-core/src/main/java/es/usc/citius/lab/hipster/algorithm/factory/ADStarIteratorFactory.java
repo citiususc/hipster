@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.algorithm.factory;
 
-import es.usc.citius.lab.hipster.algorithm.ADStar;
+import es.usc.citius.lab.hipster.algorithm.ADStarForward;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.function.ScalarFunction;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 /**
  * This class is an implementation of {@link es.usc.citius.lab.hipster.algorithm.factory.AlgorithmIteratorFactory}
- * to obtain the the {@link es.usc.citius.lab.hipster.algorithm.ADStar} iterator to solve a search problem
+ * to obtain the the {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} iterator to solve a search problem
  * given its definition.
  *
  * @param <S> class defining the state
@@ -48,7 +48,7 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
     private double epsilon;
 
     /**
-     * Main constructor for ADStar factory that takes the definition of a heuristic problem
+     * Main constructor for ADStarForward factory that takes the definition of a heuristic problem
      * the accumulation operation and the scaling operations for the cost type and the sub-optimal
      * bounded value to do the search.
      * 
@@ -75,7 +75,7 @@ public class ADStarIteratorFactory<S, T extends Comparable<T>> implements
                 f.getCostFunction(), f.getHeuristicFunction(), this.costAccumulator, this.scale,
                 this.epsilon);
 
-        return new ADStar<S, T>(f.getInitialState(), f.getGoalState(),
+        return new ADStarForward<S, T>(f.getInitialState(), f.getGoalState(),
                 f.getTransitionFunction(), f.getTransitionFunction(),
                 defaultBuilder, updater);
     }

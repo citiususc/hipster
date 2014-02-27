@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.node.HeuristicNode;
+
+import es.usc.citius.lab.hipster.node.adstar.ADStarNode;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
 import es.usc.citius.lab.hipster.util.maze.MazeSearch;
 import es.usc.citius.lab.hipster.util.maze.Mazes;
@@ -28,22 +28,17 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Executes tests over predefined maze strings, comparing the results between
- * Jung and AD* iterator.
- *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @version 1.0
- * @since 26/03/2013
  */
-public class AStarMazeTest {
+public class ADStarForwardMazeTest {
 
-    public AStarMazeTest() {
+    public ADStarForwardMazeTest() {
     }
 
 
     @Test
-    public void AStar_Maze1() throws InterruptedException {
+    public void ADStar_Maze1() throws InterruptedException {
         execute(Mazes.Example.MAZE1, true);
     }
 
@@ -53,7 +48,7 @@ public class AStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze2() throws InterruptedException {
+    public void ADStar_Maze2() throws InterruptedException {
         execute(Mazes.Example.MAZE2, true);
     }
 
@@ -63,7 +58,7 @@ public class AStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze3() throws InterruptedException {
+    public void ADStar_Maze3() throws InterruptedException {
         execute(Mazes.Example.MAZE3, true);
     }
 
@@ -73,7 +68,7 @@ public class AStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze4() throws InterruptedException {
+    public void ADStar_Maze4() throws InterruptedException {
         execute(Mazes.Example.MAZE4, true);
     }
 
@@ -83,7 +78,7 @@ public class AStarMazeTest {
     }
 
     @Test
-    public void AStar_Maze5() throws InterruptedException {
+    public void ADStar_Maze5() throws InterruptedException {
         execute(Mazes.Example.MAZE5, true);
     }
 
@@ -93,10 +88,9 @@ public class AStarMazeTest {
     }
 
     private void execute(Mazes.Example example, boolean heuristic) {
-
-        Iterator<HeuristicNode<Point,Double>> it = Algorithms.createAStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic)).iterator();
+        Iterator<ADStarNode<Point,Double>> it = Algorithms.createADStar(new MazeHeuristicSearchProblem(example.getMaze(), heuristic), 1.0d).iterator();
         MazeSearch.Result resultIterator = MazeSearch.executeIteratorSearch(it, example.getMaze().getGoalLoc());
-        assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.0000001);
+        assertEquals(example.getMinimalPathCost(), resultIterator.getCost(), 0.000000001);
     }
 
 

@@ -7,16 +7,17 @@ import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Transition;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 /**
- * Definition for a generic graph-based problem, where the connectivity is defined using a Map<S, Iterable<S>>,
+ * Definition for a generic graph-based problem, where the connectivity is defined using a Map<S, Collection<S>>,
  * the costs are defined with a Map<S, Map<S, Double>> and the heuristic (optional) is defined as a Map<S, Double>.
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 24/02/2014
  */
-public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Double> {
+public class MapBasedGraphSearchProblem<S> implements HeuristicSearchProblem<S, Double> {
 
     private S begin;
     private S goal;
@@ -25,7 +26,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
     private HeuristicFunction<S, Double> heuristicFunction;
 
     /**
-     * Default constructor for GraphSearchProblemAsMap. The problem is defined as a set
+     * Default constructor for MapBasedGraphSearchProblem. The problem is defined as a set
      * of connections (which defines the transition function) and a map of costs between
      * states (which defines the cost function).
      *
@@ -34,7 +35,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param connectivity map defining the set of neighbor states per state in the graph
      * @param costs map containing for each pair of states the corresponding cost
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Iterable<S>> connectivity, Map<S, Map<S, Double>> costs){
+    public MapBasedGraphSearchProblem(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs){
         //assign begin and ending states
         this.begin = begin;
         this.goal = goal;
@@ -62,8 +63,8 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param costs table containing for each pair of states the corresponding cost
      * @param heuristics map containing the heuristic value per state
      */
-    public GraphSearchProblemAsMap(S begin, S goal, Map<S, Iterable<S>> connectivity, Map<S, Map<S, Double>> costs,
-                                   Map<S, Double> heuristics){
+    public MapBasedGraphSearchProblem(S begin, S goal, Map<S, Collection<S>> connectivity, Map<S, Map<S, Double>> costs,
+                                      Map<S, Double> heuristics){
         this(begin, goal, connectivity, costs);
         //assign heuristic function
         this.heuristicFunction = heuristicFunction(heuristics);
@@ -102,7 +103,7 @@ public class GraphSearchProblemAsMap<S> implements HeuristicSearchProblem<S, Dou
      * @param <S> class defining the state
      * @return transition function according to the definition of the connectivity taken as input
      */
-    public static <S> TransitionFunction<S> transitionFunction(final Map<S, Iterable<S>> connectivity){
+    public static <S> TransitionFunction<S> transitionFunction(final Map<S, Collection<S>> connectivity){
         return new TransitionFunction<S>() {
             @Override
             public Iterable<? extends Transition<S>> from(S current) {

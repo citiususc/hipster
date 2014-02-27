@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * The ADStarNodeUpdater is used by the {@link es.usc.citius.lab.hipster.algorithm.ADStar}
+ * The ADStarNodeUpdater is used by the {@link es.usc.citius.lab.hipster.algorithm.ADStarForward}
  * algorithm to update the G and V values of the {@link es.usc.citius.lab.hipster.node.adstar.ADStarNode} 
  * explored by the algorithm. Different operations are executed depending on its consistent or inconsistent state:
  * <ul>
@@ -62,13 +62,13 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
     /**
      * The constructor for ADStarNodeUpdater takes the elements that involve the cost
      * definition to update the G and V values of the {@link es.usc.citius.lab.hipster.node.adstar.ADStarNode} 
-     * as the {@link es.usc.citius.lab.hipster.algorithm.ADStar} algorithm is being executed.
+     * as the {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} algorithm is being executed.
      * 
      * @param costFunction function to evaluate instances of {@link es.usc.citius.lab.hipster.node.Transition}
      * @param heuristicFunction function to estimate the cost of to the goal
      * @param add operation to accumulate the cost
      * @param scale operation to scale the cost by a factor
-     * @param epsilon inflation factor of the {@link es.usc.citius.lab.hipster.algorithm.ADStar} algorithm
+     * @param epsilon inflation factor of the {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} algorithm
      */
     public ADStarNodeUpdater(CostFunction<S, T> costFunction,
                              HeuristicFunction<S, T> heuristicFunction, BinaryOperation<T> add,
@@ -84,8 +84,8 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
      * Updates a node in consistent state (V > G) updating the path
      * and the cost if the parent node and the transition improves the current cost of the node.
      * 
-     * @param node {@link es.usc.citius.lab.hipster.algorithm.ADStar} node to update, in consistent state
-     * @param parent previous {@link es.usc.citius.lab.hipster.algorithm.ADStar} of the node
+     * @param node {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} node to update, in consistent state
+     * @param parent previous {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} of the node
      * @param transition {@link es.usc.citius.lab.hipster.node.Transition} between the parent and the node
      * @return true if the node has changed its {@link es.usc.citius.lab.hipster.node.adstar.ADStarNode.Key}
      */
@@ -111,7 +111,7 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
      * Updates a node in inconsistent state (V <= G), evaluating all the predecessors of the current node
      * and updating the parent to the node which combination of cost and transition is minimal.
      * 
-     * @param node inconsistent {@link es.usc.citius.lab.hipster.algorithm.ADStar} node to update
+     * @param node inconsistent {@link es.usc.citius.lab.hipster.algorithm.ADStarForward} node to update
      * @param predecessorMap map containing the the predecessor nodes and 
      * @return true if the node has changed its {@link es.usc.citius.lab.hipster.node.adstar.ADStarNode.Key}
      */
