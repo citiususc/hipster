@@ -34,13 +34,30 @@ TODO;
 The easiest way to use Hipster is adding it as a dependency with your favourite dependency manager.
 Maven users can include the library using the following snippet:
 
+#### Snapshots
+
 ````xml
-<dependency>
-    <groupId>es.usc.citius</groupId>
-    <artifactId>hipster</artifactId>
-    <version>${hipster.version}</version>
-</dependency>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Internal Snapshots</name>
+            <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencies>
+       ...
+       <dependency>
+          <groupId>es.usc.citius.lab</groupId>
+          <artifactId>hipster</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+       </dependency>
+    </dependencies>
 ````
+
+#### Releases
+
+TODO;
 
 ## License
 
