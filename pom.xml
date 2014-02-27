@@ -18,6 +18,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Point to the root dir to locate custom templates for javadoc -->
         <hipster.root.dir>${project.basedir}</hipster.root.dir>
+        <!-- Site config -->
+        <site.url>http://citiususc.github.io/hipster</site.url>
+        <github.global.server>github</github.global.server>
+        <site.deploy.id>gh-pages</site.deploy.id>
+        <site.deploy.url />
     </properties>
     <organization>
         <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
@@ -76,6 +81,11 @@
             <name>Internal Snapshots</name>
             <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
+        <site>
+            <id>${site.deploy.id}</id>
+            <name>Github site deployment</name>
+            <url>${site.deploy.url}</url>
+        </site>
     </distributionManagement>
 
     <dependencies>
@@ -123,6 +133,36 @@
                         <useStandardDocletOptions>false</useStandardDocletOptions>
                         <additionalJOption>-J-Xmx1024m</additionalJOption>
                         <docfilessubdirs>true</docfilessubdirs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>lt.velykis.maven.skins</groupId>
+                            <artifactId>reflow-velocity-tools</artifactId>
+                            <version>1.0.0</version>
+                        </dependency>
+                        <!-- Reflow skin requires Velocity >= 1.7  -->
+                        <dependency>
+                            <groupId>org.apache.velocity</groupId>
+                            <artifactId>velocity</artifactId>
+                            <version>1.7</version>
+                        </dependency>
+                        <!-- Markdown site support with Doxia -->
+                        <dependency>
+                            <groupId>org.apache.maven.doxia</groupId>
+                            <artifactId>doxia-module-markdown</artifactId>
+                            <version>1.3</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <skipDeploy>true</skipDeploy>
+                        <generateReports>true</generateReports>
+                        <inputEncoding>UTF-8</inputEncoding>
+                        <outputEncoding>UTF-8</outputEncoding>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -213,26 +253,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>lt.velykis.maven.skins</groupId>
-                        <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.0.0</version>
-                    </dependency>
-                    <!-- Reflow skin requires Velocity >= 1.7  -->
-                    <dependency>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                        <version>1.7</version>
-                    </dependency>
-                    <!-- Markdown site support with Doxia -->
-                    <dependency>
-                        <groupId>org.apache.maven.doxia</groupId>
-                        <artifactId>doxia-module-markdown</artifactId>
-                        <version>1.3</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <!-- Plugin to generate reports of test coverage -->
             <plugin>
@@ -242,4 +262,30 @@
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>summary</report>
+                            <report>license</report>
+                            <report>modules</report>
+                            <report>project-team</report>
+                            <report>scm</report>
+                            <report>issue-tracking</report>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugins</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>
