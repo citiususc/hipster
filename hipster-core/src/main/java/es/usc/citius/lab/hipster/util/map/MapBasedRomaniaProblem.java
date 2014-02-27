@@ -4,10 +4,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
+import es.usc.citius.lab.hipster.algorithm.Algorithms;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Definition of the states, transitions, costs and heuristics for the Romania Problem
@@ -133,6 +132,8 @@ public class MapBasedRomaniaProblem {
         table.put(City.Sibiu, City.Arad, 140d);
         table.put(City.Sibiu, City.Fagaras, 99d);
         table.put(City.Sibiu, City.Rimnicu_Vilcea, 80d);
+        table.put(City.Fagaras, City.Sibiu, 99d);
+        table.put(City.Fagaras, City.Bucharest, 211d);
         table.put(City.Pitesti, City.Rimnicu_Vilcea, 97d);
         table.put(City.Pitesti, City.Craiova, 138d);
         table.put(City.Pitesti, City.Bucharest, 101d);
