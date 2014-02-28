@@ -42,19 +42,19 @@ Maven users can include the library using the following snippet:
 #### Snapshots
 
 ````xml
-    <distributionManagement>
-        <snapshotRepository>
+    <repositories>
+        <repository>
             <id>snapshots</id>
-            <name>Internal Snapshots</name>
+            <name>CITIUS Snapshots</name>
             <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+        </repository>
+    </repositories>
 
     <dependencies>
        ...
        <dependency>
           <groupId>es.usc.citius.lab</groupId>
-          <artifactId>hipster</artifactId>
+          <artifactId>hipster-all</artifactId>
           <version>0.0.1-SNAPSHOT</version>
        </dependency>
     </dependencies>
