@@ -93,15 +93,15 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
                                     ADStarNode<S, T> parent, Transition<S> transition) {
         T accumulatedCost = this.add.apply(parent.getG(),
                 this.costFunction.evaluate(transition)); // parent.getG().add(this.costFunction.evaluate(transition));
-        if (node.g.compareTo(accumulatedCost) > 0) {
+        if (node.getG().compareTo(accumulatedCost) > 0) {
             node.setPreviousNode(parent);
             // node.previousNode = parent;
-            node.g = accumulatedCost;
+            node.setG(accumulatedCost);
             node.setState(transition);
             // node.state = transition;
-            node.key = new ADStarNode.Key<T>(node.g, node.v,
+            node.setKey(new ADStarNode.Key<T>(node.getG(), node.getV(),
                     this.heuristicFunction.estimate(transition.to()),
-                    this.epsilon, this.add, this.scale);
+                    this.epsilon, this.add, this.scale));
             return true;
         }
         return false;
@@ -122,7 +122,7 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
         Transition<S> minTransition = null;
         for (Entry<Transition<S>, ADStarNode<S, T>> current : predecessorMap
                 .entrySet()) {
-            T value = this.add.apply(current.getValue().v, this.costFunction.evaluate(current.getKey()));
+            T value = this.add.apply(current.getValue().getV(), this.costFunction.evaluate(current.getKey()));
             //T value = current.getValue().v.add(this.costFunction.evaluate(current.getKey()));
             if (value.compareTo(minValue) < 0) {
                 minValue = value;
@@ -132,12 +132,12 @@ public class ADStarNodeUpdater<S, T extends Comparable<T>> {
         }
         node.setPreviousNode(minParent);
         // node.previousNode = minParent;
-        node.g = minValue;
+        node.setG(minValue);
         node.setState(minTransition);
         // node.state = minTransition;
-        node.key = new ADStarNode.Key<T>(node.g, node.v,
+        node.setKey(new ADStarNode.Key<T>(node.getG(), node.getV(),
                 this.heuristicFunction.estimate(minTransition.to()),
-                this.epsilon, this.add, this.scale);
+                this.epsilon, this.add, this.scale));
         return true;
     }
 
