@@ -76,6 +76,15 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         public List<S> getOptimalPath() {
             return optimalPath;
         }
+
+        @Override
+        public String toString() {
+            return "Search Result {" +
+                    "Search time=" + stopwatch +
+                    ", total iterations=" + iterations +
+                    ", optimal path=" + optimalPath +
+                    '}';
+        }
     }
 
     public interface SearchListener<N> {
