@@ -14,14 +14,17 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model;
+package es.usc.citius.hipster.model.impl;
+
+import es.usc.citius.hipster.model.AbstractNode;
+import es.usc.citius.hipster.model.ActionState;
 
 /**
  * Simple implementation of a search node which does not keep any information about
  * costs. If your problem does not use actions, you can use instances of
  * {@code new UnweightedNode<Void,S>}.
  *
- * @see es.usc.citius.hipster.model.UnweightedNode#newNodeWithoutAction(UnweightedNode, Object)
+ * @see UnweightedNode#newNodeWithoutAction(UnweightedNode, Object)
  * @param <A> Generic actions of the problem.
  * @param <S> Generic states of the problem.
  */

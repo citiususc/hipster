@@ -18,12 +18,25 @@ package es.usc.citius.hipster.algorithm;
 
 
 import es.usc.citius.hipster.model.ActionState;
-import es.usc.citius.hipster.model.UnweightedNode;
+import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 public final class Hipster {
 
+    public static <A,S,N extends HeuristicNode<A,S,Double,N>> AStar<A,S,Double,N> createAStar(HeuristicSearchProblem<A,S,Double> problem){
+        return null;
+    }
+
+    /**
+     * Create a simple BFS algorithm using nodes of type UnweightedNode
+     * @param problem search problem components
+     * @param <A> action type
+     * @param <S> state type
+     * @return
+     */
     public static <A,S> BreadthFirstSearch<A,S,UnweightedNode<A,S>> createBreadthFirstSearch(SearchProblem<A,S> problem){
         return new BreadthFirstSearch<A, S, UnweightedNode<A,S>>(problem.getInitialState(), problem.getTransitionFunction(),
                 new NodeFactory<A, S, UnweightedNode<A,S>>() {
