@@ -23,7 +23,7 @@ import es.usc.citius.hipster.model.function.NodeFactory;
 
 import java.util.*;
 
-public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> implements Iterator<N> {
+public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
     private Queue<N> queue = new LinkedList<N>();
     private NodeFactory<A,S,N> nodeFactory;
     private Map<S, N> visited = new HashMap<S, N>();
@@ -38,28 +38,32 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> implements Iterator<N
     }
 
     @Override
-    public boolean hasNext() {
-        return !queue.isEmpty();
-    }
-
-    @Override
-    public N next() {
-        // Take next node
-        N current = this.queue.poll();
-        S currentState = current.state();
-        for(ActionState<A,S> transition : tf.transitionsFrom(currentState)){
-            if (!this.visited.containsKey(transition.getState())){
-                N successorNode = this.nodeFactory.makeNode(current, transition);
-                this.visited.put(transition.getState(), successorNode);
-                this.queue.add(successorNode);
+    public Iterator<N> iterator() {
+        return new Iterator<N>() {
+            @Override
+            public boolean hasNext() {
+                return !queue.isEmpty();
             }
-        }
 
-        return current;
-    }
+            @Override
+            public N next() {
+                // Take next node
+                N current = queue.poll();
+                S currentState = current.state();
+                for(ActionState<A,S> transition : tf.transitionsFrom(currentState)){
+                    if (!visited.containsKey(transition.getState())){
+                        N successorNode = nodeFactory.makeNode(current, transition);
+                        visited.put(transition.getState(), successorNode);
+                        queue.add(successorNode);
+                    }
+                }
+                return current;
+            }
 
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }
