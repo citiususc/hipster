@@ -21,7 +21,7 @@ package es.usc.citius.hipster.model;
  * costs. If your problem does not use actions, you can use instances of
  * {@code new UnweightedNode<Void,S>}.
  *
- * @see es.usc.citius.hipster.model.UnweightedNode#newNodeWithoutActions(UnweightedNode, Object)
+ * @see es.usc.citius.hipster.model.UnweightedNode#newNodeWithoutAction(UnweightedNode, Object)
  * @param <A> Generic actions of the problem.
  * @param <S> Generic states of the problem.
  */
