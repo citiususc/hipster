@@ -36,7 +36,10 @@ import java.util.*;
  * <a href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=4082128">Original paper</a>:
  * Hart, Peter E., Nils J. Nilsson, and Bertram Raphael. <b>"A formal basis for the heuristic determination of minimum cost paths."</b>. <i>IEEE Transactions on Systems Science and Cybernetics 4.2 (1968): 100-107</i>.
  *
- * @param <S> state type
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <C> comparable cost used to compare states.
+ * @param <N> type of the heuristic search node used.
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
