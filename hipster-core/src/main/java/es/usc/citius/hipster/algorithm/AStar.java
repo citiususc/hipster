@@ -33,7 +33,7 @@ import java.util.*;
  * time for insertions.
  * </p>
  *
- * <a href="#">Original paper</a>:
+ * <a href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=4082128">Original paper</a>:
  * Hart, Peter E., Nils J. Nilsson, and Bertram Raphael. <b>"A formal basis for the heuristic determination of minimum cost paths."</b>. <i>IEEE Transactions on Systems Science and Cybernetics 4.2 (1968): 100-107</i>.
  *
  * @param <S> state type
