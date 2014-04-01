@@ -35,7 +35,7 @@ public class UnweightedNode<A,S> extends AbstractNode<A,S,UnweightedNode<A,S>> {
         super(previousNode, actionState.getState(), actionState.getAction());
     }
 
-    public static <S> UnweightedNode<Void,S> newNodeWithoutActions(UnweightedNode<Void,S> previousNode, S state){
+    public static <S> UnweightedNode<Void,S> newNodeWithoutAction(UnweightedNode<Void,S> previousNode, S state){
         return new UnweightedNode<Void, S>(previousNode, state, null);
     }
 }
