@@ -27,7 +27,23 @@ import es.usc.citius.hipster.model.function.NodeFactory;
 import java.util.Iterator;
 import java.util.Stack;
 
-
+/**
+ * <p>
+ * Implementation of the IDA* algorithm. Similar to Iterative DFS but using heuristics to limit
+ * the space search and keeping a very low memory usage.
+ * </p>
+ *
+ * <a href="http://www.sciencedirect.com/science/article/pii/0004370285900840">Original paper</a>:
+ * Richard E. Korf <i><b>"Depth-first Iterative-Deepening: An Optimal Admissible Tree Search."</b></i>,
+ * Artificial Intelligence, vol. 27, pp. 97-109, 1985.
+ *
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <C> comparable cost used to compare states.
+ * @param <N> type of the heuristic search node.
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ */
 public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
     private final S initialState;
