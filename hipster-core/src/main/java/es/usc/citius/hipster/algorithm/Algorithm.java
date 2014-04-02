@@ -145,4 +145,12 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         Collections.reverse(states);
         return states;
     }
+
+    public S getGoalState() {
+        return goalState;
+    }
+
+    public void setGoalState(S goalState) {
+        this.goalState = goalState;
+    }
 }
