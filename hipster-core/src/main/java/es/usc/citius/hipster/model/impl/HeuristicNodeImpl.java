@@ -50,4 +50,9 @@ public class HeuristicNodeImpl<A,S,C extends Comparable<C>>
     public C getCost() {
         return cost;
     }
+
+    @Override
+    public int compareTo(HeuristicNodeImpl<A, S, C> o) {
+        return score.compareTo(o.score);
+    }
 }

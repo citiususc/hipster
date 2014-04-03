@@ -25,7 +25,7 @@ package es.usc.citius.hipster.model;
  * @param <C> Cost type (comparable)
  * @param <N> Mode type
  */
-public interface CostNode<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Node<A,S,N> {
+public interface CostNode<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Node<A,S,N>, Comparable<N> {
     /**
      * Obtain the generic cost associated to the cost node.
      * @return
