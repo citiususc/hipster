@@ -177,10 +177,21 @@ public class Problem {
 
         }
 
+        /**
+         * Create a new search problem that does not handle explicit actions, i.e., you only
+         * need to define a transition function from state to states without using actions to
+         * perform a transition.
+         */
         public InternalNoActionStep1 withoutActions(){
             return new InternalNoActionStep1();
         }
 
+        /**
+         * Create a search problem with explicit actions. For example
+         * @param actionClass
+         * @param <A>
+         * @return
+         */
         public <A> InternalWithActionStep1<A> withActions(Class<A> actionClass){
             return new InternalWithActionStep1<A>(actionClass);
         }
