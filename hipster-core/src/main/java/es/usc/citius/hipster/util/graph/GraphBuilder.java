@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class HipsterGraphBuilder {
+public final class GraphBuilder {
 
     protected static class Builder<V,E> {
         private Builder() {}
@@ -132,7 +132,7 @@ public final class HipsterGraphBuilder {
         }
     }
 
-    public static <V,E> MutableHashBasedDirectedGraph<V,E> newHashBasedDirectedGraph(){
+    public static <V,E> MutableHashBasedDirectedGraph<V,E> newDirectedGraph(){
         return new MutableHashBasedDirectedGraph<V, E>();
     }
 }
