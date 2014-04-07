@@ -36,7 +36,7 @@ public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S
     public List<N> path() {
         LinkedList<N> path = new LinkedList<N>();
         N currentNode = (N) this;
-        while(this != null){
+        while(currentNode != null){
             path.add(currentNode);
             currentNode = currentNode.previousNode;
         }
