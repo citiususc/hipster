@@ -18,7 +18,7 @@ package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.ActionState;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 
 import java.util.*;
@@ -46,7 +46,7 @@ import java.util.*;
 public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
     private final S initialState;
-    private final ActionStateTransitionFunction<A,S> tf;
+    private final TransitionFunction<A,S> tf;
     private final NodeFactory<A, S, N> factory;
 
     /**
@@ -57,7 +57,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
      * @param transitionFunction function that retrieves the neighbors of a state
      * @param factory component to obtain the instance of a node from a state
      */
-    public AStar(S initialState, ActionStateTransitionFunction<A,S> transitionFunction, NodeFactory<A, S, N> factory) {
+    public AStar(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A, S, N> factory) {
         this.initialState = initialState;
         this.tf = transitionFunction;
         this.factory = factory;

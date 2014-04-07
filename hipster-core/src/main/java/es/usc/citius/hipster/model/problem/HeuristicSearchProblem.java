@@ -17,6 +17,8 @@
 package es.usc.citius.hipster.model.problem;
 
 
+import es.usc.citius.hipster.model.function.HeuristicFunction;
+
 public interface HeuristicSearchProblem<A,S,C extends Comparable<C>> extends InformedSearchProblem<A,S,C> {
-    void getHeuristicFunction();
+    HeuristicFunction<S,C> getHeuristicFunction();
 }

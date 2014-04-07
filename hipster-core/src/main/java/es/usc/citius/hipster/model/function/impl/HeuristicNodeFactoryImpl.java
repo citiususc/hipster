@@ -18,13 +18,46 @@ package es.usc.citius.hipster.model.function.impl;
 
 
 import es.usc.citius.hipster.model.ActionState;
-import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
 
-public class HeuristicNodeFactoryImpl<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> implements NodeFactory<A,S,N>{
+public class HeuristicNodeFactoryImpl<A,S,C extends Comparable<C>> implements NodeFactory<A,S,HeuristicNodeImpl<A,S,C>>{
+
+    private CostFunction<A,S,C> gf;
+    private HeuristicFunction<S,C> hf;
+    private BinaryOperation<C> costAccumulator;
+
+
+    public HeuristicNodeFactoryImpl(CostFunction<A,S,C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
+        this.gf = costFunction;
+        this.hf = heuristicFunction;
+        this.costAccumulator = costAccumulator;
+    }
+
+    public HeuristicNodeFactoryImpl(CostFunction<A,S,C> costFunction, BinaryOperation<C> costAccumulator) {
+        this.gf = costFunction;
+        this.hf = new HeuristicFunction<S, C>() {
+            public C estimate(S state) {
+                return HeuristicNodeFactoryImpl.this.costAccumulator.getIdentityElem();
+            }
+        };
+        this.costAccumulator = costAccumulator;
+    }
 
     @Override
-    public N makeNode(N fromNode, ActionState<A, S> actionState) {
-        return null;
+    public HeuristicNodeImpl<A, S, C> makeNode(HeuristicNodeImpl<A, S, C> fromNode, ActionState<A, S> actionState) {
+        C cost, estimatedDistance, score;
+
+        if (fromNode == null){
+            cost = costAccumulator.getIdentityElem();
+        } else {
+            cost = costAccumulator.apply(fromNode.getCost(), this.gf.evaluate(actionState));
+        }
+        estimatedDistance = this.hf.estimate(actionState.getState());
+        score = costAccumulator.apply(cost, estimatedDistance);
+
+        return new HeuristicNodeImpl<A,S,C>(fromNode, actionState.getState(), actionState.getAction(), cost, estimatedDistance, score);
     }
 }

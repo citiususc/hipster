@@ -21,7 +21,7 @@ package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.ActionState;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 
 import java.util.Iterator;
@@ -48,10 +48,10 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
     private final S initialState;
     private NodeFactory<A,S,N> factory;
-    private ActionStateTransitionFunction<A,S> tf;
+    private TransitionFunction<A,S> tf;
 
 
-    public IDAStar(S initialState, ActionStateTransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> factory) {
+    public IDAStar(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> factory) {
         this.initialState = initialState;
         this.tf = transitionFunction;
         this.factory = factory;

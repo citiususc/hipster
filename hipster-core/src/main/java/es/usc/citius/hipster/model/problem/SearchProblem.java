@@ -17,10 +17,10 @@
 package es.usc.citius.hipster.model.problem;
 
 
-import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 
 public interface SearchProblem<A,S> {
-    ActionStateTransitionFunction<A,S> getTransitionFunction();
+    TransitionFunction<A,S> getTransitionFunction();
     S getInitialState();
     S getGoalState();
 }

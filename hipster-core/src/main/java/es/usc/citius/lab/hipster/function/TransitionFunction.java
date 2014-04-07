@@ -26,7 +26,7 @@ import es.usc.citius.lab.hipster.node.Transition;
  * (avoiding diagonal movements), the transition function can be implemented as:
  *
  * <pre>
- *     {@code TransitionFunction<Point> transition = new TransitionFunction<Point>(){
+ *     {@code ActionStateTransitionFunction<Point> transition = new ActionStateTransitionFunction<Point>(){
  *             Iterable<? extends Transition<Point>> from(Point origin) {
  *                     // Compute the four available movements from origin
  *                     Set<Point> states = new HashSet<Point>();

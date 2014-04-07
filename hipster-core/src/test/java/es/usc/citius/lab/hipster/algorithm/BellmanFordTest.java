@@ -100,7 +100,7 @@ public class BellmanFordTest {
         graph.addEdge(new JungEdge<String>("D", "E", 2.0), "D", "E");
 
         final CostOperator<Double> accumulator = CostOperator.doubleAdditionOp();
-        TransitionFunction<String> transition = new TransitionFunction<String>() {
+        ActionStateTransitionFunction<String> transition = new ActionStateTransitionFunction<String>() {
             public Iterable<Transition<String>> from(String current) {
                 Collection<Transition<String>> transitions = new ArrayList<Transition<String>>();
                 Collection<JungEdge<String>> edges = graph.getOutEdges(current);

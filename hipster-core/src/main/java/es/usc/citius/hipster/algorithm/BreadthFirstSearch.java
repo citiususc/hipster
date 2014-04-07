@@ -18,17 +18,17 @@ package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.ActionState;
 import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 
 import java.util.*;
 
 public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
     private final S initialState;
-    private final ActionStateTransitionFunction<A,S> tf;
+    private final TransitionFunction<A,S> tf;
     private final NodeFactory<A,S,N> nodeFactory;
 
-    public BreadthFirstSearch(S initialState, ActionStateTransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> nodeFactory) {
+    public BreadthFirstSearch(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> nodeFactory) {
         this.initialState = initialState;
         this.tf = transitionFunction;
         this.nodeFactory = nodeFactory;

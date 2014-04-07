@@ -14,19 +14,22 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.function;
+package es.usc.citius.hipster.model.function.impl;
 
 
 import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.function.ActionFunction;
+import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class DefaultActionStateTransitionFunction<A,S> implements ActionStateTransitionFunction<A,S> {
+public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunction<A,S> {
     private final ActionFunction<A,S> af;
-    private final TransitionFunction<A,S> tf;
+    private final ActionStateTransitionFunction<A,S> tf;
 
-    public DefaultActionStateTransitionFunction(ActionFunction<A, S> af, TransitionFunction<A, S> tf) {
+    public DefaultActionStateTransitionFunction(ActionFunction<A, S> af, ActionStateTransitionFunction<A, S> tf) {
         this.af = af;
         this.tf = tf;
     }

@@ -17,8 +17,7 @@
 package es.usc.citius.hipster.model.function;
 
 
-import es.usc.citius.hipster.model.ActionState;
-
-public interface TransitionFunction<A,S> {
-    Iterable<ActionState<A,S>> transitionsFrom(S state);
+public interface StateTransitionFunction<S> {
+    Iterable<S> transitionsFrom(S state);
 }
+
