@@ -18,12 +18,14 @@ package es.usc.citius.hipster.algorithm;
 
 
 import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
 import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
+import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 public final class Hipster {
@@ -32,6 +34,23 @@ public final class Hipster {
         HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
+                BinaryOperation.doubleAdditionOp());
+
+        return new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
+                problem.getInitialState(),
+                problem.getTransitionFunction(),
+                factory);
+    }
+
+    public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
+        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+                problem.getCostFunction(),
+                new HeuristicFunction<S, Double>() {
+                    @Override
+                    public Double estimate(S state) {
+                        return BinaryOperation.doubleAdditionOp().getIdentityElem();
+                    }
+                },
                 BinaryOperation.doubleAdditionOp());
 
         return new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
