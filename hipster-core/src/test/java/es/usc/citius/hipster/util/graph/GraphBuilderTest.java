@@ -48,11 +48,6 @@ public class GraphBuilderTest {
     }
 
     @Test
-    public void testSearch(){
-        System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("B").in(testGraph)).search());
-    }
-
-    @Test
     public void testVertices() {
         Set<String> vertices = new HashSet<String>(Arrays.asList("A","B","C","D","E","F"));
         assertEquals(vertices, testGraph.vertices());
