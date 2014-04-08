@@ -49,42 +49,7 @@ public class GraphBuilderTest {
 
     @Test
     public void testSearch(){
-        InformedSearchProblem<WeightedEdge,String,Double> p = new InformedSearchProblem<WeightedEdge, String, Double>() {
-            @Override
-            public CostFunction<WeightedEdge, String, Double> getCostFunction() {
-                return new CostFunction<WeightedEdge, String, Double>() {
-                    @Override
-                    public Double evaluate(ActionState<WeightedEdge, String> actionState) {
-                        return actionState.getAction().getValue();
-                    }
-                };
-            }
-
-            @Override
-            public TransitionFunction<WeightedEdge, String> getTransitionFunction() {
-                return new TransitionFunction<WeightedEdge, String>() {
-                    @Override
-                    public Iterable<ActionState<WeightedEdge, String>> transitionsFrom(String state) {
-                        Set<ActionState<WeightedEdge, String>> as = new HashSet<ActionState<WeightedEdge, String>>();
-                        for(WeightedEdge edge : testGraph.outgoingEdgesFrom(state)){
-                            as.add(new ActionState<WeightedEdge, String>(edge, testGraph.targetVertexOf(edge)));
-                        }
-                        return as;
-                    }
-                };
-            }
-
-            @Override
-            public String getInitialState() {
-                return "A";
-            }
-
-            @Override
-            public String getGoalState() {
-                return "F";
-            }
-        };
-        System.out.println(Hipster.createDijkstra(p).search());
+        System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("B").in(testGraph)).search());
     }
 
     @Test
