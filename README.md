@@ -32,9 +32,6 @@ The current version of the library comes with some very well-known and wide used
 If you don't find the algorithm or the feature you are looking for, please consider contributing to Hipster!. You can open a new issue or better fork this repository and create a pull request with your contribution. If you go for this second option, please follow the contribution guidelines.
 
 ## Getting started
-TODO;
-
-## Usage
 
 The easiest way to use Hipster is adding it as a dependency with your favourite dependency manager.
 Maven users can include the library using the following snippet:
@@ -63,6 +60,31 @@ Maven users can include the library using the following snippet:
 #### Releases
 
 TODO;
+
+#### Quick Example
+
+Here is a quick example of how to search a shortest path in a graph with Dijkstra's algorithm:
+
+```java
+// Create a simple weighted directed graph with Hipster
+HipsterDirectedGraph<String,WeightedEdge> graph =
+   GraphBuilder.<String,WeightedEdge>newDirectedGraph()
+     .from("A").to("B").withEdge(WeightedEdge.create(4.0d))
+     .from("A").to("C").withEdge(WeightedEdge.create(2.0d))
+     .from("B").to("C").withEdge(WeightedEdge.create(5.0d))
+     .from("B").to("D").withEdge(WeightedEdge.create(10.0d))
+     .from("C").to("E").withEdge(WeightedEdge.create(3.0d))
+     .from("D").to("F").withEdge(WeightedEdge.create(11.0d))
+     .from("E").to("D").withEdge(WeightedEdge.create(4.0d));
+
+// Search the shortest path with Dijkstra's algorithm and print the result
+System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("B").in(graph)).search());
+```
+But that's not all!. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem, N-Queens problem, etc.
+
+## What's next?
+
+If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/pablormier/hipster/wiki/Solving-problems-with-Hipster) and the JavaDoc documentation. There are also a few implemented examples here.
 
 ## License
 
