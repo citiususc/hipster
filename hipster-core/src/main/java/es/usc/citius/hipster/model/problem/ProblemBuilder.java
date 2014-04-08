@@ -25,15 +25,15 @@ public final class ProblemBuilder {
     public static final class ProblemBuilderAssistant {
         private ProblemBuilderAssistant(){}
 
-        public static final class ProblemAssistantBuilder<S> {
+        public static final class ActionStateProblemBuilder<S> {
             private final S initialState;
             private S optionalGoalState;
 
-            public ProblemAssistantBuilder(S initialState) {
+            public ActionStateProblemBuilder(S initialState) {
                 this.initialState = initialState;
             }
 
-            public ProblemAssistantBuilder<S> goalState(S goal){
+            public ActionStateProblemBuilder<S> goalState(S goal){
                 this.optionalGoalState = goal;
                 return this;
             }
@@ -214,8 +214,8 @@ public final class ProblemBuilder {
             }
         }
 
-        public <S> ProblemAssistantBuilder<S> initialState(S initialState){
-            return new ProblemAssistantBuilder<S>(initialState);
+        public <S> ActionStateProblemBuilder<S> initialState(S initialState){
+            return new ActionStateProblemBuilder<S>(initialState);
         }
 
     }
