@@ -16,87 +16,34 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
-import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.util.map.MapBasedGraphSearchProblem;
 import es.usc.citius.lab.hipster.util.map.MapBasedRomaniaProblem;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Executes tests over predefined maze strings, comparing the results between
- * Jung and AD* iterator.
+ * Concrete implementation of the test case suite for the A* algorithm based in the Romania problem.
+ * This test suite extends from {@link es.usc.citius.lab.hipster.algorithm.RomaniaProblemOptimalSearchTest}
+ * and adds the wollowing test cases:
+ * <ul>
+ *     <li>Order and number of expansions performed by A*.</li>
+ * </ul>
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
- * @version 1.0
- * @since 26/03/2013
+ * @since 0.1.0
  */
-public class AStarRomaniaProblemTest {
-
-    private HeuristicSearchProblem<MapBasedRomaniaProblem.City, Double> problem;
-    private Iterator<HeuristicNode<MapBasedRomaniaProblem.City, Double>> astarIterator;
+public class AStarRomaniaProblemTest extends RomaniaProblemOptimalSearchTest {
 
     /**
-     * Constructor of the AStar test. The Romania problem is instantiated before all tests.
+     * Default constructor for this test suite that calls the parent constructor.
      */
     public AStarRomaniaProblemTest() {
-        //obtain instance of Romanian problem
-        problem = new MapBasedGraphSearchProblem<MapBasedRomaniaProblem.City>(
-                MapBasedRomaniaProblem.City.Arad,
-                MapBasedRomaniaProblem.City.Bucharest,
-                MapBasedRomaniaProblem.transitions(),
-                MapBasedRomaniaProblem.costs(),
-                MapBasedRomaniaProblem.heuristics()
-        );
-    }
-
-    /**
-     * Instantiates the AStar iterator before each test.
-     */
-    @Before
-    public void createAStarIterator(){
-        this.astarIterator = Algorithms.createAStar(problem).iterator();
-    }
-
-    /**
-     * Check the returned path of the algorithm to be the optimal for the problem definition.
-     */
-    @Test
-    public void optimalPathFromAradToBucharest() {
-        HeuristicNode<MapBasedRomaniaProblem.City, Double> node;
-        //search optimal path
-        do{
-            //
-            node = astarIterator.next();
-        }while(astarIterator.hasNext() && !node.transition().to().equals(MapBasedRomaniaProblem.City.Bucharest));
-        //list of cities in the optimal path
-        List<MapBasedRomaniaProblem.City> optimalPath =
-                Arrays.asList(
-                        MapBasedRomaniaProblem.City.Arad,
-                        MapBasedRomaniaProblem.City.Sibiu,
-                        MapBasedRomaniaProblem.City.Rimnicu_Vilcea,
-                        MapBasedRomaniaProblem.City.Pitesti,
-                        MapBasedRomaniaProblem.City.Bucharest
-                        );
-        //path returned by A*
-        List<Node<MapBasedRomaniaProblem.City>> path = node.path();
-        //check elements returned by the search algorithm
-        for(int i = 0; i < path.size(); i++){
-            //check if current element of the path is equals to the
-            assertEquals(
-                    "Failed checking element " + i + " of the path. Expected: " +
-                            optimalPath.get(i) + ", found: " + path.get(i).transition().to(),
-                    path.get(i).transition().to(),
-                    optimalPath.get(i)
-            );
-        }
+        super();
     }
 
     /**
@@ -116,7 +63,7 @@ public class AStarRomaniaProblemTest {
                 );
         //compare expanded cities with expected ones
         for(int i = 0; i < expansionsPerformed.size(); i++){
-            HeuristicNode<MapBasedRomaniaProblem.City, Double> current = astarIterator.next();
+            HeuristicNode<MapBasedRomaniaProblem.City, Double> current = searchIterator.next();
             assertEquals(
                     "Failed checking expanded element no. " + (i + 1) + ". Expected: " +
                             expansionsPerformed.get(i) + ", found: " + current.transition().to(),
@@ -127,54 +74,12 @@ public class AStarRomaniaProblemTest {
     }
 
     /**
-     * Check the costs of the elements expanded by the algorithm.
+     * Instantiates the A* search iterator.
+     *
+     * @return search iterator according to the problem definition
      */
-    public void costsFromAradToBucharest() {
-        //list of costs of the nodes expanded by A* during the search
-        List<Double> costsNodesExpanded =
-                Arrays.asList(
-                        0d,
-                        140d,
-                        220d,
-                        239d,
-                        317d,
-                        418d
-                );
-        //compare expected scores with
-        for(int i = 0; i < costsNodesExpanded.size(); i++){
-            HeuristicNode<MapBasedRomaniaProblem.City, Double> current = astarIterator.next();
-            assertEquals(
-                    "Failed checking cost of expanded element no. " + (i + 1) + ". Expected: " +
-                            costsNodesExpanded.get(i) + ", found: " + current.getCost(),
-                    current.getCost(),
-                    costsNodesExpanded.get(i)
-            );
-        }
-    }
-
-    /**
-     * Check the scores of the elements expanded by the algorithm.
-     */
-    public void scoresFromAradToBucharest() {
-        //list of scores of the nodes expanded by A* during the search
-        List<Double> scoreNodesExpanded =
-                Arrays.asList(
-                        366d,
-                        393d,
-                        413d,
-                        415d,
-                        417d,
-                        418d
-                );
-        //compare expected scores with
-        for(int i = 0; i < scoreNodesExpanded.size(); i++){
-            HeuristicNode<MapBasedRomaniaProblem.City, Double> current = astarIterator.next();
-            assertEquals(
-                    "Failed checking score of expanded element no. " + (i + 1) + ". Expected: " +
-                            scoreNodesExpanded.get(i) + ", found: " + current.getScore(),
-                    current.getScore(),
-                    scoreNodesExpanded.get(i)
-            );
-        }
+    @Override
+    public Iterator<HeuristicNode<MapBasedRomaniaProblem.City, Double>> createIterator() {
+        return Algorithms.createAStar(problem).iterator();
     }
 }
