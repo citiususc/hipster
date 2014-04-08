@@ -46,6 +46,10 @@ public class ActionState<A,S> {
         this.state = state;
     }
 
+    public static <A,S> ActionState<A,S> create(A action, S state){
+        return new ActionState<A, S>(action, state);
+    }
+
     public static <A,S> Set<ActionState<A,S>> fromMap(Map<A, S> actionStates){
         Set<ActionState<A,S>> actionStatesSet = new HashSet<ActionState<A, S>>();
         for(Map.Entry<A,S> as : actionStates.entrySet()){
