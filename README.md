@@ -78,7 +78,7 @@ HipsterDirectedGraph<String,WeightedEdge> graph =
      .from("E").to("D").withEdge(WeightedEdge.create(4.0d));
 
 // Search the shortest path with Dijkstra's algorithm and print the result
-System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("B").in(graph)).search());
+System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("F").in(graph)).search());
 ```
 But that's not all!. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem, N-Queens problem, etc.
 
