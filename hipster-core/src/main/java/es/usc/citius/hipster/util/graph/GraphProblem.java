@@ -57,7 +57,7 @@ public final class GraphProblem {
                                 public Iterable<ActionState<WeightedEdge, V>> transitionsFrom(V state) {
                                     Set<ActionState<WeightedEdge, V>> as = new HashSet<ActionState<WeightedEdge, V>>();
                                     for (WeightedEdge edge : graph.outgoingEdgesFrom(state)) {
-                                        as.add(new ActionState<WeightedEdge, V>(edge, graph.targetVertexOf(edge)));
+                                        as.add(ActionState.create(edge, graph.targetVertexOf(edge)));
                                     }
                                     return as;
                                 }
