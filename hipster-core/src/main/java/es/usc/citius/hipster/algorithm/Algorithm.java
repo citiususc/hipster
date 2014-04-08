@@ -82,7 +82,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             return "Search Result {" +
                     "Search time=" + stopwatch +
                     ", total iterations=" + iterations +
-                    ", optimal path=" + optimalPath +
+                    ", solution=" + optimalPath +
                     '}';
         }
     }
