@@ -21,6 +21,7 @@ import es.usc.citius.hipster.model.ActionState;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
+import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,51 +47,37 @@ public final class GraphProblem {
                 this.toVertex = toVertex;
             }
 
-            public InformedSearchProblem<WeightedEdge,V,Double> in(final HipsterDirectedGraph<V,WeightedEdge> graph){
-                return new InformedSearchProblem<WeightedEdge, V, Double>() {
-                    @Override
-                    public CostFunction<WeightedEdge, V, Double> getCostFunction() {
-                        return new CostFunction<WeightedEdge, V, Double>() {
-                            @Override
-                            public Double evaluate(ActionState<WeightedEdge, V> actionState) {
-                                return actionState.getAction().getValue();
-                            }
-                        };
-                    }
-
-                    @Override
-                    public TransitionFunction<WeightedEdge, V> getTransitionFunction() {
-                        return new TransitionFunction<WeightedEdge, V>() {
-                            @Override
-                            public Iterable<ActionState<WeightedEdge, V>> transitionsFrom(V state) {
-                                Set<ActionState<WeightedEdge, V>> as = new HashSet<ActionState<WeightedEdge, V>>();
-                                for(WeightedEdge edge : graph.outgoingEdgesFrom(state)){
-                                    as.add(new ActionState<WeightedEdge, V>(edge, graph.targetVertexOf(edge)));
+            public InformedSearchProblem<WeightedEdge, V, Double> in(final HipsterDirectedGraph<V, WeightedEdge> graph) {
+                return ProblemBuilder.create()
+                        .initialState(fromVertex)
+                        .goalState(toVertex)
+                        .defineProblemWithExplicitActions(WeightedEdge.class)
+                            .useTransitionFunction(new TransitionFunction<WeightedEdge, V>() {
+                                @Override
+                                public Iterable<ActionState<WeightedEdge, V>> transitionsFrom(V state) {
+                                    Set<ActionState<WeightedEdge, V>> as = new HashSet<ActionState<WeightedEdge, V>>();
+                                    for (WeightedEdge edge : graph.outgoingEdgesFrom(state)) {
+                                        as.add(new ActionState<WeightedEdge, V>(edge, graph.targetVertexOf(edge)));
+                                    }
+                                    return as;
                                 }
-                                return as;
-                            }
-                        };
-                    }
+                            })
+                            .useCostFunction(new CostFunction<WeightedEdge, V, Double>() {
+                                @Override
+                                public Double evaluate(ActionState<WeightedEdge, V> actionState) {
+                                    return actionState.getAction().getValue();
+                                }
+                            })
+                            .build();
+            }
 
-                    @Override
-                    public V getInitialState() {
-                        return fromVertex;
-                    }
-
-                    @Override
-                    public V getGoalState() {
-                        return toVertex;
-                    }
-                };
+            public ToVertex to(V vertex) {
+                return new ToVertex(vertex);
             }
         }
 
-        public ToVertex to(V vertex){
-            return new ToVertex(vertex);
+        public static <V> FromVertex from(V vertex) {
+            return new FromVertex<V>(vertex);
         }
-    }
-
-    public static <V> FromVertex from(V vertex){
-        return new FromVertex<V>(vertex);
     }
 }

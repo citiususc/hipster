@@ -45,8 +45,8 @@ public final class ProblemBuilder {
              * or ActionStateTransitionFunction to apply actions to states in order
              * to obtain new states.
              */
-            public ExplicitActionProblemBuilder defineProblemWithExplicitActions(){
-                return new ExplicitActionProblemBuilder();
+            public <A> ExplicitActionProblemBuilder<A> defineProblemWithExplicitActions(Class<A> type){
+                return new ExplicitActionProblemBuilder<A>();
             }
 
             /**
@@ -92,7 +92,7 @@ public final class ProblemBuilder {
                  * @param transitionFunction
                  *
                  */
-                public <A> GenericSearchProblemBuilder<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
+                public GenericSearchProblemBuilder<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
                     return new GenericSearchProblemBuilder<A>(transitionFunction);
                 }
             }
@@ -129,7 +129,7 @@ public final class ProblemBuilder {
                  * @param cf
                  *
                  */
-                public <C extends Comparable<C>> InformedSearchProblemBuilder useCostFunction(CostFunction<A, S, C> cf){
+                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useCostFunction(CostFunction<A, S, C> cf){
                     return new InformedSearchProblemBuilder<C>(cf);
                 }
 
