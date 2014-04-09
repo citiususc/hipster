@@ -5,8 +5,9 @@ jdk:
   - openjdk6
   
 branches:
-  excludes:
-    - gh-pages
+  only:
+    - master
+    - development
 
 after_success:
   #- .config/publish-javadoc.sh
