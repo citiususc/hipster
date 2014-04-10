@@ -4,6 +4,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
+import es.usc.citius.hipster.util.graph.GraphBuilder;
+import es.usc.citius.hipster.util.graph.HipsterGraph;
 
 import java.util.*;
 
@@ -13,144 +15,41 @@ import java.util.*;
  *
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Pablo Rodríguez Mier
  */
 public class RomanianProblem {
 
-    /**
-     * Enumeration for our type of nodes.
-     */
     public enum City{
-        Oradea("Oradea"), Zerind("Zerind"), Arad("Arad"), Timisoara("Timisoara"), Lugoj("Lugoj"),
-        Mehadia("Mehadia"), Drobeta("Drobeta"), Craiova("Craiova"), Rimnicu_Vilcea("Rimnicu Vilcea"),
-        Pitesti("Pitesti"), Sibiu("Sibiu"), Fagaras("Fagaras"), Bucharest("Bucharest"), Giurgiu("Giurgiu"),
-        Urziceni("Urziceni"), Hirsova("Hirsova"), Eforie("Eforie"), Vaslui("Vaslui"), Iasi("Iasi"),
-        Neamt("Neamt");
-
-        /**
-         * Default constructor for the City type.
-         *
-         * @param name name of the city
-         */
-        private City(final String name){
-            this.name = name;
-        }
-
-        private final String name;
-
-        @Override
-        public String toString() {
-            return name;
-        }
+        Arad, Bucharest, Craiova, Drobeta, Eforie, Fagaras, Giurgiu,
+        Hirsova, Iasi, Lugoj, Mehadia, Neamt, Oradea, Pitesti, Rimnicu_Vilcea,
+        Sibiu, Timisoara,  Urziceni, Vaslui, Zerind;
     }
 
-    /**
-     * Transitions definition for the Romania problem. Considered bidirectional arcs.
-     *
-     * @return map with the transitions definition for the Romania problem.
-     */
-    public static Map<City, Collection<City>> transitions(){
-        Multimap<City, City> map = ArrayListMultimap.create();
-        map.put(City.Oradea, City.Zerind);
-        map.put(City.Oradea, City.Sibiu);
-        map.put(City.Zerind, City.Oradea);
-        map.put(City.Zerind, City.Arad);
-        map.put(City.Arad, City.Zerind);
-        map.put(City.Arad, City.Sibiu);
-        map.put(City.Arad, City.Timisoara);
-        map.put(City.Timisoara, City.Arad);
-        map.put(City.Timisoara, City.Lugoj);
-        map.put(City.Lugoj, City.Timisoara);
-        map.put(City.Lugoj, City.Mehadia);
-        map.put(City.Mehadia, City.Lugoj);
-        map.put(City.Mehadia, City.Drobeta);
-        map.put(City.Drobeta, City.Mehadia);
-        map.put(City.Drobeta, City.Craiova);
-        map.put(City.Craiova, City.Drobeta);
-        map.put(City.Craiova, City.Rimnicu_Vilcea);
-        map.put(City.Craiova, City.Pitesti);
-        map.put(City.Rimnicu_Vilcea, City.Sibiu);
-        map.put(City.Rimnicu_Vilcea, City.Pitesti);
-        map.put(City.Rimnicu_Vilcea, City.Craiova);
-        map.put(City.Sibiu, City.Oradea);
-        map.put(City.Sibiu, City.Arad);
-        map.put(City.Sibiu, City.Rimnicu_Vilcea);
-        map.put(City.Sibiu, City.Fagaras);
-        map.put(City.Pitesti, City.Rimnicu_Vilcea);
-        map.put(City.Pitesti, City.Craiova);
-        map.put(City.Pitesti, City.Bucharest);
-        map.put(City.Fagaras, City.Sibiu);
-        map.put(City.Fagaras, City.Bucharest);
-        map.put(City.Bucharest, City.Fagaras);
-        map.put(City.Bucharest, City.Giurgiu);
-        map.put(City.Bucharest, City.Pitesti);
-        map.put(City.Bucharest, City.Urziceni);
-        map.put(City.Urziceni, City.Bucharest);
-        map.put(City.Urziceni, City.Hirsova);
-        map.put(City.Urziceni, City.Vaslui);
-        map.put(City.Hirsova, City.Urziceni);
-        map.put(City.Hirsova, City.Eforie);
-        map.put(City.Eforie, City.Hirsova);
-        map.put(City.Vaslui, City.Urziceni);
-        map.put(City.Vaslui, City.Iasi);
-        map.put(City.Iasi, City.Vaslui);
-        map.put(City.Iasi, City.Neamt);
-        map.put(City.Neamt, City.Iasi);
-        return map.asMap();
-    }
-
-    /**
-     * Costs definition for the Romania problem. Added costs for each direction of the arcs.
-     *
-     * @return map with the costs definition for the Romania problem.
-     */
-    public static Map<City, Map<City, Double>> costs(){
-        Table<City, City, Double> table = HashBasedTable.create();
-        table.put(City.Oradea, City.Zerind, 71d);
-        table.put(City.Oradea, City.Sibiu, 151d);
-        table.put(City.Zerind, City.Arad, 75d);
-        table.put(City.Zerind, City.Oradea, 71d);
-        table.put(City.Arad, City.Sibiu, 140d);
-        table.put(City.Arad, City.Zerind, 75d);
-        table.put(City.Arad, City.Timisoara, 118d);
-        table.put(City.Timisoara, City.Arad, 118d);
-        table.put(City.Timisoara, City.Lugoj, 111d);
-        table.put(City.Lugoj, City.Timisoara, 111d);
-        table.put(City.Lugoj, City.Mehadia, 70d);
-        table.put(City.Mehadia, City.Lugoj, 70d);
-        table.put(City.Mehadia, City.Drobeta, 75d);
-        table.put(City.Drobeta, City.Mehadia, 75d);
-        table.put(City.Drobeta, City.Craiova, 120d);
-        table.put(City.Craiova, City.Drobeta, 120d);
-        table.put(City.Craiova, City.Rimnicu_Vilcea, 146d);
-        table.put(City.Craiova, City.Pitesti, 138d);
-        table.put(City.Rimnicu_Vilcea, City.Sibiu, 80d);
-        table.put(City.Rimnicu_Vilcea, City.Craiova, 146d);
-        table.put(City.Rimnicu_Vilcea, City.Pitesti, 97d);
-        table.put(City.Sibiu, City.Oradea, 151d);
-        table.put(City.Sibiu, City.Arad, 140d);
-        table.put(City.Sibiu, City.Fagaras, 99d);
-        table.put(City.Sibiu, City.Rimnicu_Vilcea, 80d);
-        table.put(City.Fagaras, City.Sibiu, 99d);
-        table.put(City.Fagaras, City.Bucharest, 211d);
-        table.put(City.Pitesti, City.Rimnicu_Vilcea, 97d);
-        table.put(City.Pitesti, City.Craiova, 138d);
-        table.put(City.Pitesti, City.Bucharest, 101d);
-        table.put(City.Bucharest, City.Fagaras, 211d);
-        table.put(City.Bucharest, City.Giurgiu, 90d);
-        table.put(City.Bucharest, City.Pitesti, 101d);
-        table.put(City.Bucharest, City.Urziceni, 85d);
-        table.put(City.Urziceni, City.Bucharest, 85d);
-        table.put(City.Urziceni, City.Hirsova, 98d);
-        table.put(City.Urziceni, City.Vaslui, 142d);
-        table.put(City.Hirsova, City.Urziceni, 98d);
-        table.put(City.Hirsova, City.Eforie, 86d);
-        table.put(City.Eforie, City.Hirsova, 86d);
-        table.put(City.Vaslui, City.Urziceni, 142d);
-        table.put(City.Vaslui, City.Iasi, 92d);
-        table.put(City.Iasi, City.Vaslui, 92d);
-        table.put(City.Iasi, City.Neamt, 87d);
-        table.put(City.Neamt, City.Iasi, 87d);
-        return table.rowMap();
+    public static GraphBuilder.MutableHashBasedGraph<City, Double> graph(){
+        return GraphBuilder.<City,Double>newGraph()
+                    .connect(City.Arad).to(City.Zerind).withEdge(75d)
+                    .connect(City.Arad).to(City.Timisoara).withEdge(118d)
+                    .connect(City.Arad).to(City.Sibiu).withEdge(140d)
+                    .connect(City.Bucharest).to(City.Giurgiu).withEdge(90d)
+                    .connect(City.Bucharest).to(City.Urziceni).withEdge(85d)
+                    .connect(City.Bucharest).to(City.Fagaras).withEdge(211d)
+                    .connect(City.Bucharest).to(City.Pitesti).withEdge(101d)
+                    .connect(City.Craiova).to(City.Drobeta).withEdge(120d)
+                    .connect(City.Craiova).to(City.Rimnicu_Vilcea).withEdge(146d)
+                    .connect(City.Craiova).to(City.Pitesti).withEdge(138d)
+                    .connect(City.Drobeta).to(City.Mehadia).withEdge(75d)
+                    .connect(City.Eforie).to(City.Hirsova).withEdge(86d)
+                    .connect(City.Fagaras).to(City.Sibiu).withEdge(99d)
+                    .connect(City.Hirsova).to(City.Urziceni).withEdge(98d)
+                    .connect(City.Iasi).to(City.Neamt).withEdge(87d)
+                    .connect(City.Iasi).to(City.Vaslui).withEdge(92d)
+                    .connect(City.Lugoj).to(City.Timisoara).withEdge(111d)
+                    .connect(City.Lugoj).to(City.Mehadia).withEdge(70d)
+                    .connect(City.Oradea).to(City.Zerind).withEdge(71d)
+                    .connect(City.Oradea).to(City.Sibiu).withEdge(151d)
+                    .connect(City.Pitesti).to(City.Rimnicu_Vilcea).withEdge(97d)
+                    .connect(City.Rimnicu_Vilcea).to(City.Sibiu).withEdge(80d)
+                    .connect(City.Urziceni).to(City.Vaslui).withEdge(142d);
     }
 
     /**
