@@ -17,8 +17,8 @@
 package es.usc.citius.hipster.model.function;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 
 public interface NodeFactory<A,S,N> {
-    N makeNode(N fromNode, ActionState<A,S> actionState);
+    N makeNode(N fromNode, Transition<A,S> transition);
 }

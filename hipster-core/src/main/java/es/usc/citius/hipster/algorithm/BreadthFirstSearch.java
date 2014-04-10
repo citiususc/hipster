@@ -16,7 +16,7 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
@@ -46,7 +46,7 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
          * Use {@link BreadthFirstSearch#iterator()} to create a new BFS iterator.
          */
         private BFSIter(){
-            N initialNode = nodeFactory.makeNode(null, new ActionState<A, S>(null, initialState));
+            N initialNode = nodeFactory.makeNode(null, new Transition<A, S>(null, initialState));
             visited.put(initialState, initialNode);
             queue.add(initialNode);
         }
@@ -61,7 +61,7 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
             // Take next node
             N current = queue.poll();
             S currentState = current.state();
-            for(ActionState<A,S> transition : tf.transitionsFrom(currentState)){
+            for(Transition<A,S> transition : tf.transitionsFrom(currentState)){
                 if (!visited.containsKey(transition.getState())){
                     N successorNode = nodeFactory.makeNode(current, transition);
                     visited.put(transition.getState(), successorNode);

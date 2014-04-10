@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.model.impl;
 
 import es.usc.citius.hipster.model.AbstractNode;
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 
 /**
  * Simple implementation of a search node which does not keep any information about
@@ -34,8 +34,8 @@ public class UnweightedNode<A,S> extends AbstractNode<A,S,UnweightedNode<A,S>> {
         super(previousNode, state, action);
     }
 
-    public UnweightedNode(UnweightedNode<A, S> previousNode, ActionState<A, S> actionState) {
-        super(previousNode, actionState.getState(), actionState.getAction());
+    public UnweightedNode(UnweightedNode<A, S> previousNode, Transition<A, S> transition) {
+        super(previousNode, transition.getState(), transition.getAction());
     }
 
     public static <S> UnweightedNode<Void,S> newNodeWithoutAction(UnweightedNode<Void,S> previousNode, S state){

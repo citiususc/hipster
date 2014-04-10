@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.model.function.impl;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
@@ -35,10 +35,10 @@ public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunc
     }
 
     @Override
-    public Iterable<ActionState<A, S>> transitionsFrom(final S state) {
-        Set<ActionState<A,S>> result = new HashSet<ActionState<A, S>>();
+    public Iterable<Transition<A, S>> transitionsFrom(final S state) {
+        Set<Transition<A,S>> result = new HashSet<Transition<A, S>>();
         for(A applicableAction : af.actionsFor(state)){
-            result.add(new ActionState<A, S>(applicableAction, tf.apply(applicableAction, state)));
+            result.add(new Transition<A, S>(applicableAction, tf.apply(applicableAction, state)));
         }
         return result;
     }

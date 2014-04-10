@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
@@ -54,18 +54,18 @@ public final class GraphProblem {
                         .defineProblemWithExplicitActions(WeightedEdge.class)
                             .useTransitionFunction(new TransitionFunction<WeightedEdge, V>() {
                                 @Override
-                                public Iterable<ActionState<WeightedEdge, V>> transitionsFrom(V state) {
-                                    Set<ActionState<WeightedEdge, V>> as = new HashSet<ActionState<WeightedEdge, V>>();
+                                public Iterable<Transition<WeightedEdge, V>> transitionsFrom(V state) {
+                                    Set<Transition<WeightedEdge, V>> as = new HashSet<Transition<WeightedEdge, V>>();
                                     for (WeightedEdge edge : graph.outgoingEdgesFrom(state)) {
-                                        as.add(ActionState.create(edge, graph.targetVertexOf(edge)));
+                                        as.add(Transition.create(edge, graph.targetVertexOf(edge)));
                                     }
                                     return as;
                                 }
                             })
                             .useCostFunction(new CostFunction<WeightedEdge, V, Double>() {
                                 @Override
-                                public Double evaluate(ActionState<WeightedEdge, V> actionState) {
-                                    return actionState.getAction().getValue();
+                                public Double evaluate(Transition<WeightedEdge, V> transition) {
+                                    return transition.getAction().getValue();
                                 }
                             })
                             .build();

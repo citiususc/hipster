@@ -86,7 +86,7 @@ public final class ProblemBuilder {
 
                 /**
                  * Use a transition function that computes all the actions/states that are
-                 * reachable from a given state. The function returns a set of ActionState
+                 * reachable from a given state. The function returns a set of Transition
                  * with the action and the new resultant state. If you prefer to define actions
                  * separately, use useActionFunction instead.
                  * @param transitionFunction

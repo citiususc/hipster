@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.algorithm;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
@@ -70,8 +70,8 @@ public final class Hipster {
         return new BreadthFirstSearch<A, S, UnweightedNode<A,S>>(problem.getInitialState(), problem.getTransitionFunction(),
                 new NodeFactory<A, S, UnweightedNode<A,S>>() {
                     @Override
-                    public UnweightedNode<A,S> makeNode(UnweightedNode<A,S> fromNode, ActionState<A, S> actionState) {
-                        return new UnweightedNode<A,S>(fromNode, actionState);
+                    public UnweightedNode<A,S> makeNode(UnweightedNode<A,S> fromNode, Transition<A, S> transition) {
+                        return new UnweightedNode<A,S>(fromNode, transition);
                     }
                 });
     }

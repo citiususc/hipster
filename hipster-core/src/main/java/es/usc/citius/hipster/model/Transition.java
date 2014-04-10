@@ -21,11 +21,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ActionState<A,S> {
+public class Transition<A,S> {
+    // Source state (origin) of the transition
+    private S fromState;
+    // Action applied to fromState
     private A action;
+    // Resultant state after applying the action to fromState
     private S state;
 
-    public ActionState(A action, S state) {
+    public Transition(A action, S state) {
+        this.action = action;
+        this.state = state;
+    }
+
+    public Transition(S fromState, A action, S state) {
+        this.fromState = fromState;
         this.action = action;
         this.state = state;
     }
@@ -46,15 +56,19 @@ public class ActionState<A,S> {
         this.state = state;
     }
 
-    public static <A,S> ActionState<A,S> create(A action, S state){
-        return new ActionState<A, S>(action, state);
+    public static <A,S> Transition<A,S> create(A action, S state){
+        return new Transition<A, S>(action, state);
     }
 
-    public static <A,S> Set<ActionState<A,S>> fromMap(Map<A, S> actionStates){
-        Set<ActionState<A,S>> actionStatesSet = new HashSet<ActionState<A, S>>();
+    public static <A,S> Set<Transition<A,S>> fromMap(Map<A, S> actionStates){
+        Set<Transition<A,S>> actionStatesSet = new HashSet<Transition<A, S>>();
         for(Map.Entry<A,S> as : actionStates.entrySet()){
-            actionStatesSet.add(new ActionState<A, S>(as.getKey(), as.getValue()));
+            actionStatesSet.add(new Transition<A, S>(as.getKey(), as.getValue()));
         }
         return actionStatesSet;
+    }
+
+    public S getFromState() {
+        return fromState;
     }
 }

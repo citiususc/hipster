@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.model.function.impl;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
@@ -47,17 +47,17 @@ public class HeuristicNodeFactoryImpl<A,S,C extends Comparable<C>> implements No
     }
 
     @Override
-    public HeuristicNodeImpl<A, S, C> makeNode(HeuristicNodeImpl<A, S, C> fromNode, ActionState<A, S> actionState) {
+    public HeuristicNodeImpl<A, S, C> makeNode(HeuristicNodeImpl<A, S, C> fromNode, Transition<A, S> transition) {
         C cost, estimatedDistance, score;
 
         if (fromNode == null){
             cost = costAccumulator.getIdentityElem();
         } else {
-            cost = costAccumulator.apply(fromNode.getCost(), this.gf.evaluate(actionState));
+            cost = costAccumulator.apply(fromNode.getCost(), this.gf.evaluate(transition));
         }
-        estimatedDistance = this.hf.estimate(actionState.getState());
+        estimatedDistance = this.hf.estimate(transition.getState());
         score = costAccumulator.apply(cost, estimatedDistance);
 
-        return new HeuristicNodeImpl<A,S,C>(fromNode, actionState.getState(), actionState.getAction(), cost, estimatedDistance, score);
+        return new HeuristicNodeImpl<A,S,C>(fromNode, transition.getState(), transition.getAction(), cost, estimatedDistance, score);
     }
 }

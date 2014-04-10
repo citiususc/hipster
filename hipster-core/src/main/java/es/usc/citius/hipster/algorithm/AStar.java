@@ -16,7 +16,7 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
@@ -80,7 +80,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             open = new HashMap<S, N>();
             closed = new HashMap<S, N>();
             queue = new PriorityQueue<N>();
-            N initialNode = factory.makeNode(null, new ActionState<A, S>(null, initialState));
+            N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
             queue.add(initialNode);
             open.put(initialState, initialNode);
         }
@@ -116,7 +116,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             open.remove(currentState);
 
             // Analyze the cost of each movement from the current node
-            for (ActionState<A,S> successor : tf.transitionsFrom(currentState)) {
+            for (Transition<A,S> successor : tf.transitionsFrom(currentState)) {
                 // Compute the new cost of the successor
                 N successorNode = factory.makeNode(current, successor);
                 N successorOpen = open.get(successor.getState());

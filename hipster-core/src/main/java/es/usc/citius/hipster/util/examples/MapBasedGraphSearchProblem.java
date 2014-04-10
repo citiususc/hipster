@@ -1,7 +1,7 @@
 package es.usc.citius.hipster.util.examples;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
@@ -102,12 +102,12 @@ public class MapBasedGraphSearchProblem<S> implements HeuristicSearchProblem<S, 
     public static <S> TransitionFunction<S,S> transitionFunction(final Map<S, Collection<S>> connectivity){
         return new TransitionFunction<S,S>() {
             @Override
-            public Iterable<ActionState<S, S>> transitionsFrom(S state) {
+            public Iterable<Transition<S, S>> transitionsFrom(S state) {
                 //initialize variable to store outgoing transitions
-                ArrayList<ActionState<S,S>> outgoingTransitions = new ArrayList<ActionState<S,S>>();
+                ArrayList<Transition<S,S>> outgoingTransitions = new ArrayList<Transition<S,S>>();
                 //iterate over connections to generate the transitions
                 for(S neighbor : connectivity.get(state)){
-                    outgoingTransitions.add(ActionState.create(state, neighbor));
+                    outgoingTransitions.add(Transition.create(state, neighbor));
                 }
                 return outgoingTransitions;
             }
@@ -125,13 +125,13 @@ public class MapBasedGraphSearchProblem<S> implements HeuristicSearchProblem<S, 
     public static <S> CostFunction<S, S, Double> costFunction(final Map<S, Map<S, Double>> costs){
         return new CostFunction<S, S, Double>() {
             @Override
-            public Double evaluate(ActionState<S, S> actionState) {
+            public Double evaluate(Transition<S, S> transition) {
                 try {
                     /*
                      * returns 0 when no entry is present in the cost definition map, or one of the elements
                      * of the transition is null
                      */
-                    return costs.get(actionState.getAction()).get(actionState.getState());
+                    return costs.get(transition.getAction()).get(transition.getState());
                 } catch (Exception e){
                     return 0d;
                 }

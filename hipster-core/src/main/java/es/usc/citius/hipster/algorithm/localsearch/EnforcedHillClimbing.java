@@ -20,7 +20,7 @@ package es.usc.citius.hipster.algorithm.localsearch;
 
 
 import es.usc.citius.hipster.algorithm.Algorithm;
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
@@ -56,7 +56,7 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         private C bestHeuristic = null;
 
         private EHCIter() {
-            N initial = factory.makeNode(null, ActionState.<A, S>create(null, initialState));
+            N initial = factory.makeNode(null, Transition.<A, S>create(null, initialState));
             bestHeuristic = heuristicFunction.estimate(initialState);
             queue.add(initial);
         }
@@ -70,7 +70,7 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         public N next() {
             N current = this.queue.poll();
             // Generate successors
-            for(ActionState<A,S> successor : transitionFunction.transitionsFrom(current.state())){
+            for(Transition<A,S> successor : transitionFunction.transitionsFrom(current.state())){
                 S currentState = successor.getState();
                 // Evaluate
                 C heuristic = heuristicFunction.estimate(currentState);

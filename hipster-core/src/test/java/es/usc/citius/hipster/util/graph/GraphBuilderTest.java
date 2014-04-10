@@ -17,11 +17,6 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.model.ActionState;
-import es.usc.citius.hipster.model.function.CostFunction;
-import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

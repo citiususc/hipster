@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.model.function;
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 
 /**
  * The cost function evaluates a {@link es.usc.citius.lab.hipster.node.Transition}
@@ -29,5 +29,5 @@ import es.usc.citius.hipster.model.ActionState;
  */
 public interface CostFunction<A, S, C extends Comparable<C>> {
 
-    public C evaluate(ActionState<A,S> actionState);
+    public C evaluate(Transition<A,S> transition);
 }

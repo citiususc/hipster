@@ -19,7 +19,7 @@ package es.usc.citius.hipster.algorithm;
 
 
 
-import es.usc.citius.hipster.model.ActionState;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
@@ -59,7 +59,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
     private class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        Iterator<ActionState<A,S>> successors;
+        Iterator<Transition<A,S>> successors;
         // Current search node
         N node;
         // Boolean value to check if the node is still unvisited
@@ -68,7 +68,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         // Boolean to indicate that this node is fully processed
         boolean processed = false;
 
-        StackFrameNode(Iterator<ActionState<A,S>> successors, N node) {
+        StackFrameNode(Iterator<Transition<A,S>> successors, N node) {
             this.successors = successors;
             this.node = node;
         }
@@ -87,7 +87,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         private StackFrameNode next;
 
         private IDAStarIter(){
-            N initialNode = factory.makeNode(null, new ActionState<A, S>(null, initialState));
+            N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
             // Set initial bound
             fLimit = initialNode.getEstimation();
             minfLimit = null;
@@ -147,7 +147,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                         fLimit = minfLimit;
                         reinitialization++;
                         //System.out.println("Reinitializing, new bound: " + fLimit);
-                        N initialNode = factory.makeNode(null, new ActionState<A, S>(null, initialState));
+                        N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
                         minfLimit = null;
                         stack.add(new StackFrameNode(initialNode));
                         nextNode = processNextNode();
@@ -192,7 +192,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             // Find a successor
             if (current.successors.hasNext()){
                 // 3 - Node has at least one neighbor
-                ActionState<A, S> t = current.successors.next();
+                Transition<A, S> t = current.successors.next();
                 // Create the neighbor and push the node
                 N neighbor = factory.makeNode(current.node, t);
                 stack.add(new StackFrameNode(neighbor));

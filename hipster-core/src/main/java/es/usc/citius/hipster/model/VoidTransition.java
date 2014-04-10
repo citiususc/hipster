@@ -17,9 +17,9 @@
 package es.usc.citius.hipster.model;
 
 
-public class VoidActionState<S> extends ActionState<Void, S> {
+public class VoidTransition<S> extends Transition<Void, S> {
 
-    public VoidActionState(S state) {
+    public VoidTransition(S state) {
         super(null, state);
     }
 }
