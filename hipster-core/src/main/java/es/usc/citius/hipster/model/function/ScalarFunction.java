@@ -37,7 +37,7 @@ package es.usc.citius.hipster.model.function;
  * </pre>
  *
  * To create a default scalar function to operate with doubles,
- * simple use {@link es.usc.citius.lab.hipster.function.impl.Product}.
+ * simple use {@link es.usc.citius.hipster.model.function.impl.Product}.
  *
  * @param <T> type of the domain of the function
  * 

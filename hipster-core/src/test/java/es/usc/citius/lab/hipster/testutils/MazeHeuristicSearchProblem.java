@@ -17,7 +17,7 @@ package es.usc.citius.lab.hipster.testutils;
 
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.hipster.util.examples.maze.Maze2D;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;

@@ -2,8 +2,8 @@ package es.usc.citius.lab.hipster.examples;
 
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
-import es.usc.citius.lab.hipster.util.map.MapBasedGraphSearchProblem;
-import es.usc.citius.lab.hipster.util.map.MapBasedRomaniaProblem;
+import es.usc.citius.hipster.util.examples.MapBasedGraphSearchProblem;
+import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
 
 import java.util.List;
 

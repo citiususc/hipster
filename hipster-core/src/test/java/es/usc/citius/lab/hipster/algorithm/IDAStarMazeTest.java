@@ -21,14 +21,13 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
-import es.usc.citius.lab.hipster.algorithm.problem.InformedSearchProblem;
 import es.usc.citius.lab.hipster.function.CostFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
-import es.usc.citius.lab.hipster.util.maze.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.Mazes;
+import es.usc.citius.hipster.util.examples.maze.MazeSearch;
+import es.usc.citius.hipster.util.examples.maze.Mazes;
 import org.junit.Test;
 
 import java.awt.*;

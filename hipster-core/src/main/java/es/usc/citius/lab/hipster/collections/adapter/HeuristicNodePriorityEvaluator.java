@@ -16,19 +16,21 @@
 
 package es.usc.citius.lab.hipster.collections.adapter;
 
-import es.usc.citius.lab.hipster.node.HeuristicNode;
+
+import es.usc.citius.hipster.model.HeuristicNode;
 
 /**
  * @author Pablo Rodríguez Mier
  */
-public class HeuristicNodePriorityEvaluator<S, T extends Comparable<T>> implements PriorityEvaluator<HeuristicNode<S, T>> {
+public class HeuristicNodePriorityEvaluator<A, S, C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> implements PriorityEvaluator<N> {
     @Override
-    public double getPriority(HeuristicNode<S, T> heuristicNode) {
-        T cost = heuristicNode.getScore();
+    public double getPriority(N n) {
+        C cost = n.getScore();
         if (cost instanceof Number) {
             return ((Number) cost).doubleValue();
         }
         throw new ClassCastException("Automatic cast to double of the HeuristicNode score failed. HeuristicNode#getScore() is not returning a Number. Please " +
                 "use a different PriorityEvaluator to evaluate properly the custom type used by HeuristicNode.");
+
     }
 }

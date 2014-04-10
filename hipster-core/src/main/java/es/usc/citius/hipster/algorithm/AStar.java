@@ -107,7 +107,6 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
          * the state with {@code currentNode.transition().to().equals(myGoalState)}
          *
          * @return next visited state.
-         * @see es.usc.citius.lab.hipster.node.HeuristicNode
          */
         public N next() {
             // Get and remove the best node in the queue

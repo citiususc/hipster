@@ -15,6 +15,7 @@
  */
 package es.usc.citius.lab.hipster.algorithm.combinatorial;
 
+import es.usc.citius.hipster.util.SetCoverIterator;
 import org.junit.Test;
 
 import java.util.Arrays;

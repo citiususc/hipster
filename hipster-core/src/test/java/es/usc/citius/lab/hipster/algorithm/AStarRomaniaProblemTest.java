@@ -17,7 +17,7 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.node.HeuristicNode;
-import es.usc.citius.lab.hipster.util.map.MapBasedRomaniaProblem;
+import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
 import org.junit.Test;
 
 import java.util.Arrays;

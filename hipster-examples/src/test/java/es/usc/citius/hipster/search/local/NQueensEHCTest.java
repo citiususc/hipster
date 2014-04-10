@@ -22,7 +22,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.node.Node;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.search.local.EnforcedHillClimbing;
+import es.usc.citius.hipster.algorithm.localsearch.EnforcedHillClimbing;
 import org.junit.Test;
 
 import java.util.*;

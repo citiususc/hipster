@@ -20,12 +20,10 @@ import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
-import es.usc.citius.lab.hipster.util.maze.MazeSearch;
+import es.usc.citius.hipster.util.examples.maze.Maze2D;
 import org.apache.commons.collections15.Transformer;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 /**

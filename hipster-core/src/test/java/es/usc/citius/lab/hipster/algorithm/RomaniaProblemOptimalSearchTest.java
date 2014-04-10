@@ -3,8 +3,8 @@ package es.usc.citius.lab.hipster.algorithm;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.lab.hipster.node.HeuristicNode;
 import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.util.map.MapBasedGraphSearchProblem;
-import es.usc.citius.lab.hipster.util.map.MapBasedRomaniaProblem;
+import es.usc.citius.hipster.util.examples.MapBasedGraphSearchProblem;
+import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
 import org.junit.Before;
 import org.junit.Test;
 

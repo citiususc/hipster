@@ -23,7 +23,7 @@ import es.usc.citius.lab.hipster.function.HeuristicFunction;
 import es.usc.citius.lab.hipster.function.TransitionFunction;
 import es.usc.citius.lab.hipster.function.impl.BinaryOperation;
 import es.usc.citius.lab.hipster.node.Transition;
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.hipster.util.examples.maze.Maze2D;
 
 import java.awt.*;
 

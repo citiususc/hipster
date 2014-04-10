@@ -16,7 +16,7 @@
 
 package es.usc.citius.lab.hipster.maze;
 
-import es.usc.citius.lab.hipster.util.maze.Maze2D;
+import es.usc.citius.hipster.util.examples.maze.Maze2D;
 import org.junit.Test;
 
 import java.awt.*;

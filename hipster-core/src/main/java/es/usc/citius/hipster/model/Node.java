@@ -16,8 +16,6 @@
 
 package es.usc.citius.hipster.model;
 
-import es.usc.citius.lab.hipster.node.Transition;
-
 import java.util.List;
 
 /**

@@ -19,8 +19,8 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.lab.hipster.node.CostNode;
 import es.usc.citius.lab.hipster.testutils.MazeHeuristicSearchProblem;
-import es.usc.citius.lab.hipster.util.maze.MazeSearch;
-import es.usc.citius.lab.hipster.util.maze.Mazes;
+import es.usc.citius.hipster.util.examples.maze.MazeSearch;
+import es.usc.citius.hipster.util.examples.maze.Mazes;
 import org.junit.Test;
 
 import java.awt.*;
