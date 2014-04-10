@@ -35,11 +35,13 @@ public final class Hipster {
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
                 BinaryOperation.doubleAdditionOp());
-
-        return new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
+        AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
+            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
                 problem.getInitialState(),
                 problem.getTransitionFunction(),
                 factory);
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
     }
 
     public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
@@ -53,10 +55,14 @@ public final class Hipster {
                 },
                 BinaryOperation.doubleAdditionOp());
 
-        return new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
+        AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
+            new AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
                 problem.getInitialState(),
                 problem.getTransitionFunction(),
                 factory);
+        // TODO: Improve the way to set an optional goal
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
     }
 
     /**
@@ -67,12 +73,15 @@ public final class Hipster {
      * @return
      */
     public static <A,S> BreadthFirstSearch<A,S,UnweightedNode<A,S>> createBreadthFirstSearch(SearchProblem<A,S> problem){
-        return new BreadthFirstSearch<A, S, UnweightedNode<A,S>>(problem.getInitialState(), problem.getTransitionFunction(),
-                new NodeFactory<A, S, UnweightedNode<A,S>>() {
+        BreadthFirstSearch<A, S, UnweightedNode<A, S>> algorithm = new BreadthFirstSearch<A, S, UnweightedNode<A, S>>(problem.getInitialState(), problem.getTransitionFunction(),
+                new NodeFactory<A, S, UnweightedNode<A, S>>() {
                     @Override
-                    public UnweightedNode<A,S> makeNode(UnweightedNode<A,S> fromNode, Transition<A, S> transition) {
-                        return new UnweightedNode<A,S>(fromNode, transition);
+                    public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
+                        return new UnweightedNode<A, S>(fromNode, transition);
                     }
-                });
+                }
+        );
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
     }
 }

@@ -63,10 +63,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
 
         /**
-         * Last node expanded with the goal state. Use
-         * {@link es.usc.citius.lab.hipster.node.Node#path()} to obtain the
-         * full path from the initial node.
-         *
+
          * @return goal node.
          */
         public N getGoalNode() {
@@ -83,6 +80,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
                     "Search time=" + stopwatch +
                     ", total iterations=" + iterations +
                     ", solution=" + optimalPath +
+                    ", node info=" + goalNode +
                     '}';
         }
     }

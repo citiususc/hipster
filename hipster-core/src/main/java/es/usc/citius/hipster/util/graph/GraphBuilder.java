@@ -31,6 +31,76 @@ public final class GraphBuilder {
         private Builder() {}
     }
 
+    public static class MutableHashBasedGraph<V,E> extends Builder<V,E> implements HipsterGraph<V,E> {
+        private final Table<V,V,E> graphTable;
+
+        private MutableHashBasedGraph(){
+            this.graphTable = HashBasedTable.create();
+        }
+
+        public final class FromVertex {
+            private V fromVertex;
+
+            private FromVertex(V fromVertex){
+                this.fromVertex = fromVertex;
+            }
+
+            public ToVertex to(V toVertex){
+                return new ToVertex(toVertex);
+            }
+
+            public final class ToVertex {
+                private V toVertex;
+
+                public ToVertex(V toVertex) {
+                    this.toVertex = toVertex;
+                }
+
+                public MutableHashBasedGraph<V,E> withEdge(E edge){
+                    // Put both relations (not directed)
+                    graphTable.put(fromVertex, toVertex, edge);
+                    graphTable.put(toVertex, fromVertex, edge);
+                    return MutableHashBasedGraph.this;
+                }
+            }
+        }
+
+        public FromVertex connect(V vertex){
+            return new FromVertex(vertex);
+        }
+
+        @Override
+        public Set<E> edges() {
+            return new HashSet<E>(graphTable.values());
+        }
+
+        @Override
+        public Set<V> vertices() {
+            return Sets.union(graphTable.rowKeySet(), graphTable.columnKeySet());
+        }
+
+        @Override
+        public Set<E> edgesWithVertex(V vertex) {
+            return Sets.union(new HashSet<E>(graphTable.row(vertex).values()),
+                    new HashSet<E>(graphTable.column(vertex).values()));
+        }
+
+        @Override
+        public V vertexConnectedTo(V vertex, E edge) {
+            for(Map.Entry<V,E> entry : graphTable.row(vertex).entrySet()){
+                if (entry.getValue().equals(edge)){
+                    return entry.getKey();
+                }
+            }
+            for(Map.Entry<V,E> entry : graphTable.column(vertex).entrySet()){
+                if (entry.getValue().equals(edge)){
+                    return entry.getKey();
+                }
+            }
+            return null;
+        }
+    }
+
     // Ultra slow implementation of a directed graph
     public static class MutableHashBasedDirectedGraph<V,E> extends Builder<V,E> implements HipsterDirectedGraph<V,E> {
         // Row = source, Column = target
@@ -134,5 +204,9 @@ public final class GraphBuilder {
 
     public static <V,E> MutableHashBasedDirectedGraph<V,E> newDirectedGraph(){
         return new MutableHashBasedDirectedGraph<V, E>();
+    }
+
+    public static <V,E> MutableHashBasedGraph<V,E> newGraph(){
+        return new MutableHashBasedGraph<V, E>();
     }
 }

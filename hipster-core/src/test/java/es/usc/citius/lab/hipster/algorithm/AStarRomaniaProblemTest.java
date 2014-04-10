@@ -16,7 +16,7 @@
 //
 //package es.usc.citius.lab.hipster.algorithm;
 //
-//import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
+//import es.usc.citius.hipster.util.examples.RomanianProblemOptimalPathTest;
 //import org.junit.Test;
 //
 //import java.util.Arrays;
@@ -48,18 +48,18 @@
 //    @Test
 //    public void expansionsFromAradToBucharest() {
 //        //list of expansions to be done by A* during the search
-//        List<MapBasedRomaniaProblem.City> expansionsPerformed =
+//        List<RomanianProblemOptimalPathTest.City> expansionsPerformed =
 //                Arrays.asList(
-//                        MapBasedRomaniaProblem.City.Arad,
-//                        MapBasedRomaniaProblem.City.Sibiu,
-//                        MapBasedRomaniaProblem.City.Rimnicu_Vilcea,
-//                        MapBasedRomaniaProblem.City.Fagaras,
-//                        MapBasedRomaniaProblem.City.Pitesti,
-//                        MapBasedRomaniaProblem.City.Bucharest
+//                        RomanianProblemOptimalPathTest.City.Arad,
+//                        RomanianProblemOptimalPathTest.City.Sibiu,
+//                        RomanianProblemOptimalPathTest.City.Rimnicu_Vilcea,
+//                        RomanianProblemOptimalPathTest.City.Fagaras,
+//                        RomanianProblemOptimalPathTest.City.Pitesti,
+//                        RomanianProblemOptimalPathTest.City.Bucharest
 //                );
 //        //compare expanded cities with expected ones
 //        for(int i = 0; i < expansionsPerformed.size(); i++){
-//            HeuristicNode<MapBasedRomaniaProblem.City, Double> current = searchIterator.next();
+//            HeuristicNode<RomanianProblemOptimalPathTest.City, Double> current = searchIterator.next();
 //            assertEquals(
 //                    "Failed checking expanded element no. " + (i + 1) + ". Expected: " +
 //                            expansionsPerformed.get(i) + ", found: " + current.transition().to(),
@@ -75,7 +75,7 @@
 //     * @return search iterator according to the problem definition
 //     */
 //    @Override
-//    public Iterator<HeuristicNode<MapBasedRomaniaProblem.City, Double>> createIterator() {
+//    public Iterator<HeuristicNode<RomanianProblemOptimalPathTest.City, Double>> createIterator() {
 //        return Algorithms.createAStar(problem).iterator();
 //    }
 //}

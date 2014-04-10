@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
-public class MapBasedRomaniaProblem {
+public class RomanianProblem {
 
     /**
      * Enumeration for our type of nodes.

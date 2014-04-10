@@ -6,7 +6,7 @@
 //import es.usc.citius.hipster.model.function.TransitionFunction;
 //import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 //import es.usc.citius.hipster.model.problem.ProblemBuilder;
-//import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
+//import es.usc.citius.hipster.util.examples.RomanianProblemOptimalPathTest;
 //import org.junit.Before;
 //import org.junit.Test;
 //
@@ -30,9 +30,9 @@
 // */
 //public abstract class RomaniaProblemOptimalSearchTest {
 //
-//    protected HeuristicSearchProblem<Void, MapBasedRomaniaProblem.City, Double> problem;
-//    protected Map<MapBasedRomaniaProblem.City, Double> costMap;
-//    protected Map<MapBasedRomaniaProblem.City, Double> scoreMap;
+//    protected HeuristicSearchProblem<Void, RomanianProblemOptimalPathTest.City, Double> problem;
+//    protected Map<RomanianProblemOptimalPathTest.City, Double> costMap;
+//    protected Map<RomanianProblemOptimalPathTest.City, Double> scoreMap;
 //
 //    /**
 //     * Constructor of the AStar test. The Romania problem is instantiated before all tests.
@@ -40,23 +40,23 @@
 //    public RomaniaProblemOptimalSearchTest() {
 //        //obtain instance of Romanian problem
 //
-//        TransitionFunction<Void, MapBasedRomaniaProblem.City> tf = new TransitionFunction<Void, MapBasedRomaniaProblem.City>() {
+//        TransitionFunction<Void, RomanianProblemOptimalPathTest.City> tf = new TransitionFunction<Void, RomanianProblemOptimalPathTest.City>() {
 //            @Override
-//            public Iterable<Transition<Void, MapBasedRomaniaProblem.City>> transitionsFrom(MapBasedRomaniaProblem.City state) {
+//            public Iterable<Transition<Void, RomanianProblemOptimalPathTest.City>> transitionsFrom(RomanianProblemOptimalPathTest.City state) {
 //                return null;
 //            }
 //        };
 //
-//        CostFunction<Void, MapBasedRomaniaProblem.City, Double> cf = new CostFunction<Void, MapBasedRomaniaProblem.City, Double>() {
+//        CostFunction<Void, RomanianProblemOptimalPathTest.City, Double> cf = new CostFunction<Void, RomanianProblemOptimalPathTest.City, Double>() {
 //            @Override
-//            public Double evaluate(Transition<Void, MapBasedRomaniaProblem.City> transition) {
+//            public Double evaluate(Transition<Void, RomanianProblemOptimalPathTest.City> transition) {
 //                return null;
 //            }
 //        };
 //
 //        problem = ProblemBuilder.create()
-//                .initialState(MapBasedRomaniaProblem.City.Arad)
-//                .goalState(MapBasedRomaniaProblem.City.Bucharest)
+//                .initialState(RomanianProblemOptimalPathTest.City.Arad)
+//                .goalState(RomanianProblemOptimalPathTest.City.Bucharest)
 //                .defineProblemWithoutActions()
 //                    .useTransitionFunction(tf)
 //                    .useCostFunction(cf)
@@ -66,29 +66,29 @@
 //
 //
 //        //obtain cost map for expanding nodes from Arad
-//        costMap = new HashMap<MapBasedRomaniaProblem.City, Double>();
-//        costMap.put(MapBasedRomaniaProblem.City.Arad, 0d);
-//        costMap.put(MapBasedRomaniaProblem.City.Zerind, 75d);
-//        costMap.put(MapBasedRomaniaProblem.City.Timisoara, 118d);
-//        costMap.put(MapBasedRomaniaProblem.City.Sibiu, 140d);
-//        costMap.put(MapBasedRomaniaProblem.City.Oradea, 291d);
-//        costMap.put(MapBasedRomaniaProblem.City.Fagaras, 239d);
-//        costMap.put(MapBasedRomaniaProblem.City.Rimnicu_Vilcea, 220d);
-//        costMap.put(MapBasedRomaniaProblem.City.Craiova, 366d);
-//        costMap.put(MapBasedRomaniaProblem.City.Pitesti, 317d);
-//        costMap.put(MapBasedRomaniaProblem.City.Bucharest, 418d);
+//        costMap = new HashMap<RomanianProblemOptimalPathTest.City, Double>();
+//        costMap.put(RomanianProblemOptimalPathTest.City.Arad, 0d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Zerind, 75d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Timisoara, 118d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Sibiu, 140d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Oradea, 291d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Fagaras, 239d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Rimnicu_Vilcea, 220d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Craiova, 366d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Pitesti, 317d);
+//        costMap.put(RomanianProblemOptimalPathTest.City.Bucharest, 418d);
 //        //obtain score map for expanding nodes to Bucharest
-//        scoreMap = new HashMap<MapBasedRomaniaProblem.City, Double>();
-//        scoreMap.put(MapBasedRomaniaProblem.City.Arad, 366d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Zerind, 449d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Timisoara, 447d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Sibiu, 393d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Oradea, 671d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Fagaras, 415d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Rimnicu_Vilcea, 413d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Craiova, 526d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Pitesti, 417d);
-//        scoreMap.put(MapBasedRomaniaProblem.City.Bucharest, 418d);
+//        scoreMap = new HashMap<RomanianProblemOptimalPathTest.City, Double>();
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Arad, 366d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Zerind, 449d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Timisoara, 447d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Sibiu, 393d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Oradea, 671d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Fagaras, 415d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Rimnicu_Vilcea, 413d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Craiova, 526d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Pitesti, 417d);
+//        scoreMap.put(RomanianProblemOptimalPathTest.City.Bucharest, 418d);
 //    }
 //
 //    /**
@@ -96,23 +96,23 @@
 //     */
 //    @Test
 //    public void optimalPathFromAradToBucharest() {
-//        HeuristicNode<MapBasedRomaniaProblem.City, Double> node;
+//        HeuristicNode<RomanianProblemOptimalPathTest.City, Double> node;
 //        //search optimal path
 //        do{
 //            //
 //            node = searchIterator.next();
-//        }while(searchIterator.hasNext() && !node.transition().to().equals(MapBasedRomaniaProblem.City.Bucharest));
+//        }while(searchIterator.hasNext() && !node.transition().to().equals(RomanianProblemOptimalPathTest.City.Bucharest));
 //        //list of cities in the optimal path
-//        List<MapBasedRomaniaProblem.City> optimalPath =
+//        List<RomanianProblemOptimalPathTest.City> optimalPath =
 //                Arrays.asList(
-//                        MapBasedRomaniaProblem.City.Arad,
-//                        MapBasedRomaniaProblem.City.Sibiu,
-//                        MapBasedRomaniaProblem.City.Rimnicu_Vilcea,
-//                        MapBasedRomaniaProblem.City.Pitesti,
-//                        MapBasedRomaniaProblem.City.Bucharest
+//                        RomanianProblemOptimalPathTest.City.Arad,
+//                        RomanianProblemOptimalPathTest.City.Sibiu,
+//                        RomanianProblemOptimalPathTest.City.Rimnicu_Vilcea,
+//                        RomanianProblemOptimalPathTest.City.Pitesti,
+//                        RomanianProblemOptimalPathTest.City.Bucharest
 //                );
 //        //path returned by the search algorithm
-//        List<Node<MapBasedRomaniaProblem.City>> path = node.path();
+//        List<Node<RomanianProblemOptimalPathTest.City>> path = node.path();
 //        //check elements returned by the search algorithm
 //        for(int i = 0; i < path.size(); i++){
 //            //check if current element of the path is equals to the
@@ -130,7 +130,7 @@
 //     */
 //    @Test
 //    public void costsFromAradToBucharest() {
-//        HeuristicNode<MapBasedRomaniaProblem.City, Double> node;
+//        HeuristicNode<RomanianProblemOptimalPathTest.City, Double> node;
 //        //search optimal path
 //        do{
 //            node = searchIterator.next();
@@ -141,7 +141,7 @@
 //                    node.getCost(),
 //                    costMap.get(node.transition().to())
 //            );
-//        }while(searchIterator.hasNext() && !node.transition().to().equals(MapBasedRomaniaProblem.City.Bucharest));
+//        }while(searchIterator.hasNext() && !node.transition().to().equals(RomanianProblemOptimalPathTest.City.Bucharest));
 //    }
 //
 //    /**
@@ -149,7 +149,7 @@
 //     */
 //    @Test
 //    public void scoresFromAradToBucharest() {
-//        HeuristicNode<MapBasedRomaniaProblem.City, Double> node;
+//        HeuristicNode<RomanianProblemOptimalPathTest.City, Double> node;
 //        //search optimal path
 //        do{
 //            node = searchIterator.next();
@@ -160,7 +160,7 @@
 //                    node.getScore(),
 //                    scoreMap.get(node.transition().to())
 //            );
-//        }while(searchIterator.hasNext() && !node.transition().to().equals(MapBasedRomaniaProblem.City.Bucharest));
+//        }while(searchIterator.hasNext() && !node.transition().to().equals(RomanianProblemOptimalPathTest.City.Bucharest));
 //    }
 //
 //    /**
@@ -176,6 +176,6 @@
 //     *
 //     * @return instance of iterator for a search algorithm.
 //     */
-//    public abstract Iterator<HeuristicNode<MapBasedRomaniaProblem.City, Double>> createIterator();
+//    public abstract Iterator<HeuristicNode<RomanianProblemOptimalPathTest.City, Double>> createIterator();
 //
 //}

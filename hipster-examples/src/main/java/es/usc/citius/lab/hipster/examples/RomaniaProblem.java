@@ -1,9 +1,9 @@
 package es.usc.citius.lab.hipster.examples;
 
+import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.lab.hipster.algorithm.Algorithms;
 import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.util.examples.MapBasedGraphSearchProblem;
-import es.usc.citius.hipster.util.examples.MapBasedRomaniaProblem;
 
 import java.util.List;
 
@@ -22,18 +22,18 @@ public class RomaniaProblem {
         //weight is the distance in km between the cities.
         //The Goal of the problem is always the city of Bucharest. The heuristic of the problem is the distance
         //in km of the straight line between each city and Bucharest.
-        MapBasedRomaniaProblem.City begin = MapBasedRomaniaProblem.City.Lugoj;
-        MapBasedRomaniaProblem.City goal = MapBasedRomaniaProblem.City.Bucharest;
+        RomanianProblem.City begin = RomanianProblem.City.Lugoj;
+        RomanianProblem.City goal = RomanianProblem.City.Bucharest;
         //We instantiate the search problem using the graph-based implementation provided in Hipster.
-        HeuristicSearchProblem<MapBasedRomaniaProblem.City, Double> problem =
-                new MapBasedGraphSearchProblem<MapBasedRomaniaProblem.City>(
+        HeuristicSearchProblem<RomanianProblem.City, Double> problem =
+                new MapBasedGraphSearchProblem<RomanianProblem.City>(
                         begin,
                         goal,
-                        MapBasedRomaniaProblem.transitions(),
-                        MapBasedRomaniaProblem.costs(),
-                        MapBasedRomaniaProblem.heuristics()
+                        RomanianProblem.transitions(),
+                        RomanianProblem.costs(),
+                        RomanianProblem.heuristics()
                 );
-        List<MapBasedRomaniaProblem.City> path = Algorithms.createAStar(problem).getOptimalPath();
+        List<RomanianProblem.City> path = Algorithms.createAStar(problem).getOptimalPath();
         System.out.println("Solution path: " + path);
     }
 

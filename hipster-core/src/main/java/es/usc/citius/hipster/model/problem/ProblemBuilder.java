@@ -45,8 +45,8 @@ public final class ProblemBuilder {
              * or ActionStateTransitionFunction to apply actions to states in order
              * to obtain new states.
              */
-            public <A> ExplicitActionProblemBuilder<A> defineProblemWithExplicitActions(Class<A> type){
-                return new ExplicitActionProblemBuilder<A>();
+            public ExplicitActionProblemBuilder defineProblemWithExplicitActions(){
+                return new ExplicitActionProblemBuilder();
             }
 
             /**
@@ -65,14 +65,14 @@ public final class ProblemBuilder {
                 }
             }
 
-            public final class ExplicitActionProblemBuilder<A> {
+            public final class ExplicitActionProblemBuilder {
                 private ExplicitActionProblemBuilder(){}
 
-                public ExplicitActionProblem useActionFunction(ActionFunction<A, S> actionFunction){
+                public <A> ExplicitActionProblem useActionFunction(ActionFunction<A, S> actionFunction){
                     return new ExplicitActionProblem(actionFunction);
                 }
 
-                public final class ExplicitActionProblem {
+                public final class ExplicitActionProblem<A> {
                     private ActionFunction<A, S> af;
 
                     public ExplicitActionProblem(ActionFunction<A, S> af) {
@@ -92,7 +92,7 @@ public final class ProblemBuilder {
                  * @param transitionFunction
                  *
                  */
-                public GenericSearchProblemBuilder<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
+                public <A> GenericSearchProblemBuilder<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
                     return new GenericSearchProblemBuilder<A>(transitionFunction);
                 }
             }

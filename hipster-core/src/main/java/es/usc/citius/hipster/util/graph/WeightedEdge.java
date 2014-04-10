@@ -39,4 +39,5 @@ public class WeightedEdge extends UniqueEdge<Double> {
                 ", edgeId='" + this.getEdgeId() + '\'' +
                 '}';
     }
+
 }
