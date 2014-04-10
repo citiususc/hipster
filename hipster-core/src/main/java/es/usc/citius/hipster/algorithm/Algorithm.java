@@ -76,11 +76,11 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
 
         @Override
         public String toString() {
-            return "Search Result {" +
-                    "Search time=" + stopwatch +
-                    ", total iterations=" + iterations +
+            return "SearchResult {" +
+                    "SearchTime=" + stopwatch +
+                    ", totalIterations=" + iterations +
                     ", solution=" + optimalPath +
-                    ", node info=" + goalNode +
+                    ", goalInfo=" + goalNode +
                     '}';
         }
     }
