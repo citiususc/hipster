@@ -25,6 +25,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Simple graph builder for testing and example purposes.
+ *
+ * @author Pablo Rodríguez Mier
+ */
 public final class GraphBuilder {
 
     protected static class Builder<V,E> {
