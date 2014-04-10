@@ -17,9 +17,13 @@
 package es.usc.citius.hipster.model;
 
 
-public class VoidTransition<S> extends Transition<Void, S> {
+/**
+ * A SimpleTransition is just a transition without explicit actions {@code Transition<Void,S>}
+ * @param <S> state type of the transition
+ */
+public class SimpleTransition<S> extends Transition<Void, S> {
 
-    public VoidTransition(S state) {
+    public SimpleTransition(S state) {
         super(null, state);
     }
 }
