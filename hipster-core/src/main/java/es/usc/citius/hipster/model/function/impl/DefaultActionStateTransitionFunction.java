@@ -38,7 +38,7 @@ public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunc
     public Iterable<Transition<A, S>> transitionsFrom(final S state) {
         Set<Transition<A,S>> result = new HashSet<Transition<A, S>>();
         for(A applicableAction : af.actionsFor(state)){
-            result.add(new Transition<A, S>(applicableAction, tf.apply(applicableAction, state)));
+            result.add(new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state)));
         }
         return result;
     }
