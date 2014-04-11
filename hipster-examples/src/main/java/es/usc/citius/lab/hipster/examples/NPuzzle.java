@@ -17,6 +17,12 @@
 package es.usc.citius.lab.hipster.examples;
 
 
+import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.function.*;
+import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
+import es.usc.citius.hipster.model.problem.ProblemBuilder;
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -120,6 +126,26 @@ public final class NPuzzle {
             this.previousBoard = previousBoard;
         }
 
+        @Override
+        public String toString() {
+            /*
+            // Print each row of all states
+            int[][] board = this.getMatrixBoard();
+            int size = board.length;
+            StringBuffer output = new StringBuffer();
+            for(int i=0; i < this.getMatrixBoard().length; i++){
+                String row = "| ";
+                for(int j=0; j <size; j++){
+                    row += board[i][j] + " ";
+                }
+                row += "|\n";
+                output.append(row);
+            }
+            return output.toString();
+            */
+            return Arrays.toString(this.plainBoard);
+        }
+
         // IMPORTANT NOTE: Since we are creating a state class (the basic unit search)
         // we have to override equals & hashcode to guarantee that two states with
         // the same tiles in the same position ARE EQUAL.
@@ -141,6 +167,8 @@ public final class NPuzzle {
             return Arrays.hashCode(plainBoard);
         }
     }
+
+    public enum PuzzleMove {UP, DOWN, LEFT, RIGHT}
 
 
     /**
@@ -172,63 +200,72 @@ public final class NPuzzle {
 
         final Puzzle initialState = new Puzzle(new int[]{0,8,7,6,5,4,3,2,1});
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
-        final int[][] goal = goalState.getMatrixBoard();
+        //final int[][] goal = goalState.getMatrixBoard();
 
-
-        TransitionFunction<Puzzle> tf = new TransitionFunction<Puzzle>() {
+        ActionFunction<PuzzleMove, Puzzle> af = new ActionFunction<PuzzleMove, Puzzle>() {
             @Override
-            public Iterable<? extends Transition<Puzzle>> from(Puzzle current) {
-                // Compute the movements
-                Point gap = current.getTile(0);
-                // There are always maximum 4 tiles around the gap (left, right, top, bottom)
-                Set<Point> points = new HashSet<Point>();
-                // Left
-                points.add(new Point(gap.x-1,gap.y));
-                // Right
-                points.add(new Point(gap.x+1,gap.y));
-                // Top
-                points.add(new Point(gap.x,gap.y-1));
-                // Bottom
-                points.add(new Point(gap.x,gap.y+1));
+            public Set<PuzzleMove> actionsFor(Puzzle state) {
+                Set<PuzzleMove> movements = new HashSet<PuzzleMove>();
+                // Get which place the gap tile is in
+                Point gap = state.getTile(0);
+                // side size of the board
+                int boardSize = state.getMatrixBoard().length;
+                // Check valid movements. There are always maximum 4 tiles around the gap (left, right, top, down)
 
-                Set<Puzzle> states = new HashSet<Puzzle>();
-                // Now, we generate the boards (states) resulting from
-                // moving one tile to the gap. We have max 4 possible new
-                // states (depending on the gap position).
-
-                // For optimization purposes, we avoid to take an action that leads to
-                // the previous state.
-                Puzzle previousBoard = current.getPreviousBoard();
-                for(Point movement : points){
-                    // The tiles that can be moved are those around the gap.
-                    int[][] board = current.copyBoard();
-                    // Generate the new boards (states) with the tiles moved.
-                    int size = board.length;
-                    // Check if the point is in the board or not!
-                    if (movement.x >=0 && movement.x < size && movement.y >=0 && movement.y < size){
-                        // Generate a new board, replacing the gap with the number at that point
-                        int numberTile = board[movement.x][movement.y];
-                        // Replace gap
-                        board[gap.x][gap.y]=numberTile;
-                        // Fill the tile with the gap
-                        board[movement.x][movement.y] = 0;
-                        // Create the new board state
-                        Puzzle newState = new Puzzle(board);
-                        if (!(previousBoard != null && previousBoard.equals(newState))){
-                            newState.setPreviousBoard(current);
-                            states.add(newState);
-                        }
-                    }
+                // Can we move the gap to right ? (i.e., the right tile next to the gap to the left)
+                if (gap.getY() >= 0 && gap.getY() < boardSize-1){
+                    movements.add(PuzzleMove.RIGHT);
+                }
+                // Can we move the gap to the left?
+                if (gap.getY() > 0 && gap.getY() <= boardSize-1){
+                    movements.add(PuzzleMove.LEFT);
+                }
+                // Check for UP and DOWN
+                if (gap.getX() > 0 && gap.getX() <= boardSize-1){
+                    movements.add(PuzzleMove.UP);
                 }
 
-                // Generate the transitions
-                return Transition.map(current, states);
+                if (gap.getX() >= 0 && gap.getX() < boardSize-1){
+                    movements.add(PuzzleMove.DOWN);
+                }
+                return movements;
             }
         };
 
-        CostFunction<Puzzle, Double> cf = new CostFunction<Puzzle, Double>() {
+        ActionStateTransitionFunction<PuzzleMove, Puzzle> atf = new ActionStateTransitionFunction<PuzzleMove, Puzzle>() {
             @Override
-            public Double evaluate(Transition<Puzzle> transition) {
+            public Puzzle apply(PuzzleMove action, Puzzle state) {
+                // Generate the next board
+                Point gap = state.getTile(0);
+                int[][] board = state.copyBoard();
+                //System.out.println("Applying " + action + " to " + state + " gap: " + gap.toString());
+                // x=row, y=column
+                switch (action){
+                    case UP:
+                        board[gap.x][gap.y]=state.getMatrixBoard()[gap.x-1][gap.y];
+                        board[gap.x-1][gap.y]=0;
+                        break;
+                    case DOWN:
+                        board[gap.x][gap.y]=state.getMatrixBoard()[gap.x+1][gap.y];
+                        board[gap.x+1][gap.y]=0;
+                        break;
+                    case LEFT:
+                        board[gap.x][gap.y]=state.getMatrixBoard()[gap.x][gap.y-1];
+                        board[gap.x][gap.y-1]=0;
+                        break;
+                    case RIGHT:
+                        board[gap.x][gap.y]=state.getMatrixBoard()[gap.x][gap.y+1];
+                        board[gap.x][gap.y+1]=0;
+                        break;
+                }
+                Puzzle successor = new Puzzle(board);
+                return successor;
+            }
+        };
+
+        CostFunction<PuzzleMove, Puzzle, Double> cf = new CostFunction<PuzzleMove, Puzzle, Double>() {
+            @Override
+            public Double evaluate(Transition<PuzzleMove, Puzzle> transition) {
                 return 1d;
             }
         };
@@ -251,44 +288,22 @@ public final class NPuzzle {
                             mdistance += Math.abs(dx) + Math.abs(dy);
                         }
                     }
-                return Double.valueOf(mdistance);
+                return (double)mdistance;
             }
         };
 
-        // Create a search problem using all these elements. We can use the DefaultSearchProblem
-        // implementation that uses double values.
-        DefaultSearchProblem<Puzzle> problem = new DefaultSearchProblem<Puzzle>(initialState, goalState, tf, cf, hf);
-        solveWithDijkstra(problem);
-        solveWithAStar(problem);
-        solveWithIterativeIDA(problem);
+        HeuristicSearchProblem<PuzzleMove, Puzzle, Double> p =
+                ProblemBuilder.create()
+                    .initialState(initialState)
+                    .goalState(goalState)
+                    .defineProblemWithExplicitActions()
+                        .useActionFunction(af)
+                        .useTransitionFunction(atf)
+                        .useCostFunction(cf)
+                        .useHeuristicFunction(hf)
+                        .build();
+
+        System.out.println(Hipster.createAStar(p).search());
     }
 
-    public static void solveWithAStar(DefaultSearchProblem<Puzzle> problem){
-        System.out.println("Solving puzzle with A* + Manhattan distance...");
-        printSearchResult(Algorithms.createAStar(problem).search(), problem.getInitialState().matrix.length);
-    }
-
-    public static void solveWithDijkstra(DefaultSearchProblem<Puzzle> problem){
-        System.out.println("Solving puzzle with Dijkstra...");
-        printSearchResult(Algorithms.createDijkstra(problem).search(), problem.getInitialState().matrix.length);
-    }
-
-    public static void solveWithRecursiveIDA(DefaultSearchProblem<Puzzle> problem){
-        RecursiveIDA<Puzzle, Double> ida = new RecursiveIDA<Puzzle, Double>(problem.getInitialState(), problem.getTransitionFunction(), problem.getNodeFactory());
-        System.out.println("Launching recursive IDA");
-        ida.search(problem.getGoalState());
-    }
-
-    public static void solveWithIterativeIDA(DefaultSearchProblem<Puzzle> problem){
-        System.out.println("Solving puzzle with IDA* + manhattan distance (iterative implementation)...");
-        printSearchResult(Algorithms.createIDAStar(problem).search(), problem.getInitialState().matrix.length);
-    }
-
-    public static void printSearchResult(Algorithms.Search.Result result, int boardSize){
-        System.out.println(getPrettyPath((List<Puzzle>)result.getOptimalPath(), boardSize));
-        System.out.println("Total movements: " + ((HeuristicNode)result.getGoalNode()).getCost());
-        System.out.println("Total iterations: " + result.getIterations());
-        System.out.println("Total time: " + result.getStopwatch().toString());
-        System.out.println();
-    }
 }

@@ -84,4 +84,18 @@ public final class Hipster {
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }
+
+    public static <A,S> IDAStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
+        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+                problem.getCostFunction(),
+                problem.getHeuristicFunction(),
+                BinaryOperation.doubleAdditionOp());
+        IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
+                new IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
+                        problem.getInitialState(),
+                        problem.getTransitionFunction(),
+                        factory);
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
+    }
 }

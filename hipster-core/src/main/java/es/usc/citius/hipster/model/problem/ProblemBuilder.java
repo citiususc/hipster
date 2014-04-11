@@ -72,8 +72,8 @@ public final class ProblemBuilder {
             public final class ExplicitActionProblemBuilder {
                 private ExplicitActionProblemBuilder(){}
 
-                public <A> ExplicitActionProblem useActionFunction(ActionFunction<A, S> actionFunction){
-                    return new ExplicitActionProblem(actionFunction);
+                public <A> ExplicitActionProblem<A> useActionFunction(ActionFunction<A, S> actionFunction){
+                    return new ExplicitActionProblem<A>(actionFunction);
                 }
 
                 public final class ExplicitActionProblem<A> {
