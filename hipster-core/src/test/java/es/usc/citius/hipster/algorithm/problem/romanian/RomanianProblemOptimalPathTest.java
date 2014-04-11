@@ -31,6 +31,7 @@ import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.GraphEdge;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
+import es.usc.citius.hipster.util.graph.HipsterGraph;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -59,7 +60,7 @@ public class RomanianProblemOptimalPathTest {
     @Test
     public void RomanianProblemAStarTest() {
 
-        final GraphBuilder.MutableHashBasedGraph<City, Double> graph = RomanianProblem.graph();
+        final HipsterGraph<City, Double> graph = RomanianProblem.graph();
 
         HeuristicSearchProblem<GraphEdge<City,Double>, City, Double> p = ProblemBuilder.create()
                 .initialState(City.Arad)
