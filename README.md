@@ -69,16 +69,16 @@ Here is a quick example of how to search a shortest path in a graph with Dijkstr
 // Create a simple weighted directed graph with Hipster
 HipsterDirectedGraph<String,WeightedEdge> graph =
    GraphBuilder.<String,WeightedEdge>newDirectedGraph()
-     .from("A").to("B").withEdge(WeightedEdge.create(4.0d))
-     .from("A").to("C").withEdge(WeightedEdge.create(2.0d))
-     .from("B").to("C").withEdge(WeightedEdge.create(5.0d))
-     .from("B").to("D").withEdge(WeightedEdge.create(10.0d))
-     .from("C").to("E").withEdge(WeightedEdge.create(3.0d))
-     .from("D").to("F").withEdge(WeightedEdge.create(11.0d))
-     .from("E").to("D").withEdge(WeightedEdge.create(4.0d));
+     .from("A").to("B").withEdge(4d)
+     .from("A").to("C").withEdge(2d)
+     .from("B").to("C").withEdge(5d)
+     .from("B").to("D").withEdge(10d)
+     .from("C").to("E").withEdge(3d)
+     .from("D").to("F").withEdge(11d)
+     .from("E").to("D").withEdge(4d);
 
 // Search the shortest path with Dijkstra's algorithm and print the result
-System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("F").in(graph)).search());
+System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(graph)).search());
 ```
 But that's not all!. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem, N-Queens problem, etc.
 
