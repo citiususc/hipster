@@ -17,6 +17,8 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,19 +29,20 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 public class GraphBuilderTest {
-    private static HipsterDirectedGraph<String, WeightedEdge> testGraph;
+    private static HipsterDirectedGraph<String, Double> testGraph;
 
     @BeforeClass
     public static void setUp() throws Exception {
 
-        testGraph = GraphBuilder.<String,WeightedEdge>newDirectedGraph()
-                .from("A").to("B").withEdge(WeightedEdge.create(4.0d))
-                .from("A").to("C").withEdge(WeightedEdge.create(2.0d))
-                .from("B").to("C").withEdge(WeightedEdge.create(5.0d))
-                .from("B").to("D").withEdge(WeightedEdge.create(10.0d))
-                .from("C").to("E").withEdge(WeightedEdge.create(3.0d))
-                .from("D").to("F").withEdge(WeightedEdge.create(11.0d))
-                .from("E").to("D").withEdge(WeightedEdge.create(4.0d));
+        testGraph = GraphBuilder.<String,Double>newDirectedGraph()
+                .from("A").to("B").withEdge(4d)
+                .from("A").to("C").withEdge(2d)
+                .from("B").to("C").withEdge(5d)
+                .from("B").to("D").withEdge(10d)
+                .from("C").to("E").withEdge(3d)
+                .from("D").to("F").withEdge(11d)
+                .from("E").to("D").withEdge(4d);
+        System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(testGraph)).search());
     }
 
     @Test
@@ -50,20 +53,21 @@ public class GraphBuilderTest {
 
     @Test
     public void testEdges() {
-        Set<Double> expectedValues = new HashSet<Double>(Arrays.asList(4.0d, 2.0d, 5.0d, 10.0d, 3.0d, 11.0d, 4.0d));
+        Set<Double> expectedValues = new HashSet<Double>(Arrays.asList(4d, 2d, 5d, 10d, 3d, 11d, 4d));
         Set<Double> values = new HashSet<Double>();
-        for(WeightedEdge edge : testGraph.edges()){
-            values.add(edge.getValue());
+        for(GraphEdge<String,Double> edge : testGraph.edges()){
+            values.add(edge.getEdgeValue());
         }
+        assertEquals(7, testGraph.edges().size());
         assertEquals(expectedValues, values);
     }
 
     @Test
     public void testIncomingEdges(){
-        Set<WeightedEdge> edges = testGraph.incomingEdgesFrom("D");
+        Set<GraphEdge<String,Double>> edges = testGraph.incomingEdgesFrom("D");
         Set<Double> values = new HashSet<Double>();
-        for(WeightedEdge e : edges){
-            values.add(e.getValue());
+        for(GraphEdge<String,Double> e : edges){
+            values.add(e.getEdgeValue());
         }
         assertEquals(2, edges.size());
         assertEquals(values, new HashSet<Double>(Arrays.asList(4.0d, 10.0d)));
@@ -71,10 +75,10 @@ public class GraphBuilderTest {
 
     @Test
     public void testOutgoingEdges(){
-        Set<WeightedEdge> edges = testGraph.outgoingEdgesFrom("B");
+        Set<GraphEdge<String,Double>> edges = testGraph.outgoingEdgesFrom("B");
         Set<Double> values = new HashSet<Double>();
-        for(WeightedEdge e : edges){
-            values.add(e.getValue());
+        for(GraphEdge<String,Double> e : edges){
+            values.add(e.getEdgeValue());
         }
         assertEquals(2, edges.size());
         assertEquals(values, new HashSet<Double>(Arrays.asList(5.0d, 10.0d)));
@@ -83,14 +87,14 @@ public class GraphBuilderTest {
     @Test
     public void testVertexConnectedTo(){
         // Get outgoing edge from C
-        WeightedEdge edge = testGraph.outgoingEdgesFrom("C").iterator().next();
+        GraphEdge<String,Double> edge = testGraph.outgoingEdgesFrom("C").iterator().next();
         assertEquals("E", testGraph.vertexConnectedTo("C", edge));
     }
 
     @Test
     public void testSourceTargetVertex(){
         // Get outgoing edge from C
-        WeightedEdge edge = testGraph.outgoingEdgesFrom("C").iterator().next();
+        GraphEdge<String,Double> edge = testGraph.outgoingEdgesFrom("C").iterator().next();
         assertEquals("C", testGraph.sourceVertexOf(edge));
         assertEquals("E", testGraph.targetVertexOf(edge));
     }

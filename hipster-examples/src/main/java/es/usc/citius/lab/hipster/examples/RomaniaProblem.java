@@ -1,11 +1,8 @@
 package es.usc.citius.lab.hipster.examples;
 
+import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-import es.usc.citius.lab.hipster.algorithm.Algorithms;
-import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
-import es.usc.citius.hipster.util.examples.MapBasedGraphSearchProblem;
-
-import java.util.List;
+import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 
 /**
  * Implementation of the Romania problem as described in
@@ -22,19 +19,7 @@ public class RomaniaProblem {
         //weight is the distance in km between the cities.
         //The Goal of the problem is always the city of Bucharest. The heuristic of the problem is the distance
         //in km of the straight line between each city and Bucharest.
-        RomanianProblem.City begin = RomanianProblem.City.Lugoj;
-        RomanianProblem.City goal = RomanianProblem.City.Bucharest;
-        //We instantiate the search problem using the graph-based implementation provided in Hipster.
-        HeuristicSearchProblem<RomanianProblem.City, Double> problem =
-                new MapBasedGraphSearchProblem<RomanianProblem.City>(
-                        begin,
-                        goal,
-                        RomanianProblem.transitions(),
-                        RomanianProblem.costs(),
-                        RomanianProblem.heuristics()
-                );
-        List<RomanianProblem.City> path = Algorithms.createAStar(problem).getOptimalPath();
-        System.out.println("Solution path: " + path);
+        System.out.println(Hipster.createDijkstra(GraphSearchProblem.from(RomanianProblem.City.Arad).to(RomanianProblem.City.Bucharest).in(RomanianProblem.graph())).search());
     }
 
 }

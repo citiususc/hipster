@@ -20,6 +20,10 @@ package es.usc.citius.hipster.model.problem;
 import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.DefaultActionStateTransitionFunction;
 
+/**
+ * Problem builder can be used to define a search problem easily
+ * when the cost type used is Double.
+ */
 public final class ProblemBuilder {
 
     public static final class ProblemBuilderAssistant {
@@ -129,25 +133,24 @@ public final class ProblemBuilder {
                  * @param cf
                  *
                  */
-                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useCostFunction(CostFunction<A, S, C> cf){
-                    return new InformedSearchProblemBuilder<C>(cf);
+                public InformedSearchProblemBuilder useCostFunction(CostFunction<A, S, Double> cf){
+                    return new InformedSearchProblemBuilder(cf);
                 }
 
                 /**
                  * An informed search problem builder generates informed search problems with a generic cost
-                 * @param <C> generic cost type
                  */
-                public final class InformedSearchProblemBuilder<C extends Comparable<C>> {
-                    private CostFunction<A,S,C> cf;
+                public final class InformedSearchProblemBuilder {
+                    private CostFunction<A,S,Double> cf;
 
-                    public InformedSearchProblemBuilder(CostFunction<A, S, C> cf) {
+                    public InformedSearchProblemBuilder(CostFunction<A, S, Double> cf) {
                         this.cf = cf;
                     }
 
-                    public InformedSearchProblem<A,S,C> build(){
-                        return new InformedSearchProblem<A, S, C>() {
+                    public InformedSearchProblem<A,S,Double> build(){
+                        return new InformedSearchProblem<A, S, Double>() {
                             @Override
-                            public CostFunction<A, S, C> getCostFunction() {
+                            public CostFunction<A, S, Double> getCostFunction() {
                                 return cf;
                             }
 
@@ -169,27 +172,27 @@ public final class ProblemBuilder {
 
                     }
 
-                    public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, C> hf){
+                    public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, Double> hf){
                         return new HeuristicSearchProblemBuilder(hf);
                     }
 
                     public final class HeuristicSearchProblemBuilder {
-                        private HeuristicFunction<S,C> hf;
+                        private HeuristicFunction<S,Double> hf;
 
-                        public HeuristicSearchProblemBuilder(HeuristicFunction<S, C> hf) {
+                        public HeuristicSearchProblemBuilder(HeuristicFunction<S,Double> hf) {
                             this.hf = hf;
                         }
 
 
-                        public HeuristicSearchProblem<A,S,C> build(){
-                            return new HeuristicSearchProblem<A, S, C>() {
+                        public HeuristicSearchProblem<A,S,Double> build(){
+                            return new HeuristicSearchProblem<A,S,Double>() {
                                 @Override
-                                public HeuristicFunction<S, C> getHeuristicFunction() {
+                                public HeuristicFunction<S, Double> getHeuristicFunction() {
                                     return hf;
                                 }
 
                                 @Override
-                                public CostFunction<A, S, C> getCostFunction() {
+                                public CostFunction<A, S, Double> getCostFunction() {
                                     return cf;
                                 }
 

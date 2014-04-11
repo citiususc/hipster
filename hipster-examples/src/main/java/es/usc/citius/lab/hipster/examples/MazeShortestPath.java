@@ -17,11 +17,6 @@
 package es.usc.citius.lab.hipster.examples;
 
 
-import es.usc.citius.lab.hipster.algorithm.Algorithms;
-import es.usc.citius.lab.hipster.algorithm.problem.DefaultSearchProblem;
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.Transition;
 import es.usc.citius.hipster.util.examples.maze.Maze2D;
 import es.usc.citius.hipster.util.examples.maze.MazeSearch;
 import es.usc.citius.hipster.util.examples.maze.Mazes;

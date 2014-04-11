@@ -25,6 +25,31 @@ public class RomanianProblem {
         Sibiu, Timisoara,  Urziceni, Vaslui, Zerind;
     }
 
+    private static final Map<City, Double> heuristicMap = new HashMap<City, Double>();
+
+    static {
+        heuristicMap.put(City.Oradea, 380d);
+        heuristicMap.put(City.Zerind, 374d);
+        heuristicMap.put(City.Arad, 366d);
+        heuristicMap.put(City.Timisoara, 329d);
+        heuristicMap.put(City.Lugoj, 244d);
+        heuristicMap.put(City.Mehadia, 241d);
+        heuristicMap.put(City.Drobeta, 242d);
+        heuristicMap.put(City.Craiova, 160d);
+        heuristicMap.put(City.Rimnicu_Vilcea, 193d);
+        heuristicMap.put(City.Pitesti, 100d);
+        heuristicMap.put(City.Sibiu, 253d);
+        heuristicMap.put(City.Fagaras, 176d);
+        heuristicMap.put(City.Giurgiu, 77d);
+        heuristicMap.put(City.Urziceni, 80d);
+        heuristicMap.put(City.Hirsova, 151d);
+        heuristicMap.put(City.Eforie, 161d);
+        heuristicMap.put(City.Vaslui, 199d);
+        heuristicMap.put(City.Iasi, 226d);
+        heuristicMap.put(City.Neamt, 234d);
+        heuristicMap.put(City.Bucharest, 0d);
+    }
+
     public static GraphBuilder.MutableHashBasedGraph<City, Double> graph(){
         return GraphBuilder.<City,Double>newGraph()
                     .connect(City.Arad).to(City.Zerind).withEdge(75d)
@@ -58,28 +83,7 @@ public class RomanianProblem {
      * @return map with the heuristics definition for the Romania problem.
      */
     public static Map<City, Double> heuristics(){
-        Map<City, Double> map = new HashMap<City, Double>();
-        map.put(City.Oradea, 380d);
-        map.put(City.Zerind, 374d);
-        map.put(City.Arad, 366d);
-        map.put(City.Timisoara, 329d);
-        map.put(City.Lugoj, 244d);
-        map.put(City.Mehadia, 241d);
-        map.put(City.Drobeta, 242d);
-        map.put(City.Craiova, 160d);
-        map.put(City.Rimnicu_Vilcea, 193d);
-        map.put(City.Pitesti, 100d);
-        map.put(City.Sibiu, 253d);
-        map.put(City.Fagaras, 176d);
-        map.put(City.Giurgiu, 77d);
-        map.put(City.Urziceni, 80d);
-        map.put(City.Hirsova, 151d);
-        map.put(City.Eforie, 161d);
-        map.put(City.Vaslui, 199d);
-        map.put(City.Iasi, 226d);
-        map.put(City.Neamt, 234d);
-        map.put(City.Bucharest, 0d);
-        return map;
+        return heuristicMap;
     }
 
 }

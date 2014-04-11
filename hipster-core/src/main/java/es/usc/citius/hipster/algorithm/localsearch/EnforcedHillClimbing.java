@@ -56,7 +56,7 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         private C bestHeuristic = null;
 
         private EHCIter() {
-            N initial = factory.makeNode(null, Transition.<A, S>create(null, initialState));
+            N initial = factory.makeNode(null, new Transition<A, S>(null, null, initialState));
             bestHeuristic = heuristicFunction.estimate(initialState);
             queue.add(initial);
         }

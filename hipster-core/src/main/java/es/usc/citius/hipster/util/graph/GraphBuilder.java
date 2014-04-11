@@ -37,7 +37,7 @@ public final class GraphBuilder {
     }
 
     public static class MutableHashBasedGraph<V,E> extends Builder<V,E> implements HipsterGraph<V,E> {
-        private final Table<V,V,E> graphTable;
+        private final Table<V,V,GraphEdge<V,E>> graphTable;
 
         private MutableHashBasedGraph(){
             this.graphTable = HashBasedTable.create();
@@ -63,8 +63,8 @@ public final class GraphBuilder {
 
                 public MutableHashBasedGraph<V,E> withEdge(E edge){
                     // Put both relations (not directed)
-                    graphTable.put(fromVertex, toVertex, edge);
-                    graphTable.put(toVertex, fromVertex, edge);
+                    graphTable.put(fromVertex, toVertex, new GraphEdge<V,E>(fromVertex, toVertex, edge));
+                    graphTable.put(toVertex, fromVertex, new GraphEdge<V,E>(toVertex, fromVertex, edge));
                     return MutableHashBasedGraph.this;
                 }
             }
@@ -75,8 +75,8 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Set<E> edges() {
-            return new HashSet<E>(graphTable.values());
+        public Set<GraphEdge<V,E>> edges() {
+            return new HashSet<GraphEdge<V,E>>(graphTable.values());
         }
 
         @Override
@@ -85,22 +85,17 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Set<E> edgesWithVertex(V vertex) {
-            return Sets.union(new HashSet<E>(graphTable.row(vertex).values()),
-                    new HashSet<E>(graphTable.column(vertex).values()));
+        public Set<GraphEdge<V,E>> edgesWithVertex(V vertex) {
+            return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
+                    new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
         }
 
         @Override
-        public V vertexConnectedTo(V vertex, E edge) {
-            for(Map.Entry<V,E> entry : graphTable.row(vertex).entrySet()){
-                if (entry.getValue().equals(edge)){
-                    return entry.getKey();
-                }
-            }
-            for(Map.Entry<V,E> entry : graphTable.column(vertex).entrySet()){
-                if (entry.getValue().equals(edge)){
-                    return entry.getKey();
-                }
+        public V vertexConnectedTo(V vertex, GraphEdge<V,E> edge) {
+            if (edge.getVertex1().equals(vertex)){
+                return edge.getVertex2();
+            } else if (edge.getVertex2().equals(vertex)) {
+                return edge.getVertex1();
             }
             return null;
         }
@@ -109,7 +104,7 @@ public final class GraphBuilder {
     // Ultra slow implementation of a directed graph
     public static class MutableHashBasedDirectedGraph<V,E> extends Builder<V,E> implements HipsterDirectedGraph<V,E> {
         // Row = source, Column = target
-        private final Table<V,V,E> graphTable;
+        private final Table<V,V,GraphEdge<V,E>> graphTable;
 
         private MutableHashBasedDirectedGraph(){
             this.graphTable = HashBasedTable.create();
@@ -134,7 +129,7 @@ public final class GraphBuilder {
                 }
 
                 public MutableHashBasedDirectedGraph<V,E> withEdge(E edge){
-                    graphTable.put(fromVertex, toVertex, edge);
+                    graphTable.put(fromVertex, toVertex, new GraphEdge<V,E>(fromVertex, toVertex, edge));
                     return MutableHashBasedDirectedGraph.this;
                 }
             }
@@ -146,38 +141,28 @@ public final class GraphBuilder {
 
 
         @Override
-        public V sourceVertexOf(E edge) {
-            for(Table.Cell<V,V,E> cell : graphTable.cellSet()){
-                if (cell.getValue().equals(edge)){
-                    return cell.getRowKey();
-                }
-            }
-            return null;
+        public V sourceVertexOf(GraphEdge<V,E> edge) {
+            return edge.getVertex1();
         }
 
         @Override
-        public V targetVertexOf(E edge) {
-            for(Table.Cell<V,V,E> cell : graphTable.cellSet()){
-                if (cell.getValue().equals(edge)){
-                    return cell.getColumnKey();
-                }
-            }
-            return null;
+        public V targetVertexOf(GraphEdge<V,E> edge) {
+            return edge.getVertex2();
         }
 
         @Override
-        public Set<E> outgoingEdgesFrom(V vertex) {
+        public Set<GraphEdge<V,E>> outgoingEdgesFrom(V vertex) {
             return Sets.newHashSet(graphTable.row(vertex).values());
         }
 
         @Override
-        public Set<E> incomingEdgesFrom(V vertex) {
+        public Set<GraphEdge<V,E>> incomingEdgesFrom(V vertex) {
             return Sets.newHashSet(graphTable.column(vertex).values());
         }
 
         @Override
-        public Set<E> edges() {
-            return new HashSet<E>(graphTable.values());
+        public Set<GraphEdge<V,E>> edges() {
+            return new HashSet<GraphEdge<V,E>>(graphTable.values());
         }
 
         @Override
@@ -186,22 +171,17 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Set<E> edgesWithVertex(V vertex) {
-            return Sets.union(new HashSet<E>(graphTable.row(vertex).values()),
-                    new HashSet<E>(graphTable.column(vertex).values()));
+        public Set<GraphEdge<V,E>> edgesWithVertex(V vertex) {
+            return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
+                    new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
         }
 
         @Override
-        public V vertexConnectedTo(V vertex, E edge) {
-            for(Map.Entry<V,E> entry : graphTable.row(vertex).entrySet()){
-                if (entry.getValue().equals(edge)){
-                   return entry.getKey();
-                }
-            }
-            for(Map.Entry<V,E> entry : graphTable.column(vertex).entrySet()){
-                if (entry.getValue().equals(edge)){
-                    return entry.getKey();
-                }
+        public V vertexConnectedTo(V vertex, GraphEdge<V,E> edge) {
+            if (edge.getVertex1().equals(vertex)){
+                return edge.getVertex2();
+            } else if (edge.getVertex2().equals(vertex)) {
+                return edge.getVertex1();
             }
             return null;
         }

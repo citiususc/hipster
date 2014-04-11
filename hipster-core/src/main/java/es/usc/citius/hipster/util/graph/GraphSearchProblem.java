@@ -45,6 +45,7 @@ public final class GraphSearchProblem {
                 this.toVertex = toVertex;
             }
 
+
             public <E> InformedSearchProblem<E, V, Double> in(final HipsterDirectedGraph<V, E> graph) {
                 return ProblemBuilder.create()
                         .initialState(fromVertex)
@@ -53,9 +54,9 @@ public final class GraphSearchProblem {
                             .useTransitionFunction(new TransitionFunction<E, V>() {
                                 @Override
                                 public Iterable<Transition<E, V>> transitionsFrom(V state) {
-                                    Set<Transition<E, V>> as = new HashSet<Transition<E, V>>();
-                                    for (E edge : graph.outgoingEdgesFrom(state)) {
-                                        as.add(Transition.create(edge, graph.targetVertexOf(edge)));
+                                    Set<Transition<E,V>> as = new HashSet<Transition<E, V>>();
+                                    for (GraphEdge<V,E> edge : graph.outgoingEdgesFrom(state)) {
+                                        as.add(Transition.create(state, edge.getEdgeValue(), graph.targetVertexOf(edge)));
                                     }
                                     return as;
                                 }
@@ -77,9 +78,9 @@ public final class GraphSearchProblem {
                         .useTransitionFunction(new TransitionFunction<E, V>() {
                             @Override
                             public Iterable<Transition<E, V>> transitionsFrom(V state) {
-                                Set<Transition<E, V>> as = new HashSet<Transition<E, V>>();
-                                for (E edge : graph.edgesWithVertex(state)) {
-                                    as.add(Transition.create(edge, graph.vertexConnectedTo(state,edge)));
+                                Set<Transition<E,V>> as = new HashSet<Transition<E, V>>();
+                                for (GraphEdge<V,E> edge : graph.edgesWithVertex(state)) {
+                                    as.add(Transition.create(state, edge.getEdgeValue(), graph.vertexConnectedTo(state,edge)));
                                 }
                                 return as;
                             }

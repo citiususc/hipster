@@ -17,17 +17,100 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
 
+import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
+import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
+import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
+import es.usc.citius.hipster.util.graph.GraphBuilder;
+import es.usc.citius.hipster.util.graph.GraphEdge;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static es.usc.citius.hipster.util.examples.RomanianProblem.*;
+import static org.junit.Assert.assertEquals;
 
 public class RomanianProblemOptimalPathTest {
 
     @Test
-    public void RomanianProblemTest(){
+    public void RomanianProblemTest() {
         System.out.println(Hipster.createDijkstra(GraphSearchProblem.from(City.Arad).to(City.Bucharest).in(RomanianProblem.graph())).search());
+        /*
+        AStar.AStarIter it
+                = Hipster.createDijkstra(GraphSearchProblem.from(City.Arad).to(City.Bucharest).in(RomanianProblem.graph())).iterator();
+        while (it.hasNext()) {
+            HeuristicNode node = it.next();
+            System.out.println(node.state() + " - " + node);
+            // Check expansion order
+        }*/
     }
+
+    @Test
+    public void RomanianProblemAStarTest() {
+
+        final GraphBuilder.MutableHashBasedGraph<City, Double> graph = RomanianProblem.graph();
+
+        HeuristicSearchProblem<GraphEdge<City,Double>, City, Double> p = ProblemBuilder.create()
+                .initialState(City.Arad)
+                .goalState(City.Bucharest)
+                // Actions = Edges of the graph
+                .defineProblemWithExplicitActions()
+                // Create the TransitionFunction<Action,State> where
+                // Actions = GraphEdge<City,Double> (edges of the graph)
+                // States = City
+                .useTransitionFunction(new TransitionFunction<GraphEdge<City, Double>, City>() {
+                    @Override
+                    public Iterable<Transition<GraphEdge<City, Double>, City>> transitionsFrom(City fromCity) {
+                        Set<Transition<GraphEdge<City, Double>, City>> successors = new HashSet<Transition<GraphEdge<City, Double>, City>>();
+                        for (GraphEdge<City, Double> edge : graph.edgesWithVertex(fromCity)) {
+                            City toCity = graph.vertexConnectedTo(fromCity, edge);
+                            successors.add(Transition.create(fromCity, edge, toCity));
+                        }
+                        return successors;
+                    }
+                })
+                .useCostFunction(new CostFunction<GraphEdge<City,Double>, City, Double>() {
+                    @Override
+                    public Double evaluate(Transition<GraphEdge<City,Double>, City> transition) {
+                        return transition.getAction().getEdgeValue();
+                    }
+                })
+                .useHeuristicFunction(new HeuristicFunction<City, Double>() {
+                    @Override
+                    public Double estimate(City state) {
+                        return RomanianProblem.heuristics().get(state);
+                    }
+                })
+                .build();
+
+        // Create the custom AStar iterator. Generics may be scary, but IDEs can autocomplete signatures pretty well, don't panic!
+        // If you don't need type safety, just define AStar.AStarIter it = Hipster.createAStar(p).iterator()
+        AStar<GraphEdge<City,Double>, City, Double, HeuristicNodeImpl<GraphEdge<City,Double>, City, Double>>.AStarIter it
+                = Hipster.createAStar(p).iterator();
+
+        List<Double> expectedScore = Arrays.asList(366d, 393d, 413d, 415d, 417d, 418d);
+        int i=0;
+        while (it.hasNext()) {
+            //System.out.println(node.state() + " - " + node);
+            HeuristicNodeImpl<GraphEdge<City,Double>, City, Double> node = it.next();
+            // Check expansion order and score
+            assertEquals(expectedScore.get(i), node.getScore());
+            i++;
+            if (node.state().equals(City.Bucharest)){
+                break;
+            }
+        }
+    }
+
 }

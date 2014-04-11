@@ -24,7 +24,7 @@ public interface HipsterGraph<V,E> {
      * Return the set of edges.
      * @return
      */
-    Set<E> edges();
+    Set<GraphEdge<V,E>> edges();
 
     /**
      * Return the set of vertices.
@@ -37,7 +37,7 @@ public interface HipsterGraph<V,E> {
      * @param vertex
      * @return
      */
-    Set<E> edgesWithVertex(V vertex);
+    Set<GraphEdge<V,E>> edgesWithVertex(V vertex);
 
     /**
      * Return the vertex that match: V --[E]-- ?V. That is, the vertex
@@ -47,6 +47,6 @@ public interface HipsterGraph<V,E> {
      * @param edge
      * @return
      */
-    V vertexConnectedTo(V vertex, E edge);
+    V vertexConnectedTo(V vertex, GraphEdge<V,E> edge);
 
 }

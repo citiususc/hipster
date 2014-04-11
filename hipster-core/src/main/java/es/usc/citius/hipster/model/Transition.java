@@ -34,10 +34,18 @@ public class Transition<A,S> {
         this.state = state;
     }
 
-    public Transition(S fromState, A action, S state) {
+    public Transition(S fromState, A action, S toState) {
         this.fromState = fromState;
         this.action = action;
-        this.state = state;
+        this.state = toState;
+    }
+
+    public static <A,S> Transition<A,S> create(S fromState, A action, S toState){
+        return new Transition<A, S>(fromState, action, toState);
+    }
+
+    public static <S> Transition<Void,S> create(S fromState, S toState){
+        return new Transition<Void, S>(fromState, null, toState);
     }
 
     public A getAction() {
@@ -54,18 +62,6 @@ public class Transition<A,S> {
 
     public void setState(S state) {
         this.state = state;
-    }
-
-    public static <A,S> Transition<A,S> create(A action, S state){
-        return new Transition<A, S>(action, state);
-    }
-
-    public static <A,S> Set<Transition<A,S>> fromMap(Map<A, S> actionStates){
-        Set<Transition<A,S>> actionStatesSet = new HashSet<Transition<A, S>>();
-        for(Map.Entry<A,S> as : actionStates.entrySet()){
-            actionStatesSet.add(new Transition<A, S>(as.getKey(), as.getValue()));
-        }
-        return actionStatesSet;
     }
 
     public S getFromState() {

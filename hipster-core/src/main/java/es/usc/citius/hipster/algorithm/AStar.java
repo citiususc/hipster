@@ -71,7 +71,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
     /**
      * Internal iterator that implements all the logic of the A* search
      */
-    private class AStarIter implements Iterator<N> {
+    public class AStarIter implements Iterator<N> {
         private Map<S, N> open;
         private Map<S, N> closed;
         private Queue<N> queue;
