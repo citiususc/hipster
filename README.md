@@ -67,8 +67,8 @@ Here is a quick example of how to search a shortest path in a graph with Dijkstr
 
 ```java
 // Create a simple weighted directed graph with Hipster
-HipsterDirectedGraph<String,WeightedEdge> graph =
-   GraphBuilder.<String,WeightedEdge>newDirectedGraph()
+HipsterDirectedGraph<String,Double> graph =
+   GraphBuilder.<String,Double>newDirectedGraph()
      .from("A").to("B").withEdge(4d)
      .from("A").to("C").withEdge(2d)
      .from("B").to("C").withEdge(5d)
