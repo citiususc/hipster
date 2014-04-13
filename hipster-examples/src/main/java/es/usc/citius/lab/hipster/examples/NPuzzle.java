@@ -17,7 +17,9 @@
 package es.usc.citius.lab.hipster.examples;
 
 
+import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
@@ -303,7 +305,20 @@ public final class NPuzzle {
                         .useHeuristicFunction(hf)
                         .build();
 
-        System.out.println(Hipster.createAStar(p).search());
+
+        AStar.AStarIter it = Hipster.createAStar(p).iterator();
+        int i=0;
+        while(it.hasNext()){
+            HeuristicNode n = it.next();
+            if (n.state().equals(goalState)){
+                System.out.println("Goal: " + n.state());
+                break;
+            }
+            System.out.println(n.state() + " - " + n);
+            i++;
+        }
+        System.out.println(i);
+
     }
 
 }
