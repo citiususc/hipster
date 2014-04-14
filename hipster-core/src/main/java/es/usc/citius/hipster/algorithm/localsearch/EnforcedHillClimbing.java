@@ -23,6 +23,7 @@ import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
@@ -39,16 +40,12 @@ import java.util.Queue;
  */
 public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private S initialState;
-    private TransitionFunction<A,S> transitionFunction;
-    private HeuristicFunction<S, C> heuristicFunction;
-    private NodeFactory<A,S,N> factory;
+    private N initialNode;
+    private NodeExpander<A,S,N> nodeExpander;
 
-    public EnforcedHillClimbing(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> factory, HeuristicFunction<S, C> hf){
-        this.initialState = initialState;
-        this.transitionFunction = transitionFunction;
-        this.heuristicFunction = hf;
-        this.factory = factory;
+    public EnforcedHillClimbing(N initialNode, NodeExpander<A, S, N> nodeExpander) {
+        this.initialNode = initialNode;
+        this.nodeExpander = nodeExpander;
     }
 
     public class EHCIter implements Iterator<N> {
@@ -56,9 +53,8 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         private C bestHeuristic = null;
 
         private EHCIter() {
-            N initial = factory.makeNode(null, new Transition<A, S>(null, null, initialState));
-            bestHeuristic = heuristicFunction.estimate(initialState);
-            queue.add(initial);
+            bestHeuristic = initialNode.getEstimation();
+            queue.add(initialNode);
         }
 
         @Override
@@ -70,19 +66,19 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         public N next() {
             N current = this.queue.poll();
             // Generate successors
-            for(Transition<A,S> successor : transitionFunction.transitionsFrom(current.state())){
-                S currentState = successor.getState();
+            for(N successor : nodeExpander.expand(current)){
+                S currentState = successor.state();
                 // Evaluate
-                C heuristic = heuristicFunction.estimate(currentState);
+                C heuristic = successor.getEstimation();
                 // If this node has better heuristic, "climb" over the rest of the partial solutions
                 if (heuristic.compareTo(bestHeuristic)<0){
                     bestHeuristic = heuristic;
                     this.queue.clear();
-                    this.queue.add(factory.makeNode(current, successor));
+                    this.queue.add(successor);
                     // Skip other successors
                     break;
                 }
-                this.queue.add(factory.makeNode(current, successor));
+                this.queue.add(successor);
             }
             return current;
         }
