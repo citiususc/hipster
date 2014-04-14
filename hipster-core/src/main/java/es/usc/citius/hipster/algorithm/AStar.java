@@ -16,10 +16,8 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.*;
 
@@ -45,22 +43,19 @@ import java.util.*;
  */
 public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private final S initialState;
-    private final TransitionFunction<A,S> tf;
-    private final NodeFactory<A, S, N> factory;
+    private final N initialNode;
+    private final NodeExpander<A,S,N> expander;
 
     /**
      * Default constructor for ADStarForward. Requires the initial state, the successor function to generate
      * the neighbor states of a current one and the factory to instantiate new nodes.
      *
-     * @param initialState state used as start
-     * @param transitionFunction function that retrieves the neighbors of a state
-     * @param factory component to obtain the instance of a node from a state
+     * @param initialNode the initial node (which contains the initial state of the search).
+     * @param expander function to obtain (expand) a node to obtain the successor nodes.
      */
-    public AStar(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A, S, N> factory) {
-        this.initialState = initialState;
-        this.tf = transitionFunction;
-        this.factory = factory;
+    public AStar(N initialNode, NodeExpander<A,S,N> expander) {
+        this.initialNode = initialNode;
+        this.expander = expander;
     }
 
     @Override
@@ -80,9 +75,8 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             open = new HashMap<S, N>();
             closed = new HashMap<S, N>();
             queue = new PriorityQueue<N>();
-            N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
             queue.add(initialNode);
-            open.put(initialState, initialNode);
+            open.put(initialNode.state(), initialNode);
         }
 
         /**
@@ -116,10 +110,8 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             open.remove(currentState);
 
             // Analyze the cost of each movement from the current node
-            for (Transition<A,S> successor : tf.transitionsFrom(currentState)) {
-                // Compute the new cost of the successor
-                N successorNode = factory.makeNode(current, successor);
-                N successorOpen = open.get(successor.getState());
+            for(N successorNode : expander.expand(current)){
+                N successorOpen = open.get(successorNode.state());
                 if (successorOpen != null) {
                     if (successorOpen.getScore().compareTo(successorNode.getScore()) <= 0) {
                         // Keep analyzing the other movements, discard this movement
@@ -127,7 +119,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
                     }
                 }
 
-                N successorClose = closed.get(successor.getState());
+                N successorClose = closed.get(successorNode.state());
                 if (successorClose != null) {
                     // Check if this path improves the cost of a closed neighbor.
                     if (successorClose.getScore().compareTo(successorNode.getScore()) <= 0) {
@@ -136,7 +128,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
                 }
 
                 // In any other case, add the new successor to the open list to explore later
-                open.put(successor.getState(), successorNode);
+                open.put(successorNode.state(), successorNode);
                 queue.add(successorNode);
             }
             // Once analyzed, the current node moves to the closed list
@@ -210,13 +202,11 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
         }
     }
 
-    /**
-     * Get the initial state used by the algorithm.
-     *
-     * @return initial state.
-     */
-    public S getInitialState() {
-        return this.initialState;
+    public N getInitialNode() {
+        return initialNode;
     }
 
+    public NodeExpander<A, S, N> getExpander() {
+        return expander;
+    }
 }

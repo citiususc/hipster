@@ -19,32 +19,42 @@ package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
+import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
 import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
-import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 public final class Hipster {
 
+    //TODO; Refactor - Remove redundant code
+
     public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createAStar(HeuristicSearchProblem<A,S,Double> problem){
+        // Create the node factory that generates HeuristicNodes with their costs
         HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
                 BinaryOperation.doubleAdditionOp());
+        // Make the initial node. The initial node contains the initial state
+        // of the problem, and it comes from no previous node (null) and using no action (null)
+        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        // Create a Lazy Node Expander by default
+        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        // Create the algorithm with all those components
         AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(
-                problem.getInitialState(),
-                problem.getTransitionFunction(),
-                factory);
+            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+        // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }
 
     public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
+        // The Dijkstra impl. is the same as the A* but without using heuristics
         HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 new HeuristicFunction<S, Double>() {
@@ -54,13 +64,15 @@ public final class Hipster {
                     }
                 },
                 BinaryOperation.doubleAdditionOp());
-
+        // Make the initial node. The initial node contains the initial state
+        // of the problem, and it comes from no previous node (null) and using no action (null)
+        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        // Create a Lazy Node Expander by default
+        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        // Create the algorithm with all those components
         AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-            new AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
-                problem.getInitialState(),
-                problem.getTransitionFunction(),
-                factory);
-        // TODO: Improve the way to set an optional goal
+                new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+        // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }

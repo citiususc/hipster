@@ -303,7 +303,7 @@ public final class NPuzzle {
 
         // There are many ways to launch the search.
         // Easiest way, just run the algorithm and print the result
-        System.out.println(Hipster.createIDAStar(p).search());
+        System.out.println(Hipster.createAStar(p).search());
 
         /*
             // Use an event handle to monitor the execution of the algorithm
