@@ -1,9 +1,14 @@
 language: java
+
 jdk:
   - oraclejdk7
   - openjdk6
+  
 branches:
   only:
     - master
     - development
-before_install: 'mvn -version'
+
+after_success:
+  #- .config/publish-javadoc.sh
+  #- .config/publish-artifacts.sh
