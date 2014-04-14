@@ -17,18 +17,18 @@
 package es.usc.citius.lab.hipster.examples;
 
 
-import es.usc.citius.hipster.algorithm.AStar;
-import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.*;
-import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
+import es.usc.citius.hipster.model.function.ActionFunction;
+import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class NPuzzle {
@@ -303,7 +303,7 @@ public final class NPuzzle {
 
         // There are many ways to launch the search.
         // Easiest way, just run the algorithm and print the result
-        System.out.println(Hipster.createAStar(p).search());
+        System.out.println(Hipster.createIDAStar(p).search());
 
         /*
             // Use an event handle to monitor the execution of the algorithm
