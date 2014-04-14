@@ -18,10 +18,12 @@ package es.usc.citius.lab.hipster.examples;
 
 
 import es.usc.citius.hipster.algorithm.AStar;
+import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
+import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
@@ -208,23 +210,20 @@ public final class NPuzzle {
                 Point gap = state.getTile(0);
                 // side size of the board
                 int boardSize = state.getMatrixBoard().length;
-                // Check valid movements. There are always maximum 4 tiles around the gap (left, right, top, down)
 
-                // Can we move the gap to right ? (i.e., the right tile next to the gap to the left)
+                // Check valid movements. There are always maximum
+                // 4 tiles around the gap (left, right, top, down)
+                if (gap.getX() > 0 && gap.getX() < boardSize){
+                    movements.add(PuzzleMove.UP);
+                }
+                if (gap.getX() >= 0 && gap.getX() < boardSize-1){
+                    movements.add(PuzzleMove.DOWN);
+                }
                 if (gap.getY() >= 0 && gap.getY() < boardSize-1){
                     movements.add(PuzzleMove.RIGHT);
                 }
-                // Can we move the gap to the left?
-                if (gap.getY() > 0 && gap.getY() <= boardSize-1){
+                if (gap.getY() > 0 && gap.getY() < boardSize){
                     movements.add(PuzzleMove.LEFT);
-                }
-                // Check for UP and DOWN
-                if (gap.getX() > 0 && gap.getX() <= boardSize-1){
-                    movements.add(PuzzleMove.UP);
-                }
-
-                if (gap.getX() >= 0 && gap.getX() < boardSize-1){
-                    movements.add(PuzzleMove.DOWN);
                 }
                 return movements;
             }
@@ -301,18 +300,32 @@ public final class NPuzzle {
                         .useHeuristicFunction(hf)
                         .build();
 
-        AStar.AStarIter it = Hipster.createAStar(p).iterator();
-        int i=0;
-        while(it.hasNext()){
-            HeuristicNode n = it.next();
-            if (n.state().equals(goalState)){
-                System.out.println("Goal: " + n.state());
-                break;
+
+        // There are many ways to launch the search.
+        // Easiest way, just run the algorithm and print the result
+        System.out.println(Hipster.createAStar(p).search());
+
+        /*
+            // Use an event handle to monitor the execution of the algorithm
+            Hipster.createAStar(p).search(new Algorithm.SearchListener<HeuristicNodeImpl<PuzzleMove, Puzzle, Double>>() {
+                @Override
+                public void handle(HeuristicNodeImpl<PuzzleMove, Puzzle, Double> node) {
+                    System.out.println("Node: " + node);
+                }
+            });
+
+            // Use a finer-grained iterator to control the search
+            AStar.AStarIter it = Hipster.createAStar(p).iterator();
+            int i=0;
+            while(it.hasNext()){
+                i++;
+                HeuristicNode n = it.next();
+                System.out.println(n + " (it: " + i + ")");
+                if (n.state().equals(goalState)){
+                    break;
+                }
             }
-            System.out.println(n.state() + " - " + n);
-            i++;
-        }
-        System.out.println(i);
+        */
 
     }
 
