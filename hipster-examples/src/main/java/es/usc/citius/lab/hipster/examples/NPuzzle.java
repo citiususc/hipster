@@ -26,10 +26,8 @@ import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public final class NPuzzle {
 
@@ -206,8 +204,8 @@ public final class NPuzzle {
 
         ActionFunction<PuzzleMove, Puzzle> af = new ActionFunction<PuzzleMove, Puzzle>() {
             @Override
-            public Set<PuzzleMove> actionsFor(Puzzle state) {
-                Set<PuzzleMove> movements = new HashSet<PuzzleMove>();
+            public Iterable<PuzzleMove> actionsFor(Puzzle state) {
+                LinkedList<PuzzleMove> movements = new LinkedList<PuzzleMove>();
                 // Get which place the gap tile is in
                 Point gap = state.getTile(0);
                 // side size of the board
@@ -304,7 +302,6 @@ public final class NPuzzle {
                         .useCostFunction(cf)
                         .useHeuristicFunction(hf)
                         .build();
-
 
         AStar.AStarIter it = Hipster.createAStar(p).iterator();
         int i=0;
