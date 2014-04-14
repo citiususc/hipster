@@ -17,7 +17,22 @@
 package es.usc.citius.hipster.model.function;
 
 
-public interface StateTransitionFunction<S> {
-    Iterable<S> transitionsFrom(S state);
+import es.usc.citius.hipster.model.Transition;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public abstract class StateTransitionFunction<S> implements TransitionFunction<Void, S> {
+
+    @Override
+    public Iterable<Transition<Void, S>> transitionsFrom(S state) {
+        List<Transition<Void,S>> successors = new LinkedList<Transition<Void, S>>();
+        for(S successor : successorsOf(state)){
+            successors.add(new Transition<Void, S>(state, null, successor));
+        }
+        return successors;
+    }
+
+    public abstract Iterable<S> successorsOf(S state);
 }
 
