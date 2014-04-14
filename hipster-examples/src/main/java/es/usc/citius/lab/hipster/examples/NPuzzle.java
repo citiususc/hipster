@@ -32,8 +32,23 @@ import java.util.List;
 public final class NPuzzle {
 
     /**
-     * Puzzle class represents the state codification for this game. Note that
-     * the performance of the search algorithm strongly depends
+     * Actions that can be used in the N-Puzzle game. In the particular
+     * case of the 8-Puzzle, we have a 3x3 board with eight numbers and
+     * an empty grid square. Each tile next to the empty grid square can
+     * be moved to fill it. This is equivalent to consider the empty square
+     * as the tile that can be moved up, down, left or right in the board.
+     * Therefore, the actions that we can apply in the board are: moving
+     * the empty square up, down, left or right (depending on the position
+     * of the gap).
+     */
+    public enum PuzzleMove {UP, DOWN, LEFT, RIGHT}
+
+    /**
+     * Puzzle class represents the state codification for this game.
+     * It is represented as a plain array of numbers, where 0 represents
+     * the empty square.
+     *
+     * Note that the performance of the search algorithm strongly depends
      * on the chosen representation of the state, as well as
      * the performance of the transition and evaluation functions.
      * This representation for a state of the 8-puzzle problem is not
@@ -128,21 +143,6 @@ public final class NPuzzle {
 
         @Override
         public String toString() {
-            /*
-            // Print each row of all states
-            int[][] board = this.getMatrixBoard();
-            int size = board.length;
-            StringBuffer output = new StringBuffer();
-            for(int i=0; i < this.getMatrixBoard().length; i++){
-                String row = "| ";
-                for(int j=0; j <size; j++){
-                    row += board[i][j] + " ";
-                }
-                row += "|\n";
-                output.append(row);
-            }
-            return output.toString();
-            */
             return Arrays.toString(this.plainBoard);
         }
 
@@ -167,8 +167,6 @@ public final class NPuzzle {
             return Arrays.hashCode(plainBoard);
         }
     }
-
-    public enum PuzzleMove {UP, DOWN, LEFT, RIGHT}
 
 
     /**
