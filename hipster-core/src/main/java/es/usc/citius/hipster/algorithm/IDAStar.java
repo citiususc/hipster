@@ -19,10 +19,8 @@ package es.usc.citius.hipster.algorithm;
 
 
 
-import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -46,20 +44,18 @@ import java.util.Stack;
  */
 public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private final S initialState;
-    private NodeFactory<A,S,N> factory;
-    private TransitionFunction<A,S> tf;
+    private final N initialNode;
+    private final NodeExpander<A,S,N> expander;
 
 
-    public IDAStar(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> factory) {
-        this.initialState = initialState;
-        this.tf = transitionFunction;
-        this.factory = factory;
+    public IDAStar(N initialNode, NodeExpander<A,S,N> expander) {
+        this.initialNode = initialNode;
+        this.expander = expander;
     }
 
     private class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        Iterator<Transition<A,S>> successors;
+        Iterator<N> successors;
         // Current search node
         N node;
         // Boolean value to check if the node is still unvisited
@@ -68,14 +64,14 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         // Boolean to indicate that this node is fully processed
         boolean processed = false;
 
-        StackFrameNode(Iterator<Transition<A,S>> successors, N node) {
+        StackFrameNode(Iterator<N> successors, N node) {
             this.successors = successors;
             this.node = node;
         }
 
         StackFrameNode(N node) {
             this.node = node;
-            this.successors = tf.transitionsFrom(node.state()).iterator();
+            this.successors = expander.expand(node).iterator();
         }
     }
 
@@ -87,7 +83,6 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         private StackFrameNode next;
 
         private IDAStarIter(){
-            N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
             // Set initial bound
             fLimit = initialNode.getEstimation();
             minfLimit = null;
@@ -147,7 +142,6 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                         fLimit = minfLimit;
                         reinitialization++;
                         //System.out.println("Reinitializing, new bound: " + fLimit);
-                        N initialNode = factory.makeNode(null, new Transition<A, S>(null, initialState));
                         minfLimit = null;
                         stack.add(new StackFrameNode(initialNode));
                         nextNode = processNextNode();
@@ -192,10 +186,9 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             // Find a successor
             if (current.successors.hasNext()){
                 // 3 - Node has at least one neighbor
-                Transition<A, S> t = current.successors.next();
-                // Create the neighbor and push the node
-                N neighbor = factory.makeNode(current.node, t);
-                stack.add(new StackFrameNode(neighbor));
+                N successor = current.successors.next();
+                // push the node;
+                stack.add(new StackFrameNode(successor));
                 return current;
 
             } else {

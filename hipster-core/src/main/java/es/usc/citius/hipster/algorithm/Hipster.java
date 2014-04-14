@@ -35,19 +35,11 @@ public final class Hipster {
     //TODO; Refactor - Remove redundant code
 
     public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createAStar(HeuristicSearchProblem<A,S,Double> problem){
-        // Create the node factory that generates HeuristicNodes with their costs
-        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
-                problem.getCostFunction(),
-                problem.getHeuristicFunction(),
-                BinaryOperation.doubleAdditionOp());
-        // Make the initial node. The initial node contains the initial state
-        // of the problem, and it comes from no previous node (null) and using no action (null)
-        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
         // Create a Lazy Node Expander by default
-        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        SearchComponents<A,S> components = createDefaultComponents(problem);
         // Create the algorithm with all those components
         AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(components.initialNode, components.expander);
         // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
@@ -98,16 +90,40 @@ public final class Hipster {
     }
 
     public static <A,S> IDAStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
-        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+        SearchComponents<A,S> components = createDefaultComponents(problem);
+
+        IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
+                new IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
+                        components.initialNode, components.expander);
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
+    }
+
+    private static class SearchComponents<A,S> {
+        private HeuristicNodeImpl<A, S, Double> initialNode;
+        private NodeExpander<A,S,HeuristicNodeImpl<A, S, Double>> expander;
+
+        private SearchComponents(HeuristicNodeImpl<A, S, Double> initialNode, NodeExpander<A, S, HeuristicNodeImpl<A, S, Double>> expander) {
+            this.initialNode = initialNode;
+            this.expander = expander;
+        }
+    }
+
+    private static <A,S> SearchComponents<A,S> createDefaultComponents(HeuristicSearchProblem<A, S, Double> problem){
+        HeuristicNodeFactoryImpl<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
+        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>> nodeExpander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(
+                problem.getTransitionFunction(),
+                factory);
+
+        return new SearchComponents<A, S>(initialNode, nodeExpander);
+    }
+
+
+    private static <A,S> HeuristicNodeFactoryImpl<A, S, Double> createDefaultHeuristicNodeFactory(HeuristicSearchProblem<A, S, Double> problem){
+        return new HeuristicNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
                 BinaryOperation.doubleAdditionOp());
-        IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-                new IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
-                        problem.getInitialState(),
-                        problem.getTransitionFunction(),
-                        factory);
-        algorithm.setGoalState(problem.getGoalState());
-        return algorithm;
     }
 }

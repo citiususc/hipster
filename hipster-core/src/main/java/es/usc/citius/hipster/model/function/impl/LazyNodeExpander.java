@@ -48,4 +48,12 @@ public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander
             }
         });
     }
+
+    public TransitionFunction<A, S> getTransitionFunction() {
+        return tf;
+    }
+
+    public NodeFactory<A, S, N> getNodeFactory() {
+        return factory;
+    }
 }
