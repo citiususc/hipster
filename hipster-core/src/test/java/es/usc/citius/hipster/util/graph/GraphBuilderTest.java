@@ -42,7 +42,6 @@ public class GraphBuilderTest {
                 .from("C").to("E").withEdge(3d)
                 .from("D").to("F").withEdge(11d)
                 .from("E").to("D").withEdge(4d);
-        System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(testGraph)).search());
     }
 
     @Test
