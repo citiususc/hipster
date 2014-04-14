@@ -25,9 +25,6 @@ import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Pablo Rodríguez Mier
  */
@@ -80,12 +77,13 @@ public final class GraphSearchProblem {
                         .defineProblemWithExplicitActions()
                         .useTransitionFunction(new TransitionFunction<E, V>() {
                             @Override
-                            public Iterable<Transition<E, V>> transitionsFrom(V state) {
-                                Set<Transition<E,V>> as = new HashSet<Transition<E, V>>();
-                                for (GraphEdge<V,E> edge : graph.edgesWithVertex(state)) {
-                                    as.add(Transition.create(state, edge.getEdgeValue(), graph.vertexConnectedTo(state,edge)));
-                                }
-                                return as;
+                            public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                                return Iterables.transform(graph.edgesWithVertex(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                    @Override
+                                    public Transition<E,V> apply(GraphEdge<V, E> edge) {
+                                        return Transition.create(state, edge.getEdgeValue(), graph.vertexConnectedTo(state,edge));
+                                    }
+                                });
                             }
                         })
                         .useCostFunction(new CostFunction<E, V, Double>() {

@@ -22,7 +22,6 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -151,27 +150,27 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Set<GraphEdge<V,E>> outgoingEdgesFrom(V vertex) {
-            return Sets.newHashSet(graphTable.row(vertex).values());
+        public Iterable<GraphEdge<V,E>> outgoingEdgesFrom(V vertex) {
+            return graphTable.row(vertex).values();
         }
 
         @Override
-        public Set<GraphEdge<V,E>> incomingEdgesFrom(V vertex) {
-            return Sets.newHashSet(graphTable.column(vertex).values());
+        public Iterable<GraphEdge<V,E>> incomingEdgesFrom(V vertex) {
+            return graphTable.column(vertex).values();
         }
 
         @Override
-        public Set<GraphEdge<V,E>> edges() {
-            return new HashSet<GraphEdge<V,E>>(graphTable.values());
+        public Iterable<GraphEdge<V,E>> edges() {
+            return graphTable.values();
         }
 
         @Override
-        public Set<V> vertices() {
+        public Iterable<V> vertices() {
             return Sets.union(graphTable.rowKeySet(), graphTable.columnKeySet());
         }
 
         @Override
-        public Set<GraphEdge<V,E>> edgesWithVertex(V vertex) {
+        public Iterable<GraphEdge<V,E>> edgesWithVertex(V vertex) {
             return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
                     new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
         }

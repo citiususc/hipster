@@ -17,8 +17,8 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import com.google.common.collect.Sets;
 import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -58,13 +58,13 @@ public class GraphBuilderTest {
         for(GraphEdge<String,Double> edge : testGraph.edges()){
             values.add(edge.getEdgeValue());
         }
-        assertEquals(7, testGraph.edges().size());
+        assertEquals(7, Sets.newHashSet(testGraph.edges()).size());
         assertEquals(expectedValues, values);
     }
 
     @Test
     public void testIncomingEdges(){
-        Set<GraphEdge<String,Double>> edges = testGraph.incomingEdgesFrom("D");
+        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.incomingEdgesFrom("D"));
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());
@@ -75,7 +75,7 @@ public class GraphBuilderTest {
 
     @Test
     public void testOutgoingEdges(){
-        Set<GraphEdge<String,Double>> edges = testGraph.outgoingEdgesFrom("B");
+        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.outgoingEdgesFrom("B"));
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());

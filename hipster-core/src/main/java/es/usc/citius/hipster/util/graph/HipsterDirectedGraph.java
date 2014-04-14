@@ -17,11 +17,9 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import java.util.Set;
-
 public interface HipsterDirectedGraph<V,E> extends HipsterGraph<V,E> {
     V sourceVertexOf(GraphEdge<V,E> edge);
     V targetVertexOf(GraphEdge<V,E> edge);
-    Set<GraphEdge<V,E>> outgoingEdgesFrom(V vertex);
-    Set<GraphEdge<V,E>> incomingEdgesFrom(V vertex);
+    Iterable<GraphEdge<V,E>> outgoingEdgesFrom(V vertex);
+    Iterable<GraphEdge<V,E>> incomingEdgesFrom(V vertex);
 }

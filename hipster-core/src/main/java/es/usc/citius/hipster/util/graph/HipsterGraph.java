@@ -17,27 +17,25 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import java.util.Set;
-
 public interface HipsterGraph<V,E> {
     /**
-     * Return the set of edges.
+     * Return the edges.
      * @return
      */
-    Set<GraphEdge<V,E>> edges();
+    Iterable<GraphEdge<V,E>> edges();
 
     /**
-     * Return the set of vertices.
+     * Return the vertices.
      * @return
      */
-    Set<V> vertices();
+    Iterable<V> vertices();
 
     /**
      * Return all the edges that are connected with the given vertex.
      * @param vertex
      * @return
      */
-    Set<GraphEdge<V,E>> edgesWithVertex(V vertex);
+    Iterable<GraphEdge<V,E>> edgesWithVertex(V vertex);
 
     /**
      * Return the vertex that match: V --[E]-- ?V. That is, the vertex
