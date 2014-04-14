@@ -16,23 +16,11 @@
 
 package es.usc.citius.hipster.model.function;
 
+import es.usc.citius.hipster.model.Node;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import es.usc.citius.hipster.model.Transition;
-
-public abstract class StateTransitionFunction<S> implements TransitionFunction<Void, S> {
-
-    @Override
-    public Iterable<Transition<Void, S>> transitionsFrom(final S state) {
-        return Iterables.transform(successorsOf(state), new Function<S, Transition<Void,S>>() {
-            @Override
-            public Transition<Void,S> apply(S successor) {
-                return new Transition<Void, S>(state, null, successor);
-            }
-        });
-    }
-
-    public abstract Iterable<S> successorsOf(S state);
+/**
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ */
+public interface NodeExpander<A,S,N extends Node<A,S,N>> {
+    Iterable<N> expand(N node);
 }
-

@@ -17,31 +17,29 @@
 package es.usc.citius.hipster.model.function.impl;
 
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunction<A,S> {
+public class LazyActionStateTransitionFunction<A,S> implements TransitionFunction<A,S> {
     private final ActionFunction<A,S> af;
     private final ActionStateTransitionFunction<A,S> tf;
 
-    public DefaultActionStateTransitionFunction(ActionFunction<A, S> af, ActionStateTransitionFunction<A, S> tf) {
+    public LazyActionStateTransitionFunction(ActionFunction<A, S> af, ActionStateTransitionFunction<A, S> tf) {
         this.af = af;
         this.tf = tf;
     }
 
     @Override
     public Iterable<Transition<A, S>> transitionsFrom(final S state) {
-        List<Transition<A,S>> result = new LinkedList<Transition<A, S>>();
-        for(A applicableAction : af.actionsFor(state)){
-            result.add(new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state)));
-        }
-        return result;
+        return Iterables.transform(af.actionsFor(state), new Function<A, Transition<A, S>>() {
+            @Override
+            public Transition<A, S> apply(A applicableAction) {
+                return new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state));
+            }
+        });
     }
 }

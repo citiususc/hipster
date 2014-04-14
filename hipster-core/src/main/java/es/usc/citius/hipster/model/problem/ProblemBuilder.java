@@ -18,7 +18,7 @@ package es.usc.citius.hipster.model.problem;
 
 
 import es.usc.citius.hipster.model.function.*;
-import es.usc.citius.hipster.model.function.impl.DefaultActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.impl.LazyActionStateTransitionFunction;
 
 /**
  * Problem builder can be used to define a search problem easily
@@ -84,7 +84,7 @@ public final class ProblemBuilder {
                     }
 
                     public GenericSearchProblemBuilder<A> useTransitionFunction(ActionStateTransitionFunction<A, S> atf){
-                        return new GenericSearchProblemBuilder<A>(new DefaultActionStateTransitionFunction<A, S>(af, atf));
+                        return new GenericSearchProblemBuilder<A>(new LazyActionStateTransitionFunction<A, S>(af, atf));
                     }
                 }
 
