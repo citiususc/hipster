@@ -17,10 +17,9 @@
 package es.usc.citius.hipster.algorithm;
 
 
+import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
@@ -36,7 +35,7 @@ public final class Hipster {
 
     public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createAStar(HeuristicSearchProblem<A,S,Double> problem){
         // Create a Lazy Node Expander by default
-        SearchComponents<A,S> components = createDefaultComponents(problem);
+        SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> components = createHeuristicSearchComponents(problem);
         // Create the algorithm with all those components
         AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
             new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(components.initialNode, components.expander);
@@ -77,20 +76,21 @@ public final class Hipster {
      * @return
      */
     public static <A,S> BreadthFirstSearch<A,S,UnweightedNode<A,S>> createBreadthFirstSearch(SearchProblem<A,S> problem){
-        BreadthFirstSearch<A, S, UnweightedNode<A, S>> algorithm = new BreadthFirstSearch<A, S, UnweightedNode<A, S>>(problem.getInitialState(), problem.getTransitionFunction(),
-                new NodeFactory<A, S, UnweightedNode<A, S>>() {
-                    @Override
-                    public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
-                        return new UnweightedNode<A, S>(fromNode, transition);
-                    }
-                }
-        );
+        NodeFactory<A,S,UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
+            @Override
+            public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
+                return new UnweightedNode<A, S>(fromNode, transition);
+            }
+        };
+        UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, problem.getInitialState()));
+        NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(problem.getTransitionFunction(), factory);
+        BreadthFirstSearch<A, S, UnweightedNode<A, S>> algorithm = new BreadthFirstSearch<A, S, UnweightedNode<A, S>>(initialNode, nodeExpander);
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }
 
     public static <A,S> IDAStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
-        SearchComponents<A,S> components = createDefaultComponents(problem);
+        SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> components = createHeuristicSearchComponents(problem);
 
         IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
                 new IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
@@ -99,24 +99,24 @@ public final class Hipster {
         return algorithm;
     }
 
-    private static class SearchComponents<A,S> {
-        private HeuristicNodeImpl<A, S, Double> initialNode;
-        private NodeExpander<A,S,HeuristicNodeImpl<A, S, Double>> expander;
+    private static class SearchComponents<A,S,N extends Node<A,S,N>> {
+        private N initialNode;
+        private NodeExpander<A,S,N> expander;
 
-        private SearchComponents(HeuristicNodeImpl<A, S, Double> initialNode, NodeExpander<A, S, HeuristicNodeImpl<A, S, Double>> expander) {
+        private SearchComponents(N initialNode, NodeExpander<A, S, N> expander) {
             this.initialNode = initialNode;
             this.expander = expander;
         }
     }
 
-    private static <A,S> SearchComponents<A,S> createDefaultComponents(HeuristicSearchProblem<A, S, Double> problem){
+    private static <A,S> SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> createHeuristicSearchComponents(HeuristicSearchProblem<A, S, Double> problem){
         HeuristicNodeFactoryImpl<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
         HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
         LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>> nodeExpander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(
                 problem.getTransitionFunction(),
                 factory);
 
-        return new SearchComponents<A, S>(initialNode, nodeExpander);
+        return new SearchComponents<A, S, HeuristicNodeImpl<A,S,Double>>(initialNode, nodeExpander);
     }
 
 

@@ -16,22 +16,18 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.*;
 
 public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
-    private final S initialState;
-    private final TransitionFunction<A,S> tf;
-    private final NodeFactory<A,S,N> nodeFactory;
+    private final N initialNode;
+    private final NodeExpander<A,S,N> expander;
 
-    public BreadthFirstSearch(S initialState, TransitionFunction<A,S> transitionFunction, NodeFactory<A,S,N> nodeFactory) {
-        this.initialState = initialState;
-        this.tf = transitionFunction;
-        this.nodeFactory = nodeFactory;
+    public BreadthFirstSearch(N initialNode, NodeExpander<A, S, N> expander) {
+        this.initialNode = initialNode;
+        this.expander = expander;
     }
 
     /**
@@ -46,8 +42,7 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
          * Use {@link BreadthFirstSearch#iterator()} to create a new BFS iterator.
          */
         private BFSIter(){
-            N initialNode = nodeFactory.makeNode(null, new Transition<A, S>(null, initialState));
-            visited.put(initialState, initialNode);
+            visited.put(initialNode.state(), initialNode);
             queue.add(initialNode);
         }
 
@@ -60,11 +55,9 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
         public N next() {
             // Take next node
             N current = queue.poll();
-            S currentState = current.state();
-            for(Transition<A,S> transition : tf.transitionsFrom(currentState)){
-                if (!visited.containsKey(transition.getState())){
-                    N successorNode = nodeFactory.makeNode(current, transition);
-                    visited.put(transition.getState(), successorNode);
+            for(N successorNode : expander.expand(current)){
+                if (!visited.containsKey(successorNode.state())){
+                    visited.put(successorNode.state(), successorNode);
                     queue.add(successorNode);
                 }
             }
