@@ -19,6 +19,7 @@ package es.usc.citius.hipster.model.problem;
 
 import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.LazyActionStateTransitionFunction;
+import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 
 /**
  * Problem builder can be used to define a search problem easily

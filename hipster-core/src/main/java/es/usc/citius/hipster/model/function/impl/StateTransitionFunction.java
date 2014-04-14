@@ -14,12 +14,13 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.function;
+package es.usc.citius.hipster.model.function.impl;
 
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.function.TransitionFunction;
 
 public abstract class StateTransitionFunction<S> implements TransitionFunction<Void, S> {
 
