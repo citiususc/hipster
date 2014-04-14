@@ -23,6 +23,8 @@ import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunction<A,S> {
@@ -36,7 +38,7 @@ public class DefaultActionStateTransitionFunction<A,S> implements TransitionFunc
 
     @Override
     public Iterable<Transition<A, S>> transitionsFrom(final S state) {
-        Set<Transition<A,S>> result = new HashSet<Transition<A, S>>();
+        List<Transition<A,S>> result = new LinkedList<Transition<A, S>>();
         for(A applicableAction : af.actionsFor(state)){
             result.add(new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state)));
         }

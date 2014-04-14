@@ -16,14 +16,11 @@
 
 package es.usc.citius.hipster.model.function;
 
-
-import java.util.Set;
-
 public interface ActionFunction<A,S> {
     /**
      * Compute a set of applicable actions for the given state
      * @param state
      * @return Set of applicable actions
      */
-    Set<A> actionsFor(S state);
+    Iterable<A> actionsFor(S state);
 }
