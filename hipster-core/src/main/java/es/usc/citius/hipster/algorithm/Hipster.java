@@ -89,6 +89,20 @@ public final class Hipster {
         return algorithm;
     }
 
+    public static <A,S> DepthFirstSearch<A,S,UnweightedNode<A,S>> createDepthFirstSearch(SearchProblem<A,S> problem){
+        NodeFactory<A,S,UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
+            @Override
+            public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
+                return new UnweightedNode<A, S>(fromNode, transition);
+            }
+        };
+        UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, problem.getInitialState()));
+        NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(problem.getTransitionFunction(), factory);
+        DepthFirstSearch<A, S, UnweightedNode<A, S>> algorithm = new DepthFirstSearch<A, S, UnweightedNode<A, S>>(initialNode, nodeExpander);
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
+    }
+
     public static <A,S> IDAStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
         SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> components = createHeuristicSearchComponents(problem);
 

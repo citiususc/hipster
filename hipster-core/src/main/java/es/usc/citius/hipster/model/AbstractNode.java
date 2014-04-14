@@ -58,5 +58,11 @@ public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S
         return action;
     }
 
-
+    @Override
+    public String toString() {
+        return "Node{" +
+                "action=" + action +
+                ", state=" + this.state() +
+                '}';
+    }
 }

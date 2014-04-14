@@ -17,6 +17,8 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
@@ -53,12 +55,13 @@ public final class GraphSearchProblem {
                         .defineProblemWithExplicitActions()
                             .useTransitionFunction(new TransitionFunction<E, V>() {
                                 @Override
-                                public Iterable<Transition<E, V>> transitionsFrom(V state) {
-                                    Set<Transition<E,V>> as = new HashSet<Transition<E, V>>();
-                                    for (GraphEdge<V,E> edge : graph.outgoingEdgesFrom(state)) {
-                                        as.add(Transition.create(state, edge.getEdgeValue(), graph.targetVertexOf(edge)));
-                                    }
-                                    return as;
+                                public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                                    return Iterables.transform(graph.outgoingEdgesFrom(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                        @Override
+                                        public Transition<E,V> apply(GraphEdge<V, E> edge) {
+                                            return Transition.create(state, edge.getEdgeValue(), graph.targetVertexOf(edge));
+                                        }
+                                    });
                                 }
                             })
                             .useCostFunction(new CostFunction<E, V, Double>() {
