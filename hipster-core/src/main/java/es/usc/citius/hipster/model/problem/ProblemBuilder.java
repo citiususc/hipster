@@ -64,7 +64,7 @@ public final class ProblemBuilder {
             public final class NoActionsProblem {
                 private NoActionsProblem(){}
 
-                public GenericSearchProblemBuilder<Void> useTransitionFunction(TransitionFunction<Void, S> transitionFunction){
+                public GenericSearchProblemBuilder<Void> useTransitionFunction(StateTransitionFunction<S> transitionFunction){
                     return new GenericSearchProblemBuilder<Void>(transitionFunction);
                 }
             }
