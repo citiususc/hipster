@@ -59,7 +59,8 @@ public class HeuristicNodeImpl<A,S,C extends Comparable<C>>
     @Override
     public String toString() {
         return "HeuristicNodeImpl{" +
-                "cost=" + cost +
+                "state=" + this.state() +
+                ", cost=" + cost +
                 ", estimation=" + estimation +
                 ", score=" + score +
                 '}';
