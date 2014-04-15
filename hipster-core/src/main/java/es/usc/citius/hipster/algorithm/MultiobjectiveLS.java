@@ -16,6 +16,7 @@
 
 package es.usc.citius.hipster.algorithm;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Multimap;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
@@ -101,6 +102,25 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             }
             return false;
         }
+    }
+
+    @Override
+    public SearchResult search() {
+        MOLSIter it = new MOLSIter();
+        // Run the iterator until no more nodes.
+        int iteration = 0;
+        Stopwatch w = Stopwatch.createStarted();
+        while(it.hasNext()){
+            it.next();
+            iteration++;
+        }
+        w.stop();
+
+        if (getGoalState() != null) {
+            Collection<N> solutions = it.nonDominated.get(getGoalState());
+            return new SearchResult(solutions, iteration, w);
+        }
+        return new SearchResult(Collections.<N>emptyList(), iteration, w);
     }
 
     @Override

@@ -20,10 +20,7 @@ package es.usc.citius.hipster.algorithm;
 import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.Node;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N> {
 
@@ -35,12 +32,17 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     public final class SearchResult {
         Stopwatch stopwatch;
         int iterations;
-        N goalNode;
-        List<S> optimalPath;
+        Collection<N> goalNodes;
 
-        public SearchResult(N goalNode, List<S> optimalPath, int iterations, Stopwatch stopwatch) {
-            this.goalNode = goalNode;
-            this.optimalPath = optimalPath;
+
+        public SearchResult(N goalNode, int iterations, Stopwatch stopwatch) {
+            this.goalNodes = Collections.singletonList(goalNode);
+            this.iterations = iterations;
+            this.stopwatch = stopwatch;
+        }
+
+        public SearchResult(Collection<N> goalNodes, int iterations, Stopwatch stopwatch) {
+            this.goalNodes = goalNodes;
             this.iterations = iterations;
             this.stopwatch = stopwatch;
         }
@@ -63,15 +65,23 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
 
         /**
-
          * @return goal node.
          */
         public N getGoalNode() {
-            return goalNode;
+            return goalNodes.iterator().next();
         }
 
-        public List<S> getOptimalPath() {
-            return optimalPath;
+        public Collection<N> getGoalNodes() {
+            return goalNodes;
+        }
+
+        public List<List<S>> getOptimalPaths() {
+            List<List<S>> paths = new ArrayList<List<S>>(goalNodes.size());
+            for(N goalNode : goalNodes){
+                paths.add(recoverStatePath(goalNode));
+            }
+
+            return paths;
         }
 
         @Override
@@ -79,8 +89,8 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             return "SearchResult {" +
                     "SearchTime=" + stopwatch +
                     ", totalIterations=" + iterations +
-                    ", solution=" + optimalPath +
-                    ", goalInfo=" + goalNode +
+                    ", solutions=" + getOptimalPaths() +
+                    ", goalNodes=" + goalNodes +
                     '}';
         }
     }
@@ -103,7 +113,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             }
         }
         w.stop();
-        return new SearchResult(currentNode, recoverStatePath(currentNode), iteration, w);
+        return new SearchResult(currentNode, iteration, w);
     }
 
     /**

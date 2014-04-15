@@ -119,10 +119,10 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
 
         if (getGoalState() != null) {
             N goalNode = it.explored.get(getGoalState());
-            return new SearchResult(goalNode, recoverStatePath(goalNode), iteration, w);
+            return new SearchResult(goalNode, iteration, w);
         }
 
-        return new SearchResult(null, Collections.<S>emptyList(), iteration, w);
+        return new SearchResult(Collections.<N>emptyList(), iteration, w);
     }
 
     @Override
