@@ -19,16 +19,14 @@ package es.usc.citius.hipster.algorithm.problem.romanian;
 
 import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.GraphEdge;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
@@ -97,14 +95,14 @@ public class RomanianProblemOptimalPathTest {
 
         // Create the custom AStar iterator. Generics may be scary, but IDEs can autocomplete signatures pretty well, don't panic!
         // If you don't need type safety, just define AStar.AStarIter it = Hipster.createAStar(p).iterator()
-        AStar<GraphEdge<City,Double>, City, Double, HeuristicNodeImpl<GraphEdge<City,Double>, City, Double>>.AStarIter it
+        AStar<GraphEdge<City,Double>, City, Double, WeightedNode<GraphEdge<City,Double>, City, Double>>.AStarIter it
                 = Hipster.createAStar(p).iterator();
 
         List<Double> expectedScore = Arrays.asList(366d, 393d, 413d, 415d, 417d, 418d);
         int i=0;
         while (it.hasNext()) {
             //System.out.println(node.state() + " - " + node);
-            HeuristicNodeImpl<GraphEdge<City,Double>, City, Double> node = it.next();
+            WeightedNode<GraphEdge<City,Double>, City, Double> node = it.next();
             // Check expansion order and score
             assertEquals(expectedScore.get(i), node.getScore());
             i++;

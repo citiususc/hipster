@@ -21,33 +21,33 @@ import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
-import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 
-public class HeuristicNodeFactoryImpl<A,S,C extends Comparable<C>> implements NodeFactory<A,S,HeuristicNodeImpl<A,S,C>>{
+public class WeightedNodeFactoryImpl<A,S,C extends Comparable<C>> implements NodeFactory<A,S,WeightedNode<A,S,C>>{
 
     private CostFunction<A,S,C> gf;
     private HeuristicFunction<S,C> hf;
     private BinaryOperation<C> costAccumulator;
 
 
-    public HeuristicNodeFactoryImpl(CostFunction<A,S,C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
+    public WeightedNodeFactoryImpl(CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = heuristicFunction;
         this.costAccumulator = costAccumulator;
     }
 
-    public HeuristicNodeFactoryImpl(CostFunction<A,S,C> costFunction, BinaryOperation<C> costAccumulator) {
+    public WeightedNodeFactoryImpl(CostFunction<A, S, C> costFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = new HeuristicFunction<S, C>() {
             public C estimate(S state) {
-                return HeuristicNodeFactoryImpl.this.costAccumulator.getIdentityElem();
+                return WeightedNodeFactoryImpl.this.costAccumulator.getIdentityElem();
             }
         };
         this.costAccumulator = costAccumulator;
     }
 
     @Override
-    public HeuristicNodeImpl<A, S, C> makeNode(HeuristicNodeImpl<A, S, C> fromNode, Transition<A, S> transition) {
+    public WeightedNode<A, S, C> makeNode(WeightedNode<A, S, C> fromNode, Transition<A, S> transition) {
         C cost, estimatedDistance, score;
 
         if (fromNode == null){
@@ -58,6 +58,6 @@ public class HeuristicNodeFactoryImpl<A,S,C extends Comparable<C>> implements No
         estimatedDistance = this.hf.estimate(transition.getState());
         score = costAccumulator.apply(cost, estimatedDistance);
 
-        return new HeuristicNodeImpl<A,S,C>(fromNode, transition.getState(), transition.getAction(), cost, estimatedDistance, score);
+        return new WeightedNode<A,S,C>(fromNode, transition.getState(), transition.getAction(), cost, estimatedDistance, score);
     }
 }

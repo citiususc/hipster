@@ -23,9 +23,9 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
-import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
+import es.usc.citius.hipster.model.function.impl.WeightedNodeFactoryImpl;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
-import es.usc.citius.hipster.model.impl.HeuristicNodeImpl;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
@@ -35,20 +35,20 @@ public final class Hipster {
 
     //TODO; Refactor - Remove redundant code
 
-    public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createAStar(HeuristicSearchProblem<A,S,Double> problem){
+    public static <A,S> AStar<A,S,Double,WeightedNode<A,S,Double>> createAStar(HeuristicSearchProblem<A,S,Double> problem){
         // Create a Lazy Node Expander by default
-        SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> components = createHeuristicSearchComponents(problem);
+        SearchComponents<A,S,WeightedNode<A,S,Double>> components = createHeuristicSearchComponents(problem);
         // Create the algorithm with all those components
-        AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-            new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(components.initialNode, components.expander);
+        AStar<A, S, Double, WeightedNode<A, S, Double>> algorithm =
+            new AStar<A, S, Double, WeightedNode<A,S,Double>>(components.initialNode, components.expander);
         // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }
 
-    public static <A,S> AStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
+    public static <A,S> AStar<A,S,Double,WeightedNode<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
         // The Dijkstra impl. is the same as the A* but without using heuristics
-        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+        WeightedNodeFactoryImpl<A,S,Double> factory = new WeightedNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 new HeuristicFunction<S, Double>() {
                     @Override
@@ -59,20 +59,20 @@ public final class Hipster {
                 BinaryOperation.doubleAdditionOp());
         // Make the initial node. The initial node contains the initial state
         // of the problem, and it comes from no previous node (null) and using no action (null)
-        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        WeightedNode<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
         // Create a Lazy Node Expander by default
-        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        NodeExpander<A,S,WeightedNode<A,S,Double>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, Double>>(problem.getTransitionFunction(), factory);
         // Create the algorithm with all those components
-        AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-                new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+        AStar<A, S, Double, WeightedNode<A, S, Double>> algorithm =
+                new AStar<A, S, Double, WeightedNode<A,S,Double>>(initialNode, expander);
         // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
     }
 
-    public static <A,S> BellmanFord<A,S,Double,HeuristicNodeImpl<A,S,Double>> createBellmanFord(InformedSearchProblem<A,S,Double> problem){
+    public static <A,S> BellmanFord<A,S,Double,WeightedNode<A,S,Double>> createBellmanFord(InformedSearchProblem<A,S,Double> problem){
         // The Dijkstra impl. is the same as the A* but without using heuristics
-        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+        WeightedNodeFactoryImpl<A,S,Double> factory = new WeightedNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 new HeuristicFunction<S, Double>() {
                     @Override
@@ -83,11 +83,11 @@ public final class Hipster {
                 BinaryOperation.doubleAdditionOp());
         // Make the initial node. The initial node contains the initial state
         // of the problem, and it comes from no previous node (null) and using no action (null)
-        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        WeightedNode<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
         // Create a Lazy Node Expander by default
-        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        NodeExpander<A,S,WeightedNode<A,S,Double>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, Double>>(problem.getTransitionFunction(), factory);
         // Create the algorithm with all those components
-        BellmanFord<A, S, Double, HeuristicNodeImpl<A,S,Double>> algorithm = new BellmanFord<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+        BellmanFord<A, S, Double, WeightedNode<A,S,Double>> algorithm = new BellmanFord<A, S, Double, WeightedNode<A,S,Double>>(initialNode, expander);
         // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
@@ -128,11 +128,11 @@ public final class Hipster {
         return algorithm;
     }
 
-    public static <A,S> IDAStar<A,S,Double,HeuristicNodeImpl<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
-        SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> components = createHeuristicSearchComponents(problem);
+    public static <A,S> IDAStar<A,S,Double,WeightedNode<A,S,Double>> createIDAStar(HeuristicSearchProblem<A,S,Double> problem){
+        SearchComponents<A,S,WeightedNode<A,S,Double>> components = createHeuristicSearchComponents(problem);
 
-        IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
-                new IDAStar<A, S, Double, HeuristicNodeImpl<A, S, Double>>(
+        IDAStar<A, S, Double, WeightedNode<A, S, Double>> algorithm =
+                new IDAStar<A, S, Double, WeightedNode<A, S, Double>>(
                         components.initialNode, components.expander);
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
@@ -148,19 +148,19 @@ public final class Hipster {
         }
     }
 
-    private static <A,S> SearchComponents<A,S,HeuristicNodeImpl<A,S,Double>> createHeuristicSearchComponents(HeuristicSearchProblem<A, S, Double> problem){
-        HeuristicNodeFactoryImpl<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
-        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
-        LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>> nodeExpander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(
+    private static <A,S> SearchComponents<A,S,WeightedNode<A,S,Double>> createHeuristicSearchComponents(HeuristicSearchProblem<A, S, Double> problem){
+        WeightedNodeFactoryImpl<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
+        WeightedNode<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        LazyNodeExpander<A, S, WeightedNode<A, S, Double>> nodeExpander = new LazyNodeExpander<A, S, WeightedNode<A, S, Double>>(
                 problem.getTransitionFunction(),
                 factory);
 
-        return new SearchComponents<A, S, HeuristicNodeImpl<A,S,Double>>(initialNode, nodeExpander);
+        return new SearchComponents<A, S, WeightedNode<A,S,Double>>(initialNode, nodeExpander);
     }
 
 
-    private static <A,S> HeuristicNodeFactoryImpl<A, S, Double> createDefaultHeuristicNodeFactory(HeuristicSearchProblem<A, S, Double> problem){
-        return new HeuristicNodeFactoryImpl<A,S,Double>(
+    private static <A,S> WeightedNodeFactoryImpl<A, S, Double> createDefaultHeuristicNodeFactory(HeuristicSearchProblem<A, S, Double> problem){
+        return new WeightedNodeFactoryImpl<A,S,Double>(
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
                 BinaryOperation.doubleAdditionOp());

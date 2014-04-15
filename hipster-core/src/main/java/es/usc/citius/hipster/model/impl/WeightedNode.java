@@ -20,16 +20,16 @@ package es.usc.citius.hipster.model.impl;
 import es.usc.citius.hipster.model.AbstractNode;
 import es.usc.citius.hipster.model.HeuristicNode;
 
-public class HeuristicNodeImpl<A,S,C extends Comparable<C>>
-        extends AbstractNode<A,S,HeuristicNodeImpl<A,S,C>>
-        implements HeuristicNode<A,S,C, HeuristicNodeImpl<A,S,C>> {
+public class WeightedNode<A,S,C extends Comparable<C>>
+        extends AbstractNode<A,S,WeightedNode<A,S,C>>
+        implements HeuristicNode<A,S,C, WeightedNode<A,S,C>> {
 
 
     private C cost;
     private C estimation;
     private C score;
 
-    public HeuristicNodeImpl(HeuristicNodeImpl<A, S, C> previousNode, S state, A action, C cost, C estimation, C score) {
+    public WeightedNode(WeightedNode<A, S, C> previousNode, S state, A action, C cost, C estimation, C score) {
         super(previousNode, state, action);
         this.cost = cost;
         this.estimation = estimation;
@@ -52,13 +52,13 @@ public class HeuristicNodeImpl<A,S,C extends Comparable<C>>
     }
 
     @Override
-    public int compareTo(HeuristicNodeImpl<A, S, C> o) {
+    public int compareTo(WeightedNode<A, S, C> o) {
         return score.compareTo(o.score);
     }
 
     @Override
     public String toString() {
-        return "HeuristicNodeImpl{" +
+        return "WeightedNode{" +
                 "state=" + this.state() +
                 ", cost=" + cost +
                 ", estimation=" + estimation +

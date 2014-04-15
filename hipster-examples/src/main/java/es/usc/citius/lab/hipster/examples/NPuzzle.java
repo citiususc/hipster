@@ -307,9 +307,9 @@ public final class NPuzzle {
 
         /*
             // Use an event handle to monitor the execution of the algorithm
-            Hipster.createAStar(p).search(new Algorithm.SearchListener<HeuristicNodeImpl<PuzzleMove, Puzzle, Double>>() {
+            Hipster.createAStar(p).search(new Algorithm.SearchListener<WeightedNode<PuzzleMove, Puzzle, Double>>() {
                 @Override
-                public void handle(HeuristicNodeImpl<PuzzleMove, Puzzle, Double> node) {
+                public void handle(WeightedNode<PuzzleMove, Puzzle, Double> node) {
                     System.out.println("Node: " + node);
                 }
             });
