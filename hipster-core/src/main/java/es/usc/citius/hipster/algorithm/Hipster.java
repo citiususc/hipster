@@ -19,7 +19,9 @@ package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.*;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.HeuristicNodeFactoryImpl;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
@@ -63,6 +65,29 @@ public final class Hipster {
         // Create the algorithm with all those components
         AStar<A, S, Double, HeuristicNodeImpl<A, S, Double>> algorithm =
                 new AStar<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
+        // Put the optional goal state
+        algorithm.setGoalState(problem.getGoalState());
+        return algorithm;
+    }
+
+    public static <A,S> BellmanFord<A,S,Double,HeuristicNodeImpl<A,S,Double>> createBellmanFord(InformedSearchProblem<A,S,Double> problem){
+        // The Dijkstra impl. is the same as the A* but without using heuristics
+        HeuristicNodeFactoryImpl<A,S,Double> factory = new HeuristicNodeFactoryImpl<A,S,Double>(
+                problem.getCostFunction(),
+                new HeuristicFunction<S, Double>() {
+                    @Override
+                    public Double estimate(S state) {
+                        return BinaryOperation.doubleAdditionOp().getIdentityElem();
+                    }
+                },
+                BinaryOperation.doubleAdditionOp());
+        // Make the initial node. The initial node contains the initial state
+        // of the problem, and it comes from no previous node (null) and using no action (null)
+        HeuristicNodeImpl<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
+        // Create a Lazy Node Expander by default
+        NodeExpander<A,S,HeuristicNodeImpl<A,S,Double>> expander = new LazyNodeExpander<A, S, HeuristicNodeImpl<A, S, Double>>(problem.getTransitionFunction(), factory);
+        // Create the algorithm with all those components
+        BellmanFord<A, S, Double, HeuristicNodeImpl<A,S,Double>> algorithm = new BellmanFord<A, S, Double, HeuristicNodeImpl<A,S,Double>>(initialNode, expander);
         // Put the optional goal state
         algorithm.setGoalState(problem.getGoalState());
         return algorithm;
