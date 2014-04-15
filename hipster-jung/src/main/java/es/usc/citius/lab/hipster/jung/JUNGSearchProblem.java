@@ -16,21 +16,22 @@
 
 package es.usc.citius.lab.hipster.jung;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import edu.uci.ics.jung.graph.Graph;
-import es.usc.citius.lab.hipster.algorithm.problem.HeuristicSearchProblem;
-import es.usc.citius.lab.hipster.function.CostFunction;
-import es.usc.citius.lab.hipster.function.HeuristicFunction;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.Transition;
+import edu.uci.ics.jung.graph.util.Pair;
+import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import org.apache.commons.collections15.Transformer;
 
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author Pablo Rodríguez Mier
  */
-public class JUNGSearchProblem<V, E> implements HeuristicSearchProblem<V, Double> {
+public class JUNGSearchProblem<V, E> implements HeuristicSearchProblem<E, V, Double> {
     private V start;
     private V end;
     private Graph<V, E> graph;
@@ -70,30 +71,29 @@ public class JUNGSearchProblem<V, E> implements HeuristicSearchProblem<V, Double
     }
 
     @Override
-    public TransitionFunction<V> getTransitionFunction() {
-        return new TransitionFunction<V>() {
+    public TransitionFunction<E,V> getTransitionFunction() {
+        return new TransitionFunction<E,V>() {
             @Override
-            public Iterable<? extends Transition<V>> from(V current) {
-                Collection<Transition<V>> transitions = new ArrayList<Transition<V>>();
-                for (V successor : graph.getSuccessors(current)) {
-                    transitions.add(new Transition<V>(current, successor));
-                }
-                return transitions;
+            public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                return Collections2.transform(graph.getOutEdges(state), new Function<E, Transition<E, V>>() {
+                    @Override
+                    public Transition<E, V> apply(E edge) {
+                        Pair<V> endpoints = graph.getEndpoints(edge);
+                        V successor = endpoints.getFirst().equals(state) ? endpoints.getSecond() : endpoints.getFirst();
+                        return Transition.create(state, edge, successor);
+                    }
+                });
             }
+
         };
     }
 
     @Override
-    public CostFunction<V, Double> getCostFunction() {
-        // TODO: The best place to compute the cost is when
-        // the neighbors are calculated in almost all cases!
-        // Transition + NodeFactory can be mixed!
-        return new CostFunction<V, Double>() {
+    public CostFunction<E, V, Double> getCostFunction() {
+        return new CostFunction<E, V, Double>() {
             @Override
-            public Double evaluate(Transition<V> transition) {
-                // Get the distance of the transition
-                E edge = graph.findEdge(transition.from(), transition.to());
-                return transformer.transform(edge).doubleValue();
+            public Double evaluate(Transition<E, V> transition) {
+                return transformer.transform(transition.getAction()).doubleValue();
             }
         };
     }

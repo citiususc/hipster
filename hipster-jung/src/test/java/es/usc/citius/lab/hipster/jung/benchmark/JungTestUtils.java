@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.jung;
+package es.usc.citius.lab.hipster.jung.benchmark;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -35,7 +35,7 @@ import java.util.List;
  * @version 1.0
  * @since 26-03-2013
  */
-public class JungUtils {
+public class JungTestUtils {
 
     /**
      * Conversion process.
