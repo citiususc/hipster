@@ -16,14 +16,12 @@
 
 package es.usc.citius.hipster.algorithm;
 
+import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.lab.hipster.collections.HashQueue;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
@@ -103,8 +101,28 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
 
         @Override
         public void remove() {
-
+            throw new UnsupportedOperationException();
         }
+    }
+
+    @Override
+    public SearchResult search() {
+        BellmanFordIter it = new BellmanFordIter();
+        // Run the iterator until no more nodes.
+        int iteration = 0;
+        Stopwatch w = Stopwatch.createStarted();
+        while(it.hasNext()){
+            it.next();
+            iteration++;
+        }
+        w.stop();
+
+        if (getGoalState() != null) {
+            N goalNode = it.explored.get(getGoalState());
+            return new SearchResult(goalNode, recoverStatePath(goalNode), iteration, w);
+        }
+
+        return new SearchResult(null, Collections.<S>emptyList(), iteration, w);
     }
 
     @Override
