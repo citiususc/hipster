@@ -21,9 +21,8 @@ import es.usc.citius.lab.hipster.collections.HashQueue;
 import org.junit.Test;
 
 import java.util.Iterator;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+;import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class HashQueueTest {
