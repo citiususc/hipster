@@ -18,7 +18,6 @@ package es.usc.citius.hipster.util.graph;
 
 
 import com.google.common.collect.Sets;
-import es.usc.citius.hipster.algorithm.Hipster;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -63,7 +62,7 @@ public class GraphBuilderTest {
 
     @Test
     public void testIncomingEdges(){
-        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.incomingEdgesFrom("D"));
+        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.incomingEdgesOf("D"));
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());
@@ -74,7 +73,7 @@ public class GraphBuilderTest {
 
     @Test
     public void testOutgoingEdges(){
-        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.outgoingEdgesFrom("B"));
+        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.outgoingEdgesOf("B"));
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());
@@ -83,18 +82,5 @@ public class GraphBuilderTest {
         assertEquals(values, new HashSet<Double>(Arrays.asList(5.0d, 10.0d)));
     }
 
-    @Test
-    public void testVertexConnectedTo(){
-        // Get outgoing edge from C
-        GraphEdge<String,Double> edge = testGraph.outgoingEdgesFrom("C").iterator().next();
-        assertEquals("E", testGraph.vertexConnectedTo("C", edge));
-    }
 
-    @Test
-    public void testSourceTargetVertex(){
-        // Get outgoing edge from C
-        GraphEdge<String,Double> edge = testGraph.outgoingEdgesFrom("C").iterator().next();
-        assertEquals("C", testGraph.sourceVertexOf(edge));
-        assertEquals("E", testGraph.targetVertexOf(edge));
-    }
 }
