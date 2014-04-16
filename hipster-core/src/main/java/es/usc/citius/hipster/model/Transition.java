@@ -17,10 +17,6 @@
 package es.usc.citius.hipster.model;
 
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class Transition<A,S> {
     // Source state (origin) of the transition
     private S fromState;
@@ -66,5 +62,10 @@ public class Transition<A,S> {
 
     public S getFromState() {
         return fromState;
+    }
+
+    @Override
+    public String toString() {
+        return fromState + " ---(" + action + ")---> " + state;
     }
 }
