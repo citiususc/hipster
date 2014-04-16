@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>hipster</artifactId>
-        <groupId>es.usc.citius.lab</groupId>
+        <groupId>es.usc.citius</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -32,13 +32,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>es.usc.citius.lab</groupId>
+            <groupId>es.usc.citius</groupId>
             <artifactId>hipster-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>es.usc.citius.lab</groupId>
+            <groupId>es.usc.citius</groupId>
             <artifactId>hipster-jung</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
