@@ -17,6 +17,7 @@
 package es.usc.citius.hipster.algorithm;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
@@ -34,11 +35,23 @@ import java.util.*;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
+    private N initialNode;
     private NodeExpander<A,S,N> nodeExpander;
+
+    public MultiobjectiveLS(N initialNode, NodeExpander<A, S, N> nodeExpander) {
+        this.initialNode = initialNode;
+        this.nodeExpander = nodeExpander;
+    }
 
     public class MOLSIter implements Iterator<N> {
         private Queue<N> queue = new LinkedList<N>();
         public Multimap<S, N> nonDominated;
+
+        public MOLSIter(){
+            queue = new PriorityQueue<N>();
+            this.nonDominated = HashMultimap.create();
+            this.queue.add(initialNode);
+        }
 
         public boolean hasNext() {
             return !this.queue.isEmpty();
