@@ -18,18 +18,16 @@ package es.usc.citius.hipster.model.function.impl;
 import es.usc.citius.hipster.model.function.BinaryFunction;
 
 /**
- * A binary operation is an implementation of {@link es.usc.citius.lab.hipster.function.BinaryFunction} that also
- * has the following definitions:
+ * A implementation of {@link es.usc.citius.hipster.model.function.BinaryFunction} used to define
+ * a custom cost algebra that also has the following definitions:
  * <ul>
  * 		<li>identity element (A*I = A)</li>
  * 		<li>maximum element (A*M = M)</li>
  * </ul>
- * 
- * @author Pablo Rodríguez Mier <pablo.rodriguez.mier@usc.es>
  *
- * @param <E> operator class
+ * @param <E> element type
  */
-public class BinaryOperation<E extends Comparable<E>> implements BinaryFunction<E> {
+public class BinaryOperation<E> implements BinaryFunction<E> {
 
 	private E maxElem;
 	private E identityElem;
