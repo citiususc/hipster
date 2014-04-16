@@ -25,7 +25,7 @@ import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
-import es.usc.citius.hipster.model.function.impl.WeightedNodeFactoryImpl;
+import es.usc.citius.hipster.model.function.impl.WeightedNodeFactory;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.GraphEdge;
@@ -81,7 +81,7 @@ public class MultiobjectiveShortestPathTest {
                         .from("v4").to("v6").withEdge(new Cost(2d,2d));
 
         // Define the custom components to work with the special cost
-        WeightedNodeFactoryImpl<Cost, String, Cost> factory = new WeightedNodeFactoryImpl<Cost, String, Cost>(
+        WeightedNodeFactory<Cost, String, Cost> factory = new WeightedNodeFactory<Cost, String, Cost>(
                 new CostFunction<Cost, String, Cost>() {
                     @Override
                     public Cost evaluate(Transition<Cost, String> transition) {

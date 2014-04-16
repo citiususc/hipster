@@ -23,24 +23,24 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
-public class WeightedNodeFactoryImpl<A,S,C extends Comparable<C>> implements NodeFactory<A,S,WeightedNode<A,S,C>>{
+public class WeightedNodeFactory<A,S,C extends Comparable<C>> implements NodeFactory<A,S,WeightedNode<A,S,C>>{
 
     private CostFunction<A,S,C> gf;
     private HeuristicFunction<S,C> hf;
     private BinaryOperation<C> costAccumulator;
 
 
-    public WeightedNodeFactoryImpl(CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
+    public WeightedNodeFactory(CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = heuristicFunction;
         this.costAccumulator = costAccumulator;
     }
 
-    public WeightedNodeFactoryImpl(CostFunction<A, S, C> costFunction, BinaryOperation<C> costAccumulator) {
+    public WeightedNodeFactory(CostFunction<A, S, C> costFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = new HeuristicFunction<S, C>() {
             public C estimate(S state) {
-                return WeightedNodeFactoryImpl.this.costAccumulator.getIdentityElem();
+                return WeightedNodeFactory.this.costAccumulator.getIdentityElem();
             }
         };
         this.costAccumulator = costAccumulator;

@@ -23,7 +23,7 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
-import es.usc.citius.hipster.model.function.impl.WeightedNodeFactoryImpl;
+import es.usc.citius.hipster.model.function.impl.WeightedNodeFactory;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
@@ -48,7 +48,7 @@ public final class Hipster {
 
     public static <A,S> AStar<A,S,Double,WeightedNode<A,S,Double>> createDijkstra(InformedSearchProblem<A,S,Double> problem){
         // The Dijkstra impl. is the same as the A* but without using heuristics
-        WeightedNodeFactoryImpl<A,S,Double> factory = new WeightedNodeFactoryImpl<A,S,Double>(
+        WeightedNodeFactory<A,S,Double> factory = new WeightedNodeFactory<A,S,Double>(
                 problem.getCostFunction(),
                 new HeuristicFunction<S, Double>() {
                     @Override
@@ -72,7 +72,7 @@ public final class Hipster {
 
     public static <A,S> BellmanFord<A,S,Double,WeightedNode<A,S,Double>> createBellmanFord(InformedSearchProblem<A,S,Double> problem){
         // The Dijkstra impl. is the same as the A* but without using heuristics
-        WeightedNodeFactoryImpl<A,S,Double> factory = new WeightedNodeFactoryImpl<A,S,Double>(
+        WeightedNodeFactory<A,S,Double> factory = new WeightedNodeFactory<A,S,Double>(
                 problem.getCostFunction(),
                 new HeuristicFunction<S, Double>() {
                     @Override
@@ -149,7 +149,7 @@ public final class Hipster {
     }
 
     private static <A,S> SearchComponents<A,S,WeightedNode<A,S,Double>> createHeuristicSearchComponents(HeuristicSearchProblem<A, S, Double> problem){
-        WeightedNodeFactoryImpl<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
+        WeightedNodeFactory<A, S, Double> factory = createDefaultHeuristicNodeFactory(problem);
         WeightedNode<A,S,Double> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, problem.getInitialState()));
         LazyNodeExpander<A, S, WeightedNode<A, S, Double>> nodeExpander = new LazyNodeExpander<A, S, WeightedNode<A, S, Double>>(
                 problem.getTransitionFunction(),
@@ -159,8 +159,8 @@ public final class Hipster {
     }
 
 
-    private static <A,S> WeightedNodeFactoryImpl<A, S, Double> createDefaultHeuristicNodeFactory(HeuristicSearchProblem<A, S, Double> problem){
-        return new WeightedNodeFactoryImpl<A,S,Double>(
+    private static <A,S> WeightedNodeFactory<A, S, Double> createDefaultHeuristicNodeFactory(HeuristicSearchProblem<A, S, Double> problem){
+        return new WeightedNodeFactory<A,S,Double>(
                 problem.getCostFunction(),
                 problem.getHeuristicFunction(),
                 BinaryOperation.doubleAdditionOp());
