@@ -70,15 +70,16 @@ public class MultiobjectiveShortestPathTest {
     public void test(){
         // Create a multiobjective graph
         final HipsterDirectedGraph<String, Cost> graph =
-                GraphBuilder.<String, Cost>newDirectedGraph()
-                        .from("v1").to("v2").withEdge(new Cost(7d,1d))
-                        .from("v1").to("v3").withEdge(new Cost(1d,7d))
-                        .from("v1").to("v4").withEdge(new Cost(8d,4d))
-                        .from("v2").to("v4").withEdge(new Cost(2d,1d))
-                        .from("v2").to("v6").withEdge(new Cost(2d,2d))
-                        .from("v3").to("v4").withEdge(new Cost(1d,1d))
-                        .from("v4").to("v5").withEdge(new Cost(6d,4d))
-                        .from("v4").to("v6").withEdge(new Cost(2d,2d));
+                GraphBuilder.newGraph()
+                        .connect("v1").to("v2").withEdge(new Cost(7d,1d))
+                        .connect("v1").to("v3").withEdge(new Cost(1d,7d))
+                        .connect("v1").to("v4").withEdge(new Cost(8d,4d))
+                        .connect("v2").to("v4").withEdge(new Cost(2d,1d))
+                        .connect("v2").to("v6").withEdge(new Cost(2d,2d))
+                        .connect("v3").to("v4").withEdge(new Cost(1d,1d))
+                        .connect("v4").to("v5").withEdge(new Cost(6d,4d))
+                        .connect("v4").to("v6").withEdge(new Cost(2d,2d))
+                        .buildDirectedGraph();
 
         // Define the custom components to work with the special cost
         WeightedNodeFactory<Cost, String, Cost> factory = new WeightedNodeFactory<Cost, String, Cost>(

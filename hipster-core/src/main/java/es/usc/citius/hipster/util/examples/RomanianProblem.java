@@ -1,9 +1,5 @@
 package es.usc.citius.hipster.util.examples;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 
@@ -50,7 +46,7 @@ public class RomanianProblem {
         heuristicMap.put(City.Neamt, 234d);
         heuristicMap.put(City.Bucharest, 0d);
 
-        graph = GraphBuilder.<City,Double>newGraph()
+        graph = GraphBuilder.newGraph()
                 .connect(City.Arad).to(City.Zerind).withEdge(75d)
                 .connect(City.Arad).to(City.Timisoara).withEdge(118d)
                 .connect(City.Arad).to(City.Sibiu).withEdge(140d)
@@ -73,7 +69,8 @@ public class RomanianProblem {
                 .connect(City.Oradea).to(City.Sibiu).withEdge(151d)
                 .connect(City.Pitesti).to(City.Rimnicu_Vilcea).withEdge(97d)
                 .connect(City.Rimnicu_Vilcea).to(City.Sibiu).withEdge(80d)
-                .connect(City.Urziceni).to(City.Vaslui).withEdge(142d);
+                .connect(City.Urziceni).to(City.Vaslui).withEdge(142d)
+                .buildUndirectedGraph();
 
 
     }

@@ -29,11 +29,12 @@ public class BellmanFordTest {
     public void negativeCycleTest(){
         // Create a graph with negative cycles
         HipsterDirectedGraph<String, Double> graph =
-                GraphBuilder.<String, Double>newDirectedGraph()
-                .from("A").to("B").withEdge(1d)
-                .from("B").to("C").withEdge(1d)
-                .from("C").to("B").withEdge(-2d)
-                .from("C").to("D").withEdge(1d);
+                GraphBuilder.newGraph()
+                .connect("A").to("B").withEdge(1d)
+                .connect("B").to("C").withEdge(1d)
+                .connect("C").to("B").withEdge(-2d)
+                .connect("C").to("D").withEdge(1d)
+                .buildDirectedGraph();
         //TODO; Complete test
         //System.out.println(Hipster.createBellmanFord(GraphSearchProblem.from("A").to("D").in(graph)).search());
     }

@@ -17,148 +17,111 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.HashSet;
-import java.util.Set;
+public class GraphBuilder {
 
-/**
- * Simple graph builder for testing and example purposes.
- *
- * @author Pablo Rodríguez Mier
- */
-public final class GraphBuilder {
+    public final static class Assistant {
 
+        public final class Vertex1<V> {
+            V v1;
 
-    public static class MutableHashBasedGraph<V,E> implements HipsterGraph<V,E> {
-        private final Table<V,V,GraphEdge<V,E>> graphTable;
-
-        private MutableHashBasedGraph(){
-            this.graphTable = HashBasedTable.create();
-        }
-
-        public final class FromVertex {
-            private V fromVertex;
-
-            private FromVertex(V fromVertex){
-                this.fromVertex = fromVertex;
+            private Vertex1(V v1) {
+                this.v1 = v1;
             }
 
-            public ToVertex to(V toVertex){
-                return new ToVertex(toVertex);
-            }
+            public final class Vertex2 {
+                V v2;
 
-            public final class ToVertex {
-                private V toVertex;
-
-                public ToVertex(V toVertex) {
-                    this.toVertex = toVertex;
+                private Vertex2(V v2) {
+                    this.v2 = v2;
                 }
 
-                public MutableHashBasedGraph<V,E> withEdge(E edge){
-                    // Put both relations (not directed)
-                    graphTable.put(fromVertex, toVertex, new GraphEdge<V,E>(fromVertex, toVertex, edge));
-                    graphTable.put(toVertex, fromVertex, new GraphEdge<V,E>(toVertex, fromVertex, edge));
-                    return MutableHashBasedGraph.this;
+                public final class Builder<VT,ET> {
+
+                    private List<Connection> connections = new LinkedList<Connection>();
+
+                    private class Connection {
+                        private VT vertex1;
+                        private VT vertex2;
+                        private ET edge;
+
+                        private Connection(VT vertex1, VT vertex2, ET edge) {
+                            this.vertex1 = vertex1;
+                            this.vertex2 = vertex2;
+                            this.edge = edge;
+                        }
+                    }
+
+                    public Builder(VT v1, VT v2, ET edge){
+                        connections.add(new Connection(v1, v2, edge));
+                    }
+
+                    public HipsterDirectedGraph<VT,ET> buildDirectedGraph(){
+                        HashBasedHipsterDirectedGraph<VT, ET> graph = HashBasedHipsterDirectedGraph.create();
+                        for(Connection c : connections){
+                            graph.connect(c.vertex1, c.vertex2, c.edge);
+                        }
+                        return graph;
+                    }
+
+                    public HipsterGraph<VT,ET> buildUndirectedGraph(){
+                        HashBasedHipsterGraph<VT, ET> graph = HashBasedHipsterGraph.create();
+                        for(Connection c : connections){
+                            graph.connect(c.vertex1, c.vertex2, c.edge);
+                        }
+                        return graph;
+                    }
+
+                    public final class Vertex1T {
+                        private VT v1t;
+
+                        private Vertex1T(VT v1t) {
+                            this.v1t = v1t;
+                        }
+
+                        public final class Vertex2T {
+                            private VT v2t;
+
+                            private Vertex2T(VT vertex) {
+                                this.v2t = vertex;
+                            }
+
+                            public Builder<VT, ET> withEdge(ET edge){
+                                connections.add(new Connection(v1t, v2t, edge));
+                                return Builder.this;
+                            }
+
+                        }
+
+                        public Vertex2T to(VT vertex){
+                            return new Vertex2T(vertex);
+                        }
+                    }
+
+                    public Vertex1T connect(VT vertex){
+                        return new Vertex1T(vertex);
+                    }
+
+                }
+
+                public <E> Builder<V,E> withEdge(E edge){
+                    return new Builder<V, E>(v1, v2, edge);
                 }
             }
-        }
 
-        public FromVertex connect(V vertex){
-            return new FromVertex(vertex);
-        }
-
-        @Override
-        public Set<GraphEdge<V,E>> edges() {
-            return new HashSet<GraphEdge<V,E>>(graphTable.values());
-        }
-
-        @Override
-        public Set<V> vertices() {
-            return Sets.union(graphTable.rowKeySet(), graphTable.columnKeySet());
-        }
-
-        @Override
-        public Set<GraphEdge<V,E>> edgesOf(V vertex) {
-            return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
-                    new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
-        }
-
-    }
-
-    // (inefficient) implementation of a directed graph
-    public static class MutableHashBasedDirectedGraph<V,E> implements HipsterDirectedGraph<V,E> {
-        // Row = source, Column = target
-        private final Table<V,V,GraphEdge<V,E>> graphTable;
-
-        private MutableHashBasedDirectedGraph(){
-            this.graphTable = HashBasedTable.create();
-        }
-
-        public final class FromVertex {
-            private V fromVertex;
-
-            private FromVertex(V fromVertex){
-                this.fromVertex = fromVertex;
-            }
-
-            public ToVertex to(V toVertex){
-                return new ToVertex(toVertex);
-            }
-
-            public final class ToVertex {
-                private V toVertex;
-
-                public ToVertex(V toVertex) {
-                    this.toVertex = toVertex;
-                }
-
-                public MutableHashBasedDirectedGraph<V,E> withEdge(E edge){
-                    graphTable.put(fromVertex, toVertex, new GraphEdge<V,E>(fromVertex, toVertex, edge));
-                    return MutableHashBasedDirectedGraph.this;
-                }
+            public Vertex2 to(V vertex){
+                return new Vertex2(vertex);
             }
         }
-
-        public FromVertex from(V vertex){
-            return new FromVertex(vertex);
+        public <V> Vertex1<V> connect(V vertex){
+            return new Vertex1<V>(vertex);
         }
-
-        @Override
-        public Iterable<GraphEdge<V,E>> outgoingEdgesOf(V vertex) {
-            return graphTable.row(vertex).values();
-        }
-
-        @Override
-        public Iterable<GraphEdge<V,E>> incomingEdgesOf(V vertex) {
-            return graphTable.column(vertex).values();
-        }
-
-        @Override
-        public Iterable<GraphEdge<V,E>> edges() {
-            return graphTable.values();
-        }
-
-        @Override
-        public Iterable<V> vertices() {
-            return Sets.union(graphTable.rowKeySet(), graphTable.columnKeySet());
-        }
-
-        @Override
-        public Iterable<GraphEdge<V,E>> edgesOf(V vertex) {
-            return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
-                    new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
-        }
-
     }
 
-    public static <V,E> MutableHashBasedDirectedGraph<V,E> newDirectedGraph(){
-        return new MutableHashBasedDirectedGraph<V, E>();
+    public static Assistant newGraph(){
+        return new Assistant();
     }
 
-    public static <V,E> MutableHashBasedGraph<V,E> newGraph(){
-        return new MutableHashBasedGraph<V, E>();
-    }
 }

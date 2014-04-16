@@ -32,21 +32,22 @@ public class DepthFirstSearchTest {
     @Test
     public void test(){
         HipsterDirectedGraph<String, String> graph =
-                GraphBuilder.<String, String>newDirectedGraph()
-                .from("A").to("B").withEdge("1")
-                .from("A").to("C").withEdge("2")
-                .from("B").to("D").withEdge("3")
-                .from("B").to("E").withEdge("4")
-                .from("D").to("H").withEdge("5")
-                .from("D").to("I").withEdge("6")
-                .from("E").to("J").withEdge("7")
-                .from("E").to("K").withEdge("8")
-                .from("C").to("F").withEdge("9")
-                .from("C").to("G").withEdge("10")
-                .from("F").to("L").withEdge("11")
-                .from("F").to("M").withEdge("12")
-                .from("G").to("N").withEdge("13")
-                .from("G").to("O").withEdge("14");
+                GraphBuilder.newGraph()
+                .connect("A").to("B").withEdge("1")
+                .connect("A").to("C").withEdge("2")
+                .connect("B").to("D").withEdge("3")
+                .connect("B").to("E").withEdge("4")
+                .connect("D").to("H").withEdge("5")
+                .connect("D").to("I").withEdge("6")
+                .connect("E").to("J").withEdge("7")
+                .connect("E").to("K").withEdge("8")
+                .connect("C").to("F").withEdge("9")
+                .connect("C").to("G").withEdge("10")
+                .connect("F").to("L").withEdge("11")
+                .connect("F").to("M").withEdge("12")
+                .connect("G").to("N").withEdge("13")
+                .connect("G").to("O").withEdge("14")
+                .buildDirectedGraph();
 
         Hipster.createDepthFirstSearch(
                 GraphSearchProblem.from("A").to("O").in(graph)
