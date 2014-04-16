@@ -31,11 +31,8 @@ import java.util.Set;
  */
 public final class GraphBuilder {
 
-    protected static class Builder<V,E> {
-        private Builder() {}
-    }
 
-    public static class MutableHashBasedGraph<V,E> extends Builder<V,E> implements HipsterGraph<V,E> {
+    public static class MutableHashBasedGraph<V,E> implements HipsterGraph<V,E> {
         private final Table<V,V,GraphEdge<V,E>> graphTable;
 
         private MutableHashBasedGraph(){
@@ -84,24 +81,15 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Set<GraphEdge<V,E>> edgesWithVertex(V vertex) {
+        public Set<GraphEdge<V,E>> edgesOf(V vertex) {
             return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
                     new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
         }
 
-        @Override
-        public V vertexConnectedTo(V vertex, GraphEdge<V,E> edge) {
-            if (edge.getVertex1().equals(vertex)){
-                return edge.getVertex2();
-            } else if (edge.getVertex2().equals(vertex)) {
-                return edge.getVertex1();
-            }
-            return null;
-        }
     }
 
-    // Ultra slow implementation of a directed graph
-    public static class MutableHashBasedDirectedGraph<V,E> extends Builder<V,E> implements HipsterDirectedGraph<V,E> {
+    // (inefficient) implementation of a directed graph
+    public static class MutableHashBasedDirectedGraph<V,E> implements HipsterDirectedGraph<V,E> {
         // Row = source, Column = target
         private final Table<V,V,GraphEdge<V,E>> graphTable;
 
@@ -138,24 +126,13 @@ public final class GraphBuilder {
             return new FromVertex(vertex);
         }
 
-
         @Override
-        public V sourceVertexOf(GraphEdge<V,E> edge) {
-            return edge.getVertex1();
-        }
-
-        @Override
-        public V targetVertexOf(GraphEdge<V,E> edge) {
-            return edge.getVertex2();
-        }
-
-        @Override
-        public Iterable<GraphEdge<V,E>> outgoingEdgesFrom(V vertex) {
+        public Iterable<GraphEdge<V,E>> outgoingEdgesOf(V vertex) {
             return graphTable.row(vertex).values();
         }
 
         @Override
-        public Iterable<GraphEdge<V,E>> incomingEdgesFrom(V vertex) {
+        public Iterable<GraphEdge<V,E>> incomingEdgesOf(V vertex) {
             return graphTable.column(vertex).values();
         }
 
@@ -170,20 +147,11 @@ public final class GraphBuilder {
         }
 
         @Override
-        public Iterable<GraphEdge<V,E>> edgesWithVertex(V vertex) {
+        public Iterable<GraphEdge<V,E>> edgesOf(V vertex) {
             return Sets.union(new HashSet<GraphEdge<V,E>>(graphTable.row(vertex).values()),
                     new HashSet<GraphEdge<V,E>>(graphTable.column(vertex).values()));
         }
 
-        @Override
-        public V vertexConnectedTo(V vertex, GraphEdge<V,E> edge) {
-            if (edge.getVertex1().equals(vertex)){
-                return edge.getVertex2();
-            } else if (edge.getVertex2().equals(vertex)) {
-                return edge.getVertex1();
-            }
-            return null;
-        }
     }
 
     public static <V,E> MutableHashBasedDirectedGraph<V,E> newDirectedGraph(){

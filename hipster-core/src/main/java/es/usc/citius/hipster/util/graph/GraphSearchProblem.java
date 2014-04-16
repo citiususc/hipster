@@ -53,10 +53,10 @@ public final class GraphSearchProblem {
                             .useTransitionFunction(new TransitionFunction<E, V>() {
                                 @Override
                                 public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                                    return Iterables.transform(graph.outgoingEdgesFrom(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                    return Iterables.transform(graph.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
                                         @Override
                                         public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                            return Transition.create(state, edge.getEdgeValue(), graph.targetVertexOf(edge));
+                                            return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
                                         }
                                     });
                                 }
@@ -78,10 +78,11 @@ public final class GraphSearchProblem {
                         .useTransitionFunction(new TransitionFunction<E, V>() {
                             @Override
                             public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                                return Iterables.transform(graph.edgesWithVertex(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
                                     @Override
                                     public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                        return Transition.create(state, edge.getEdgeValue(), graph.vertexConnectedTo(state,edge));
+                                        V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
+                                        return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
                                     }
                                 });
                             }

@@ -35,16 +35,6 @@ public interface HipsterGraph<V,E> {
      * @param vertex
      * @return
      */
-    Iterable<GraphEdge<V,E>> edgesWithVertex(V vertex);
-
-    /**
-     * Return the vertex that match: V --[E]-- ?V. That is, the vertex
-     * tha is connected with the given vertex through the given edge (or null
-     * if there is no such vertex).
-     * @param vertex
-     * @param edge
-     * @return
-     */
-    V vertexConnectedTo(V vertex, GraphEdge<V,E> edge);
+    Iterable<GraphEdge<V,E>> edgesOf(V vertex);
 
 }

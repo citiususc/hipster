@@ -17,27 +17,54 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import com.google.common.base.Preconditions;
+
 public final class GraphEdge<V,E> {
-    private V vertex1;
-    private V vertex2;
-    private E edgeValue;
+    private V vertex1;   // endpoint 1 (source vertex in a directed graph)
+    private V vertex2;   // endpoint 2 (target vertex in a directed graph)
+    private E edgeValue; // custom value associated to the edge
+    private boolean directed = false;
 
     public GraphEdge(V vertex1, V vertex2, E edgeValue) {
+        this(vertex1, vertex2, edgeValue, false);
+    }
+
+    public GraphEdge(V vertex1, V vertex2, E edgeValue, boolean directed) {
+        Preconditions.checkArgument(vertex1 != null && vertex2 != null, "Vertices cannot be null");
         this.vertex1 = vertex1;
         this.vertex2 = vertex2;
         this.edgeValue = edgeValue;
+        this.directed = directed;
     }
 
+    /**
+     * Returns one of the endpoints of the edge. If the edge
+     * is directed, then the vertex1 corresponds with the source endpoint.
+     * @return vertex endpoint.
+     */
     public V getVertex1() {
         return vertex1;
     }
 
+    /**
+     * Returns one of the endpoints of the edge. If the edge
+     * is directed, then the vertex2 corresponds with the target endpoint.
+     * @return vertex endpoint.
+     */
     public V getVertex2() {
         return vertex2;
     }
 
+    /**
+     * Return the value assigned to the edge.
+     * @return value of the edge.
+     */
     public E getEdgeValue() {
         return edgeValue;
+    }
+
+    public boolean isDirected() {
+        return directed;
     }
 
     @Override
@@ -47,6 +74,7 @@ public final class GraphEdge<V,E> {
 
         GraphEdge graphEdge = (GraphEdge) o;
 
+        if (directed != graphEdge.directed) return false;
         if (edgeValue != null ? !edgeValue.equals(graphEdge.edgeValue) : graphEdge.edgeValue != null) return false;
         if (!vertex1.equals(graphEdge.vertex1)) return false;
         if (!vertex2.equals(graphEdge.vertex2)) return false;
@@ -59,6 +87,12 @@ public final class GraphEdge<V,E> {
         int result = vertex1.hashCode();
         result = 31 * result + vertex2.hashCode();
         result = 31 * result + (edgeValue != null ? edgeValue.hashCode() : 0);
+        result = 31 * result + (directed ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return vertex1 + " ---(" + edgeValue + ")---" + (directed ? "> " : " ") + vertex2;
     }
 }
