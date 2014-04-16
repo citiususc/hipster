@@ -58,8 +58,8 @@ public class RomanianProblemOptimalPathTest {
                     @Override
                     public Iterable<Transition<GraphEdge<City, Double>, City>> transitionsFrom(City fromCity) {
                         Set<Transition<GraphEdge<City, Double>, City>> successors = new HashSet<Transition<GraphEdge<City, Double>, City>>();
-                        for (GraphEdge<City, Double> edge : graph.edgesWithVertex(fromCity)) {
-                            City toCity = graph.vertexConnectedTo(fromCity, edge);
+                        for (GraphEdge<City, Double> edge : graph.edgesOf(fromCity)) {
+                            City toCity = edge.getVertex1().equals(fromCity)? edge.getVertex2() : fromCity;
                             successors.add(Transition.create(fromCity, edge, toCity));
                         }
                         return successors;

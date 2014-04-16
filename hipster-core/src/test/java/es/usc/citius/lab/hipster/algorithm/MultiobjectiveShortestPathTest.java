@@ -101,7 +101,7 @@ public class MultiobjectiveShortestPathTest {
         TransitionFunction<Cost,String> tf = new TransitionFunction<Cost, String>() {
             @Override
             public Iterable<Transition<Cost, String>> transitionsFrom(final String state) {
-                return Iterables.transform(graph.outgoingEdgesFrom(state), new Function<GraphEdge<String, Cost>, Transition<Cost, String>>() {
+                return Iterables.transform(graph.outgoingEdgesOf(state), new Function<GraphEdge<String, Cost>, Transition<Cost, String>>() {
                     @Override
                     public Transition<Cost, String> apply(GraphEdge<String, Cost> input) {
                         return Transition.create(state, input.getEdgeValue(), input.getVertex2());
