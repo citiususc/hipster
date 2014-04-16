@@ -28,7 +28,6 @@ import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.util.graph.GraphEdge;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 import org.junit.Test;
 
@@ -37,23 +36,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static es.usc.citius.hipster.util.examples.RomanianProblem.*;
+import static es.usc.citius.hipster.util.examples.RomanianProblem.City;
 import static org.junit.Assert.assertEquals;
 
 public class RomanianProblemOptimalPathTest {
-
-    @Test
-    public void RomanianProblemTest() {
-        System.out.println(Hipster.createDijkstra(GraphSearchProblem.from(City.Arad).to(City.Bucharest).in(RomanianProblem.graph())).search());
-        /*
-        AStar.AStarIter it
-                = Hipster.createDijkstra(GraphSearchProblem.from(City.Arad).to(City.Bucharest).in(RomanianProblem.graph())).iterator();
-        while (it.hasNext()) {
-            HeuristicNode node = it.next();
-            System.out.println(node.state() + " - " + node);
-            // Check expansion order
-        }*/
-    }
 
     @Test
     public void RomanianProblemAStarTest() {
