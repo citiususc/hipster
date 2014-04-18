@@ -67,15 +67,15 @@ Here is a quick example of how to search a shortest path in a graph with Dijkstr
 
 ```java
 // Create a simple weighted directed graph with Hipster
-HipsterDirectedGraph<String,Double> graph =
-   GraphBuilder.<String,Double>newDirectedGraph()
+HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
      .from("A").to("B").withEdge(4d)
      .from("A").to("C").withEdge(2d)
      .from("B").to("C").withEdge(5d)
      .from("B").to("D").withEdge(10d)
      .from("C").to("E").withEdge(3d)
      .from("D").to("F").withEdge(11d)
-     .from("E").to("D").withEdge(4d);
+     .from("E").to("D").withEdge(4d)
+     .newDirectedGraph();
 
 // Search the shortest path with Dijkstra's algorithm and print the result
 System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(graph)).search());
