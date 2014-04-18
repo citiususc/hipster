@@ -41,7 +41,7 @@ public class NQueensProblemExample {
         final int size = 8;
         HeuristicSearchProblem<Void, NQueens, Double> p = ProblemBuilder.create()
                 .initialState(new NQueens(size))
-                        // No goal state: there are multiple goal states, we just one a valid goal state
+                // No goal state: there are multiple goal states, we just need to find a valid goal state
                 .defineProblemWithoutActions()
                 .useTransitionFunction(new StateTransitionFunction<NQueens>() {
                     @Override
@@ -77,11 +77,24 @@ public class NQueensProblemExample {
                     }
                 }).build();
 
+        System.out.println("Random initial state (" + p.getInitialState().attackedQueens() + " attacked queens):");
+        System.out.println(p.getInitialState());
 
+        System.out.println("Running 8-Queens problem with Enforced Hill Climbing and a custom goal test predicate");
+        // Option 1 - Run the algorithm until the predicate is satisfied (until we find a state with score 0, that is, no attacked queens)
+        System.out.println(Hipster.createHillClimbing(p, true).search(new Predicate<WeightedNode<Void, NQueens, Double>>() {
+            @Override
+            public boolean apply(WeightedNode<Void, NQueens, Double> node) {
+                return node.getScore().equals(0d);
+            }
+        }));
+
+
+        System.out.println("Running 8-Queens problem with Enforced Hill Climbing using fine-grained iteration capabilities");
+        // Option 2 - Manual execution. Expand nodes until we find a state that meets the requirements (no attacked queens)
         HillClimbing<Void, NQueens, Double, WeightedNode<Void, NQueens, Double>>.EHCIter it = Hipster.createHillClimbing(p, true).iterator();
         int iteration = 0;
         Double best = it.getBestScore();
-        System.out.println("Best score " + best);
         while (it.hasNext()) {
             iteration++;
             WeightedNode<Void, NQueens, Double> node = it.next();
