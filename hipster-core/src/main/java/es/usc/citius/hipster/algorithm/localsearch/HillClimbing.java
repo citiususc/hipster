@@ -70,16 +70,23 @@ public class HillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,
             N bestNode = null;
             // Generate successors
             for(N successor : nodeExpander.expand(current)){
-                if (bestNode == null) bestNode = successor;
-                // Is this successor better (has lower score?)
-                if (bestNode.compareTo(successor) < 0){
-                    bestNode = successor;
-                    if (enforced){
+                // Is this successor better? (has lower score?)
+                // Hill climbing, just select the best node
+                if (enforced){
+                    C score = successor.getScore();
+                    if (score.compareTo(bestScore) < 0){
+                        bestScore = score;
                         this.queue.clear();
                         this.queue.add(successor);
                         break;
                     }
+                } else {
+                    if (bestNode == null) bestNode = successor;
+                    if (successor.compareTo(bestNode) < 0){
+                        bestNode = successor;
+                    }
                 }
+
                 if (enforced){
                     // Add the successor to the queue to perform BFS search
                     // (enforced hill climbing)
@@ -117,7 +124,7 @@ public class HillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,
 
 
     @Override
-    public Iterator<N> iterator() {
+    public EHCIter iterator() {
         return new EHCIter();
     }
 }

@@ -17,6 +17,7 @@
 package es.usc.citius.hipster.algorithm;
 
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.Node;
 
@@ -99,30 +100,41 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         void handle(N node);
     }
 
-    private SearchResult search(Iterator<N> it){
-        int iteration = 0;
-        Stopwatch w = Stopwatch.createStarted();
-        N currentNode = null;
-        while(it.hasNext()){
-            iteration++;
-            currentNode = it.next();
-            if (goalState != null) {
-                if (currentNode.state().equals(this.goalState)) {
-                    break;
-                }
-            }
-        }
-        w.stop();
-        return new SearchResult(currentNode, iteration, w);
-    }
-
     /**
      * Run the algorithm until the goal is found or no more states are
      * available.
      * @return SearchResult with the information of the search
      */
     public SearchResult search(){
-        return search(iterator());
+        return search(iterator(), new Predicate<N>() {
+            @Override
+            public boolean apply(N n) {
+                if (goalState != null) {
+                    return n.state().equals(goalState);
+                }
+                return false;
+            }
+        });
+    }
+
+    public SearchResult search(Predicate<N> condition){
+        return search(iterator(), condition);
+    }
+
+    private SearchResult search(Iterator<N> it, Predicate<N> condition){
+        int iteration = 0;
+        Stopwatch w = Stopwatch.createStarted();
+        N currentNode = null;
+        while(it.hasNext()){
+            iteration++;
+            currentNode = it.next();
+            if (condition.apply(currentNode)) {
+                break;
+            }
+
+        }
+        w.stop();
+        return new SearchResult(currentNode, iteration, w);
     }
 
     /**

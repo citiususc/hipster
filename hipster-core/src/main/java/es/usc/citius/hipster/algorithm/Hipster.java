@@ -17,11 +17,10 @@
 package es.usc.citius.hipster.algorithm;
 
 
+import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.WeightedNodeFactory;
 import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
@@ -138,6 +137,15 @@ public final class Hipster {
         return algorithm;
     }
 
+    public static <A,S> HillClimbing<A,S,Double,WeightedNode<A,S,Double>> createHillClimbing(HeuristicSearchProblem<A,S,Double> problem, boolean enforced){
+        SearchComponents<A,S,WeightedNode<A,S,Double>> components = createHeuristicSearchComponents(problem);
+        HillClimbing<A,S,Double, WeightedNode<A,S,Double>> hc =
+                new HillClimbing<A, S, Double, WeightedNode<A, S, Double>>(
+                        components.initialNode, components.expander, enforced);
+        hc.setGoalState(problem.getGoalState());
+        return hc;
+    }
+
     private static class SearchComponents<A,S,N extends Node<A,S,N>> {
         private N initialNode;
         private NodeExpander<A,S,N> expander;
@@ -146,6 +154,40 @@ public final class Hipster {
             this.initialNode = initialNode;
             this.expander = expander;
         }
+    }
+
+    public static <A,S> HeuristicSearchProblem<A,S,Double> toHeuristicProblem(final InformedSearchProblem<A,S,Double> problem){
+        return new HeuristicSearchProblem<A, S, Double>() {
+            @Override
+            public HeuristicFunction<S, Double> getHeuristicFunction() {
+                return new HeuristicFunction<S, Double>() {
+                    @Override
+                    public Double estimate(S state) {
+                        return 0d;
+                    }
+                };
+            }
+
+            @Override
+            public CostFunction<A, S, Double> getCostFunction() {
+                return problem.getCostFunction();
+            }
+
+            @Override
+            public TransitionFunction<A, S> getTransitionFunction() {
+                return problem.getTransitionFunction();
+            }
+
+            @Override
+            public S getInitialState() {
+                return problem.getInitialState();
+            }
+
+            @Override
+            public S getGoalState() {
+                return problem.getGoalState();
+            }
+        };
     }
 
     private static <A,S> SearchComponents<A,S,WeightedNode<A,S,Double>> createHeuristicSearchComponents(HeuristicSearchProblem<A, S, Double> problem){
