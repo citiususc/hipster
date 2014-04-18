@@ -17,7 +17,7 @@
 //package es.usc.citius.hipster.search.local;
 //
 //
-//import es.usc.citius.lab.hipster.examples.NQueens;
+//import es.usc.citius.hipster.examples.problem.NQueens;
 //import es.usc.citius.lab.hipster.function.HeuristicFunction;
 //import es.usc.citius.lab.hipster.function.TransitionFunction;
 //import es.usc.citius.lab.hipster.node.Node;

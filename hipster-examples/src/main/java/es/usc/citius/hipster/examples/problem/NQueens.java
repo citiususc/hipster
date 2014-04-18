@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.examples;
+package es.usc.citius.hipster.examples.problem;
 
 
 import java.util.Arrays;
@@ -51,7 +51,7 @@ public class NQueens {
 
     @Override
     public String toString() {
-        String output = "";
+        String output = "" + System.lineSeparator();
         // Build string row by row
         for (int i = 0; i < queens.length; i++) {
             // Check if there is a queen in this row

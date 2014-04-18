@@ -1,4 +1,4 @@
-package es.usc.citius.lab.hipster.examples;
+package es.usc.citius.hipster.examples.problem;
 
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
@@ -8,8 +8,6 @@ import es.usc.citius.hipster.util.graph.GraphSearchProblem;
  * Implementation of the Romania problem as described in
  * http://www.pearsonhighered.com/assets/hip/us/hip_us_pearsonhighered/samplechapter/0136042597.pdf.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 24/02/2014
  */
 public class RomaniaProblem {
 
