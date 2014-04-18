@@ -22,7 +22,7 @@
 //import es.usc.citius.lab.hipster.function.TransitionFunction;
 //import es.usc.citius.lab.hipster.node.Node;
 //import es.usc.citius.lab.hipster.node.Transition;
-//import es.usc.citius.hipster.algorithm.localsearch.EnforcedHillClimbing;
+//import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 //import org.junit.Test;
 //
 //import java.util.*;
@@ -62,18 +62,18 @@
 //        };
 //
 //        NQueens initial = new NQueens(size);
-//        EnforcedHillClimbing<NQueens, Integer> ehc = new EnforcedHillClimbing<NQueens, Integer>(initial, tf,hf);
+//        HillClimbing<NQueens, Integer> ehc = new HillClimbing<NQueens, Integer>(initial, tf,hf);
 //
 //        System.out.println("Initial state: ");
 //        System.out.println(initial.toString());
 //
 //        int iteration=0;
-//        Integer best = ehc.getBestHeuristic();
+//        Integer best = ehc.getBestScore();
 //        while(ehc.hasNext()){
 //            iteration++;
 //            Node<NQueens> node = ehc.next();
-//            if (ehc.getBestHeuristic() < best){
-//                best = ehc.getBestHeuristic();
+//            if (ehc.getBestScore() < best){
+//                best = ehc.getBestScore();
 //                System.out.println("New local minimum found with value " + best + " at iteration " + iteration);
 //            }
 //            int attacked = node.transition().to().attackedQueens();

@@ -20,12 +20,8 @@ package es.usc.citius.hipster.algorithm.localsearch;
 
 
 import es.usc.citius.hipster.algorithm.Algorithm;
-import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactory;
-import es.usc.citius.hipster.model.function.TransitionFunction;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,22 +34,28 @@ import java.util.Queue;
  * @param <C>
  * @param <N>
  */
-public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
+public class HillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
     private N initialNode;
     private NodeExpander<A,S,N> nodeExpander;
+    private boolean enforced;
 
-    public EnforcedHillClimbing(N initialNode, NodeExpander<A, S, N> nodeExpander) {
+    public HillClimbing(N initialNode, NodeExpander<A, S, N> nodeExpander) {
+        this(initialNode, nodeExpander, false);
+    }
+
+    public HillClimbing(N initialNode, NodeExpander<A, S, N> nodeExpander, boolean enforcedHillClimbing) {
         this.initialNode = initialNode;
         this.nodeExpander = nodeExpander;
+        this.enforced = enforcedHillClimbing;
     }
 
     public class EHCIter implements Iterator<N> {
         private Queue<N> queue = new LinkedList<N>();
-        private C bestHeuristic = null;
+        private C bestScore = null;
 
         private EHCIter() {
-            bestHeuristic = initialNode.getEstimation();
+            bestScore = initialNode.getEstimation();
             queue.add(initialNode);
         }
 
@@ -65,27 +67,35 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
         @Override
         public N next() {
             N current = this.queue.poll();
+            N bestNode = null;
             // Generate successors
             for(N successor : nodeExpander.expand(current)){
-                S currentState = successor.state();
-                // Evaluate
-                C heuristic = successor.getEstimation();
-                // If this node has better heuristic, "climb" over the rest of the partial solutions
-                if (heuristic.compareTo(bestHeuristic)<0){
-                    bestHeuristic = heuristic;
-                    this.queue.clear();
-                    this.queue.add(successor);
-                    // Skip other successors
-                    break;
+                if (bestNode == null) bestNode = successor;
+                // Is this successor better (has lower score?)
+                if (bestNode.compareTo(successor) < 0){
+                    bestNode = successor;
+                    if (enforced){
+                        this.queue.clear();
+                        this.queue.add(successor);
+                        break;
+                    }
                 }
-                this.queue.add(successor);
+                if (enforced){
+                    // Add the successor to the queue to perform BFS search
+                    // (enforced hill climbing)
+                    this.queue.add(successor);
+                }
             }
+            // After exploring all successors, only add the best successor
+            // to the queue (normal hill climbing)
+            if (!enforced) this.queue.add(bestNode);
+            // Return the current expanded node
             return current;
         }
 
         @Override
         public void remove() {
-
+            throw new UnsupportedOperationException();
         }
 
         public Queue<N> getQueue() {
@@ -96,12 +106,12 @@ public class EnforcedHillClimbing<A,S,C extends Comparable<C>,N extends Heuristi
             this.queue = queue;
         }
 
-        public C getBestHeuristic() {
-            return bestHeuristic;
+        public C getBestScore() {
+            return bestScore;
         }
 
-        public void setBestHeuristic(C bestHeuristic) {
-            this.bestHeuristic = bestHeuristic;
+        public void setBestScore(C bestScore) {
+            this.bestScore = bestScore;
         }
     }
 
