@@ -26,7 +26,6 @@ import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
-import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
 /**
@@ -48,27 +47,35 @@ public final class GraphSearchProblem {
                 this.toVertex = toVertex;
             }
 
-            public class GraphProblemBuilder<E> {
-                private HipsterGraph<V,E> graph;
+            public class WeightType<E> {
                 private TransitionFunction<E,V> tf;
 
-                private GraphProblemBuilder(TransitionFunction<E, V> tf, HipsterGraph<V, E> graph) {
+                private WeightType(TransitionFunction<E, V> tf) {
                     this.tf = tf;
-                    this.graph = graph;
                 }
 
-                public Hipster.SearchComponents<E, V, WeightedNode<E, V, Double>> withDoubleEdges(){
+                public Hipster.SearchComponents<E, V, WeightedNode<E, V, Double>> takeEdgesAsCosts(){
+                    // Try to automatically obtain weights from edges
+                    CostFunction<E,V,Double> cf = new CostFunction<E, V, Double>() {
+                        @Override
+                        public Double evaluate(Transition<E, V> transition) {
+                            E action = transition.getAction();
+                            if (action instanceof Number){
+                                return ((Number)action).doubleValue();
+                            } else {
+                                throw new ClassCastException("The defined graph uses edges of type " +
+                                        action.getClass() + " instead of Number. For custom edge costs" +
+                                        " please use withGenericCosts method.");
+                            }
+
+                        }
+                    };
                     return ProblemBuilder.create()
                             .initialState(fromVertex)
                             .goalState(toVertex)
                             .defineProblemWithExplicitActions()
                             .useTransitionFunction(tf)
-                            .useCostFunction(new CostFunction<E, V, Double>() {
-                                @Override
-                                public Double evaluate(Transition<E, V> transition) {
-                                    return (Double)transition.getAction();
-                                }
-                            })
+                            .useCostFunction(cf)
                             .build();
                 }
 
@@ -97,8 +104,7 @@ public final class GraphSearchProblem {
                 }
             }
 
-
-            public <E> GraphProblemBuilder<E> in(final HipsterGraph<V, E> graph) {
+            public <E> WeightType<E> in(final HipsterGraph<V, E> graph) {
                 TransitionFunction<E,V> tf;
                 if (graph instanceof HipsterDirectedGraph){
                     final HipsterDirectedGraph<V,E> dg = (HipsterDirectedGraph<V,E>) graph;
@@ -127,7 +133,7 @@ public final class GraphSearchProblem {
                         }
                     };
                 }
-                return new GraphProblemBuilder<E>(tf, graph);
+                return new WeightType<E>(tf);
             }
 
         }

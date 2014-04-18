@@ -55,6 +55,16 @@ public final class GraphEdge<V,E> {
         return vertex2;
     }
 
+    public V getVertexAdjacentTo(V vertex){
+        if (vertex1.equals(vertex)){
+            return vertex2;
+        } else if (vertex2.equals(vertex)){
+            return vertex1;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Return the value assigned to the edge.
      * @return value of the edge.
