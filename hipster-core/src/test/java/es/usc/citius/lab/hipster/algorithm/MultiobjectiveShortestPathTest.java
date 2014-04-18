@@ -29,6 +29,7 @@ import es.usc.citius.hipster.model.function.impl.WeightedNodeFactory;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.GraphEdge;
+import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import org.junit.Test;
 
@@ -56,7 +57,7 @@ public class MultiobjectiveShortestPathTest {
 
         @Override
         public int compareTo(Cost o) {
-            // Lexicographical comparation
+            // Lexicographical comparison
             if (c1 < o.c1 && c2 < o.c2){
                 return -1;
             } else if (o.c1 < c1 && o.c2 < c2){
@@ -81,6 +82,31 @@ public class MultiobjectiveShortestPathTest {
                         .connect("v4").to("v6").withEdge(new Cost(2d,2d))
                         .buildDirectedGraph();
 
+        // Since we use a special cost, we need to define a BinaryOperation<Cost>
+        // that provides the required elements to work with our special cost type.
+        // These elements are: a BinaryFunction<Cost> that defines how to compute
+        // a new cost from two costs: C x C -> C, the identity element I of our
+        // cost (C + I = C, I + C = C), and the maximum value.
+
+        // Cost a + Cost b is defined as a new cost a.c1+b.c1, a.c2+b.c2
+        BinaryFunction<Cost> f = new BinaryFunction<Cost>() {
+            @Override
+            public Cost apply(Cost a, Cost b) {
+                return new Cost(a.c1+b.c1, a.c2 + b.c2);
+            }
+        };
+        // The identity cost identity satisfy:
+        // f.apply(c, identity).equals(c)
+        // f.apply(identity, c).equals(c)
+        Cost identity = new Cost(0d, 0d);
+
+        // Maximum value of our costs
+        Cost max = new Cost(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        // Create our custom binary operation:
+        BinaryOperation<Cost> bf = new BinaryOperation<Cost>(f, identity, max);
+
+
         // Define the custom components to work with the special cost
         WeightedNodeFactory<Cost, String, Cost> factory = new WeightedNodeFactory<Cost, String, Cost>(
                 new CostFunction<Cost, String, Cost>() {
@@ -88,16 +114,7 @@ public class MultiobjectiveShortestPathTest {
                     public Cost evaluate(Transition<Cost, String> transition) {
                         return transition.getAction();
                     }
-                },
-
-                new BinaryOperation<Cost>(new BinaryFunction<Cost>() {
-                    @Override
-                    public Cost apply(Cost a, Cost b) {
-                        return new Cost(a.c1+b.c1, a.c2 + b.c2);
-                    }
-                }, new Cost(0d,0d), new Cost(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY))
-
-        );
+                }, bf);
 
         TransitionFunction<Cost,String> tf = new TransitionFunction<Cost, String>() {
             @Override

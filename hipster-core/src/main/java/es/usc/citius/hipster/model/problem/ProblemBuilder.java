@@ -134,24 +134,28 @@ public final class ProblemBuilder {
                  * @param cf
                  *
                  */
-                public InformedSearchProblemBuilder useCostFunction(CostFunction<A, S, Double> cf){
-                    return new InformedSearchProblemBuilder(cf);
+                public InformedSearchProblemBuilder<Double> useCostFunction(CostFunction<A, S, Double> cf){
+                    return new InformedSearchProblemBuilder<Double>(cf);
+                }
+
+                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useGenericCostFunction(CostFunction<A,S,C> cf){
+                    return new InformedSearchProblemBuilder<C>(cf);
                 }
 
                 /**
                  * An informed search problem builder generates informed search problems with a generic cost
                  */
-                public final class InformedSearchProblemBuilder {
-                    private CostFunction<A,S,Double> cf;
+                public final class InformedSearchProblemBuilder<C extends Comparable<C>> {
+                    private CostFunction<A,S,C> cf;
 
-                    public InformedSearchProblemBuilder(CostFunction<A, S, Double> cf) {
+                    public InformedSearchProblemBuilder(CostFunction<A, S, C> cf) {
                         this.cf = cf;
                     }
 
-                    public InformedSearchProblem<A,S,Double> build(){
-                        return new InformedSearchProblem<A, S, Double>() {
+                    public InformedSearchProblem<A,S,C> build(){
+                        return new InformedSearchProblem<A, S, C>() {
                             @Override
-                            public CostFunction<A, S, Double> getCostFunction() {
+                            public CostFunction<A, S, C> getCostFunction() {
                                 return cf;
                             }
 
@@ -173,27 +177,27 @@ public final class ProblemBuilder {
 
                     }
 
-                    public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, Double> hf){
+                    public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, C> hf){
                         return new HeuristicSearchProblemBuilder(hf);
                     }
 
                     public final class HeuristicSearchProblemBuilder {
-                        private HeuristicFunction<S,Double> hf;
+                        private HeuristicFunction<S,C> hf;
 
-                        public HeuristicSearchProblemBuilder(HeuristicFunction<S,Double> hf) {
+                        public HeuristicSearchProblemBuilder(HeuristicFunction<S,C> hf) {
                             this.hf = hf;
                         }
 
 
-                        public HeuristicSearchProblem<A,S,Double> build(){
-                            return new HeuristicSearchProblem<A,S,Double>() {
+                        public HeuristicSearchProblem<A,S,C> build(){
+                            return new HeuristicSearchProblem<A,S,C>() {
                                 @Override
-                                public HeuristicFunction<S, Double> getHeuristicFunction() {
+                                public HeuristicFunction<S, C> getHeuristicFunction() {
                                     return hf;
                                 }
 
                                 @Override
-                                public CostFunction<A, S, Double> getCostFunction() {
+                                public CostFunction<A, S, C> getCostFunction() {
                                     return cf;
                                 }
 

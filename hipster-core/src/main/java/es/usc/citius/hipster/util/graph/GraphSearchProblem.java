@@ -44,49 +44,45 @@ public final class GraphSearchProblem {
                 this.toVertex = toVertex;
             }
 
+            /*
+            public <E extends Comparable<E>> InformedSearchProblem<E, V, E> ing(final HipsterGraph<V,E> g){
 
-            public <E> InformedSearchProblem<E, V, Double> in(final HipsterDirectedGraph<V, E> graph) {
-                return ProblemBuilder.create()
-                        .initialState(fromVertex)
-                        .goalState(toVertex)
-                        .defineProblemWithExplicitActions()
-                            .useTransitionFunction(new TransitionFunction<E, V>() {
-                                @Override
-                                public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                                    return Iterables.transform(graph.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
-                                        @Override
-                                        public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                            return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
-                                        }
-                                    });
-                                }
-                            })
-                            .useCostFunction(new CostFunction<E, V, Double>() {
-                                @Override
-                                public Double evaluate(Transition<E, V> transition) {
-                                    return (Double)transition.getAction();
-                                }
-                            })
-                            .build();
-            }
+            }*/
 
             public <E> InformedSearchProblem<E, V, Double> in(final HipsterGraph<V, E> graph) {
+                TransitionFunction<E,V> tf;
+                if (graph instanceof HipsterDirectedGraph){
+                    final HipsterDirectedGraph<V,E> dg = (HipsterDirectedGraph<V,E>) graph;
+                    tf = new TransitionFunction<E, V>() {
+                        @Override
+                        public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                            return Iterables.transform(dg.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                @Override
+                                public Transition<E,V> apply(GraphEdge<V, E> edge) {
+                                    return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
+                                }
+                            });
+                        }
+                    };
+                } else {
+                    tf = new TransitionFunction<E, V>() {
+                        @Override
+                        public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                            return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
+                                @Override
+                                public Transition<E,V> apply(GraphEdge<V, E> edge) {
+                                    V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
+                                    return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
+                                }
+                            });
+                        }
+                    };
+                }
                 return ProblemBuilder.create()
                         .initialState(fromVertex)
                         .goalState(toVertex)
                         .defineProblemWithExplicitActions()
-                        .useTransitionFunction(new TransitionFunction<E, V>() {
-                            @Override
-                            public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                                return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
-                                    @Override
-                                    public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                        V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
-                                        return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
-                                    }
-                                });
-                            }
-                        })
+                        .useTransitionFunction(tf)
                         .useCostFunction(new CostFunction<E, V, Double>() {
                             @Override
                             public Double evaluate(Transition<E, V> transition) {
