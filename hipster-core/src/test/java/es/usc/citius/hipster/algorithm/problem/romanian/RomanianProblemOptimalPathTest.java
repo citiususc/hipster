@@ -28,6 +28,7 @@ import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.util.graph.GraphEdge;
+import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 import org.junit.Test;
 
@@ -46,28 +47,27 @@ public class RomanianProblemOptimalPathTest {
 
         final HipsterGraph<City, Double> graph = RomanianProblem.graph();
 
-        HeuristicSearchProblem<GraphEdge<City,Double>, City, Double> p = ProblemBuilder.create()
+        Hipster.SearchComponents<GraphEdge<City, Double>, City, WeightedNode<GraphEdge<City, Double>, City, Double>> p = ProblemBuilder.create()
                 .initialState(City.Arad)
-                .goalState(City.Bucharest)
-                // Actions = Edges of the graph
+                        // Actions = Edges of the graph
                 .defineProblemWithExplicitActions()
-                // Create the TransitionFunction<Action,State> where
-                // Actions = GraphEdge<City,Double> (edges of the graph)
-                // States = City
+                        // Create the TransitionFunction<Action,State> where
+                        // Actions = GraphEdge<City,Double> (edges of the graph)
+                        // States = City
                 .useTransitionFunction(new TransitionFunction<GraphEdge<City, Double>, City>() {
                     @Override
                     public Iterable<Transition<GraphEdge<City, Double>, City>> transitionsFrom(City fromCity) {
                         Set<Transition<GraphEdge<City, Double>, City>> successors = new HashSet<Transition<GraphEdge<City, Double>, City>>();
                         for (GraphEdge<City, Double> edge : graph.edgesOf(fromCity)) {
-                            City toCity = edge.getVertex1().equals(fromCity)? edge.getVertex2() : fromCity;
+                            City toCity = edge.getVertex1().equals(fromCity) ? edge.getVertex2() : fromCity;
                             successors.add(Transition.create(fromCity, edge, toCity));
                         }
                         return successors;
                     }
                 })
-                .useCostFunction(new CostFunction<GraphEdge<City,Double>, City, Double>() {
+                .useCostFunction(new CostFunction<GraphEdge<City, Double>, City, Double>() {
                     @Override
-                    public Double evaluate(Transition<GraphEdge<City,Double>, City> transition) {
+                    public Double evaluate(Transition<GraphEdge<City, Double>, City> transition) {
                         return transition.getAction().getEdgeValue();
                     }
                 })

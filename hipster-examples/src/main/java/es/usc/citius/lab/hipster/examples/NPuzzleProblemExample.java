@@ -23,6 +23,7 @@ import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import static es.usc.citius.hipster.examples.problem.NPuzzle.*;
@@ -126,16 +127,16 @@ public class NPuzzleProblemExample {
             }
         };
 
-        HeuristicSearchProblem<PuzzleMove, Puzzle, Double> p =
-                ProblemBuilder.create()
-                        .initialState(initialState)
-                        .goalState(goalState)
-                        .defineProblemWithExplicitActions()
-                            .useActionFunction(af)
-                            .useTransitionFunction(atf)
-                            .useCostFunction(cf)
-                            .useHeuristicFunction(hf)
-                            .build();
+        Hipster.SearchComponents<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
+            ProblemBuilder.create()
+                .initialState(initialState)
+                .goalState(goalState)
+                .defineProblemWithExplicitActions()
+                    .useActionFunction(af)
+                    .useTransitionFunction(atf)
+                    .useCostFunction(cf)
+                    .useHeuristicFunction(hf)
+                    .build();
 
 
         // There are many ways to launch the search.

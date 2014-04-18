@@ -17,15 +17,22 @@
 package es.usc.citius.hipster.model.problem;
 
 
+import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
-import es.usc.citius.hipster.model.function.impl.LazyActionStateTransitionFunction;
-import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
+import es.usc.citius.hipster.model.function.impl.*;
+import es.usc.citius.hipster.model.impl.UnweightedNode;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 
 /**
  * Problem builder can be used to define a search problem easily
  * when the cost type used is Double.
  */
 public final class ProblemBuilder {
+
+    private ProblemBuilder(){
+
+    }
 
     public static final class ProblemBuilderAssistant {
         private ProblemBuilderAssistant(){}
@@ -109,24 +116,16 @@ public final class ProblemBuilder {
                     this.tf = tf;
                 }
 
-                // Build an uninformed search problem
-                public SearchProblem<A,S> build(){
-                    return new SearchProblem<A, S>() {
+                public Hipster.SearchComponents<A, S, UnweightedNode<A, S>> build(){
+                    NodeFactory<A,S,UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
                         @Override
-                        public TransitionFunction<A, S> getTransitionFunction() {
-                            return tf;
-                        }
-
-                        @Override
-                        public S getInitialState() {
-                            return initialState;
-                        }
-
-                        @Override
-                        public S getGoalState() {
-                            return optionalGoalState;
+                        public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
+                            return new UnweightedNode<A, S>(fromNode, transition);
                         }
                     };
+                    UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
+                    NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
+                    return new Hipster.SearchComponents<A,S, UnweightedNode<A,S>>(initialNode, nodeExpander);
                 }
 
                 /**
@@ -135,11 +134,12 @@ public final class ProblemBuilder {
                  *
                  */
                 public InformedSearchProblemBuilder<Double> useCostFunction(CostFunction<A, S, Double> cf){
-                    return new InformedSearchProblemBuilder<Double>(cf);
+                    // Create default components
+                    return new InformedSearchProblemBuilder<Double>(cf, BinaryOperation.doubleAdditionOp());
                 }
 
-                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useGenericCostFunction(CostFunction<A,S,C> cf){
-                    return new InformedSearchProblemBuilder<C>(cf);
+                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useGenericCostFunction(CostFunction<A,S,C> cf, BinaryOperation<C> costAlgebra){
+                    return new InformedSearchProblemBuilder<C>(cf, costAlgebra);
                 }
 
                 /**
@@ -147,34 +147,29 @@ public final class ProblemBuilder {
                  */
                 public final class InformedSearchProblemBuilder<C extends Comparable<C>> {
                     private CostFunction<A,S,C> cf;
+                    private BinaryOperation<C> costAlgebra;
 
-                    public InformedSearchProblemBuilder(CostFunction<A, S, C> cf) {
+                    public InformedSearchProblemBuilder(CostFunction<A, S, C> cf, BinaryOperation<C> costAlgebra) {
                         this.cf = cf;
+                        this.costAlgebra = costAlgebra;
                     }
 
-                    public InformedSearchProblem<A,S,C> build(){
-                        return new InformedSearchProblem<A, S, C>() {
-                            @Override
-                            public CostFunction<A, S, C> getCostFunction() {
-                                return cf;
-                            }
-
-                            @Override
-                            public TransitionFunction<A, S> getTransitionFunction() {
-                                return tf;
-                            }
-
-                            @Override
-                            public S getInitialState() {
-                                return initialState;
-                            }
-
-                            @Override
-                            public S getGoalState() {
-                                return optionalGoalState;
-                            }
-                        };
-
+                    public Hipster.SearchComponents<A, S, WeightedNode<A, S, C>> build(){
+                        WeightedNodeFactory<A,S,C> factory = new WeightedNodeFactory<A,S,C>(
+                                cf,
+                                new HeuristicFunction<S, C>() {
+                                    @Override
+                                    public C estimate(S state) {
+                                        return costAlgebra.getIdentityElem();
+                                    }
+                                }, costAlgebra);
+                        // Make the initial node. The initial node contains the initial state
+                        // of the problem, and it comes from no previous node (null) and using no action (null)
+                        WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
+                        // Create a Lazy Node Expander by default
+                        NodeExpander<A,S,WeightedNode<A,S,C>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
+                        // Create the algorithm with all those components
+                        return new Hipster.SearchComponents<A,S,WeightedNode<A,S,C>>(initialNode, expander);
                     }
 
                     public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, C> hf){
@@ -188,34 +183,14 @@ public final class ProblemBuilder {
                             this.hf = hf;
                         }
 
+                        public Hipster.SearchComponents<A, S, WeightedNode<A, S, C>> build(){
+                            WeightedNodeFactory<A, S, C> factory = new WeightedNodeFactory<A,S,C>(
+                                    cf, hf, costAlgebra);
+                            WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
+                            LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander =
+                                    new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
 
-                        public HeuristicSearchProblem<A,S,C> build(){
-                            return new HeuristicSearchProblem<A,S,C>() {
-                                @Override
-                                public HeuristicFunction<S, C> getHeuristicFunction() {
-                                    return hf;
-                                }
-
-                                @Override
-                                public CostFunction<A, S, C> getCostFunction() {
-                                    return cf;
-                                }
-
-                                @Override
-                                public TransitionFunction<A, S> getTransitionFunction() {
-                                    return tf;
-                                }
-
-                                @Override
-                                public S getInitialState() {
-                                    return initialState;
-                                }
-
-                                @Override
-                                public S getGoalState() {
-                                    return optionalGoalState;
-                                }
-                            };
+                            return new Hipster.SearchComponents<A, S, WeightedNode<A,S,C>>(initialNode, nodeExpander);
                         }
                     }
                 }

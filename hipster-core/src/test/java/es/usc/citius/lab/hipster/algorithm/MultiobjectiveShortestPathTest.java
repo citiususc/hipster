@@ -18,6 +18,7 @@ package es.usc.citius.lab.hipster.algorithm;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
+import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.algorithm.MultiobjectiveLS;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.BinaryFunction;
@@ -106,38 +107,7 @@ public class MultiobjectiveShortestPathTest {
         // Create our custom binary operation:
         BinaryOperation<Cost> bf = new BinaryOperation<Cost>(f, identity, max);
 
-
-        // Define the custom components to work with the special cost
-        WeightedNodeFactory<Cost, String, Cost> factory = new WeightedNodeFactory<Cost, String, Cost>(
-                new CostFunction<Cost, String, Cost>() {
-                    @Override
-                    public Cost evaluate(Transition<Cost, String> transition) {
-                        return transition.getAction();
-                    }
-                }, bf);
-
-        TransitionFunction<Cost,String> tf = new TransitionFunction<Cost, String>() {
-            @Override
-            public Iterable<Transition<Cost, String>> transitionsFrom(final String state) {
-                return Iterables.transform(graph.outgoingEdgesOf(state), new Function<GraphEdge<String, Cost>, Transition<Cost, String>>() {
-                    @Override
-                    public Transition<Cost, String> apply(GraphEdge<String, Cost> input) {
-                        return Transition.create(state, input.getEdgeValue(), input.getVertex2());
-                    }
-                });
-            }
-        };
-
-        System.out.println(tf.transitionsFrom("v1"));
-        // Create the expander
-        LazyNodeExpander<Cost, String, WeightedNode<Cost, String, Cost>> expander = new LazyNodeExpander<Cost, String, WeightedNode<Cost, String, Cost>>(tf, factory);
-
-        // Create the initial node
-        WeightedNode<Cost, String, Cost> initialNode = factory.makeNode(null, Transition.<Cost, String>create(null, null, "v1"));
-
-        MultiobjectiveLS<Cost, String, Cost, WeightedNode<Cost, String, Cost>> algorithm = new MultiobjectiveLS<Cost, String, Cost, WeightedNode<Cost, String, Cost>>(initialNode, expander);
-        algorithm.setGoalState("v6");
-        System.out.println(algorithm.search());
+        System.out.println(Hipster.createMultiobjectiveLS(GraphSearchProblem.from("v1").to("v6").in(graph).withGenericCosts(bf)).search());
 
         // TODO; Add solution verification
     }

@@ -19,9 +19,13 @@ package es.usc.citius.hipster.util.graph;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
+import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.impl.UnweightedNode;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
@@ -33,23 +37,68 @@ public final class GraphSearchProblem {
     public static class FromVertex<V> {
         private V fromVertex;
 
-        public FromVertex(V fromVertex) {
+        private FromVertex(V fromVertex) {
             this.fromVertex = fromVertex;
         }
 
         public class ToVertex {
             private V toVertex;
 
-            public ToVertex(V toVertex) {
+            private ToVertex(V toVertex) {
                 this.toVertex = toVertex;
             }
 
-            /*
-            public <E extends Comparable<E>> InformedSearchProblem<E, V, E> ing(final HipsterGraph<V,E> g){
+            public class GraphProblemBuilder<E> {
+                private HipsterGraph<V,E> graph;
+                private TransitionFunction<E,V> tf;
 
-            }*/
+                private GraphProblemBuilder(TransitionFunction<E, V> tf, HipsterGraph<V, E> graph) {
+                    this.tf = tf;
+                    this.graph = graph;
+                }
 
-            public <E> InformedSearchProblem<E, V, Double> in(final HipsterGraph<V, E> graph) {
+                public Hipster.SearchComponents<E, V, WeightedNode<E, V, Double>> withDoubleEdges(){
+                    return ProblemBuilder.create()
+                            .initialState(fromVertex)
+                            .goalState(toVertex)
+                            .defineProblemWithExplicitActions()
+                            .useTransitionFunction(tf)
+                            .useCostFunction(new CostFunction<E, V, Double>() {
+                                @Override
+                                public Double evaluate(Transition<E, V> transition) {
+                                    return (Double)transition.getAction();
+                                }
+                            })
+                            .build();
+                }
+
+                public <C extends Comparable<C>> Hipster.SearchComponents<E, V, WeightedNode<E, V, C>> withGenericCosts(BinaryOperation<C> costAlgebra){
+                    return ProblemBuilder.create()
+                            .initialState(fromVertex)
+                            .goalState(toVertex)
+                            .defineProblemWithExplicitActions()
+                            .useTransitionFunction(tf)
+                            .useGenericCostFunction(new CostFunction<E, V, C>() {
+                                @Override
+                                public C evaluate(Transition<E, V> transition) {
+                                    return (C)transition.getAction();
+                                }
+                            }, costAlgebra)
+                            .build();
+                }
+
+                public Hipster.SearchComponents<E, V, UnweightedNode<E,V>> withoutCosts(){
+                    return ProblemBuilder.create()
+                            .initialState(fromVertex)
+                            .goalState(toVertex)
+                            .defineProblemWithExplicitActions()
+                            .useTransitionFunction(tf)
+                            .build();
+                }
+            }
+
+
+            public <E> GraphProblemBuilder<E> in(final HipsterGraph<V, E> graph) {
                 TransitionFunction<E,V> tf;
                 if (graph instanceof HipsterDirectedGraph){
                     final HipsterDirectedGraph<V,E> dg = (HipsterDirectedGraph<V,E>) graph;
@@ -78,18 +127,7 @@ public final class GraphSearchProblem {
                         }
                     };
                 }
-                return ProblemBuilder.create()
-                        .initialState(fromVertex)
-                        .goalState(toVertex)
-                        .defineProblemWithExplicitActions()
-                        .useTransitionFunction(tf)
-                        .useCostFunction(new CostFunction<E, V, Double>() {
-                            @Override
-                            public Double evaluate(Transition<E, V> transition) {
-                                return (Double)transition.getAction();
-                            }
-                        })
-                        .build();
+                return new GraphProblemBuilder<E>(tf, graph);
             }
 
         }

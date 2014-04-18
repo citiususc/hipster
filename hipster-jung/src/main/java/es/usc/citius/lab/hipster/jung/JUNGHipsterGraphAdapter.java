@@ -52,13 +52,9 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         return Iterables.transform(graph.getIncidentEdges(vertex), new Function<E, GraphEdge<V, E>>() {
             @Override
             public GraphEdge<V, E> apply(E edge) {
-                return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);;
+                return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
             }
         });
     }
 
-    @Override
-    public V vertexConnectedTo(V vertex, GraphEdge<V, E> edge) {
-        return graph.;
-    }
 }

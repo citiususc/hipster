@@ -50,7 +50,7 @@ public class DepthFirstSearchTest {
                 .buildDirectedGraph();
 
         Hipster.createDepthFirstSearch(
-                GraphSearchProblem.from("A").to("O").in(graph)
+                GraphSearchProblem.from("A").to("O").in(graph).withoutCosts()
         ).search(new Algorithm.SearchListener<UnweightedNode<String, String>>() {
             @Override
             public void handle(UnweightedNode<String, String> node) {
