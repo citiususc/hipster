@@ -46,7 +46,7 @@ public class RomanianProblem {
         heuristicMap.put(City.Neamt, 234d);
         heuristicMap.put(City.Bucharest, 0d);
 
-        graph = GraphBuilder.newGraph()
+        graph = GraphBuilder.create()
                 .connect(City.Arad).to(City.Zerind).withEdge(75d)
                 .connect(City.Arad).to(City.Timisoara).withEdge(118d)
                 .connect(City.Arad).to(City.Sibiu).withEdge(140d)

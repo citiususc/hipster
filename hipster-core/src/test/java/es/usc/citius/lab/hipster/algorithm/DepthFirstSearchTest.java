@@ -32,7 +32,7 @@ public class DepthFirstSearchTest {
     @Test
     public void test(){
         HipsterDirectedGraph<String, String> graph =
-                GraphBuilder.newGraph()
+                GraphBuilder.create()
                 .connect("A").to("B").withEdge("1")
                 .connect("A").to("C").withEdge("2")
                 .connect("B").to("D").withEdge("3")

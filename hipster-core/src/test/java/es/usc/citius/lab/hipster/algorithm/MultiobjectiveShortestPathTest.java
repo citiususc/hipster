@@ -16,20 +16,10 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.algorithm.MultiobjectiveLS;
-import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.BinaryFunction;
-import es.usc.citius.hipster.model.function.CostFunction;
-import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
-import es.usc.citius.hipster.model.function.impl.LazyNodeExpander;
-import es.usc.citius.hipster.model.function.impl.WeightedNodeFactory;
-import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
-import es.usc.citius.hipster.util.graph.GraphEdge;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import org.junit.Test;
@@ -72,15 +62,15 @@ public class MultiobjectiveShortestPathTest {
     public void test(){
         // Create a multiobjective graph
         final HipsterDirectedGraph<String, Cost> graph =
-                GraphBuilder.newGraph()
-                        .connect("v1").to("v2").withEdge(new Cost(7d,1d))
-                        .connect("v1").to("v3").withEdge(new Cost(1d,7d))
-                        .connect("v1").to("v4").withEdge(new Cost(8d,4d))
-                        .connect("v2").to("v4").withEdge(new Cost(2d,1d))
-                        .connect("v2").to("v6").withEdge(new Cost(2d,2d))
-                        .connect("v3").to("v4").withEdge(new Cost(1d,1d))
-                        .connect("v4").to("v5").withEdge(new Cost(6d,4d))
-                        .connect("v4").to("v6").withEdge(new Cost(2d,2d))
+                GraphBuilder.create()
+                        .connect("v1").to("v2").withEdge(new Cost(7d, 1d))
+                        .connect("v1").to("v3").withEdge(new Cost(1d, 7d))
+                        .connect("v1").to("v4").withEdge(new Cost(8d, 4d))
+                        .connect("v2").to("v4").withEdge(new Cost(2d, 1d))
+                        .connect("v2").to("v6").withEdge(new Cost(2d, 2d))
+                        .connect("v3").to("v4").withEdge(new Cost(1d, 1d))
+                        .connect("v4").to("v5").withEdge(new Cost(6d, 4d))
+                        .connect("v4").to("v6").withEdge(new Cost(2d, 2d))
                         .buildDirectedGraph();
 
         // Since we use a special cost, we need to define a BinaryOperation<Cost>

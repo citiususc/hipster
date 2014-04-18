@@ -33,7 +33,7 @@ public class GraphBuilderTest {
     @BeforeClass
     public static void setUp() throws Exception {
 
-        testGraph = GraphBuilder.newGraph()
+        testGraph = GraphBuilder.create()
                 .connect("A").to("B").withEdge(4d)
                 .connect("A").to("C").withEdge(2d)
                 .connect("B").to("C").withEdge(5d)

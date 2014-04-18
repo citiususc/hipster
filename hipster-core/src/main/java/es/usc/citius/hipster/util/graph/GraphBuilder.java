@@ -120,7 +120,7 @@ public class GraphBuilder {
         }
     }
 
-    public static Assistant newGraph(){
+    public static Assistant create(){
         return new Assistant();
     }
 

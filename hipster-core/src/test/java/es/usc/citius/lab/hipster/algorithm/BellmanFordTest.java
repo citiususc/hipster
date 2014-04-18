@@ -29,7 +29,7 @@ public class BellmanFordTest {
     public void negativeCycleTest(){
         // Create a graph with negative cycles
         HipsterDirectedGraph<String, Double> graph =
-                GraphBuilder.newGraph()
+                GraphBuilder.create()
                 .connect("A").to("B").withEdge(1d)
                 .connect("B").to("C").withEdge(1d)
                 .connect("C").to("B").withEdge(-2d)
