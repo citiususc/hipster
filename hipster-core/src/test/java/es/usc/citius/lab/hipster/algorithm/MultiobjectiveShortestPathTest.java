@@ -57,6 +57,30 @@ public class MultiobjectiveShortestPathTest {
             // Non-dominated
             return 0;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Cost cost = (Cost) o;
+
+            if (Double.compare(cost.c1, c1) != 0) return false;
+            if (Double.compare(cost.c2, c2) != 0) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            temp = Double.doubleToLongBits(c1);
+            result = (int) (temp ^ (temp >>> 32));
+            temp = Double.doubleToLongBits(c2);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            return result;
+        }
     }
     @Test
     public void test(){
@@ -83,7 +107,8 @@ public class MultiobjectiveShortestPathTest {
         BinaryFunction<Cost> f = new BinaryFunction<Cost>() {
             @Override
             public Cost apply(Cost a, Cost b) {
-                return new Cost(a.c1+b.c1, a.c2 + b.c2);
+                Cost c = new Cost(a.c1 + b.c1, a.c2 + b.c2);
+                return c;
             }
         };
         // The identity cost identity satisfy:

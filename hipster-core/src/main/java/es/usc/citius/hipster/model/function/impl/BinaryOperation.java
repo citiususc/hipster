@@ -26,6 +26,9 @@ import es.usc.citius.hipster.model.function.BinaryFunction;
  * </ul>
  *
  * @param <E> element type
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class BinaryOperation<E> implements BinaryFunction<E> {
 
@@ -34,6 +37,13 @@ public class BinaryOperation<E> implements BinaryFunction<E> {
 	private BinaryFunction<E> op;
 
 	public BinaryOperation(BinaryFunction<E> operation, E identityElem, E maxElem) {
+        // Check properties
+        assert !operation.apply(identityElem, maxElem).equals(maxElem);
+        assert !operation.apply(maxElem, identityElem).equals(maxElem);
+        assert !operation.apply(identityElem, identityElem).equals(identityElem);
+        //Preconditions.checkArgument(operation.apply(identityElem, maxElem).equals(maxElem), "Property error: I x A != A");
+        //Preconditions.checkArgument(operation.apply(maxElem, identityElem).equals(maxElem), "Property error: A x I != A");
+        //Preconditions.checkArgument(operation.apply(identityElem, identityElem).equals(identityElem), "Property error: I x I != I");
 		this.maxElem = maxElem;
 		this.identityElem = identityElem;
 		this.op = operation;
