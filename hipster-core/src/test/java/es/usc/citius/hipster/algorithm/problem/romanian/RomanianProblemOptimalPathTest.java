@@ -38,7 +38,7 @@ public class RomanianProblemOptimalPathTest {
 
         final HipsterGraph<City, Double> graph = RomanianProblem.graph();
 
-        Hipster.SearchComponents p = GraphSearchProblem
+        Hipster.SearchProblem p = GraphSearchProblem
                 .from(City.Arad)
                 .to(City.Bucharest)
                 .in(graph)

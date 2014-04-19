@@ -17,14 +17,12 @@
 package es.usc.citius.lab.hipster.examples;
 
 import es.usc.citius.hipster.algorithm.Hipster;
-import es.usc.citius.hipster.examples.problem.NPuzzle;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
-import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import static es.usc.citius.hipster.examples.problem.NPuzzle.*;
 
@@ -127,7 +125,7 @@ public class NPuzzleProblemExample {
             }
         };
 
-        Hipster.SearchComponents<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
+        Hipster.SearchProblem<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
             ProblemBuilder.create()
                 .initialState(initialState)
                 .goalState(goalState)
