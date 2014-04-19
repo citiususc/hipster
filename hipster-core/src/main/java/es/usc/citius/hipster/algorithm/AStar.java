@@ -59,19 +59,19 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
     }
 
     @Override
-    public AStarIter iterator() {
-        return new AStarIter();
+    public Iterator iterator() {
+        return new Iterator();
     }
 
     /**
      * Internal iterator that implements all the logic of the A* search
      */
-    public class AStarIter implements Iterator<N> {
+    public class Iterator implements java.util.Iterator<N> {
         private Map<S, N> open;
         private Map<S, N> closed;
         private Queue<N> queue;
 
-        private AStarIter() {
+        private Iterator() {
             open = new HashMap<S, N>();
             closed = new HashMap<S, N>();
             queue = new PriorityQueue<N>();

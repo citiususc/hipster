@@ -19,7 +19,6 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
-import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -38,7 +37,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
 
     private class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        Iterator<N> successors;
+        java.util.Iterator<N> successors;
         // Current search node
         N node;
         // Boolean value to check if the node is still unvisited
@@ -47,7 +46,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         // Boolean to indicate that this node is fully processed
         boolean processed = false;
 
-        StackFrameNode(Iterator<N> successors, N node) {
+        StackFrameNode(java.util.Iterator successors, N node) {
             this.successors = successors;
             this.node = node;
         }
@@ -58,11 +57,11 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
     }
 
-    public class DFSIter implements Iterator<N> {
+    public class Iterator implements java.util.Iterator<N> {
         private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
         private StackFrameNode next;
 
-        private DFSIter(){
+        private Iterator(){
             this.stack.add(new StackFrameNode(initialNode));
         }
 
@@ -136,7 +135,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
     }
     @Override
-    public Iterator<N> iterator() {
-        return new DFSIter();
+    public java.util.Iterator<N> iterator() {
+        return new Iterator();
     }
 }

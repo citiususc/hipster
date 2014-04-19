@@ -35,11 +35,11 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         this.nodeExpander = nodeExpander;
     }
 
-    public class BellmanFordIter implements Iterator<N> {
+    public class Iterator implements java.util.Iterator<N> {
         private Queue<S> queue;
         private Map<S, N> explored;
 
-        private BellmanFordIter(){
+        private Iterator(){
             this.queue = new HashQueue<S>();
             this.explored = new HashMap<S, N>();
             this.queue.add(initialNode.state());
@@ -107,7 +107,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
 
     @Override
     public SearchResult search() {
-        BellmanFordIter it = new BellmanFordIter();
+        Iterator it = new Iterator();
         // Run the iterator until no more nodes.
         int iteration = 0;
         Stopwatch w = Stopwatch.createStarted();
@@ -126,7 +126,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     }
 
     @Override
-    public Iterator<N> iterator() {
-        return new BellmanFordIter();
+    public java.util.Iterator<N> iterator() {
+        return new Iterator();
     }
 }

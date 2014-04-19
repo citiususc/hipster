@@ -49,6 +49,7 @@ public class DepthFirstSearchTest {
                 .connect("G").to("O").withEdge("14")
                 .buildDirectedGraph();
 
+        /*
         Hipster.createDepthFirstSearch(
                 GraphSearchProblem.from("A").to("O").in(graph).withoutCosts()
         ).search(new Algorithm.SearchListener<UnweightedNode<String, String>>() {
@@ -56,7 +57,7 @@ public class DepthFirstSearchTest {
             public void handle(UnweightedNode<String, String> node) {
                 System.out.println(node);
             }
-        });
+        });*/
 
     }
 }

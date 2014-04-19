@@ -97,7 +97,7 @@ public class MultiobjectiveShortestPathTest {
         // Create our custom binary operation:
         BinaryOperation<Cost> bf = new BinaryOperation<Cost>(f, identity, max);
 
-        System.out.println(Hipster.createMultiobjectiveLS(GraphSearchProblem.from("v1").to("v6").in(graph).withGenericCosts(bf)).search());
+        System.out.println(Hipster.createMultiobjectiveLS(GraphSearchProblem.from("v1").to("v6").in(graph).useGenericCosts(bf).build()).search());
 
         // TODO; Add solution verification
     }

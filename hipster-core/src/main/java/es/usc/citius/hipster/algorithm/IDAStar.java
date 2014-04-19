@@ -22,7 +22,6 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
-import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -55,7 +54,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
     private class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        Iterator<N> successors;
+        java.util.Iterator<N> successors;
         // Current search node
         N node;
         // Boolean value to check if the node is still unvisited
@@ -64,7 +63,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         // Boolean to indicate that this node is fully processed
         boolean processed = false;
 
-        StackFrameNode(Iterator<N> successors, N node) {
+        StackFrameNode(java.util.Iterator successors, N node) {
             this.successors = successors;
             this.node = node;
         }
@@ -75,14 +74,14 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         }
     }
 
-    public class IDAStarIter implements Iterator<N> {
+    public class Iterator implements java.util.Iterator<N> {
         private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
         private C fLimit;
         private C minfLimit;
         private int reinitialization = 0;
         private StackFrameNode next;
 
-        private IDAStarIter(){
+        private Iterator(){
             // Set initial bound
             fLimit = initialNode.getEstimation();
             minfLimit = null;
@@ -242,8 +241,8 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
     }
 
     @Override
-    public IDAStarIter iterator() {
-        return new IDAStarIter();
+    public Iterator iterator() {
+        return new Iterator();
     }
 
 }

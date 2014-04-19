@@ -1,5 +1,6 @@
 package es.usc.citius.hipster.util.examples;
 
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 
@@ -86,6 +87,15 @@ public class RomanianProblem {
      */
     public static Map<City, Double> heuristics(){
         return heuristicMap;
+    }
+
+    public static HeuristicFunction<City, Double> heuristicFunction(){
+        return new HeuristicFunction<City, Double>() {
+            @Override
+            public Double estimate(City state) {
+                return heuristics().get(state);
+            }
+        };
     }
 
 }

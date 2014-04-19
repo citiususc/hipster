@@ -43,11 +43,11 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
         this.nodeExpander = nodeExpander;
     }
 
-    public class MOLSIter implements Iterator<N> {
+    public class Iterator implements java.util.Iterator<N> {
         private Queue<N> queue = new LinkedList<N>();
         public Multimap<S, N> nonDominated;
 
-        public MOLSIter(){
+        public Iterator(){
             queue = new PriorityQueue<N>();
             this.nonDominated = HashMultimap.create();
             this.queue.add(initialNode);
@@ -119,7 +119,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
 
     @Override
     public SearchResult search() {
-        MOLSIter it = new MOLSIter();
+        Iterator it = new Iterator();
         // Run the iterator until no more nodes.
         int iteration = 0;
         Stopwatch w = Stopwatch.createStarted();
@@ -137,7 +137,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
     }
 
     @Override
-    public Iterator<N> iterator() {
-        return new MOLSIter();
+    public java.util.Iterator<N> iterator() {
+        return new Iterator();
     }
 }
