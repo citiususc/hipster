@@ -34,6 +34,10 @@ import es.usc.citius.hipster.model.problem.ProblemBuilder;
  */
 public final class GraphSearchProblem {
 
+    public static <V> FromVertex<V> startingFrom(V vertex) {
+        return new FromVertex<V>(vertex);
+    }
+
     public static class FromVertex<V> {
         private V fromVertex;
 
@@ -41,149 +45,133 @@ public final class GraphSearchProblem {
             this.fromVertex = fromVertex;
         }
 
-        public class ToVertex {
-            private V toVertex;
+        public <E> CostType<E> in(final HipsterGraph<V, E> graph) {
+            TransitionFunction<E, V> tf;
+            if (graph instanceof HipsterDirectedGraph) {
+                final HipsterDirectedGraph<V, E> dg = (HipsterDirectedGraph<V, E>) graph;
+                tf = new TransitionFunction<E, V>() {
+                    @Override
+                    public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                        return Iterables.transform(dg.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E, V>>() {
+                            @Override
+                            public Transition<E, V> apply(GraphEdge<V, E> edge) {
+                                return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
+                            }
+                        });
+                    }
+                };
+            } else {
+                tf = new TransitionFunction<E, V>() {
+                    @Override
+                    public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                        return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E, V>>() {
+                            @Override
+                            public Transition<E, V> apply(GraphEdge<V, E> edge) {
+                                V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
+                                return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
+                            }
+                        });
+                    }
+                };
+            }
+            return new CostType<E>(tf);
+        }
 
-            private ToVertex(V toVertex) {
-                this.toVertex = toVertex;
+        public class CostType<E> {
+            private TransitionFunction<E, V> tf;
+
+            private CostType(TransitionFunction<E, V> tf) {
+                this.tf = tf;
             }
 
-            public class CostType<E> {
-                private TransitionFunction<E,V> tf;
+            public HeuristicType<Double> takeCostsFromEdges() {
+                // Try to automatically obtain weights from edges
+                CostFunction<E, V, Double> cf = new CostFunction<E, V, Double>() {
+                    @Override
+                    public Double evaluate(Transition<E, V> transition) {
+                        E action = transition.getAction();
+                        if (action instanceof Number) {
+                            return ((Number) action).doubleValue();
+                        } else {
+                            throw new ClassCastException("The defined graph uses edges of type " +
+                                    action.getClass() + " instead of Number. For custom edge costs" +
+                                    " please use withGenericCosts method.");
+                        }
 
-                private CostType(TransitionFunction<E, V> tf) {
-                    this.tf = tf;
+                    }
+                };
+                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
+            }
+
+            public HeuristicType<Double> extractCostFromEdges(final Function<E, Double> extractor) {
+                CostFunction<E, V, Double> cf = new CostFunction<E, V, Double>() {
+                    @Override
+                    public Double evaluate(Transition<E, V> transition) {
+                        return extractor.apply(transition.getAction());
+                    }
+                };
+                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
+            }
+
+            public <C extends Comparable<C>> HeuristicType<C> useGenericCosts(BinaryOperation<C> costAlgebra) {
+                CostFunction<E, V, C> cf = new CostFunction<E, V, C>() {
+                    @Override
+                    public C evaluate(Transition<E, V> transition) {
+                        return (C) transition.getAction();
+                    }
+                };
+                return new HeuristicType<C>(cf, costAlgebra);
+            }
+
+            public Hipster.SearchProblem<E, V, UnweightedNode<E, V>> build() {
+                return ProblemBuilder.create()
+                        .initialState(fromVertex)
+                        .defineProblemWithExplicitActions()
+                        .useTransitionFunction(tf)
+                        .build();
+            }
+
+            public class HeuristicType<C extends Comparable<C>> {
+                private CostFunction<E, V, C> cf;
+                private BinaryOperation<C> costAlgebra;
+
+                private HeuristicType(CostFunction<E, V, C> cf, BinaryOperation<C> costAlgebra) {
+                    this.cf = cf;
+                    this.costAlgebra = costAlgebra;
                 }
 
-                public class HeuristicType<C extends Comparable<C>> {
-                    private CostFunction<E,V,C> cf;
-                    private BinaryOperation<C> costAlgebra;
+                public Final useHeuristicFunction(HeuristicFunction<V, C> hf) {
+                    return new Final(hf);
+                }
 
-                    private HeuristicType(CostFunction<E, V, C> cf, BinaryOperation<C> costAlgebra) {
-                        this.cf = cf;
-                        this.costAlgebra = costAlgebra;
+                public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build() {
+                    return ProblemBuilder.create()
+                            .initialState(fromVertex)
+                            .defineProblemWithExplicitActions()
+                            .useTransitionFunction(tf)
+                            .useGenericCostFunction(cf, costAlgebra)
+                            .build();
+                }
+
+                public class Final {
+                    private HeuristicFunction<V, C> hf;
+
+                    private Final(HeuristicFunction<V, C> hf) {
+                        this.hf = hf;
                     }
 
-                    public class Final {
-                        private HeuristicFunction<V,C> hf;
-
-                        private Final(HeuristicFunction<V, C> hf) {
-                            this.hf = hf;
-                        }
-
-                        public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build(){
-                            return ProblemBuilder.create()
-                                    .initialState(fromVertex)
-                                    .goalState(toVertex)
-                                    .defineProblemWithExplicitActions()
-                                    .useTransitionFunction(tf)
-                                    .useGenericCostFunction(cf, costAlgebra)
-                                    .useHeuristicFunction(hf)
-                                    .build();
-                        }
-                    }
-                    public Final useHeuristicFunction(HeuristicFunction<V, C> hf){
-                        return new Final(hf);
-                    }
-
-                    public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build(){
+                    public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build() {
                         return ProblemBuilder.create()
                                 .initialState(fromVertex)
-                                .goalState(toVertex)
                                 .defineProblemWithExplicitActions()
                                 .useTransitionFunction(tf)
                                 .useGenericCostFunction(cf, costAlgebra)
+                                .useHeuristicFunction(hf)
                                 .build();
                     }
                 }
-
-                public HeuristicType<Double> takeCostsFromEdges(){
-                    // Try to automatically obtain weights from edges
-                    CostFunction<E,V,Double> cf = new CostFunction<E, V, Double>() {
-                        @Override
-                        public Double evaluate(Transition<E, V> transition) {
-                            E action = transition.getAction();
-                            if (action instanceof Number){
-                                return ((Number)action).doubleValue();
-                            } else {
-                                throw new ClassCastException("The defined graph uses edges of type " +
-                                        action.getClass() + " instead of Number. For custom edge costs" +
-                                        " please use withGenericCosts method.");
-                            }
-
-                        }
-                    };
-                    return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
-                }
-
-                public HeuristicType<Double> extractCostFromEdges(final Function<E, Double> extractor){
-                    CostFunction<E,V,Double> cf = new CostFunction<E, V, Double>() {
-                        @Override
-                        public Double evaluate(Transition<E, V> transition) {
-                            return extractor.apply(transition.getAction());
-                        }
-                    };
-                    return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
-                }
-
-                public <C extends Comparable<C>> HeuristicType<C> useGenericCosts(BinaryOperation<C> costAlgebra){
-                    CostFunction<E,V,C> cf = new CostFunction<E, V, C>() {
-                        @Override
-                        public C evaluate(Transition<E, V> transition) {
-                            return (C)transition.getAction();
-                        }
-                    };
-                    return new HeuristicType<C>(cf, costAlgebra);
-                }
-
-                public Hipster.SearchProblem<E, V, UnweightedNode<E,V>> build(){
-                    return ProblemBuilder.create()
-                            .initialState(fromVertex)
-                            .goalState(toVertex)
-                            .defineProblemWithExplicitActions()
-                            .useTransitionFunction(tf)
-                            .build();
-                }
             }
-
-            public <E> CostType<E> in(final HipsterGraph<V, E> graph) {
-                TransitionFunction<E,V> tf;
-                if (graph instanceof HipsterDirectedGraph){
-                    final HipsterDirectedGraph<V,E> dg = (HipsterDirectedGraph<V,E>) graph;
-                    tf = new TransitionFunction<E, V>() {
-                        @Override
-                        public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                            return Iterables.transform(dg.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
-                                @Override
-                                public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                    return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
-                                }
-                            });
-                        }
-                    };
-                } else {
-                    tf = new TransitionFunction<E, V>() {
-                        @Override
-                        public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                            return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E,V>>() {
-                                @Override
-                                public Transition<E,V> apply(GraphEdge<V, E> edge) {
-                                    V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
-                                    return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
-                                }
-                            });
-                        }
-                    };
-                }
-                return new CostType<E>(tf);
-            }
-
         }
-        public ToVertex to(V vertex) {
-            return new ToVertex(vertex);
-        }
-    }
-    public static <V> FromVertex<V> from(V vertex) {
-        return new FromVertex<V>(vertex);
+
     }
 }

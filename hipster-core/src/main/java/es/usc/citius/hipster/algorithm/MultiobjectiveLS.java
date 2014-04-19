@@ -16,6 +16,7 @@
 
 package es.usc.citius.hipster.algorithm;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -118,19 +119,22 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
     }
 
     @Override
-    public SearchResult search() {
-        Iterator it = new Iterator();
-        // Run the iterator until no more nodes.
+    protected SearchResult search(Predicate<N> condition){
         int iteration = 0;
+        Iterator it = new Iterator();
         Stopwatch w = Stopwatch.createStarted();
+        N currentNode;
+        N goalNode = null;
         while(it.hasNext()){
-            it.next();
             iteration++;
+            currentNode = it.next();
+            if (condition.apply(currentNode)) {
+                goalNode = currentNode;
+            }
         }
         w.stop();
-
-        if (getGoalState() != null) {
-            Collection<N> solutions = it.nonDominated.get(getGoalState());
+        if (goalNode != null) {
+            Collection<N> solutions = it.nonDominated.get(goalNode.state());
             return new SearchResult(solutions, iteration, w);
         }
         return new SearchResult(Collections.<N>emptyList(), iteration, w);

@@ -25,7 +25,6 @@ import java.util.*;
 
 public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N> {
 
-    private S goalState = null;
 
     /**
      * Holds information about the search process.
@@ -105,8 +104,8 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
      * available.
      * @return SearchResult with the information of the search
      */
-    public SearchResult search(){
-        return search(iterator(), new Predicate<N>() {
+    public SearchResult search(final S goalState){
+        return search(new Predicate<N>() {
             @Override
             public boolean apply(N n) {
                 if (goalState != null) {
@@ -117,12 +116,10 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         });
     }
 
-    public SearchResult search(Predicate<N> condition){
-        return search(iterator(), condition);
-    }
 
-    private SearchResult search(Iterator<N> it, Predicate<N> condition){
+    protected SearchResult search(Predicate<N> condition){
         int iteration = 0;
+        Iterator<N> it = iterator();
         Stopwatch w = Stopwatch.createStarted();
         N currentNode = null;
         while(it.hasNext()){
@@ -164,13 +161,5 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
         Collections.reverse(states);
         return states;
-    }
-
-    public S getGoalState() {
-        return goalState;
-    }
-
-    public void setGoalState(S goalState) {
-        this.goalState = goalState;
     }
 }

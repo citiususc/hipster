@@ -39,8 +39,7 @@ public class RomanianProblemOptimalPathTest {
         final HipsterGraph<City, Double> graph = RomanianProblem.graph();
 
         Hipster.SearchProblem p = GraphSearchProblem
-                .from(City.Arad)
-                .to(City.Bucharest)
+                .startingFrom(City.Arad)
                 .in(graph)
                 .takeCostsFromEdges()
                 .useHeuristicFunction(RomanianProblem.heuristicFunction())
