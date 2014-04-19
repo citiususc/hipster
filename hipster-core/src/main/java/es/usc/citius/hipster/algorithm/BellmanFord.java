@@ -107,7 +107,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     }
 
     @Override
-    protected SearchResult search(Predicate<N> condition){
+    public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator it = iterator();
         Stopwatch w = Stopwatch.createStarted();

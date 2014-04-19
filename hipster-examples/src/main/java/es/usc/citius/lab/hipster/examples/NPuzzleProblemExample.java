@@ -128,7 +128,6 @@ public class NPuzzleProblemExample {
         Hipster.SearchProblem<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
             ProblemBuilder.create()
                 .initialState(initialState)
-                .goalState(goalState)
                 .defineProblemWithExplicitActions()
                     .useActionFunction(af)
                     .useTransitionFunction(atf)
@@ -139,7 +138,7 @@ public class NPuzzleProblemExample {
 
         // There are many ways to launch the search.
         // Easiest way, just run the algorithm and print the result
-        System.out.println(Hipster.createAStar(p).search());
+        System.out.println(Hipster.createAStar(p).search(goalState));
 
     }
 }

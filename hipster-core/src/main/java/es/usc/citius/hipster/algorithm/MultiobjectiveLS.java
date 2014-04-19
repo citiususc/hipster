@@ -119,7 +119,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
     }
 
     @Override
-    protected SearchResult search(Predicate<N> condition){
+    public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator it = new Iterator();
         Stopwatch w = Stopwatch.createStarted();

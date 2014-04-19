@@ -20,7 +20,7 @@ package es.usc.citius.hipster.model.function;
 import es.usc.citius.hipster.model.Transition;
 
 /**
- * The cost function evaluates a {@link es.usc.citius.lab.hipster.node.Transition}
+ * The cost function evaluates a ---
  * between states. A search algorithm will find the solution that minimizes the
  * total cost of the function defined here.
  * 

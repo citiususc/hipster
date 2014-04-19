@@ -39,9 +39,9 @@ public class NQueensProblemExample {
     public static void main(String[] args) {
         // Solve the 8-Queen problem with Hill Climbing and Enforced Hill Climbing
         final int size = 8;
-        HeuristicSearchProblem<Void, NQueens, Double> p = ProblemBuilder.create()
+        Hipster.SearchProblem<Void,NQueens,WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
                 .initialState(new NQueens(size))
-                // No goal state: there are multiple goal states, we just need to find a valid goal state
+                        // No goal state: there are multiple goal states, we just need to find a valid goal state
                 .defineProblemWithoutActions()
                 .useTransitionFunction(new StateTransitionFunction<NQueens>() {
                     @Override
@@ -77,8 +77,8 @@ public class NQueensProblemExample {
                     }
                 }).build();
 
-        System.out.println("Random initial state (" + p.getInitialState().attackedQueens() + " attacked queens):");
-        System.out.println(p.getInitialState());
+        System.out.println("Random initial state (" + p.getInitialNode().state().attackedQueens() + " attacked queens):");
+        System.out.println(p.getInitialNode().state());
 
         System.out.println("Running 8-Queens problem with Enforced Hill Climbing and a custom goal test predicate");
         // Option 1 - Run the algorithm until the predicate is satisfied (until we find a state with score 0, that is, no attacked queens)

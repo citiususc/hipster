@@ -71,6 +71,14 @@ public final class Hipster {
             this.initialNode = initialNode;
             this.expander = expander;
         }
+
+        public N getInitialNode() {
+            return initialNode;
+        }
+
+        public NodeExpander<A, S, N> getExpander() {
+            return expander;
+        }
     }
 
 

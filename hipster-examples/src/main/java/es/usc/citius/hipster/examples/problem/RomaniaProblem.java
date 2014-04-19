@@ -17,7 +17,15 @@ public class RomaniaProblem {
         //weight is the distance in km between the cities.
         //The Goal of the problem is always the city of Bucharest. The heuristic of the problem is the distance
         //in km of the straight line between each city and Bucharest.
-        System.out.println(Hipster.createDijkstra(GraphSearchProblem.startingFrom(RomanianProblem.City.Arad).to(RomanianProblem.City.Bucharest).in(RomanianProblem.graph())).search());
+        System.out.println(
+                Hipster.createAStar(
+                        GraphSearchProblem
+                                .startingFrom(RomanianProblem.City.Arad)
+                                .in(RomanianProblem.graph())
+                                .takeCostsFromEdges()
+                                .build()
+                ).search(RomanianProblem.City.Bucharest)
+        );
     }
 
 }

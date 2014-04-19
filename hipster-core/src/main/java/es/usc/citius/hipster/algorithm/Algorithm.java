@@ -117,7 +117,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     }
 
 
-    protected SearchResult search(Predicate<N> condition){
+    public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator<N> it = iterator();
         Stopwatch w = Stopwatch.createStarted();
