@@ -118,7 +118,6 @@
                         <doclet>com.google.doclava.Doclava</doclet>
                         <bootclasspath>${sun.boot.class.path}</bootclasspath>
                         <additionalparam>
-                            -quiet
                             -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
                             -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
                             -hdf project.name "${project.name}"
