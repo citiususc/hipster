@@ -38,9 +38,9 @@ public class BinaryOperation<E> implements BinaryFunction<E> {
 
 	public BinaryOperation(BinaryFunction<E> operation, E identityElem, E maxElem) {
         // Check properties
-        assert !operation.apply(identityElem, maxElem).equals(maxElem);
-        assert !operation.apply(maxElem, identityElem).equals(maxElem);
-        assert !operation.apply(identityElem, identityElem).equals(identityElem);
+        assert operation.apply(identityElem, maxElem).equals(maxElem);
+        assert operation.apply(maxElem, identityElem).equals(maxElem);
+        assert operation.apply(identityElem, identityElem).equals(identityElem);
         //Preconditions.checkArgument(operation.apply(identityElem, maxElem).equals(maxElem), "Property error: I x A != A");
         //Preconditions.checkArgument(operation.apply(maxElem, identityElem).equals(maxElem), "Property error: A x I != A");
         //Preconditions.checkArgument(operation.apply(identityElem, identityElem).equals(identityElem), "Property error: I x I != I");
