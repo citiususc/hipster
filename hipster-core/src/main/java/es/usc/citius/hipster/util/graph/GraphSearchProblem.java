@@ -93,9 +93,12 @@ public final class GraphSearchProblem {
                         if (action instanceof Number) {
                             return ((Number) action).doubleValue();
                         } else {
+                            // Assume uniform costs.
+                            return 1d;
+                            /*
                             throw new ClassCastException("The defined graph uses edges of type " +
                                     action.getClass() + " instead of Number. For custom edge costs" +
-                                    " please use withGenericCosts method.");
+                                    " please use withGenericCosts method.");*/
                         }
 
                     }

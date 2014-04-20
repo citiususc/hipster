@@ -22,11 +22,14 @@ import edu.uci.ics.jung.graph.Graph;
 import es.usc.citius.hipster.util.graph.GraphEdge;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
-    private Graph<V,E> graph;
+    protected Graph<V,E> graph;
 
     public JUNGHipsterGraphAdapter(Graph<V, E> graph) {
         this.graph = graph;
@@ -34,7 +37,11 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
 
     @Override
     public Iterable<GraphEdge<V, E>> edges() {
-        return Iterables.transform(graph.getEdges(), new Function<E, GraphEdge<V, E>>() {
+        final Collection<E> edges = graph.getEdges();
+        if (edges == null || edges.isEmpty()){
+            return Collections.emptyList();
+        }
+        return Iterables.transform(edges, new Function<E, GraphEdge<V, E>>() {
             @Override
             public GraphEdge<V, E> apply(E edge) {
                 return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
@@ -49,7 +56,11 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
 
     @Override
     public Iterable<GraphEdge<V, E>> edgesOf(V vertex) {
-        return Iterables.transform(graph.getIncidentEdges(vertex), new Function<E, GraphEdge<V, E>>() {
+        final Collection<E> edges = graph.getIncidentEdges(vertex);
+        if (edges == null || edges.isEmpty()){
+            return Collections.emptyList();
+        }
+        return Iterables.transform(edges, new Function<E, GraphEdge<V, E>>() {
             @Override
             public GraphEdge<V, E> apply(E edge) {
                 return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
