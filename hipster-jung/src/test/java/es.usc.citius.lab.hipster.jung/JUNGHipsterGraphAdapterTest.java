@@ -65,7 +65,7 @@ public class JUNGHipsterGraphAdapterTest {
     }
 
     @Test
-    public void testLesMiserablesUniformShortestPathSearch(){
+    public void testUniformShortestPathSearch(){
         // Create a graph search problem
         Vertex origin = graph.query().has("label","Cochepaille").vertices().iterator().next();
         Vertex dest = graph.query().has("label","Tholomyes").vertices().iterator().next();
@@ -82,7 +82,7 @@ public class JUNGHipsterGraphAdapterTest {
     }
 
     @Test
-    public void testLesMiserablesWeightedShortestPathSearch(){
+    public void testWeightedShortestPathSearch(){
         // Take origin and dest vertices from the graph.
         // Origin: Vertex with label Cochepaille
         // Destination: Vertex with label Tholomyes
