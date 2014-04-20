@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.jung;
+package es.usc.citius.hipster.thirdparty.graphs.jung;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;

@@ -9,10 +9,10 @@
     <url>http://github.com/pablormier/hipster</url>
     <modules>
         <module>hipster-core</module>
-        <module>hipster-jung</module>
         <module>hipster-examples</module>
         <module>hipster-all</module>
         <module>hipster-test</module>
+        <module>hipster-third-party-graphs</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

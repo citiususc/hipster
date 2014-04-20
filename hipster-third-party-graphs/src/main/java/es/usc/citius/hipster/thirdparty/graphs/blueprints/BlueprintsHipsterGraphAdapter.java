@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.blueprints;
+package es.usc.citius.hipster.thirdparty.graphs.blueprints;
 
 
 import com.google.common.base.Function;
@@ -37,12 +37,7 @@ public class BlueprintsHipsterGraphAdapter implements HipsterGraph<Vertex, Edge>
 
     @Override
     public Iterable<GraphEdge<Vertex, Edge>> edges() {
-        return Iterables.transform(graph.getEdges(), new Function<Edge, GraphEdge<Vertex,Edge>>() {
-            @Override
-            public GraphEdge<Vertex,Edge> apply(@Nullable Edge edge) {
-                return new GraphEdge<Vertex, Edge>(edge.getVertex(Direction.IN), edge.getVertex(Direction.OUT), edge);
-            }
-        });
+        return convertEdges(graph.getEdges());
     }
 
     @Override
@@ -52,9 +47,13 @@ public class BlueprintsHipsterGraphAdapter implements HipsterGraph<Vertex, Edge>
 
     @Override
     public Iterable<GraphEdge<Vertex, Edge>> edgesOf(Vertex vertex) {
-        return Iterables.transform(vertex.getEdges(Direction.BOTH), new Function<Edge, GraphEdge<Vertex, Edge>>() {
+        return convertEdges(vertex.getEdges(Direction.BOTH));
+    }
+
+    protected static Iterable<GraphEdge<Vertex,Edge>> convertEdges(Iterable<Edge> edges){
+        return Iterables.transform(edges, new Function<Edge, GraphEdge<Vertex,Edge>>() {
             @Override
-            public GraphEdge<Vertex, Edge> apply(@Nullable Edge edge) {
+            public GraphEdge<Vertex,Edge> apply(@Nullable Edge edge) {
                 return new GraphEdge<Vertex, Edge>(edge.getVertex(Direction.IN), edge.getVertex(Direction.OUT), edge);
             }
         });

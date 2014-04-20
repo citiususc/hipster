@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.jung;
+package es.usc.citius.hipster.thirdparty.graphs;
 
 
 import com.google.common.base.Function;
@@ -26,6 +26,7 @@ import com.tinkerpop.blueprints.oupls.jung.GraphJung;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.thirdparty.graphs.jung.JUNGHipsterDirectedGraphAdapter;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import org.junit.BeforeClass;
