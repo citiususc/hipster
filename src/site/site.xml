@@ -23,13 +23,13 @@
     <skin>
         <groupId>lt.velykis.maven.skins</groupId>
         <artifactId>reflow-maven-skin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </skin>
 
     <custom>
         <reflowSkin>
             <smoothScroll>true</smoothScroll>
-            <theme>default</theme>
+            <theme>bootswatch-united</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
             <brand>
