@@ -16,10 +16,13 @@
 
 package es.usc.citius.lab.hipster.collections;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
- * File: FibonacciHeap.java
- * Author: Keith Schwarz (htiek@cs.stanford.edu)
+ *
+ * <p>Author: <b>Keith Schwarz</b> (htiek@cs.stanford.edu)</p>
  *
  * An implementation of a priority queue backed by a Fibonacci heap,
  * as described by Fredman and Tarjan.  Fibonacci heaps are interesting
@@ -69,22 +72,12 @@ package es.usc.citius.lab.hipster.collections;
  * we can implement delete by decreasing a key to -\infty, then calling
  * dequeueMin to extract it.
  *
- */
-
-/**
- * DISCLAIMER:
- * This implementation was taken from http://www.keithschwarz.com/interesting/code/?dir=fibonacci-heap
- */
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-/**
- * A class representing a Fibonacci heap.
+ * <p><b>Hipster author's note: This implementation was taken
+ * from http://www.keithschwarz.com/interesting/code/?dir=fibonacci-heap</b></p>
  *
  * @param <T></T> The type of elements to store in the heap.
  * @author Keith Schwarz (htiek@cs.stanford.edu)
+ *
  */
 public final class FibonacciHeap<T> {
     /* In order for all of the Fibonacci heap operations to complete in O(1),

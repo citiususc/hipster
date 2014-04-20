@@ -29,12 +29,11 @@ package es.usc.citius.hipster.model.function;
  * The abstract definition of binary operations requires to complete the method
  * {@link #apply(Object, Object)}, which returns an object of the same type. Here is 
  * an example for the {@link Double} addition operation:
- * <pre>
- *     {@code 
- *     new BinaryFunction<Double>(){
- *              Double apply(Double a, Double b){
- *                  return a + b;
- *              }
+ *
+ * <pre class="prettyprint">
+ * new BinaryFunction<Double>(){
+ *          Double apply(Double a, Double b){
+ *              return a + b;
  *          }
  *     }
  * </pre>
