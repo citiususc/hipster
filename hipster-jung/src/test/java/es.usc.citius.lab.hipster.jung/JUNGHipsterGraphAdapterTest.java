@@ -18,7 +18,6 @@ package es.usc.citius.lab.hipster.jung;
 
 
 import com.google.common.base.Function;
-import com.google.common.collect.Sets;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -103,8 +102,8 @@ public class JUNGHipsterGraphAdapterTest {
                             }
                         })
                         .build();
-        // Shortest path solution
         List<String> expectedPath = Arrays.asList("Cochepaille", "Bamatabois", "Javert", "Cosette", "Tholomyes");
+        // There is only one optimal path.
         List<Vertex> shortestPath = Hipster.createAStar(p).search(dest).getOptimalPaths().get(0);
         for(int i=0; i < shortestPath.size(); i++){
             assertEquals(expectedPath.get(i), shortestPath.get(i).getProperty("label"));
