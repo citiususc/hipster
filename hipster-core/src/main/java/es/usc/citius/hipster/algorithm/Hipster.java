@@ -25,7 +25,9 @@ import es.usc.citius.hipster.model.impl.UnweightedNode;
 
 public final class Hipster {
 
-    //TODO; Refactor - Remove redundant code
+    private Hipster(){
+
+    }
 
     public static <A,S,C extends Comparable<C>> AStar<A,S,C,WeightedNode<A,S,C>> createAStar(SearchProblem<A,S,WeightedNode<A,S,C>> components){
         AStar<A, S, C, WeightedNode<A, S, C>> algorithm = new AStar<A, S, C, WeightedNode<A,S,C>>(components.initialNode, components.expander);

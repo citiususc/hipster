@@ -201,12 +201,4 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             this.queue = queue;
         }
     }
-
-    public N getInitialNode() {
-        return initialNode;
-    }
-
-    public NodeExpander<A, S, N> getExpander() {
-        return expander;
-    }
 }

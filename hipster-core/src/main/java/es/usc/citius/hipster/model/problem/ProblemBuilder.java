@@ -25,8 +25,9 @@ import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
 /**
- * Problem builder can be used to define a search problem easily
- * when the cost type used is Double.
+ * Problem builder that is used to guide the user through the creation of a
+ * {@link es.usc.citius.hipster.algorithm.Hipster.SearchProblem} with the main components
+ * required to instantiate an algorithm.
  */
 public final class ProblemBuilder {
 
@@ -34,65 +35,110 @@ public final class ProblemBuilder {
 
     }
 
-    public static final class ProblemBuilderAssistant {
-        private ProblemBuilderAssistant(){}
+    /**
+     * Internal wizard assistant class.
+     */
+    public static final class Wizard {
+        private Wizard(){}
 
-        public static final class ActionStateProblemBuilder<S> {
+        /**
+         * Step to define the initial state of the problem.
+         */
+        public static final class ActionState<S> {
             private final S initialState;
-            private S optionalGoalState;
 
-            public ActionStateProblemBuilder(S initialState) {
+            public ActionState(S initialState) {
                 this.initialState = initialState;
-            }
-
-            public ActionStateProblemBuilder<S> goalState(S goal){
-                this.optionalGoalState = goal;
-                return this;
             }
 
             /**
              * Create a problem model that uses explicit actions.
-             * This forces you to implement functions to operate with actions,
-             * such as ActionFunction to obtain applicable actions for a given state,
-             * or ActionStateTransitionFunction to apply actions to states in order
-             * to obtain new states.
+             * This forces to implement functions to operate with actions,
+             * such as the {@link es.usc.citius.hipster.model.function.ActionFunction}
+             * to obtain applicable actions for a given state,
+             * or {@link es.usc.citius.hipster.model.function.ActionStateTransitionFunction}
+             * to apply actions to states in order to obtain new states.
+             * Use this function when you want to define explicitly the actions of your problem
+             * (for example, in the 8-Puzzle, actions are UP/DOWN/LEFT/RIGHT movements, see example
+             * problems for more information).
              */
-            public ExplicitActionProblemBuilder defineProblemWithExplicitActions(){
-                return new ExplicitActionProblemBuilder();
+            public WithAction defineProblemWithExplicitActions(){
+                return new WithAction();
             }
 
             /**
-             * This generates a simple problem model without actions. You just need
-             * to define functions to navigate from state to state without using actions.
+             * This generates a simple problem model without explicit actions. Use this
+             * when you just want to create a simple {@link es.usc.citius.hipster.model.function.impl.StateTransitionFunction}
+             * for your search problem that defines the reachable states from
+             * a given states, without worrying about actions.
              */
-            public NoActionsProblem defineProblemWithoutActions(){
-                return new NoActionsProblem();
+            public WithoutAction defineProblemWithoutActions(){
+                return new WithoutAction();
             }
 
-            public final class NoActionsProblem {
-                private NoActionsProblem(){}
+            /**
+             * Builder step to define a search problem without actions.
+             */
+            public final class WithoutAction {
+                private WithoutAction(){}
 
-                public GenericSearchProblemBuilder<Void> useTransitionFunction(StateTransitionFunction<S> transitionFunction){
-                    return new GenericSearchProblemBuilder<Void>(transitionFunction);
+
+                /**
+                 * Define the transition function for your problem. The transition function
+                 * ({@link es.usc.citius.hipster.model.function.impl.StateTransitionFunction})
+                 * is the function that computes all the reachable states from a given state.
+                 * <pre class="prettyprint">
+                 * {@code
+                 * StateTransitionFunction<S> tf =
+                 *      new StateTransitionFunction<S>(){
+                 *          public Iterable<S> successorsOf(S state) {
+                 *              return successors; // return successors of state
+                 *          }
+                 *      }
+                 * }
+                 * </pre>
+                 *
+                 * @param transitionFunction transition function to be used.
+                 */
+                public Uninformed<Void> useTransitionFunction(StateTransitionFunction<S> transitionFunction){
+                    return new Uninformed<Void>(transitionFunction);
                 }
             }
 
-            public final class ExplicitActionProblemBuilder {
-                private ExplicitActionProblemBuilder(){}
+            /**
+             * Builder step to define a search problem with actions.
+             */
+            public final class WithAction {
+                private WithAction(){}
 
-                public <A> ExplicitActionProblem<A> useActionFunction(ActionFunction<A, S> actionFunction){
-                    return new ExplicitActionProblem<A>(actionFunction);
+                /**
+                 * Select the action function that returns the applicable actions for
+                 * each state in your problem.
+                 * @param actionFunction action function to be used.
+                 */
+                public <A> Action<A> useActionFunction(ActionFunction<A, S> actionFunction){
+                    return new Action<A>(actionFunction);
                 }
 
-                public final class ExplicitActionProblem<A> {
+                /**
+                 * Builder step to select the transition function of a action-explicit search problem.
+                 */
+                public final class Action<A> {
                     private ActionFunction<A, S> af;
 
-                    public ExplicitActionProblem(ActionFunction<A, S> af) {
+                    public Action(ActionFunction<A, S> af) {
                         this.af = af;
                     }
 
-                    public GenericSearchProblemBuilder<A> useTransitionFunction(ActionStateTransitionFunction<A, S> atf){
-                        return new GenericSearchProblemBuilder<A>(new LazyActionStateTransitionFunction<A, S>(af, atf));
+                    /**
+                     * Select the {@link es.usc.citius.hipster.model.function.ActionStateTransitionFunction}
+                     * that takes a state and an action and returns the resultant state of applying the action
+                     * to the state.
+                     *
+                     * @param atf action state function to be used.
+                     */
+                    public Uninformed<A> useTransitionFunction(ActionStateTransitionFunction<A, S> atf){
+                        return new Uninformed<A>(new LazyActionStateTransitionFunction<A, S>(af, atf));
                     }
                 }
 
@@ -104,15 +150,15 @@ public final class ProblemBuilder {
                  * @param transitionFunction
                  *
                  */
-                public <A> GenericSearchProblemBuilder<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
-                    return new GenericSearchProblemBuilder<A>(transitionFunction);
+                public <A> Uninformed<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
+                    return new Uninformed<A>(transitionFunction);
                 }
             }
 
-            public final class GenericSearchProblemBuilder<A> {
+            public final class Uninformed<A> {
                 private final TransitionFunction<A,S> tf;
 
-                private GenericSearchProblemBuilder(TransitionFunction<A,S> tf){
+                private Uninformed(TransitionFunction<A, S> tf){
                     this.tf = tf;
                 }
 
@@ -133,23 +179,23 @@ public final class ProblemBuilder {
                  * @param cf
                  *
                  */
-                public InformedSearchProblemBuilder<Double> useCostFunction(CostFunction<A, S, Double> cf){
+                public Informed<Double> useCostFunction(CostFunction<A, S, Double> cf){
                     // Create default components
-                    return new InformedSearchProblemBuilder<Double>(cf, BinaryOperation.doubleAdditionOp());
+                    return new Informed<Double>(cf, BinaryOperation.doubleAdditionOp());
                 }
 
-                public <C extends Comparable<C>> InformedSearchProblemBuilder<C> useGenericCostFunction(CostFunction<A,S,C> cf, BinaryOperation<C> costAlgebra){
-                    return new InformedSearchProblemBuilder<C>(cf, costAlgebra);
+                public <C extends Comparable<C>> Informed<C> useGenericCostFunction(CostFunction<A,S,C> cf, BinaryOperation<C> costAlgebra){
+                    return new Informed<C>(cf, costAlgebra);
                 }
 
                 /**
                  * An informed search problem builder generates informed search problems with a generic cost
                  */
-                public final class InformedSearchProblemBuilder<C extends Comparable<C>> {
+                public final class Informed<C extends Comparable<C>> {
                     private CostFunction<A,S,C> cf;
                     private BinaryOperation<C> costAlgebra;
 
-                    public InformedSearchProblemBuilder(CostFunction<A, S, C> cf, BinaryOperation<C> costAlgebra) {
+                    public Informed(CostFunction<A, S, C> cf, BinaryOperation<C> costAlgebra) {
                         this.cf = cf;
                         this.costAlgebra = costAlgebra;
                     }
@@ -172,14 +218,14 @@ public final class ProblemBuilder {
                         return new Hipster.SearchProblem<A,S,WeightedNode<A,S,C>>(initialNode, expander);
                     }
 
-                    public HeuristicSearchProblemBuilder useHeuristicFunction(HeuristicFunction<S, C> hf){
-                        return new HeuristicSearchProblemBuilder(hf);
+                    public Heuristic useHeuristicFunction(HeuristicFunction<S, C> hf){
+                        return new Heuristic(hf);
                     }
 
-                    public final class HeuristicSearchProblemBuilder {
+                    public final class Heuristic {
                         private HeuristicFunction<S,C> hf;
 
-                        public HeuristicSearchProblemBuilder(HeuristicFunction<S,C> hf) {
+                        public Heuristic(HeuristicFunction<S, C> hf) {
                             this.hf = hf;
                         }
 
@@ -197,13 +243,32 @@ public final class ProblemBuilder {
             }
         }
 
-        public <S> ActionStateProblemBuilder<S> initialState(S initialState){
-            return new ActionStateProblemBuilder<S>(initialState);
+        public <S> ActionState<S> initialState(S initialState){
+            return new ActionState<S>(initialState);
         }
 
     }
 
-    public static ProblemBuilderAssistant create(){
-        return new ProblemBuilderAssistant();
+    /**
+     * <p>
+     * Creates the builder. Chain method calls until you have the problem
+     * ready to call {@code build()}. Example usage:
+     * </p>
+     * <pre class="prettyprint">
+     *     {@code
+     *     Hipster.SearchProblem p =
+     *          ProblemBuilder.create()
+     *              .initialState(initialState)
+     *              .defineProblemWithExplicitActions()
+     *                  .useActionFunction(af)
+     *                  .useTransitionFunction(atf)
+     *                  .useCostFunction(cf)
+     *                  .useHeuristicFunction(hf)
+     *                  .build();
+     *     }
+     * </pre>
+     */
+    public static Wizard create(){
+        return new Wizard();
     }
 }
