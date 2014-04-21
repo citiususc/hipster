@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.examples;
+package es.usc.citius.hipster.examples;
 
 import com.google.common.base.Predicate;
 import es.usc.citius.hipster.algorithm.Hipster;

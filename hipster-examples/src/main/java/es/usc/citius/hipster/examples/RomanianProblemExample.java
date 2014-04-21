@@ -1,4 +1,4 @@
-package es.usc.citius.hipster.examples.problem;
+package es.usc.citius.hipster.examples;
 
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
@@ -9,7 +9,7 @@ import es.usc.citius.hipster.util.graph.GraphSearchProblem;
  * http://www.pearsonhighered.com/assets/hip/us/hip_us_pearsonhighered/samplechapter/0136042597.pdf.
  *
  */
-public class RomaniaProblem {
+public class RomanianProblemExample {
 
     public static void main(String[] args) throws InterruptedException {
         //This example is based in the graph definition of the Romania problem, which is a graph where the

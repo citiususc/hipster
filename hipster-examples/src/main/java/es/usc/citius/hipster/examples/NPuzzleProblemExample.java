@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.lab.hipster.examples;
+package es.usc.citius.hipster.examples;
 
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.Transition;

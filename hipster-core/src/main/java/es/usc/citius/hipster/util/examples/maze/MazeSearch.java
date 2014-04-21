@@ -17,6 +17,11 @@
 package es.usc.citius.hipster.util.examples.maze;
 
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import es.usc.citius.hipster.model.Node;
+
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -80,22 +85,28 @@ public final class MazeSearch {
     }
 
 
-    /*
-    public static void executePrintIteratorSearch(Iterator<? extends Node<Point>> it, Maze2D maze) throws InterruptedException {
+
+    public static void printSearch(Iterator<? extends Node<?,Point,?>> it, Maze2D maze) throws InterruptedException {
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
-            Node<Point> currentNode = it.next();
-            explored.add(currentNode.transition().to());
-            List<Node<Point>> nodePath = currentNode.path();
-            List<Point> statePath = AbstractNode.statesFrom(nodePath);
+            Node<?,Point,?> currentNode = it.next();
+            if (currentNode.previousNode() != null) {
+                explored.add(currentNode.previousNode().state());
+            }
+            List<Point> statePath = Lists.transform(currentNode.path(), new Function<Node<?, Point, ?>, Point>() {
+                @Override
+                public Point apply(@Nullable Node<?, Point, ?> pointNode) {
+                    return pointNode.state();
+                }
+            });
             //clearOutput(20);
             System.out.println(getMazeStringSolution(maze, explored, statePath));
             Thread.sleep(50);
-            if (currentNode.transition().to().equals(maze.getGoalLoc())) {
+            if (currentNode.state().equals(maze.getGoalLoc())) {
                 return;
             }
         }
-    }*/
+    }
 
     public static void clearOutput(int newlines) {
         char[] chars = new char[newlines];
