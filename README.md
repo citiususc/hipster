@@ -2,10 +2,10 @@
 
 A powerful, easy to use heuristic search library implemented in pure java.
 
-## Goals
+## What's Hipster?
 
 The aim of Hipster is to provide an easy to use yet powerful and flexible type-safe Java library for heuristic search. 
-Hipster relies on a flexible model with generic operators to change the behavior without modifying the internals. Algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory.
+Hipster relies on a flexible model with generic operators that allow you to reuse and change the behavior of the algorithms very easily. Algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory.
 
 You can use Hipster to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
 
@@ -82,7 +82,7 @@ HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
 // Search the shortest path with Dijkstra's algorithm and print the result
 System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(graph)).search());
 ```
-But that's not all!. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem, N-Queens problem, etc.
+But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem or the N-Queens problem.
 
 ## What's next?
 
