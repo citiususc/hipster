@@ -20,14 +20,11 @@ import com.google.common.base.Predicate;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 import es.usc.citius.hipster.examples.problem.NQueens;
-import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
-import es.usc.citius.hipster.model.problem.HeuristicSearchProblem;
-import es.usc.citius.hipster.model.problem.InformedSearchProblem;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 
 import java.util.Arrays;
