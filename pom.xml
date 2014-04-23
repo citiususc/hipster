@@ -8,10 +8,10 @@
         <version>7</version>
     </parent>
 
-    <groupId>es.usc.citius</groupId>
-    <artifactId>hipster</artifactId>
+    <groupId>es.usc.citius.hipster</groupId>
+    <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <name>hipster</name>
+    <name>hipster-pom</name>
     <version>0.0.1-SNAPSHOT</version>
     <url>http://github.com/pablormier/hipster</url>
     <modules>
@@ -147,6 +147,11 @@
                             <groupId>org.apache.velocity</groupId>
                             <artifactId>velocity</artifactId>
                             <version>1.7</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.maven.doxia</groupId>
+                            <artifactId>doxia-module-markdown</artifactId>
+                            <version>1.5</version>
                         </dependency>
                     </dependencies>
                     <configuration>
