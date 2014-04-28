@@ -1,0 +1,158 @@
+@import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
+
+.color-highlight {
+	color: #225E9B;
+}
+
+body {
+	background-image:url(../images/bg.png);
+}
+
+body[class*="page-themes-bootswatch"] {
+	background-image: none;
+}
+
+body[class*="page-themes-bootswatch"] .color-highlight {
+	color: inherit;
+}
+
+.thumbnail-row {
+	margin-top: 10px;
+}
+
+/*h1, */h2 {
+  margin-top: 30px;
+}
+
+h3, h4, h5, h6 {
+  margin-top: 20px;
+}
+
+.carousel-caption a {
+  color: white;
+}
+
+
+/* Workarounds from http://andriusvelykis.github.io/reflow-maven-skin/css/site.css */
+
+.project-reflow-parent.page-index h2[id]:before {
+  height: 30px;
+  margin-top: -30px;
+}
+
+.project-reflow-parent.page-index .sidebar {
+  margin-top: 10px;
+}
+
+.project-reflow-parent.page-index .sidebar {
+  margin-top: 10px;
+}
+
+.project-reflow-parent.page-index .sidebar h3 {
+  margin-top: 10px;
+}
+
+
+@media (min-width: 980px) {
+  .page-themes-bootswatch-readable .navbar.affix {
+    top: 60px;
+  }
+
+  .page-themes-bootswatch-cerulean .navbar.affix {
+    top: 50px;
+  }
+
+  .page-themes-bootswatch-spruce .navbar.affix {
+    top: 55px;
+  }
+}
+
+/* Change fonts */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Lobster', cursive;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+legend {
+  font-family: 'Lobster', cursive;
+  font-size: 22.5px;
+}
+
+.navbar-brand {
+  font-family: 'Lobster', cursive;
+  font-size: 19px;
+  line-height: 21px;
+}
+
+body {
+  font-family: "Cabin", Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* Jumbotron style from Bootstrap 3 */
+
+.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  color: inherit;
+  background-color: #eee;
+}
+.jumbotron h1,
+.jumbotron .h1 {
+  color: inherit;
+}
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+.container .jumbotron {
+  border-radius: 6px;
+}
+.jumbotron .container {
+  max-width: 100%;
+}
+@media screen and (min-width: 768px) {
+  .jumbotron {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  .container .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+  }
+  .jumbotron h1,
+  .jumbotron .h1 {
+    font-size: 63px;
+  }
+}
+
+/* Custom style */
+
+pre.clean {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    border-color: transparent;
+}
+
+.main-body .fa {
+    margin-right: .5em;
+}
+
+.gist .gist-file .gist-data {
+    background-color: transparent !important;
+ }

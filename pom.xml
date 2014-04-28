@@ -148,11 +148,19 @@
                             <artifactId>velocity</artifactId>
                             <version>1.7</version>
                         </dependency>
+                        <!--
                         <dependency>
                             <groupId>org.apache.maven.doxia</groupId>
                             <artifactId>doxia-module-markdown</artifactId>
                             <version>1.5</version>
                         </dependency>
+                        -->
+                        <dependency>
+                            <groupId>net.ju-n.maven.doxia</groupId>
+                            <artifactId>doxia-module-markdown</artifactId>
+                            <version>1.0.0</version>
+                        </dependency>
+
                     </dependencies>
                     <configuration>
                         <generateReports>true</generateReports>
