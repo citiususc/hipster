@@ -84,5 +84,5 @@ work :). Check the [citation](citation.html) page for more information.
 Here you have a list of similar or complementary open source projects for Java which
 you might find useful:
 
--   **AIMA-JAVA** - A comprehensive collection of different algorithms from the "Artificial Intelligence, A Modern Approach" book.
--   **JUNG** - A Java library for graph processing. It also includes shortest path algorithms such as Dijkstra or A\*.
+-   [**AIMA-JAVA**](https://code.google.com/p/aima-java/) - A comprehensive collection of different algorithms from the book _"Artificial Intelligence, A Modern Approach"_.
+-   [**JUNG**](http://jung.sourceforge.net/) - A Java library for graph processing. It also includes shortest path algorithms such as Dijkstra or A\*.
