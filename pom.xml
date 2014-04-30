@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <name>hipster-pom</name>
     <version>0.0.1-SNAPSHOT</version>
-    <url>http://github.com/pablormier/hipster</url>
+    <url>http://github.com/citiususc/hipster</url>
     <modules>
         <module>hipster-core</module>
         <module>hipster-examples</module>
@@ -37,7 +37,7 @@
     </organization>
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/pablormier/hipster/issues</url>
+        <url>http://github.com/citiususc/hipster/issues</url>
     </issueManagement>
     <inceptionYear>2013</inceptionYear>
     <licenses>
@@ -51,9 +51,9 @@
         <maven>3.0.3</maven>
     </prerequisites>
     <scm>
-        <connection>scm:git:git@github.com:pablormier/hipster.git</connection>
-        <developerConnection>scm:git:git@github.com:pablormier/hipster.git</developerConnection>
-        <url>scm:git:git@github.com:pablormier/hipster.git</url>
+        <connection>scm:git:git@github.com:citiususc/hipster.git</connection>
+        <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
+        <url>scm:git:git@github.com:citiususc/hipster.git</url>
     </scm>
     <developers>
         <developer>
@@ -77,18 +77,15 @@
     </developers>
 
     <!-- Deployment to the internal nexus server -->
+    <!--
     <distributionManagement>
         <snapshotRepository>
             <id>citius-nexus-snapshots</id>
             <name>Internal Snapshots</name>
             <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
-        <site>
-            <id>${site.deploy.id}</id>
-            <name>Github site deployment</name>
-            <url>${site.deploy.url}</url>
-        </site>
     </distributionManagement>
+    -->
 
     <dependencies>
         <!-- Test dependencies -->
@@ -239,6 +236,13 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+
+
             <!-- Generate site documentation using reflow-maven-skin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -261,8 +265,8 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
-                    <anonymousConnection></anonymousConnection>
-                    <developerConnection></developerConnection>
+                    <anonymousConnection>scm:git:git@github.com:citiususc/hipster.git</anonymousConnection>
+                    <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
                 </configuration>
                 <reportSets>
                     <reportSet>
