@@ -2,10 +2,12 @@
 
 A powerful, easy to use heuristic search library implemented in pure java.
 
-## Goals
+## What's Hipster?
 
-The aim of Hipster is to provide an easy to use yet powerful and flexible Java library for heuristic search. 
-Hipster relies on a flexible model with generic operators to change the behavior without modifying the internals. All algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory.
+The aim of Hipster is to provide an easy to use yet powerful and flexible type-safe Java library for heuristic search. 
+Hipster relies on a flexible model with generic operators that allow you to reuse and change the behavior of the algorithms very easily. Algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory.
+
+You can use Hipster to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
 
 ## Features
 
@@ -67,20 +69,20 @@ Here is a quick example of how to search a shortest path in a graph with Dijkstr
 
 ```java
 // Create a simple weighted directed graph with Hipster
-HipsterDirectedGraph<String,WeightedEdge> graph =
-   GraphBuilder.<String,WeightedEdge>newDirectedGraph()
-     .from("A").to("B").withEdge(WeightedEdge.create(4.0d))
-     .from("A").to("C").withEdge(WeightedEdge.create(2.0d))
-     .from("B").to("C").withEdge(WeightedEdge.create(5.0d))
-     .from("B").to("D").withEdge(WeightedEdge.create(10.0d))
-     .from("C").to("E").withEdge(WeightedEdge.create(3.0d))
-     .from("D").to("F").withEdge(WeightedEdge.create(11.0d))
-     .from("E").to("D").withEdge(WeightedEdge.create(4.0d));
+HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
+     .from("A").to("B").withEdge(4d)
+     .from("A").to("C").withEdge(2d)
+     .from("B").to("C").withEdge(5d)
+     .from("B").to("D").withEdge(10d)
+     .from("C").to("E").withEdge(3d)
+     .from("D").to("F").withEdge(11d)
+     .from("E").to("D").withEdge(4d)
+     .newDirectedGraph();
 
 // Search the shortest path with Dijkstra's algorithm and print the result
-System.out.println(Hipster.createDijkstra(GraphProblem.from("A").to("B").in(graph)).search());
+System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(graph)).search());
 ```
-But that's not all!. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem, N-Queens problem, etc.
+But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem or the N-Queens problem.
 
 ## What's next?
 
