@@ -28,6 +28,7 @@
 
     <publishDate position="bottom" format="yyyy-MM-dd" />
     <version position="bottom" />
+    <googleAnalyticsAccountId>UA-32778024-2</googleAnalyticsAccountId>
 
     <custom>
         <reflowSkin>

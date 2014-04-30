@@ -76,10 +76,12 @@ The scientific supervisors of this project are listed below:
 -   **Prof. Manuel Lama**
 -   **Prof. Alberto Bugarín**
 
-The project was also presented in the
+The project was also accepted in the
 [_9th Iberian Conference on Information Systems and Technologies (CISTI), 2014_](http://www.aisti.eu/cisti2014).
 If you use this library in your research projects, we encourage you to please cite our
 work :). Check the [citation](citation.html) page for more information.
+
+### Related projects
 
 Here you have a list of similar or complementary open source projects for Java which
 you might find useful:
