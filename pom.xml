@@ -76,16 +76,6 @@
         </developer>
     </developers>
 
-    <!-- Deployment to the internal nexus server -->
-    <!--
-    <distributionManagement>
-        <snapshotRepository>
-            <id>citius-nexus-snapshots</id>
-            <name>Internal Snapshots</name>
-            <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    -->
 
     <dependencies>
         <!-- Test dependencies -->
@@ -286,5 +276,19 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>citius-snapshot-deploy</id>
+            <!-- Deployment to the internal nexus server -->
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>citius-nexus-snapshots</id>
+                    <name>Internal Snapshots</name>
+                    <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
