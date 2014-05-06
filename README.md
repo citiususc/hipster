@@ -52,7 +52,7 @@ Maven users can include the library using the following snippet:
     <dependencies>
        ...
        <dependency>
-          <groupId>es.usc.citius.lab</groupId>
+          <groupId>es.usc.citius.hipster</groupId>
           <artifactId>hipster-all</artifactId>
           <version>0.0.1-SNAPSHOT</version>
        </dependency>
@@ -68,7 +68,8 @@ TODO;
 Here is a quick example of how to search a shortest path in a graph with Dijkstra's algorithm:
 
 ```java
-// Create a simple weighted directed graph with Hipster
+// Create a simple weighted directed graph with Hipster where
+// vertices are Strings and edge values are just doubles
 HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
      .from("A").to("B").withEdge(4d)
      .from("A").to("C").withEdge(2d)
@@ -79,8 +80,16 @@ HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
      .from("E").to("D").withEdge(4d)
      .newDirectedGraph();
 
-// Search the shortest path with Dijkstra's algorithm and print the result
-System.out.println(Hipster.createDijkstra(GraphSearchProblem.from("A").to("F").in(graph)).search());
+// Create the search problem. For graph problems, just use
+// the GraphSearchProblem util class to generate the problem with ease.
+Hipster.SearchProblem p = GraphSearchProblem
+                                   .startingFrom("A")
+                                   .in(graph)
+                                   .takeCostsFromEdges()
+                                   .build();
+                           
+// Search the shortest path from "A" to "F"
+System.out.println(Hipster.createAStar(p).search("F"));
 ```
 But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem or the N-Queens problem.
 
