@@ -23,7 +23,6 @@ import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.util.examples.maze.Maze2D;
-import es.usc.citius.hipster.util.examples.maze.MazeSearch;
 import es.usc.citius.hipster.util.examples.maze.Mazes;
 
 import java.awt.*;
@@ -89,7 +88,7 @@ public class MazeShortestPath {
                 })
                 .build();
 
-        MazeSearch.printSearch(Hipster.createAStar(p).iterator(), maze);
+        //MazeSearch.printSearch(Hipster.createAStar(p).iterator(), maze);
         System.out.println(Hipster.createAStar(p).search(goal));
 
     }
