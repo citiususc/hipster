@@ -5,7 +5,7 @@
     <artifactId>hipster</artifactId>
     <packaging>pom</packaging>
     <name>hipster</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <url>http://github.com/pablormier/hipster</url>
     <modules>
         <module>hipster-core</module>
