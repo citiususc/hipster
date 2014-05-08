@@ -21,7 +21,7 @@
     <parent>
         <groupId>es.usc.citius.hipster</groupId>
         <artifactId>hipster-pom</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hipster-test</artifactId>
@@ -32,7 +32,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>es.usc.citius</groupId>
+            <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

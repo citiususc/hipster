@@ -21,7 +21,7 @@
     <parent>
         <groupId>es.usc.citius.hipster</groupId>
         <artifactId>hipster-pom</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -39,9 +39,9 @@
             <version>2.4.0</version>
         </dependency>
         <dependency>
-            <groupId>es.usc.citius</groupId>
+            <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
