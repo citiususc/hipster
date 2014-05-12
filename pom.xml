@@ -8,19 +8,6 @@
         <version>7</version>
     </parent>
 
-    <groupId>es.usc.citius.hipster</groupId>
-    <artifactId>hipster-pom</artifactId>
-    <packaging>pom</packaging>
-    <name>hipster-pom</name>
-    <version>0.1.0-SNAPSHOT</version>
-    <url>http://github.com/citiususc/hipster</url>
-    <modules>
-        <module>hipster-core</module>
-        <module>hipster-examples</module>
-        <module>hipster-all</module>
-        <module>hipster-test</module>
-        <module>hipster-third-party-graphs</module>
-    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Point to the root dir to locate custom templates for javadoc -->
@@ -31,15 +18,36 @@
         <site.deploy.id>gh-pages</site.deploy.id>
         <site.deploy.url />
     </properties>
+
+    <groupId>es.usc.citius.hipster</groupId>
+    <artifactId>hipster-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1.0-SNAPSHOT</version>
+
+    <name>hipster-pom</name>
+    <url>${site.url}</url>
+    <inceptionYear>2013</inceptionYear>
+
+    <modules>
+        <module>hipster-core</module>
+        <module>hipster-examples</module>
+        <module>hipster-all</module>
+        <module>hipster-test</module>
+        <module>hipster-third-party-graphs</module>
+    </modules>
+
     <organization>
         <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
         <url>http://citius.usc.es</url>
     </organization>
+
     <issueManagement>
         <system>GitHub</system>
         <url>http://github.com/citiususc/hipster/issues</url>
     </issueManagement>
-    <inceptionYear>2013</inceptionYear>
+
+
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -47,14 +55,17 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <prerequisites>
         <maven>3.0.3</maven>
     </prerequisites>
+
     <scm>
         <connection>scm:git:git@github.com:citiususc/hipster.git</connection>
         <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
         <url>scm:git:git@github.com:citiususc/hipster.git</url>
     </scm>
+
     <developers>
         <developer>
             <id>pablormier</id>
@@ -76,7 +87,6 @@
         </developer>
     </developers>
 
-
     <dependencies>
         <!-- Test dependencies -->
         <dependency>
@@ -88,7 +98,6 @@
     </dependencies>
 
     <build>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -167,7 +176,6 @@
         </pluginManagement>
 
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -276,6 +284,14 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <name>Site default deployment</name>
+            <url>${site.deploy.url}</url>
+        </site>
+    </distributionManagement>
 
     <profiles>
         <profile>
