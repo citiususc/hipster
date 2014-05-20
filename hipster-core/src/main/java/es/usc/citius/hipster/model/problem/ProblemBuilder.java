@@ -17,7 +17,6 @@
 package es.usc.citius.hipster.model.problem;
 
 
-import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.*;
@@ -26,7 +25,7 @@ import es.usc.citius.hipster.model.impl.WeightedNode;
 
 /**
  * Problem builder that is used to guide the user through the creation of a
- * {@link es.usc.citius.hipster.algorithm.Hipster.SearchProblem} with the main components
+ * {@link SearchProblem} with the main components
  * required to instantiate an algorithm.
  */
 public final class ProblemBuilder {
@@ -162,7 +161,7 @@ public final class ProblemBuilder {
                     this.tf = tf;
                 }
 
-                public Hipster.SearchProblem<A, S, UnweightedNode<A, S>> build(){
+                public SearchProblem<A, S, UnweightedNode<A, S>> build(){
                     NodeFactory<A,S,UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
                         @Override
                         public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
@@ -171,7 +170,7 @@ public final class ProblemBuilder {
                     };
                     UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
                     NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
-                    return new Hipster.SearchProblem<A,S, UnweightedNode<A,S>>(initialNode, nodeExpander);
+                    return new SearchProblem<A,S, UnweightedNode<A,S>>(initialNode, nodeExpander);
                 }
 
                 /**
@@ -200,7 +199,7 @@ public final class ProblemBuilder {
                         this.costAlgebra = costAlgebra;
                     }
 
-                    public Hipster.SearchProblem<A, S, WeightedNode<A, S, C>> build(){
+                    public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
                         WeightedNodeFactory<A,S,C> factory = new WeightedNodeFactory<A,S,C>(
                                 cf,
                                 new HeuristicFunction<S, C>() {
@@ -215,7 +214,7 @@ public final class ProblemBuilder {
                         // Create a Lazy Node Expander by default
                         NodeExpander<A,S,WeightedNode<A,S,C>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
                         // Create the algorithm with all those components
-                        return new Hipster.SearchProblem<A,S,WeightedNode<A,S,C>>(initialNode, expander);
+                        return new SearchProblem<A,S,WeightedNode<A,S,C>>(initialNode, expander);
                     }
 
                     public Heuristic useHeuristicFunction(HeuristicFunction<S, C> hf){
@@ -229,14 +228,14 @@ public final class ProblemBuilder {
                             this.hf = hf;
                         }
 
-                        public Hipster.SearchProblem<A, S, WeightedNode<A, S, C>> build(){
+                        public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
                             WeightedNodeFactory<A, S, C> factory = new WeightedNodeFactory<A,S,C>(
                                     cf, hf, costAlgebra);
                             WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
                             LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander =
                                     new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
 
-                            return new Hipster.SearchProblem<A, S, WeightedNode<A,S,C>>(initialNode, nodeExpander);
+                            return new SearchProblem<A, S, WeightedNode<A,S,C>>(initialNode, nodeExpander);
                         }
                     }
                 }

@@ -22,6 +22,7 @@ import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.examples.maze.Maze2D;
 import es.usc.citius.hipster.util.examples.maze.Mazes;
 
@@ -53,7 +54,7 @@ public class MazeShortestPath {
         // can be empty or occupied by an obstacle. We have to define de transition
         // function that tells the algorithm which are the available movements from
         // a concrete tile point.
-        Hipster.SearchProblem p = ProblemBuilder.create()
+        SearchProblem p = ProblemBuilder.create()
                 .initialState(origin)
                 .defineProblemWithoutActions()
                 .useTransitionFunction(new StateTransitionFunction<Point>() {

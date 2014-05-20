@@ -19,7 +19,6 @@ package es.usc.citius.hipster.util.graph;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
-import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
@@ -28,6 +27,7 @@ import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 
 /**
  * @author Pablo Rodríguez Mier
@@ -126,7 +126,7 @@ public final class GraphSearchProblem {
                 return new HeuristicType<C>(cf, costAlgebra);
             }
 
-            public Hipster.SearchProblem<E, V, UnweightedNode<E, V>> build() {
+            public SearchProblem<E, V, UnweightedNode<E, V>> build() {
                 return ProblemBuilder.create()
                         .initialState(fromVertex)
                         .defineProblemWithExplicitActions()
@@ -147,7 +147,7 @@ public final class GraphSearchProblem {
                     return new Final(hf);
                 }
 
-                public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build() {
+                public SearchProblem<E, V, WeightedNode<E, V, C>> build() {
                     return ProblemBuilder.create()
                             .initialState(fromVertex)
                             .defineProblemWithExplicitActions()
@@ -163,7 +163,7 @@ public final class GraphSearchProblem {
                         this.hf = hf;
                     }
 
-                    public Hipster.SearchProblem<E, V, WeightedNode<E, V, C>> build() {
+                    public SearchProblem<E, V, WeightedNode<E, V, C>> build() {
                         return ProblemBuilder.create()
                                 .initialState(fromVertex)
                                 .defineProblemWithExplicitActions()

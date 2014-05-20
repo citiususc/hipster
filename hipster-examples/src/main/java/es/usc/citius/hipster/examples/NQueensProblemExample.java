@@ -26,6 +26,7 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -36,7 +37,7 @@ public class NQueensProblemExample {
     public static void main(String[] args) {
         // Solve the 8-Queen problem with Hill Climbing and Enforced Hill Climbing
         final int size = 8;
-        Hipster.SearchProblem<Void,NQueens,WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
+        SearchProblem<Void,NQueens,WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
                 .initialState(new NQueens(size))
                         // No goal state: there are multiple goal states, we just need to find a valid goal state
                 .defineProblemWithoutActions()

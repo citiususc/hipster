@@ -24,10 +24,13 @@ import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
-import static es.usc.citius.hipster.examples.problem.NPuzzle.*;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 
 import java.awt.*;
 import java.util.LinkedList;
+
+import static es.usc.citius.hipster.examples.problem.NPuzzle.Puzzle;
+import static es.usc.citius.hipster.examples.problem.NPuzzle.PuzzleMove;
 
 
 public class NPuzzleProblemExample {
@@ -125,7 +128,7 @@ public class NPuzzleProblemExample {
             }
         };
 
-        Hipster.SearchProblem<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
+        SearchProblem<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
             ProblemBuilder.create()
                 .initialState(initialState)
                 .defineProblemWithExplicitActions()
