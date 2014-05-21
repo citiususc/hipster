@@ -3,7 +3,7 @@
         <center>
             <p><img alt="" src="img/hipster-no-text.png"></img></p>
             <p>An Open Source Java Library for Heuristic Search</p>
-            <p><a class="btn btn-primary btn-lg" href="https://www.github.com/citiususc/hipster/archive/master.zip" role="button">Download latest version</a></p>
+            <p><a class="btn btn-primary btn-lg" href="http://goo.gl/KRwd50" role="button">Download latest (src)</a></p>
         </center>
     </div>
 </div>
@@ -59,9 +59,9 @@ Check out some examples included in Hipster, like the N-Puzzle, N-Queens or Maze
 ### About this project
 
 During our PhD thesis, we've found that there is a lack of Java libraries
-with an extensible, flexible and simple to use model.
-Moreover, most of the libraries for search algorithms rely on recursive
-implementations which do not offer fine-grained control over the
+that implement search algorithms with an extensible, flexible and simple to use model.
+Moreover, most of the libraries rely on graph structures or recursive implementations 
+which do not offer fine-grained control over the
 algorithm. This is why we decided to make our little contribution in this field.
 Although Hipster is far from being perfect, we hope you find it useful.
 
