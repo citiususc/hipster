@@ -12,11 +12,11 @@ echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG - TRAVIS_JDK_VERSION=$TRAVIS_JDK_VERSIO
 if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   # Decide the documentation version folder name depending on the branch and the version in the pom.xml
-  wget https://raw.githubusercontent.com/citiususc/hipster/$TRAVIS_BRANCH/pom.xml > /dev/null 2>&1
+  # wget https://raw.githubusercontent.com/citiususc/hipster/$TRAVIS_BRANCH/pom.xml > /dev/null 2>&1
   # Take the version from the main pom.xml
   # grep -m 1 -E '<version>[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+(-[0-9]+)?)?</version>' pom.xml
   VERSION=`grep -m 1 "<hipster.version>" pom.xml | cut -d ">" -f 2 | cut -d "<" -f 1`
-  rm pom.xml
+  # rm pom.xml
   
   # Validate if the version is correct (example 1.0.0-SNAPSHOT, or 1.0.0-alpha-1)
   VERSION_REGEX='^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+(-[0-9]+)?)?$'
