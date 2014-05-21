@@ -1,18 +1,22 @@
 language: java
-
 jdk:
-  - oraclejdk7
-  - openjdk6
-  
+- oraclejdk7
+- openjdk6
 branches:
   only:
-    - master
-    - development
-
+  - master
+  - development
 after_success:
-    - mvn javadoc:aggregate
-    - mvn site:site
-    - chmod +x .config/deploy-site.sh
-    - .config/deploy-site.sh
-    - chmod +x .config/deploy-artifacts.sh
-    - .config/deploy-artifacts.sh
+- mvn javadoc:aggregate
+- mvn site:site
+- chmod +x .config/deploy-site.sh
+- .config/deploy-site.sh
+- chmod +x .config/deploy-artifacts.sh
+- .config/deploy-artifacts.sh
+env:
+  global:
+  - secure: H9UVDT1EEVSmxd+bcUX4OX/MHJuOP0k8suXk6LBCJvRDVy9GDSx6YRTP9Uv7VJmm21/GB/4ATatpgHd3sYxEYAW6a8UWX38ytSNKnWAIRRPP/oHS4fDwBzINpG7N2J5Fe6vErk06zvwxGTTmGPfFKsESUVaffWB0jMRqq4kai5M=
+  - secure: ILdOYjPt+8g5rlexXBYAhECtn5Zm26FRf0/nwCxUU303qtzFQyMcxinIC93aun880OnINjA7fzQeBkG4P+LSVOAXbmGTGhtyPBzMOGcnZouJM/RyXHUft6tAXPimXQ7JjDFjyv7EzSeStk/4WEp0mkxheIryZS3X1pbED1TqgUM=
+  - secure: cwV1rA8+CUHonJg40dRHCcd8KmYl9EzpCUcnS8vm/1qNkXpRmEAvwNKjZct0sZ8ZFKjKEUEzhyG0+cZVRzvEhi108/WZ5pIxp01EdtSFZTlIg73llALb2P8HClHuy4XSBDz0G4nTLES11usUGpCsLckSudNtb7bdUAH356NxFvQ=
+  - secure: XNFSHaGHiJfj4TvW6Oud1Z1dKnkXYk0njX2xjfljfFlHf4eCSIUxO9giad4xq2sE7vrjk+JpLLj/te7qjug91Ih7KH0i9T56d57q9vfu8juW49NBQxRnfhlvYWyrto5rmnKEa8Mcs/smgER6dllsURz10AqLKM32mkijG4VgdcM=
+  - secure: VFkAqPydQ9NTxXkp/gNzNUoaYd/xvryKy+ARXJhbvgUkpO2VMyo2D2wU1G6ECVzitqpO+gaUn2mu7fO1M0KjpeKp5Si7HG3fUVb4sXg6Sim563iot2rJUfiXpu6FOqPfUwQHpyUXqUfAPOA6bI9ZNKNBAurGxgLgt4AP2PjObV4=
