@@ -15,11 +15,11 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   wget https://raw.githubusercontent.com/citiususc/hipster/$TRAVIS_BRANCH/pom.xml > /dev/null 2>&1
   # Take the version from the main pom.xml
   # grep -m 1 -E '<version>[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+(-[0-9]+)?)?</version>' pom.xml
-  VERSION=`grep -m 1 "<version>" pom.xml | cut -d ">" -f 2 | cut -d "<" -f 1`
+  VERSION=`grep -m 1 "<hipster.version>" pom.xml | cut -d ">" -f 2 | cut -d "<" -f 1`
   rm pom.xml
   
   # Validate if the version is correct (example 1.0.0-SNAPSHOT, or 1.0.0-alpha-1)
-  VERSION_REGEX = '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+(-[0-9]+)?)?$'
+  VERSION_REGEX='^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+(-[0-9]+)?)?$'
   if [[ $VERSION =~ $VERSION_REGEX ]]; then
     echo "Current version is $VERSION"
   else

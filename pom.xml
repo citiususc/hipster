@@ -14,15 +14,14 @@
         <hipster.root.dir>${project.basedir}</hipster.root.dir>
         <!-- Site config -->
         <site.url>http://citiususc.github.io/hipster</site.url>
-        <github.global.server>github</github.global.server>
-        <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url />
+        <!-- Hipster version -->
+        <hipster.version>1.0.0-SNAPSHOT</hipster.version>
     </properties>
 
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${hipster.version}</version>
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
@@ -303,14 +302,6 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <distributionManagement>
-        <site>
-            <id>${site.deploy.id}</id>
-            <name>Site default deployment</name>
-            <url>${site.deploy.url}</url>
-        </site>
-    </distributionManagement>
 
     <profiles>
         <profile>
