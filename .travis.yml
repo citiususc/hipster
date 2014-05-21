@@ -10,5 +10,9 @@ branches:
     - development
 
 after_success:
-  #- .config/publish-javadoc.sh
-  #- .config/publish-artifacts.sh
+    - mvn javadoc:aggregate
+    - mvn site:site
+    - chmod +x .config/deploy-site.sh
+    - .config/deploy-javadoc.sh
+    - chmod +x .config/deploy-artifacts.sh
+    - .config/deploy-artifacts.sh
