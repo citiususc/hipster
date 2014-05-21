@@ -19,9 +19,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hipster</artifactId>
-        <groupId>es.usc.citius.lab</groupId>
-        <version>0.0.1</version>
+        <artifactId>hipster-pom</artifactId>
+        <groupId>es.usc.citius.hipster</groupId>
+        <version>1.0.0-alpha-1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hipster-test</artifactId>
@@ -32,13 +32,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>es.usc.citius.lab</groupId>
+            <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>es.usc.citius.lab</groupId>
+            <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-jung</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
