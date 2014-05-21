@@ -40,7 +40,7 @@ Maven users can include the library using the following snippet:
 
 #### Snapshots
 
-````xml
+```xml
     <repositories>
         <repository>
             <id>snapshots</id>
@@ -50,14 +50,19 @@ Maven users can include the library using the following snippet:
     </repositories>
 
     <dependencies>
-       ...
+       <!-- 
+        Add this dependency into your <dependencies> section to add
+        all the dependencies of Hipster to your project. Add hipster-core
+        instead of hipster-all for basic functionality.
+       -->
        <dependency>
           <groupId>es.usc.citius.hipster</groupId>
           <artifactId>hipster-all</artifactId>
-          <version>0.0.1-SNAPSHOT</version>
+          <version>1.0.0-SNAPSHOT</version>
        </dependency>
+       
     </dependencies>
-````
+```
 
 #### Releases
 
@@ -82,14 +87,14 @@ HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
 
 // Create the search problem. For graph problems, just use
 // the GraphSearchProblem util class to generate the problem with ease.
-Hipster.SearchProblem p = GraphSearchProblem
-                                   .startingFrom("A")
-                                   .in(graph)
-                                   .takeCostsFromEdges()
-                                   .build();
+SearchProblem p = GraphSearchProblem
+                           .startingFrom("A")
+                           .in(graph)
+                           .takeCostsFromEdges()
+                           .build();
                            
-// Search the shortest path from "A" to "F"
-System.out.println(Hipster.createAStar(p).search("F"));
+// Search the shortest path from "A" to "F" using Dijkstra
+System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
 But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem or the N-Queens problem.
 
