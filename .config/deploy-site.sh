@@ -30,6 +30,9 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   echo "Deploying Hipster [$VERSION] site and documentation to GitHub gh-pages"
   echo "Current directory is: `pwd`"
 
+  mvn javadoc:aggregate
+  mvn site:site
+
   # First, copy the generated site to the new folder
   mkdir $HOME/site
   cp -Rf target/site/* $HOME/site
