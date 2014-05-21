@@ -56,6 +56,11 @@ th {
     background-position: 0 -28px;
 }
 
+a:active,
+a:active code {
+  color:#F36126;
+}
+
 /* Scrollbar replacement. Original snippet from https://gist.github.com/devinrhode2/2573411 */
 ::-webkit-scrollbar {
     height: 5px;
