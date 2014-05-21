@@ -26,6 +26,7 @@ import com.tinkerpop.blueprints.oupls.jung.GraphJung;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.thirdparty.graphs.jung.JUNGHipsterDirectedGraphAdapter;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
@@ -73,7 +74,7 @@ public class JUNGHipsterGraphAdapterTest {
         // Create an adapted graph
         HipsterDirectedGraph<Vertex,Edge> adaptedGraph = new JUNGHipsterDirectedGraphAdapter<Vertex, Edge>(new GraphJung(graph));
         // Search a path from origin to dest
-        Hipster.SearchProblem<Edge, Vertex, WeightedNode<Edge, Vertex, Double>> p = GraphSearchProblem.startingFrom(origin).in(adaptedGraph).takeCostsFromEdges().build();
+        SearchProblem<Edge, Vertex, WeightedNode<Edge, Vertex, Double>> p = GraphSearchProblem.startingFrom(origin).in(adaptedGraph).takeCostsFromEdges().build();
         // Shortest path solution
         List<String> expectedPath = Arrays.asList("Cochepaille", "Bamatabois", "Fantine", "Tholomyes");
         List<Vertex> shortestPath = Hipster.createAStar(p).search(dest).getOptimalPaths().get(0);
@@ -92,7 +93,7 @@ public class JUNGHipsterGraphAdapterTest {
         // Create a Hipster Directed Graph from a JUNG graph
         HipsterDirectedGraph<Vertex,Edge> adaptedGraph = new JUNGHipsterDirectedGraphAdapter<Vertex, Edge>(new GraphJung(graph));
         // Search a path from origin to dest
-        Hipster.SearchProblem<Edge, Vertex, WeightedNode<Edge, Vertex, Double>> p =
+        SearchProblem<Edge, Vertex, WeightedNode<Edge, Vertex, Double>> p =
                 GraphSearchProblem
                         .startingFrom(origin)
                         .in(adaptedGraph)

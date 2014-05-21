@@ -20,6 +20,7 @@ package es.usc.citius.hipster.algorithm.problem.romanian;
 import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
@@ -38,7 +39,7 @@ public class RomanianProblemOptimalPathTest {
 
         final HipsterGraph<City, Double> graph = RomanianProblem.graph();
 
-        Hipster.SearchProblem p = GraphSearchProblem
+        SearchProblem p = GraphSearchProblem
                 .startingFrom(City.Arad)
                 .in(graph)
                 .takeCostsFromEdges()
