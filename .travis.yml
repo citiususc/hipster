@@ -13,6 +13,6 @@ after_success:
     - mvn javadoc:aggregate
     - mvn site:site
     - chmod +x .config/deploy-site.sh
-    - .config/deploy-javadoc.sh
+    - .config/deploy-site.sh
     - chmod +x .config/deploy-artifacts.sh
     - .config/deploy-artifacts.sh
