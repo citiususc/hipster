@@ -59,7 +59,7 @@ public class NQueens {
                 // if queens[i]==j then row i has a queen in column j
                 output += queens[i] == j ? " O " : " . ";
             }
-            output += System.lineSeparator();
+            output += System.getProperty("path.separator");
         }
         return output;
     }
