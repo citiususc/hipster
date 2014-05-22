@@ -43,16 +43,29 @@ Maven users can include the library using the following snippet:
 You can use the latest (unstable) version of Hipster under development. Just add the following dependency into your pom.xml:
 
 ```xml
-   <!-- 
-      Add this dependency into your <dependencies> section to add
-      all the dependencies of Hipster to your project. Add hipster-core
-      instead of hipster-all for basic functionality.
-   -->
-   <dependency>
-      <groupId>es.usc.citius.hipster</groupId>
-      <artifactId>hipster-all</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-   </dependency>
+<!-- Use sonatype oss public for snapshots -->
+<repositories>
+  <repository>
+    <id>sonatype-oss-public</id>
+    <url>https://oss.sonatype.org/content/groups/public/</url>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+</repositories>
+
+<dependencies>
+  <!-- 
+    Add this dependency under your pom.xml <dependencies> section to add
+    all the dependencies of Hipster to your project. Add hipster-core
+    instead of hipster-all for basic functionality.
+  -->
+  <dependency>
+    <groupId>es.usc.citius.hipster</groupId>
+    <artifactId>hipster-all</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </dependency>
+</dependencies>
 ```
 
 #### Releases
@@ -65,16 +78,17 @@ Here is a quick example of how to search a shortest path in a graph with Dijkstr
 
 ```java
 // Create a simple weighted directed graph with Hipster where
+// Create a simple weighted directed graph with Hipster where
 // vertices are Strings and edge values are just doubles
-HipsterDirectedGraph<String,Double> graph = GraphBuilder.newGraph()
-     .from("A").to("B").withEdge(4d)
-     .from("A").to("C").withEdge(2d)
-     .from("B").to("C").withEdge(5d)
-     .from("B").to("D").withEdge(10d)
-     .from("C").to("E").withEdge(3d)
-     .from("D").to("F").withEdge(11d)
-     .from("E").to("D").withEdge(4d)
-     .newDirectedGraph();
+HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
+     .connect("A").to("B").withEdge(4d)
+     .connect("A").to("C").withEdge(2d)
+     .connect("B").to("C").withEdge(5d)
+     .connect("B").to("D").withEdge(10d)
+     .connect("C").to("E").withEdge(3d)
+     .connect("D").to("F").withEdge(11d)
+     .connect("E").to("D").withEdge(4d)
+     .buildDirectedGraph();
 
 // Create the search problem. For graph problems, just use
 // the GraphSearchProblem util class to generate the problem with ease.
@@ -84,7 +98,7 @@ SearchProblem p = GraphSearchProblem
                            .takeCostsFromEdges()
                            .build();
                            
-// Search the shortest path from "A" to "F" using Dijkstra
+// Search the shortest path from "A" to "F"
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
 But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems such as the eight puzzle problem or the N-Queens problem.
