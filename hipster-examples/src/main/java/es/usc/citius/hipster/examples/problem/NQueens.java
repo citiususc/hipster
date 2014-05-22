@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class NQueens {
+    private static final String LS = System.getProperty("path.separator");
 
 
     // if N = 8:
@@ -51,7 +52,7 @@ public class NQueens {
 
     @Override
     public String toString() {
-        String output = "" + System.lineSeparator();
+        String output = "" + LS;
         // Build string row by row
         for (int i = 0; i < queens.length; i++) {
             // Check if there is a queen in this row
@@ -59,7 +60,7 @@ public class NQueens {
                 // if queens[i]==j then row i has a queen in column j
                 output += queens[i] == j ? " O " : " . ";
             }
-            output += System.getProperty("path.separator");
+            output += LS;
         }
         return output;
     }
