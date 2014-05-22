@@ -40,33 +40,24 @@ Maven users can include the library using the following snippet:
 
 #### Snapshots
 
-```xml
-    <repositories>
-        <repository>
-            <id>snapshots</id>
-            <name>CITIUS Snapshots</name>
-            <url>http://tec.citius.usc.es/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
+You can use the latest (unstable) version of Hipster under development. Just add the following dependency into your pom.xml:
 
-    <dependencies>
-       <!-- 
-        Add this dependency into your <dependencies> section to add
-        all the dependencies of Hipster to your project. Add hipster-core
-        instead of hipster-all for basic functionality.
-       -->
-       <dependency>
-          <groupId>es.usc.citius.hipster</groupId>
-          <artifactId>hipster-all</artifactId>
-          <version>1.0.0-SNAPSHOT</version>
-       </dependency>
-       
-    </dependencies>
+```xml
+   <!-- 
+      Add this dependency into your <dependencies> section to add
+      all the dependencies of Hipster to your project. Add hipster-core
+      instead of hipster-all for basic functionality.
+   -->
+   <dependency>
+      <groupId>es.usc.citius.hipster</groupId>
+      <artifactId>hipster-all</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+   </dependency>
 ```
 
 #### Releases
 
-TODO;
+Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/issues/milestones) to check the current development status.
 
 #### Quick Example
 
@@ -100,7 +91,7 @@ But that's not all. Hipster comes with different problem examples that illustrat
 
 ## What's next?
 
-If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/pablormier/hipster/wiki/Solving-problems-with-Hipster) and the JavaDoc documentation. There are also a few implemented examples here.
+If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/citiususc/hipster/wiki/Getting-Started) and the [JavaDoc documentation](http://citiususc.github.io/hipster/documentation/javadoc/1.0.0-SNAPSHOT). There are also a few implemented examples here.
 
 ## License
 
