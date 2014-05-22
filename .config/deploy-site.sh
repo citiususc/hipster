@@ -30,8 +30,15 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   echo "Deploying Hipster [$VERSION] site and documentation to GitHub gh-pages"
   echo "Current directory is: `pwd`"
 
+
+  echo "Building javadocs..."
   mvn javadoc:aggregate
-  mvn site:site
+
+  # Build site only if this is the master branch
+  if [ "$TRAVIS_BRANCH" == "master" ]; then
+    echo "Building site..."
+    mvn site:site
+  fi
 
   # First, copy the generated site to the new folder
   mkdir $HOME/site
@@ -59,8 +66,7 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   git config credential.helper "store --file=.git/credentials"
   echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
   
-  git add .
-  git add -u
+  git add -A
   git commit -a -m "auto-commit $TRAVIS_BRANCH Hipster site updated (build $TRAVIS_BUILD_NUMBER)"
   git push -q origin gh-pages > /dev/null
   echo "Published $TRAVIS_BRANCH Hipster site to gh-pages."
