@@ -28,7 +28,7 @@ import es.usc.citius.hipster.util.examples.maze.Mazes;
 
 import java.awt.*;
 
-public class MazeShortestPath {
+public class MazeShortestPathExample {
 
     public static void main(String[] args) throws InterruptedException {
         // First, create a maze. There is a class called Maze2D
