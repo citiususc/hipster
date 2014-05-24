@@ -156,3 +156,30 @@ pre.clean {
 .gist .gist-file .gist-data {
     background-color: transparent !important;
  }
+
+ .btn-blue {
+ 	color: #FFFFFF;
+ 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+ 	background-color: #435A6E;
+ 	*background-color: #435A6E;
+ 	background-image: -moz-linear-gradient(top, #8EAFCC, #435A6E);
+ 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#8EAFCC), to(#435A6E));
+ 	background-image: -webkit-linear-gradient(top, #8EAFCC, #435A6E);
+ 	background-image: -o-linear-gradient(top, #8EAFCC, #435A6E);
+ 	background-image: linear-gradient(to bottom, #8EAFCC, #435A6E);
+ 	background-repeat: repeat-x;
+ 	border-color: #435A6E;
+ 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+ 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8EAFCC', endColorstr='#435A6E', GradientType=0);
+ 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+ }
+ .btn-blue:hover,
+ .btn-blue:focus,
+ .btn-blue:active,
+ .btn-blue.active,
+ .btn-blue.disabled,
+ .btn-blue[disabled] {
+ 	color: #FFFFFF;
+ 	background-color: #435A6E;
+ 	*background-color: #003bb3;
+ }

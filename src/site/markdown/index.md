@@ -3,7 +3,10 @@
         <center>
             <p><img alt="" src="img/hipster-no-text.png"></img></p>
             <p>An Open Source Java Library for Heuristic Search</p>
-            <p><a class="btn btn-primary btn-lg" href="http://goo.gl/KRwd50" role="button">Download latest (src)</a></p>
+            <p>
+                <a class="btn btn-blue btn-lg" href="http://goo.gl/5sVMUE" role="button">Download Hipster</a>
+                <a class="btn btn-primary btn-lg" href="http://goo.gl/KRwd50" role="button">Download Source</a>
+            </p>
         </center>
     </div>
 </div>
