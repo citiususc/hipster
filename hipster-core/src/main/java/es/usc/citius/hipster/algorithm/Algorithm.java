@@ -86,12 +86,24 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
 
         @Override
         public String toString() {
-            return "SearchResult {" +
-                    "SearchTime=" + stopwatch +
-                    ", totalIterations=" + iterations +
-                    ", solutions=" + getOptimalPaths() +
-                    ", goalNodes=" + goalNodes +
-                    '}';
+            final String ls = System.getProperty("line.separator");
+            StringBuilder builder = new StringBuilder();
+            builder.append("Total solutions: ").append(goalNodes.size()).append(ls);
+            builder.append("Total time: ").append(getStopwatch().toString()).append(ls);
+            builder.append("Total number of iterations: ").append(getIterations()).append(ls);
+            // Take solutions
+            int solution=1;
+            for(N goalNode : goalNodes){
+                builder.append("+ Solution ").append(solution).append(": ").append(ls);
+                builder.append(" - States: ").append(ls);
+                builder.append("\t").append(recoverStatePath(goalNode).toString()).append(ls);
+                builder.append(" - Actions: ").append(ls);
+                builder.append("\t").append(recoverActionPath(goalNode).toString()).append(ls);
+                builder.append(" - Search information: ").append(ls);
+                builder.append("\t").append(goalNode.toString());
+                solution++;
+            }
+            return builder.toString();
         }
     }
 
@@ -161,5 +173,14 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
         Collections.reverse(states);
         return states;
+    }
+
+    public static <A, N extends Node<A,?,N>>  List<A> recoverActionPath(N node){
+        List<A> actions = new LinkedList<A>();
+        for(N n : node.path()){
+            if (n.action() != null) actions.add(n.action());
+        }
+        Collections.reverse(actions);
+        return actions;
     }
 }
