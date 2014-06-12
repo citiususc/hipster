@@ -28,9 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Naive implementation of the 8-Puzzle problem with Hipster.
+ * Simple implementation of the 8-Puzzle problem with Hipster.
  */
-public class Simple8PuzzleExample {
+public class SimpleEightPuzzleExample {
 
     enum Action { UP, DOWN, LEFT, RIGHT } // Possible actions of our problem
 
