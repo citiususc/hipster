@@ -59,12 +59,9 @@ public class SimpleEightPuzzleExample {
                     }
                 }).build();
 
-        // Now we have the problem. The next step is to implement the missing methods
-        // The last step is to use an algorithm to solve the problem
+        // Solve the problem using Dijkstra
 
         System.out.println(Hipster.createDijkstra(p).search(Arrays.asList(0,1,2,3,4,5,6,7,8)));
-
-        // Let's run it!
 
     }
 
