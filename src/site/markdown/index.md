@@ -4,7 +4,7 @@
             <p><img alt="" src="img/hipster-no-text.png"></img></p>
             <p>An Open Source Java Library for Heuristic Search</p>
             <p>
-                <a class="btn btn-blue btn-lg" href="http://goo.gl/5sVMUE" role="button">Download Hipster</a>
+                <a class="btn btn-blue btn-lg" href="http://goo.gl/9GCdtd" role="button">Download Hipster</a>
                 <a class="btn btn-primary btn-lg" href="http://goo.gl/KRwd50" role="button">Download Source</a>
             </p>
         </center>
@@ -23,7 +23,7 @@ is and let Hipster do the job.
 ## <i class="fa fa-cogs"></i> Modular
 
 All the components to define a search problem are clearly
-defined and separated across different maven modules. Just pick up
+defined and separated across different [Maven modules](http://maven.apache.org/). Just pick up
 the components you need and create your algorithm from scratch or
 by reusing other algorithms included in Hipster.
 
@@ -61,7 +61,7 @@ Check out some examples included in Hipster, like the N-Puzzle, N-Queens or Maze
 
 ### About this project
 
-During our PhD thesis, we've found that there is a lack of Java libraries
+During our PhD thesis, we have found that there is a lack of Java libraries
 that implement search algorithms with an extensible, flexible and simple to use model.
 Moreover, most of the libraries rely on graph structures or recursive implementations 
 which do not offer fine-grained control over the
@@ -76,8 +76,8 @@ Hipster was originally created and is currently maintained by:
 The scientific supervisors of this project are listed below:
 
 -   **Dr. Manuel Mucientes**
--   **Prof. Manuel Lama**
--   **Prof. Alberto Bugarín**
+-   **Dr. Manuel Lama**
+-   **Dr. Alberto Bugarín**
 
 The project was also accepted in the
 [_9th Iberian Conference on Information Systems and Technologies (CISTI), 2014_](http://www.aisti.eu/cisti2014).
