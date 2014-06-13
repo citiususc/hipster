@@ -34,8 +34,8 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   echo "Building javadocs..."
   mvn javadoc:aggregate
 
-  # Build site only if this is the master branch
-  if [ "$TRAVIS_BRANCH" == "master" ]; then
+  # Build site only if this is the development branch.
+  if [ "$TRAVIS_BRANCH" == "development" ]; then
     echo "Building site..."
     mvn site:site
   fi
