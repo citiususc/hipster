@@ -38,7 +38,7 @@ If you don't find the algorithm or the feature you are looking for, please consi
 The easiest way to use Hipster is adding it as a dependency with your favourite dependency manager.
 Maven users can include the library using the following snippet:
 
-#### Snapshots
+#### Snapshots ![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
 
 You can use the latest (unstable) version of Hipster under development. Just add the following dependency into your pom.xml:
 
