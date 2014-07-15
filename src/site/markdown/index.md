@@ -91,3 +91,8 @@ you might find useful:
 
 -   [**AIMA-JAVA**](https://code.google.com/p/aima-java/) - A comprehensive collection of different algorithms from the book _"Artificial Intelligence, A Modern Approach"_.
 -   [**JUNG**](http://jung.sourceforge.net/) - A Java library for graph processing. It also includes shortest path algorithms such as Dijkstra or A\*.
+
+<center>
+    <p>This software is tested and profiled using JProfiler</p>
+    <a href="http://www.ej-technologies.com/products/jprofiler/overview.html"><img src = "http://static-aws.ej-technologies.com/fSPWWYHqc7hE2dXygJb0KGSIf3TPEGUnaU62MxxGsIv.png"></img></a>
+</center>
