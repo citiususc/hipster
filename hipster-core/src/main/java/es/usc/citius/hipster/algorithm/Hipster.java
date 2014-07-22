@@ -18,6 +18,7 @@ package es.usc.citius.hipster.algorithm;
 
 
 import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
+import es.usc.citius.hipster.model.impl.ADStarNode;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
@@ -60,6 +61,10 @@ public final class Hipster {
 
     public static <A,S,C extends Comparable<C>> MultiobjectiveLS<A,S,C,WeightedNode<A,S,C>> createMultiobjectiveLS(SearchProblem<A,S,WeightedNode<A,S,C>> components){
         return new MultiobjectiveLS<A, S, C, WeightedNode<A, S, C>>(components.getInitialNode(), components.getExpander());
+    }
+
+    public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C> createADStar(SearchProblem<A,S,ADStarNode<A,S,C>> components){
+        return null;//return new ADStarForward<A, S, C>(components.getInitialNode(), components.getExpander())
     }
 
 

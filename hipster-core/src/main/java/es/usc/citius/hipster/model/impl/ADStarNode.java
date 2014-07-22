@@ -2,23 +2,22 @@ package es.usc.citius.hipster.model.impl;
 
 import es.usc.citius.hipster.model.AbstractNode;
 import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ScalarFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 
 /**
- * Implementation of {@link es.usc.citius.hipster.model.HeuristicNode} to be used with
- * the {@link es.usc.citius.hipster.algorithm.ADStarForward} algorithm. The ADStarForward node defines the cost
- * (called G) and the score (called V) to keep the nomenclature introduced in the
- * <a href="http://www.cis.upenn.edu/~maximl/files/ad_icaps05.pdf">article describing
- * the algorithm</a>. This type of node also includes a method to calculate the key for a node, which
- * is a tuple of cost elements obtained from the cost and the score and allows the comparison between
- * nodes. The theoretical details about the comparison between nodes can be consulted in the article.
+ * Interface defining the basic operations for {@link es.usc.citius.hipster.model.Node} to be used with
+ * {@link es.usc.citius.hipster.algorithm.ADStarForward}. Contains the declaration of the methods to retrieve
+ * te cost elements of the node (G and V) and the definition of the {@link ADStarNode.Key}
+ * to compare {@link ADStarNode} elements.
  *
- * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @since 1.0.0
  */
 public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S, ADStarNode<A, S, C>>
-        implements HeuristicNode<A, S, C, ADStarNode<A, S, C>> {
+        implements HeuristicNode<A, S, C, ADStarNode<A, S, C>>, Comparable<ADStarNode<A, S, C>>{
 
     protected C g;
     protected C v;
@@ -60,29 +59,6 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
         return v;
     }
 
-    /**
-     * Same as getG()
-     *
-     * @see #getG()
-     */
-    public C getCost() {
-        return this.g;
-    }
-
-    /**
-     * Same as getV()
-     *
-     * @see #getV()
-     */
-    public C getScore() {
-        return this.v;
-    }
-
-    @Override
-    public C getEstimation() {
-        return this.v;
-    }
-
     public void setG(C g) {
         this.g = g;
     }
@@ -105,6 +81,21 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
 
     public void setAction(A action){
         this.action = action;
+    }
+
+    @Override
+    public C getEstimation() {
+        return v;
+    }
+
+    @Override
+    public C getScore() {
+        return key.first;
+    }
+
+    @Override
+    public C getCost() {
+        return g;
     }
 
     /**
@@ -130,14 +121,15 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
         return this.key.compareTo(o.key);
     }
 
+
     /**
      * Inner class defining the key of the node, which depends on the values of G and V. The
      * key of the node is the comparison criterion for ADStarForward to order the open queue.
      */
-    public static class Key<T extends Comparable<T>> implements Comparable<Key<T>> {
+    public static class Key<C extends Comparable<C>> implements Comparable<Key<C>> {
 
-        private T first;
-        private T second;
+        private C first;
+        private C second;
 
         /**
          * Constructor to calculate a the key to order the nodes in the Open
@@ -145,10 +137,10 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
          *
          * @param g g value of the node
          * @param v v value of the node
-         * @param h
-         * @param e
+         * @param h value of the heuristic
+         * @param e inflation value
          */
-        public Key(T g, T v, T h, double e, BinaryOperation<T> add, ScalarFunction<T> scale) {
+        public Key(C g, C v, C h, double e, BinaryOperation<C> add, ScalarFunction<C> scale) {
             if (v.compareTo(g) >= 0) {
                 this.first = add.apply(g, scale.scale(h, e)); //g + h*e
                 this.second = g;
@@ -165,7 +157,7 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
          * @param first first cost value
          * @param second second cost value
          */
-        public Key(T first, T second){
+        public Key(C first, C second){
             this.first = first;
             this.second = second;
         }
@@ -176,7 +168,7 @@ public class ADStarNode<A, S, C extends Comparable<C>> extends AbstractNode<A, S
          * @param o other Key object
          * @return comparison result
          */
-        public int compareTo(Key<T> o) {
+        public int compareTo(Key<C> o) {
             int firstCompare = this.first.compareTo(o.first);
             if (firstCompare == 0) {
                 return this.second.compareTo(o.second);
