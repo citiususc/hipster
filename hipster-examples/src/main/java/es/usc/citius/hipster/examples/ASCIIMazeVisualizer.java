@@ -221,8 +221,8 @@ public class ASCIIMazeVisualizer {
 
     private void loadSelectedMaze(){
         switch(comboMazes.getSelectedIndex()){
-            case 0: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze4)); break;
-            case 1: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze1)); break;
+            case 0: mazeTextArea.setText(Joiner.on('\n').join(Mazes.exampleMaze1)); break;
+            case 1: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze4)); break;
             case 2: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze3)); break;
             case 3: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze2)); break;
             case 4: mazeTextArea.setText(Joiner.on('\n').join(Mazes.testMaze5)); break;
