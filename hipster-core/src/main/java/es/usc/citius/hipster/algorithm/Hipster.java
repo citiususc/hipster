@@ -21,7 +21,6 @@ import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 public final class Hipster {
