@@ -18,10 +18,19 @@ package es.usc.citius.hipster.algorithm;
 
 
 import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
-import es.usc.citius.hipster.model.impl.ADStarNode;
+import es.usc.citius.hipster.model.ADStarNode;
+import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.function.impl.ADStarNodeExpander;
+import es.usc.citius.hipster.model.function.impl.ADStarNodeFactory;
+import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
+import es.usc.citius.hipster.util.examples.RomanianProblem;
+import es.usc.citius.hipster.util.graph.GraphSearchProblem;
+
+import java.util.Collections;
 
 public final class Hipster {
 
@@ -63,9 +72,17 @@ public final class Hipster {
         return new MultiobjectiveLS<A, S, C, WeightedNode<A, S, C>>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C> createADStar(SearchProblem<A,S,ADStarNode<A,S,C>> components){
-        return null;//return new ADStarForward<A, S, C>(components.getInitialNode(), components.getExpander())
+    public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C,ADStarNodeImpl<A,S,C>> createADStar(SearchComponents<A, S, C> components){
+        //node factory instantiation
+        ADStarNodeFactory<A, S, C> factory = new ADStarNodeFactory<A, S, C>(components);
+        //node expander instantiation
+        ADStarNodeExpander<A, S, C, ADStarNodeImpl<A, S, C>> expander =
+                new ADStarNodeExpander<A, S, C, ADStarNodeImpl<A, S, C>>(components, factory, 1.0);
+        //instantiate algorithm
+        return new ADStarForward(
+                components.getBegin(),
+                Collections.singleton(components.getGoal()),
+                expander);
     }
-
 
 }

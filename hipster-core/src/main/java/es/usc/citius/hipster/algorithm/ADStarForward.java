@@ -17,10 +17,13 @@
 package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
-import es.usc.citius.hipster.model.function.impl.ADStarNodeUpdater;
-import es.usc.citius.hipster.model.impl.ADStarNode;
+import es.usc.citius.hipster.model.function.impl.*;
+import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
+import es.usc.citius.hipster.model.problem.SearchComponents;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,57 +61,23 @@ import java.util.Queue;
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  * @since 1.0.0
  */
-public class ADStarForward<A,S,C extends Comparable<C>>
-        extends Algorithm<A, S, ADStarNode<A,S,C>> {
+public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>> extends Algorithm<A, S, N> {
 
-    private final ADStarNode<A,S,C> beginNode;
-    private final Collection<ADStarNode<A,S,C>> goalNodes;
-    private final TransitionFunction<A, S> successorFunction;
-    private final TransitionFunction<A, S> predecessorFunction;
-    private final ADStarNodeUpdater<A, S, C> updater;
-    private NodeFactory<A, S, ADStarNode<A,S,C>> nodeFactory;
+    private S begin;
+    private Collection<S> goals;
+    private ADStarNodeExpander<A, S, C, N> expander;
 
-
-
-    /**
-     * Constructor to instantiate ADStarForward with a single goal state.
-     *
-     * @param begin beginning state
-     * @param goal goal state
-     * @param predecessorFunction function that generate the predecessor states from the current
-     * @param successorFunction function that generate the successor states from the current
-     * @param updater component to update the cost values of nodes already created
-     */
-    public ADStarForward(S begin, S goal, NodeFactory<A, S, ADStarNode<A,S,C>> nodeFactory, TransitionFunction<A, S> predecessorFunction,
-                         TransitionFunction<A, S> successorFunction, ADStarNodeUpdater<A, S, C> updater) {
-        this(begin, Collections.singleton(goal), nodeFactory, predecessorFunction, successorFunction, updater);
+    public ADStarForward(S begin, S goal, ADStarNodeExpander<A, S, C, N> expander) {
+        this(begin, Collections.singleton(goal), expander);
     }
 
-    /**
-     * Constructor to instantiate ADStarForward with multiple goal states. The algorithm will find first the
-     * path between the begin and the nearest goal.
-     *
-     * @param begin beginning node
-     * @param goals collection of goal states
-     * @param nodeFactory component to instantiate new nodes
-     * @param predecessorFunction function that generate the predecessor states from the current
-     * @param successorFunction function that generate the successor states from the current
-     * @param updater component to update the cost values of nodes already created
-     */
-    public ADStarForward(S begin, Collection<S> goals, NodeFactory<A, S, ADStarNode<A,S,C>> nodeFactory, TransitionFunction<A, S> predecessorFunction,
-                         TransitionFunction<A, S> successorFunction, ADStarNodeUpdater<A, S, C> updater) {
-        this.updater = updater;
-        this.predecessorFunction = predecessorFunction;
-        this.successorFunction = successorFunction;
-        this.beginNode = nodeFactory.makeNode(null, new Transition<A, S>(null, begin));
-        //initialize goal node collection
-        this.goalNodes = new ArrayList<ADStarNode<A,S,C>>(goals.size());
-        //iterate over the set of goals
-        for(S current : goals){
-            //create new node for current goal
-            this.goalNodes.add(nodeFactory.makeNode(beginNode, new Transition<A, S>(null, current)));
-        }
+    public ADStarForward(S begin, Collection<S> goals, ADStarNodeExpander<A, S, C, N> expander) {
+        this.begin = begin;
+        this.goals = goals;
+        this.expander = expander;
     }
+
+
 
     @Override
     public Iterator iterator() {
@@ -118,31 +87,41 @@ public class ADStarForward<A,S,C extends Comparable<C>>
     /**
      * Internal iterator that implements all the logic of the A* search
      */
-    public class Iterator implements java.util.Iterator<ADStarNode<A,S,C>> {
+    public class Iterator implements java.util.Iterator<N> {
         //queues used by the algorithm
-        private Map<S, ADStarNode<A,S,C>> open;
-        private Map<S, ADStarNode<A,S,C>> closed;
-        private Map<S, ADStarNode<A,S,C>> incons;
-        private Map<S, ADStarNode<A,S,C>> visited;
+        private Map<S, N> open;
+        private Map<S, N> closed;
+        private Map<S, N> incons;
         private Iterable<Transition<A, S>> transitionsChanged;
-        private Queue<ADStarNode<A,S,C>> queue;
+        private Queue<N> queue;
+        private final N beginNode;
+        private final Collection<N> goalNodes;
 
         public Iterator() {
+            //initialize nodes
+            this.beginNode = expander.makeNode(null, new Transition<A, S>(null, begin));
+            //initialize goal node collection
+            this.goalNodes = new ArrayList<N>(goals.size());
+            //iterate over the set of goals
+            for(S current : goals){
+                //create new node for current goal
+                this.goalNodes.add(expander.makeNode(beginNode, new Transition<A, S>(null, current)));
+            }
             //initialize queues of the algorithm
-            this.open = new HashMap<S, ADStarNode<A,S,C>>();
-            this.closed = new HashMap<S, ADStarNode<A,S,C>>();
-            this.incons = new HashMap<S, ADStarNode<A,S,C>>();
-            this.queue = new PriorityQueue<ADStarNode<A,S,C>>();
-            //initialize collection of visited nodes
-            this.visited = new HashMap<S, ADStarNode<A,S,C>>();
+            this.open = new HashMap<S, N>();
+            this.closed = new HashMap<S, N>();
+            this.incons = new HashMap<S, N>();
+            this.queue = new PriorityQueue<N>();
+            //initialize list of visited nodes
+            expander.clearVisited();
             //initialize set of changed transitions
             this.transitionsChanged = new HashSet<Transition<A, S>>();
             //mark begin node as visited by the algorithm
-            this.visited.put(beginNode.state(), beginNode);
+            expander.getVisited().put(beginNode.state(), beginNode);
             //mark goal nodes as visited
-            for(ADStarNode<A,S,C> current : goalNodes){
+            for(N current : goalNodes){
                 //mark current current as visited by the algorithm
-                this.visited.put(current.state(), current);
+                expander.getVisited().put(current.state(), current);
             }
             //insert beginning node at OPEN
             insertOpen(beginNode);
@@ -153,7 +132,7 @@ public class ADStarForward<A,S,C extends Comparable<C>>
          *
          * @param node instance of node to add
          */
-        private void insertOpen(ADStarNode<A,S,C> node) {
+        private void insertOpen(N node) {
             this.open.put(node.state(), node);
             this.queue.offer(node);
         }
@@ -164,9 +143,9 @@ public class ADStarForward<A,S,C extends Comparable<C>>
          *
          * @return most promising node
          */
-        private ADStarNode<A,S,C> takePromising() {
+        private N takePromising() {
             while (!queue.isEmpty()) {
-                ADStarNode<A,S,C> head = queue.peek();
+                N head = queue.peek();
                 if (!open.containsKey(head.state())) {
                     queue.poll();
                 } else {
@@ -181,7 +160,7 @@ public class ADStarForward<A,S,C extends Comparable<C>>
          *
          * @param node instance of node
          */
-        private void update(ADStarNode<A,S,C> node) {
+        private void updateQueues(N node) {
             S state = node.state();
             if (node.getV().compareTo(node.getG()) != 0) {
                 if (!this.closed.containsKey(state)) {
@@ -194,26 +173,8 @@ public class ADStarForward<A,S,C extends Comparable<C>>
                 //this.queue.remove(node);
                 this.incons.remove(state);
             }
-        }
-
-        /**
-         * Retrieves a map with the predecessors states and the node associated
-         * to each predecessor state.
-         *
-         * @param current current state to calculate predecessors of
-         * @return map pairs of <state, node> with the visited predecessors of the state
-         */
-        private Map<Transition<A, S>, ADStarNode<A,S,C>> predecessorsMap(S current){
-            //Map<Transition, Node> containing predecessors relations
-            Map<Transition<A, S>, ADStarNode<A,S,C>> mapPredecessors = new HashMap<Transition<A, S>, ADStarNode<A,S,C>>();
-            //Fill with non-null pairs of <Transition, Node>
-            for (Transition<A, S> predecessor : predecessorFunction.transitionsFrom(current)) {
-                ADStarNode<A,S,C> predecessorNode = visited.get(predecessor.getState());
-                if (predecessorNode != null) {
-                    mapPredecessors.put(predecessor, predecessorNode);
-                }
-            }
-            return mapPredecessors;
+            //remove flag to update queues
+            node.setDoUpdate(false);
         }
 
         /**
@@ -233,76 +194,42 @@ public class ADStarForward<A,S,C extends Comparable<C>>
             throw new UnsupportedOperationException();
         }
 
-        public ADStarNode<A, S, C> next() {
+        public N next() {
             //First node in OPEN retrieved, not removed
-            ADStarNode<A, S, C> current = takePromising();
+            N current = takePromising();
             S state = current.state();
-            ADStarNode<A, S, C> minGoal = Collections.min(goalNodes);
+            N minGoal = Collections.min(goalNodes);
             if (minGoal.compareTo(current) >= 0 || minGoal.getV().compareTo(minGoal.getG()) < 0) {
                 //s removed from OPEN
                 open.remove(state);
                 //this.queue.remove(current);
                 //if v(s) > g(s)
-                boolean consistent = current.getV().compareTo(current.getG()) > 0;
-                if (consistent) {
+                if (current.isConsistent()) {
                     //v(s) = g(s)
                     current.setV(current.getG());
                     //closed = closed U current
                     closed.put(state, current);
                 } else {
                     //v(s) = Infinity
-                    updater.setMaxV(current);
-                    update(current);
+                    expander.setMaxV(current);
+                    updateQueues(current);
                 }
 
-                for (Transition<A, S> transition : successorFunction.transitionsFrom(state)) {
-                    //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
-                    ADStarNode<A, S, C> successorNode = visited.get(transition.getState());
-                    if (successorNode == null) {
-                        successorNode = nodeFactory.makeNode(current, transition);
-                        visited.put(transition.getState(), successorNode);
-                    }
-                    if (consistent) {
-                        //if g(s') > g(s) + c(s, s')
-                        // bp(s') = s
-                        // g(s') = g(s) + c(s, s')
-                        boolean doUpdate = updater.updateConsistent(successorNode, current, transition);
-                        if (doUpdate) {
-                            update(successorNode);
-                        }
-                    } else {
-                        //Generate
-                        if (transition.getState().equals(state)) {
-                            // bp(s') = arg min s'' predecessor of s' such that (v(s'') + c(s'', s'))
-                            // g(s') = v(bp(s')) + c(bp(s'), s'')
-                            updater.updateInconsistent(successorNode, predecessorsMap(transition.getState()));
-                            update(successorNode);
-                        }
+                for (N successorNode : expander.expand(current)) {
+                    if(successorNode.isDoUpdate()){
+                        updateQueues(successorNode);
                     }
                 }
             } else {
                 // for all directed edges (u, v) with changed edge costs
-                for (Transition<A, S> transition : transitionsChanged) {
-                    state = transition.getState();
-                    //if v != start
-                    if (!state.equals(beginNode.state())) {
-                        //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
-                        ADStarNode<A, S, C> node = this.visited.get(state);
-                        if (node == null) {
-                            node = nodeFactory.makeNode(current, transition);
-                            visited.put(state, node);
-                        }
-                        // bp(v) = arg min s'' predecessor of v such that (v(s'') + c(s'', v))
-                        // g(v) = v(bp(v)) + c(bp(v), v)
-                        updater.updateInconsistent(node, predecessorsMap(transition.getState()));
-                        update(node);
-                    }
+                for(N nodeTransitionsChanged : expander.expandTransitionsChanged(beginNode.state(), current, transitionsChanged)){
+                    updateQueues(nodeTransitionsChanged);
                 }
                 //move states from INCONS to OPEN
                 open.putAll(incons);
-                //update the priorities for all s in OPEN according to key(s)
+                //updateQueues the priorities for all s in OPEN according to key(s)
                 queue.clear();
-                for(ADStarNode<A, S, C> node : open.values()){
+                for(N node : open.values()){
                     queue.offer(node);
                 }
                 //closed = empty
@@ -318,7 +245,7 @@ public class ADStarForward<A,S,C extends Comparable<C>>
          *
          * @return open map with the unexplored nodes and states.
          */
-        public Map<S, ADStarNode<A, S, C>> getOpen() { return open; }
+        public Map<S, N> getOpen() { return open; }
 
         /**
          * Get the internal map used by the algorithm to keep the relations between
@@ -327,9 +254,9 @@ public class ADStarForward<A,S,C extends Comparable<C>>
          *
          * @return closed map with the explored nodes and states
          */
-        public Map<S, ADStarNode<A, S, C>> getClosed() { return closed; }
+        public Map<S, N> getClosed() { return closed; }
 
-        public Map<S, ADStarNode<A, S, C>> getIncons() { return incons; }
+        public Map<S, N> getIncons() { return incons; }
     }
 
 }
