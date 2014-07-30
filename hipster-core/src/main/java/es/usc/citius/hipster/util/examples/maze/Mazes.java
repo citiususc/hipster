@@ -12,7 +12,7 @@ public final class Mazes {
 
     }
 
-    // Minimal path: 5.656854249492381
+
     /**
      * 6x9 small maze with a shortest path distance of 5.656854249492381
      */
@@ -24,7 +24,7 @@ public final class Mazes {
             "        ",
             "        "};
 
-    // Minimal path: 81.69848480983497
+
     /**
      * 20x32 maze with a shortest path distance of 81.69848480983497
      */
@@ -50,7 +50,7 @@ public final class Mazes {
             "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
             "XXXXXX            XXXXXXXXXXXXXX"};
 
-    // Minimal path: 15.55634918610405
+
     /**
      * 13x33 maze with a shortest path distance of 15.55634918610405
      */
@@ -69,7 +69,7 @@ public final class Mazes {
             "           S                     ",
             "                                 "};
 
-    // Minimal cost: 27.07106781186548
+
     /**
      * 13x33 maze with a shortest path distance of 27.07106781186548
      */
@@ -87,7 +87,7 @@ public final class Mazes {
             "                       XXX       ",
             "           S                     ",
             "                                 "};
-    // Minimal cost: 34.14213562373095
+
     /**
      * 13x33 maze with a shortest path distance of 34.14213562373095
      */
@@ -106,10 +106,29 @@ public final class Mazes {
             "           S                     ",
             "                                 "};
 
+
+    public static String[] exampleMaze1 = new String[]{
+            "|             _____                          |",
+            "|           _/     \\                        |",
+            "|           _   G  |                         |",
+            "|            |_____|                         |",
+            "|                                            |",
+            "|     ____________________/ /_____/ /        |",
+            "|     _________  ___________  ______         |",
+            "|             / /          / /               |",
+            "|            / /                             |",
+            "|           / /                              |",
+            "|          / /                               |",
+            "|                                            |",
+            "|                                            |",
+            "|                   S                        |",
+            "|                                            |"
+    };
+
     /**
      * ASCII Maze examples with the shortest path distance.
      */
-    public enum Example {
+    public enum TestMaze {
         MAZE1(new Maze2D(testMaze1),5.656854249492381),
         MAZE2(new Maze2D(testMaze2),81.69848480983497),
         MAZE3(new Maze2D(testMaze3),15.55634918610405),
@@ -120,7 +139,7 @@ public final class Mazes {
         Maze2D maze;
 
 
-        Example(Maze2D maze, double minimalPathCost){
+        TestMaze(Maze2D maze, double minimalPathCost){
             this.maze = maze;
             this.minimalPathCost = minimalPathCost;
         }
