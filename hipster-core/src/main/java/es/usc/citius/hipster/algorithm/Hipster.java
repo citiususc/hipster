@@ -18,7 +18,9 @@ package es.usc.citius.hipster.algorithm;
 
 
 import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
-import es.usc.citius.hipster.model.impl.UnweightedNode;
+import es.usc.citius.hipster.model.CostNode;
+import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
@@ -28,38 +30,37 @@ public final class Hipster {
 
     }
 
-    public static <A,S,C extends Comparable<C>> AStar<A,S,C,WeightedNode<A,S,C>> createAStar(SearchProblem<A,S,WeightedNode<A,S,C>> components){
-        return new AStar<A, S, C, WeightedNode<A,S,C>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> AStar<A,S,C,N> createAStar(SearchProblem<A,S,N> components){
+        return new AStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S,C extends Comparable<C>> AStar<A,S,C,WeightedNode<A,S,C>> createDijkstra(SearchProblem<A,S,WeightedNode<A,S,C>> components){
+    public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> AStar<A,S,C,N> createDijkstra(SearchProblem<A,S,N> components){
         //TODO: There is no difference with AStar. Actually if the NodeExpander uses heuristics, this "Dijkstra" impl works as the AStar. This should be changed!
-        return new AStar<A, S, C, WeightedNode<A,S,C>>(components.getInitialNode(), components.getExpander());
+        return new AStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
-
-    public static <A,S,C extends Comparable<C>> BellmanFord<A,S,C,WeightedNode<A,S,C>> createBellmanFord(SearchProblem<A,S,WeightedNode<A,S,C>> components){
-        return new BellmanFord<A, S, C, WeightedNode<A,S,C>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,C extends Comparable<C>, N extends CostNode<A,S,C,N>> BellmanFord<A,S,C,N> createBellmanFord(SearchProblem<A,S,N> components){
+        return new BellmanFord<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S> BreadthFirstSearch<A,S,UnweightedNode<A,S>> createBreadthFirstSearch(SearchProblem<A,S,UnweightedNode<A,S>> components){
-        return new BreadthFirstSearch<A, S, UnweightedNode<A, S>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,N extends Node<A,S,N>> BreadthFirstSearch<A,S,N> createBreadthFirstSearch(SearchProblem<A,S,N> components){
+        return new BreadthFirstSearch<A,S,N>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S> DepthFirstSearch<A,S,UnweightedNode<A,S>> createDepthFirstSearch(SearchProblem<A,S,UnweightedNode<A,S>> components){
-        return new DepthFirstSearch<A, S, UnweightedNode<A, S>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,N extends Node<A,S,N>> DepthFirstSearch<A,S,N> createDepthFirstSearch(SearchProblem<A,S,N> components){
+        return new DepthFirstSearch<A, S, N>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S,C extends Comparable<C>> IDAStar<A,S,C,WeightedNode<A,S,C>> createIDAStar(SearchProblem<A,S,WeightedNode<A,S,C>> components){
-        return new IDAStar<A, S, C, WeightedNode<A, S, C>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> IDAStar<A,S,C,N> createIDAStar(SearchProblem<A,S,N> components){
+        return new IDAStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
-    public static <A,S,C extends Comparable<C>> HillClimbing<A,S,C,WeightedNode<A,S,C>> createHillClimbing(SearchProblem<A,S,WeightedNode<A,S,C>> components, boolean enforced){
-        return new HillClimbing<A,S,C,WeightedNode<A,S,C>>(components.getInitialNode(), components.getExpander(), enforced);
+    public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> HillClimbing<A,S,C,N> createHillClimbing(SearchProblem<A,S,N> components, boolean enforced){
+        return new HillClimbing<A,S,C,N>(components.getInitialNode(), components.getExpander(), enforced);
     }
 
-    public static <A,S,C extends Comparable<C>> MultiobjectiveLS<A,S,C,WeightedNode<A,S,C>> createMultiobjectiveLS(SearchProblem<A,S,WeightedNode<A,S,C>> components){
-        return new MultiobjectiveLS<A, S, C, WeightedNode<A, S, C>>(components.getInitialNode(), components.getExpander());
+    public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> MultiobjectiveLS<A,S,C,N> createMultiobjectiveLS(SearchProblem<A,S,N> components){
+        return new MultiobjectiveLS<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
 
