@@ -135,12 +135,12 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             StackFrameNode nextNode;
             do {
                 nextNode = processNextNode();
+                // No more neighbors to visit with the current fLimit. Update the new fLimit
                 if (nextNode == null){
                     // Reinitialize
                     if (minfLimit != null && minfLimit.compareTo(fLimit)>0){
                         fLimit = minfLimit;
                         reinitialization++;
-                        //System.out.println("Reinitializing, new bound: " + fLimit);
                         minfLimit = null;
                         stack.add(new StackFrameNode(initialNode));
                         nextNode = processNextNode();
@@ -175,8 +175,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             C fCurrent = current.node.getScore();
             if (fCurrent.compareTo(fLimit)>0){
                 // Current node exceeds the limit bound, update minfLimit, pop and skip.
-                // Update minfLimit
-                updateMinFLimit(current.node.getScore());
+                updateMinFLimit(fCurrent);
                 // Remove from stack
                 current.processed = true;
                 return stack.pop();
@@ -186,7 +185,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             if (current.successors.hasNext()){
                 // 3 - Node has at least one neighbor
                 N successor = current.successors.next();
-                // push the node;
+                // push the node
                 stack.add(new StackFrameNode(successor));
                 return current;
 
