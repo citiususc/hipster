@@ -116,6 +116,14 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             }
             return false;
         }
+
+        public Queue<N> getQueue() {
+            return queue;
+        }
+
+        public Multimap<S, N> getNonDominated() {
+            return nonDominated;
+        }
     }
 
     @Override

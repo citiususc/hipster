@@ -16,8 +16,14 @@
 
 package es.usc.citius.hipster.util.examples.maze;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -28,7 +34,7 @@ import java.util.List;
  *
  * <pre>
  *     {@code public static String[] example = new String[]{
- *                  "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+ *                  "XXSXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
  *                  "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
  *                  "XX    XXXXXXXXXX XXX XX     XXXX",
  *                  "XXXXX  XXXXXX    XXX XX XXX XXXX",
@@ -43,7 +49,7 @@ import java.util.List;
  *                  "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
  *                  "XXXXXX              XXXX XX XXXX",
  *                  "XXXXXX XXXXXXXXXXXX XX      XXXX",
- *                  "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+ *                  "XXXXXX XXG   XXXXXX XXXX XXXXXXX",
  *                  "XXXXXX XXXXX   XXX            XX",
  *                  "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
  *                  "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
@@ -57,28 +63,29 @@ import java.util.List;
  * <ul>
  *     <li>"X": occupied tile</li>
  *     <li>" ": empty tile</li>
- *     <li>"@": initial state (starting point)</li>
- *     <li>"O": goal state</li>
+ *     <li>"S": initial state (starting point)</li>
+ *     <li>"G": goal state</li>
  *     <li>".": visited tile</li>
  * </ul>
  *
  */
 public class Maze2D {
 
-    private byte maze[][];
+    private char maze[][];
     private Point initialLoc;
     private Point goalLoc;
     private int rows;
     private int columns;
+    private static Set<Character> FREE_TILES = Sets.newHashSet(Arrays.asList(' ', 'S', 'G', '.'));
 
     /**
      * Symbols allowed to create a maze
      */
     public static enum Symbol {
-        OCCUPIED('X'),    // 0
-        EMPTY(' '),    // 1
-        START('@'),    // 2
-        GOAL('O'),        // 3
+        OCCUPIED('X'),
+        EMPTY(' '),
+        START('S'),
+        GOAL('G'),
         VISITED('.');
         public final char character;
 
@@ -86,8 +93,8 @@ public class Maze2D {
             this.character = symbol;
         }
 
-        public byte value() {
-            return (byte) this.ordinal();
+        public char value() {
+            return character;
         }
 
         public static Symbol parse(char c) {
@@ -96,7 +103,8 @@ public class Maze2D {
                     return s;
                 }
             }
-            throw new IllegalArgumentException("Unrecognized char " + c);
+            // If the symbol is not recognized, it is considered as an occupied tile
+            return OCCUPIED;
         }
     }
 
@@ -104,15 +112,22 @@ public class Maze2D {
      * Creates a new 2D ASCII Maze.
      *
      * @param maze    2D Byte array of that represents the maze using {@link Symbol}
-     * @param initial Starting point
-     * @param goal    Goal point
      */
-    public Maze2D(byte maze[][], Point initial, Point goal) {
+    public Maze2D(char maze[][]) {
         this.maze = maze;
         this.rows = maze.length;
-        this.columns = maze[0].length;
-        this.initialLoc = initial;
-        this.goalLoc = goal;
+        this.columns = findMaxRowLength(maze);
+        this.initialLoc = charToPoint(Symbol.START.value());
+        this.goalLoc = charToPoint(Symbol.GOAL.value());
+    }
+
+    private Point charToPoint(char c){
+        for(int row = 0; row < this.rows; row++){
+            for(int column = 0; row < this.columns; column++){
+                if (maze[row][column] == c) return new Point(column, row);
+            }
+        }
+        return null;
     }
 
     /**
@@ -120,28 +135,54 @@ public class Maze2D {
      *
      * @param maze2D Array of strings representing the maze. Use symbols from {@code Symbol}
      */
-    public Maze2D(String[] maze2D) {
+    public Maze2D(String[] maze2D) throws IllegalFormatException {
         // Initialize maze
         this.rows = maze2D.length;            // y axis (rows)
-        this.columns = maze2D[0].length();  // x axis (columns)
+        this.columns = findMaxRowLength(maze2D);  // x axis (columns)
 
-        maze = new byte[rows][columns];
+        maze = new char[rows][columns];
         // Define valid cells
         for (int row = 0; row < this.rows; row++) {
+            // if the current row has less than 'columns' characters, fill with empty tiles
+            if (maze2D[row].length() < this.columns) {
+                maze2D[row] = maze2D[row].concat(Strings.repeat(String.valueOf(Symbol.EMPTY.value()), this.columns - maze2D[row].length()));
+            }
             for (int column = 0; column < this.columns; column++) {
-                // Note that, point(x=2,y=1) is located in map[1][2]
-                int x = column;
-                int y = row;
                 char charPoint = maze2D[row].charAt(column);
-                // Parse
-                maze[row][column] = Symbol.parse(charPoint).value();
+                // Parse character
+                maze[row][column] = charPoint;
+                // Note that point(x=2,y=1) is located in maze[1][2]
                 if (maze[row][column] == Symbol.GOAL.value()) {
-                    this.goalLoc = new Point(x, y);
+                    this.goalLoc = new Point(column, row);
                 } else if (maze[row][column] == Symbol.START.value()) {
-                    this.initialLoc = new Point(x, y);
+                    this.initialLoc = new Point(column, row);
                 }
             }
         }
+
+        if (this.getInitialLoc() == null){
+            throw new IllegalArgumentException("No initial location. Use the symbol S");
+        }
+
+        if (this.getGoalLoc() == null){
+            throw new IllegalArgumentException("No goal location. Use the symbol G");
+        }
+    }
+
+    private int findMaxRowLength(String maze[]){
+        int max = 0;
+        for (String rowMaze : maze) {
+            if (rowMaze.length() > max) max = rowMaze.length();
+        }
+        return max;
+    }
+
+    private int findMaxRowLength(char maze[][]){
+        int max = 0;
+        for (int row = 0; row < maze.length; row++) {
+            if (maze[row].length > max) max = maze[row].length;
+        }
+        return max;
     }
 
     /**
@@ -168,25 +209,7 @@ public class Maze2D {
      * @return True if is free, false if is not empty.
      */
     public boolean isFree(Point p) {
-        return this.maze[p.y][p.x] > Symbol.OCCUPIED.value();
-    }
-
-    /**
-     * Create a random squared 2D Maze.
-     *
-     * @param size      Size of the maze
-     * @param spaceProb uniform probability (between 0-1) of a cell to be empty
-     * @return Random maze
-     */
-    public static Maze2D random(int size, double spaceProb) {
-        byte[][] maze = new byte[size][size];
-        Random r = new Random(System.nanoTime());
-        for (int row = 0; row < size; row++) {
-            for (int column = 0; column < size; column++) {
-                maze[row][column] = (r.nextDouble() > (1.0d - spaceProb)) ? Symbol.EMPTY.value() : Symbol.OCCUPIED.value();
-            }
-        }
-        return new Maze2D(maze, new Point(0, 0), new Point(size - 1, size - 1));
+        return FREE_TILES.contains(this.maze[p.y][p.x]);
     }
 
     /**
@@ -280,7 +303,10 @@ public class Maze2D {
             for (Point p : replacement.keySet()) {
                 int row = p.y;
                 int column = p.x;
-                stringMaze[row] = replaceChar(stringMaze[row], column, replacement.get(p));
+                char c = stringMaze[row].charAt(column);
+                if (c != Symbol.START.value() && c != Symbol.GOAL.value()) {
+                    stringMaze[row] = replaceChar(stringMaze[row], column, replacement.get(p));
+                }
             }
         }
         String output = "";
@@ -357,18 +383,12 @@ public class Maze2D {
         return validMoves;
     }
 
-    public char[][] toCharArray() {
-        char[][] chars = new char[this.rows][this.columns];
-        for (int row = 0; row < this.rows; row++) {
-            for (int column = 0; column < this.columns; column++) {
-                chars[row][column] = Symbol.values()[maze[row][column]].character;
-            }
-        }
-        return chars;
+    public char[][] getMazeCharArray() {
+        return maze;
     }
 
     public String[] toStringArray() {
-        char[][] chars = toCharArray();
+        char[][] chars = getMazeCharArray();
         String[] str = new String[chars.length];
         for (int i = 0; i < chars.length; i++) {
             str[i] = String.copyValueOf(chars[i]);
@@ -393,8 +413,8 @@ public class Maze2D {
      * @return set of different points.
      */
     public Set<Point> diff(Maze2D to) {
-        char[][] maze1 = this.toCharArray();
-        char[][] maze2 = to.toCharArray();
+        char[][] maze1 = this.getMazeCharArray();
+        char[][] maze2 = to.getMazeCharArray();
         Set<Point> differentLocations = new HashSet<Point>();
         for (int row = 0; row < this.rows; row++) {
             for (int column = 0; column < this.columns; column++) {
@@ -410,7 +430,7 @@ public class Maze2D {
      * Get this maze as a byte array.
      * @return
      */
-    public byte[][] getMaze() {
+    public char[][] getMaze() {
         return maze;
     }
 
@@ -436,10 +456,12 @@ public class Maze2D {
      * @return empty maze.
      */
     public static Maze2D empty(int size) {
-        byte[][] maze = new byte[size][size];
+        char[][] maze = new char[size][size];
         for (int i = 0; i < size; i++) {
             Arrays.fill(maze[i], Symbol.EMPTY.value());
         }
-        return new Maze2D(maze, new Point(0, 0), new Point(size - 1, size - 1));
+        maze[0][0] = Symbol.START.value();
+        maze[size][size] = Symbol.GOAL.value();
+        return new Maze2D(maze);
     }
 }

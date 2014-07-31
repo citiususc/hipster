@@ -12,24 +12,24 @@ public final class Mazes {
 
     }
 
-    // Minimal path: 5.656854249492381
+
     /**
      * 6x9 small maze with a shortest path distance of 5.656854249492381
      */
     public static String[] testMaze1 = new String[]{
             "        ",
             "    X   ",
-            "  @ X O ",
+            "  S X G ",
             "    X   ",
             "        ",
             "        "};
 
-    // Minimal path: 81.69848480983497
+
     /**
      * 20x32 maze with a shortest path distance of 81.69848480983497
      */
     public static String[] testMaze2 = new String[]{
-            "XX@XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            "XXSXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XX XXXXXXXXXXXXX     XXXXXXXXXXX",
             "XX    XXXXXXXXXX XXX XX     XXXX",
             "XXXXX  XXXXXX    XXX XX XXX XXXX",
@@ -44,18 +44,18 @@ public final class Mazes {
             "XXXXXXXXXXXXXXXXXXXXXXXX XX XXXX",
             "XXXXXX              XXXX XX XXXX",
             "XXXXXX XXXXXXXXXXXX XX      XXXX",
-            "XXXXXX XXO   XXXXXX XXXX XXXXXXX",
+            "XXXXXX XXG   XXXXXX XXXX XXXXXXX",
             "XXXXXX XXXXX   XXX            XX",
             "XXXXXX XXXXXXX XXXXXXXXXXX XXXXX",
             "XXXXXX XXXXXXX XXXXXXXXXXXXXXXXX",
             "XXXXXX            XXXXXXXXXXXXXX"};
 
-    // Minimal path: 15.55634918610405
+
     /**
      * 13x33 maze with a shortest path distance of 15.55634918610405
      */
     public static String[] testMaze3 = new String[]{
-            "                      O          ",
+            "                      G          ",
             "                                 ",
             "                                 ",
             "                                 ",
@@ -66,15 +66,15 @@ public final class Mazes {
             "                                 ",
             "                                 ",
             "                                 ",
-            "           @                     ",
+            "           S                     ",
             "                                 "};
 
-    // Minimal cost: 27.07106781186548
+
     /**
      * 13x33 maze with a shortest path distance of 27.07106781186548
      */
     public static String[] testMaze4 = new String[]{
-            "                      O          ",
+            "                      G          ",
             "                                 ",
             "                                 ",
             "                                 ",
@@ -85,14 +85,14 @@ public final class Mazes {
             "                       XXX       ",
             "                       XXX       ",
             "                       XXX       ",
-            "           @                     ",
+            "           S                     ",
             "                                 "};
-    // Minimal cost: 34.14213562373095
+
     /**
      * 13x33 maze with a shortest path distance of 34.14213562373095
      */
     public static String[] testMaze5 = new String[]{
-            "                  X   O          ",
+            "                  X   G          ",
             "                  X              ",
             "                  XXXXXXXX       ",
             "       XXXXXXXXXX  XXXXX         ",
@@ -103,13 +103,33 @@ public final class Mazes {
             "                       XXX       ",
             "                       XXX       ",
             "                       XXX       ",
-            "           @                     ",
+            "           S                     ",
             "                                 "};
+
+
+    public static String[] exampleMaze1 = new String[]{
+            "|             _________                      |",
+            "|             |       |                      |",
+            "|             |   G                          |",
+            "|             |_______|                      |",
+            "|                                            |",
+            "| ||_____________________||  ||___|| ||_     |",
+            "| ||                                         |",
+            "| //___________   ____________   _______     |",
+            "|            //  //         //  //           |",
+            "|           //  //                           |",
+            "|          //  //                            |",
+            "|         //  //                             |",
+            "|                                            |",
+            "|                                            |",
+            "|                   S                        |",
+            "|                                            |"
+    };
 
     /**
      * ASCII Maze examples with the shortest path distance.
      */
-    public enum Example {
+    public enum TestMaze {
         MAZE1(new Maze2D(testMaze1),5.656854249492381),
         MAZE2(new Maze2D(testMaze2),81.69848480983497),
         MAZE3(new Maze2D(testMaze3),15.55634918610405),
@@ -120,7 +140,7 @@ public final class Mazes {
         Maze2D maze;
 
 
-        Example(Maze2D maze, double minimalPathCost){
+        TestMaze(Maze2D maze, double minimalPathCost){
             this.maze = maze;
             this.minimalPathCost = minimalPathCost;
         }

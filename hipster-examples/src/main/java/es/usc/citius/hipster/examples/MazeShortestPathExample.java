@@ -35,7 +35,7 @@ public class MazeShortestPathExample {
         // that allows the creation of labyrinths using ascii.
         // For this example, we use the MAZE5 example defined in
         // class Mazes.
-        Mazes.Example example = Mazes.Example.MAZE1;
+        Mazes.TestMaze example = Mazes.TestMaze.MAZE1;
         // Print the maze
         System.out.println("Maze example:");
         System.out.println(example.getMaze());
