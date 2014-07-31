@@ -40,7 +40,7 @@ public abstract class RomaniaProblemOptimalSearchTest {
         costsFromArad.put(RomanianProblem.City.Zerind, 75d);
         costsFromArad.put(RomanianProblem.City.Timisoara, 118d);
         costsFromArad.put(RomanianProblem.City.Sibiu, 140d);
-        costsFromArad.put(RomanianProblem.City.Oradea, 291d);
+        costsFromArad.put(RomanianProblem.City.Oradea, 146d);
         costsFromArad.put(RomanianProblem.City.Fagaras, 239d);
         costsFromArad.put(RomanianProblem.City.Rimnicu_Vilcea, 220d);
         costsFromArad.put(RomanianProblem.City.Craiova, 366d);
@@ -52,7 +52,7 @@ public abstract class RomaniaProblemOptimalSearchTest {
         scoresFromArad.put(RomanianProblem.City.Zerind, 449d);
         scoresFromArad.put(RomanianProblem.City.Timisoara, 447d);
         scoresFromArad.put(RomanianProblem.City.Sibiu, 393d);
-        scoresFromArad.put(RomanianProblem.City.Oradea, 671d);
+        scoresFromArad.put(RomanianProblem.City.Oradea, 526d);
         scoresFromArad.put(RomanianProblem.City.Fagaras, 415d);
         scoresFromArad.put(RomanianProblem.City.Rimnicu_Vilcea, 413d);
         scoresFromArad.put(RomanianProblem.City.Craiova, 526d);
