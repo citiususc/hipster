@@ -46,6 +46,9 @@ public abstract class RomaniaProblemOptimalSearchTest {
         costsFromArad.put(RomanianProblem.City.Craiova, 366d);
         costsFromArad.put(RomanianProblem.City.Pitesti, 317d);
         costsFromArad.put(RomanianProblem.City.Bucharest, 418d);
+        costsFromArad.put(RomanianProblem.City.Lugoj, 229d);
+        costsFromArad.put(RomanianProblem.City.Mehadia, 299d);
+        costsFromArad.put(RomanianProblem.City.Drobeta, 374d);
         //obtain score map for expanding nodes to Bucharest
         scoresFromArad = new HashMap<RomanianProblem.City, Double>();
         scoresFromArad.put(RomanianProblem.City.Arad, 366d);
@@ -58,6 +61,9 @@ public abstract class RomaniaProblemOptimalSearchTest {
         scoresFromArad.put(RomanianProblem.City.Craiova, 526d);
         scoresFromArad.put(RomanianProblem.City.Pitesti, 417d);
         scoresFromArad.put(RomanianProblem.City.Bucharest, 418d);
+        scoresFromArad.put(RomanianProblem.City.Lugoj, 473d);
+        scoresFromArad.put(RomanianProblem.City.Mehadia, 540d);
+        scoresFromArad.put(RomanianProblem.City.Drobeta, 616d);
     }
 
     /**
