@@ -22,5 +22,7 @@ import es.usc.citius.hipster.model.Node;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public interface NodeExpander<A,S,N extends Node<A,S,N>> {
+
     Iterable<N> expand(N node);
+
 }

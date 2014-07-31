@@ -24,9 +24,11 @@ import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.function.impl.ScalarOperation;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
+import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 /**
@@ -40,6 +42,12 @@ public final class GraphSearchProblem {
 
     public static class FromVertex<V> {
         private V fromVertex;
+        private V toVertex;
+
+        public FromVertex<V> goalAt(V vertex) {
+            this.toVertex = vertex;
+            return this;
+        }
 
         private FromVertex(V fromVertex) {
             this.fromVertex = fromVertex;
@@ -103,7 +111,7 @@ public final class GraphSearchProblem {
 
                     }
                 };
-                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
+                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp()).useScaleAlgebra(ScalarOperation.doubleMultiplicationOp());
             }
 
             public HeuristicType<Double> extractCostFromEdges(final Function<E, Double> extractor) {
@@ -113,7 +121,7 @@ public final class GraphSearchProblem {
                         return extractor.apply(transition.getAction());
                     }
                 };
-                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp());
+                return new HeuristicType<Double>(cf, BinaryOperation.doubleAdditionOp()).useScaleAlgebra(ScalarOperation.doubleMultiplicationOp());
             }
 
             public <C extends Comparable<C>> HeuristicType<C> useGenericCosts(BinaryOperation<C> costAlgebra) {
@@ -137,10 +145,16 @@ public final class GraphSearchProblem {
             public class HeuristicType<C extends Comparable<C>> {
                 private CostFunction<E, V, C> cf;
                 private BinaryOperation<C> costAlgebra;
+                private ScalarOperation<C> scaleAlgebra;
 
                 private HeuristicType(CostFunction<E, V, C> cf, BinaryOperation<C> costAlgebra) {
                     this.cf = cf;
                     this.costAlgebra = costAlgebra;
+                }
+
+                public HeuristicType<C> useScaleAlgebra(ScalarOperation<C> scaleAlgebra){
+                    this.scaleAlgebra = scaleAlgebra;
+                    return this;
                 }
 
                 public Final useHeuristicFunction(HeuristicFunction<V, C> hf) {
@@ -161,6 +175,10 @@ public final class GraphSearchProblem {
 
                     private Final(HeuristicFunction<V, C> hf) {
                         this.hf = hf;
+                    }
+
+                    public SearchComponents<E, V, C> components(){
+                        return new SearchComponents<E, V, C>(fromVertex, toVertex, cf, hf, tf, tf, costAlgebra, scaleAlgebra);
                     }
 
                     public SearchProblem<E, V, WeightedNode<E, V, C>> build() {

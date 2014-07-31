@@ -21,7 +21,13 @@ import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.function.impl.ADStarNodeExpander;
+import es.usc.citius.hipster.model.function.impl.ADStarNodeFactory;
+import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
+import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
+
+import java.util.Collections;
 
 public final class Hipster {
 
@@ -62,5 +68,16 @@ public final class Hipster {
         return new MultiobjectiveLS<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
-
+    public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C,ADStarNodeImpl<A,S,C>> createADStar(SearchComponents<A, S, C> components){
+        //node factory instantiation
+        ADStarNodeFactory<A, S, C> factory = new ADStarNodeFactory<A, S, C>(components);
+        //node expander instantiation
+        ADStarNodeExpander<A, S, C, ADStarNodeImpl<A, S, C>> expander =
+                new ADStarNodeExpander<A, S, C, ADStarNodeImpl<A, S, C>>(components, factory, 1.0);
+        //instantiate algorithm
+        return new ADStarForward(
+                components.getBegin(),
+                Collections.singleton(components.getGoal()),
+                expander);
+    }
 }
