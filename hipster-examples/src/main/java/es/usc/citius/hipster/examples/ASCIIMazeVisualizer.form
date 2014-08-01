@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="es.usc.citius.hipster.examples.ASCIIMazeVisualizer">
   <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="525" height="445"/>
+      <xy x="20" y="20" width="532" height="445"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -54,7 +54,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="5274" binding="refreshPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="5274" binding="refreshPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints border-constraint="West"/>
                     <properties/>
@@ -62,18 +62,27 @@
                     <children>
                       <component id="60a1e" class="javax.swing.JSpinner" binding="refreshSpinner">
                         <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="50" height="-1"/>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="80" height="-1"/>
                           </grid>
                         </constraints>
                         <properties/>
                       </component>
                       <component id="b310e" class="javax.swing.JLabel" binding="refreshLabel">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Refresh interval (ms):"/>
+                        </properties>
+                      </component>
+                      <component id="69e94" class="javax.swing.JCheckBox" binding="realtimePrintingCheckBox">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <selected value="true"/>
+                          <text value="Realtime printing (slow)"/>
                         </properties>
                       </component>
                     </children>
@@ -90,7 +99,7 @@
                         </constraints>
                         <properties>
                           <horizontalAlignment value="4"/>
-                          <text value="Run"/>
+                          <text value="Start"/>
                         </properties>
                       </component>
                       <component id="83b0f" class="javax.swing.JButton" binding="resetButton">
@@ -130,6 +139,43 @@
             </constraints>
             <properties>
               <font name="Monospaced" size="20"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="278d9" binding="statusBarPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="bevel-lowered"/>
+        <children>
+          <component id="ba4cf" class="javax.swing.JLabel" binding="labelInfoSteps">
+            <constraints/>
+            <properties>
+              <text value="Steps:"/>
+            </properties>
+          </component>
+          <component id="b840e" class="javax.swing.JLabel" binding="labelSteps">
+            <constraints/>
+            <properties>
+              <text value="0"/>
+            </properties>
+          </component>
+          <component id="15b9b" class="javax.swing.JSeparator">
+            <constraints/>
+            <properties>
+              <orientation value="1"/>
+            </properties>
+          </component>
+          <component id="e9642" class="javax.swing.JLabel" binding="labelInfoCost">
+            <constraints/>
+            <properties>
+              <text value="Distance:"/>
+            </properties>
+          </component>
+          <component id="82a32" class="javax.swing.JLabel" binding="labelCost">
+            <constraints/>
+            <properties>
+              <text value="0"/>
             </properties>
           </component>
         </children>

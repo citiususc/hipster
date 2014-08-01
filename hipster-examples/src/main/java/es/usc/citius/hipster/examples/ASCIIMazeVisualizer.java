@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
@@ -19,9 +20,12 @@ import es.usc.citius.hipster.util.examples.maze.Mazes;
 
 import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -44,6 +48,12 @@ public class ASCIIMazeVisualizer {
     private JPanel refreshPanel;
     private JPanel buttonPanel;
     private JLabel refreshLabel;
+    private JCheckBox realtimePrintingCheckBox;
+    private JPanel statusBarPanel;
+    private JLabel labelInfoSteps;
+    private JLabel labelSteps;
+    private JLabel labelInfoCost;
+    private JLabel labelCost;
     private JFrame mainFrame;
     private String lastMaze;
 
@@ -82,19 +92,23 @@ public class ASCIIMazeVisualizer {
         configAlgorithmPanel.setLayout(new BorderLayout(0, 0));
         algoContainerPanel.add(configAlgorithmPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         refreshPanel = new JPanel();
-        refreshPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        refreshPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         configAlgorithmPanel.add(refreshPanel, BorderLayout.WEST);
         refreshSpinner = new JSpinner();
-        refreshPanel.add(refreshSpinner, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        refreshPanel.add(refreshSpinner, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(80, -1), null, 0, false));
         refreshLabel = new JLabel();
         refreshLabel.setText("Refresh interval (ms):");
-        refreshPanel.add(refreshLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        refreshPanel.add(refreshLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        realtimePrintingCheckBox = new JCheckBox();
+        realtimePrintingCheckBox.setSelected(true);
+        realtimePrintingCheckBox.setText("Realtime printing (slow)");
+        refreshPanel.add(realtimePrintingCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         configAlgorithmPanel.add(buttonPanel, BorderLayout.EAST);
         runButton = new JButton();
         runButton.setHorizontalAlignment(4);
-        runButton.setText("Run");
+        runButton.setText("Start");
         buttonPanel.add(runButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         resetButton = new JButton();
         resetButton.setHorizontalAlignment(4);
@@ -109,6 +123,25 @@ public class ASCIIMazeVisualizer {
         mazeTextArea = new JTextArea();
         mazeTextArea.setFont(new Font("Monospaced", mazeTextArea.getFont().getStyle(), 20));
         textContainerPanel.add(mazeTextArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        statusBarPanel = new JPanel();
+        statusBarPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        mainPanel.add(statusBarPanel, BorderLayout.SOUTH);
+        statusBarPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null));
+        labelInfoSteps = new JLabel();
+        labelInfoSteps.setText("Steps:");
+        statusBarPanel.add(labelInfoSteps);
+        labelSteps = new JLabel();
+        labelSteps.setText("0");
+        statusBarPanel.add(labelSteps);
+        final JSeparator separator1 = new JSeparator();
+        separator1.setOrientation(1);
+        statusBarPanel.add(separator1);
+        labelInfoCost = new JLabel();
+        labelInfoCost.setText("Distance:");
+        statusBarPanel.add(labelInfoCost);
+        labelCost = new JLabel();
+        labelCost.setText("0");
+        statusBarPanel.add(labelCost);
     }
 
     /**
@@ -120,9 +153,17 @@ public class ASCIIMazeVisualizer {
 
     private enum State {STOPPED, STARTED, PAUSED}
 
-    // Execution state
+    // Global execution state
     private State state = State.STOPPED;
-    private AlgorithmListener algorithmListener;
+    // Current algorithm used
+    private Iterator<? extends Node<?, Point, ?>> algorithmIterator;
+    // Listener to update the text area
+    private ExecutionHandler executionHandler;
+    // Move all to the algorithm executor
+    private Set<Point> explored = new HashSet<Point>();
+    private int steps = 0;
+    private Timer timer;
+    private Maze2D maze;
 
     public static void main(String[] args) {
 
@@ -158,21 +199,21 @@ public class ASCIIMazeVisualizer {
         comboAlgorithm.addItem("A*");
         comboAlgorithm.addItem("IDA*");
 
+        loadSelectedMaze();
+
         // Listener to process run/pause button
         runButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Fill with spaces
                 switch (state) {
-                    case STOPPED:
-                        start();
-                        break;
                     case STARTED:
                         pause();
                         break;
-                    case PAUSED:
+                    case STOPPED:
                         start();
+                        break;
+                    case PAUSED:
+                        continueExecution();
                         break;
                 }
             }
@@ -190,101 +231,130 @@ public class ASCIIMazeVisualizer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadSelectedMaze();
+                // Resize to adapt the window
                 frame.pack();
             }
         });
 
-        loadSelectedMaze();
+
+        refreshSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                timer.setDelay((Integer) refreshSpinner.getValue());
+            }
+        });
+
+        // Initialize the thread / listener for the execution
+        executionHandler = new ExecutionHandler();
+        timer = new Timer((Integer) refreshSpinner.getValue(), executionHandler);
+        new Thread(executionHandler).start();
+        timer.start();
     }
 
-    private void fillTextAreaWithSpaces() {
+    private void continueExecution() {
+        if (state.equals(State.PAUSED)) {
+            runButton.setText("Pause");
+            state = State.STARTED;
+        }
+    }
 
+    private synchronized Node<?, Point, ?> executeSearchStep() {
+        Node<?, Point, ?> node = null;
+        if (algorithmIterator.hasNext()) {
+            node = algorithmIterator.next();
+            steps++;
+            explored.add(node.state());
+            if (realtimePrintingCheckBox.isSelected()) updateVisualizer(node, maze, explored);
+            if (node.state().equals(maze.getGoalLoc())) {
+                updateVisualizer(node, maze, explored);
+                stop();
+            }
+        } else {
+            updateVisualizer(node, maze, explored);
+            stop();
+        }
+        return node;
     }
 
     private void start() {
-
-        if (state.equals(State.PAUSED)) {
-            algorithmListener.startTimer();
-            runButton.setText("Pause");
-            state = State.STARTED;
-            return;
-        }
-
         // Create a new maze and run the selected algorithm
-        Maze2D maze;
+        steps = 0;
         try {
             maze = new Maze2D(mazeTextArea.getText().split("\\r?\\n"));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(mainFrame, ex.getMessage() + ". Try to reset the map.", "Maze parse exception", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Iterator<? extends Node<?, Point, ?>> iterator = createAlgorithm(maze);
-        algorithmListener = new AlgorithmListener(iterator, maze);
-        algorithmListener.startTimer();
+        // Create a new algorithm
+        algorithmIterator = createAlgorithm(maze);
+        // Reset explored tiles
+        this.explored = new HashSet<Point>();
         runButton.setText("Pause");
         state = State.STARTED;
     }
 
     private void stop() {
-        if (state.equals(State.STARTED) || state.equals(State.PAUSED)) {
-            algorithmListener.stopTimer();
-        }
-        runButton.setText("Run");
+        runButton.setText("Start");
         state = State.STOPPED;
     }
 
     private void pause() {
-        if (state.equals(State.STARTED)) {
-            algorithmListener.stopTimer();
-        }
-        runButton.setText("Run");
+        runButton.setText("Resume");
         state = State.PAUSED;
     }
 
-    private void reset() {
-        stop();
-        loadSelectedMaze();
-    }
-
-
-    private class AlgorithmListener implements ActionListener {
-
-        private Iterator<? extends Node<?, Point, ?>> algorithmIterator;
-        private Collection<Point> explored = new HashSet<Point>();
-        private Maze2D maze;
-        private Timer timer;
-
-
-        private AlgorithmListener(Iterator<? extends Node<?, Point, ?>> algorithmIterator, Maze2D maze) {
-            this.algorithmIterator = algorithmIterator;
-            this.maze = maze;
-            this.timer = new Timer((Integer) refreshSpinner.getValue(), this);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (!algorithmIterator.hasNext()) return;
-            Node<?, Point, ?> currentNode = algorithmIterator.next();
-            // Record all visited states to mark as visited in the string
-            explored.add(currentNode.state());
-            List<Point> statePath = Lists.transform(currentNode.path(), new Function<Node<?, Point, ?>, Point>() {
+    private synchronized void updateVisualizer(final Node<?, Point, ?> node, Maze2D maze, Collection<Point> explored) {
+        if (node != null && maze != null) {
+            List<Point> statePath = Lists.transform(node.path(), new Function<Node<?, Point, ?>, Point>() {
                 @Override
                 public Point apply(Node<?, Point, ?> pointNode) {
                     return pointNode.state();
                 }
             });
 
-            final String mazeStr = getMazeStringSolution(maze, explored, statePath);
+            String mazeStr = getMazeStringSolution(maze, explored, statePath);
             mazeTextArea.setText(mazeStr);
-            if (currentNode.state().equals(maze.getGoalLoc())) stop();
+            // Update the status bar
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    labelSteps.setText(Integer.toString(steps));
+                    if (node instanceof CostNode) {
+                        CostNode n = (CostNode) node;
+                        labelCost.setText(new DecimalFormat("#.00").format(n.getCost()));
+                    }
+                }
+            });
+        }
+    }
+
+
+    private class ExecutionHandler implements ActionListener, Runnable {
+
+        private ExecutionHandler() {
         }
 
-        public void startTimer() {
-            timer.start();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (realtimePrintingCheckBox.isSelected() && state.equals(State.STARTED)) {
+                executeSearchStep();
+            }
         }
 
-        public void stopTimer() {
-            timer.stop();
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    if (!realtimePrintingCheckBox.isSelected() && state.equals(State.STARTED)) {
+                        executeSearchStep();
+                    } else {
+                        Thread.sleep(100);
+                        Thread.yield();
+                    }
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 
