@@ -8,6 +8,12 @@
                 <a class="btn btn-primary btn-lg" href="http://goo.gl/KRwd50" role="button">Download Source</a>
             </p>
         </center>
+
+        <center>
+        <a class="media-icon" href="https://twitter.com/hipster4j" target="_blank" title="Hipster on Twitter"><img src="img/twitter.svg" alt="twitter"></a>
+        <a class="media-icon" href="https://plus.google.com/103153744967420864206" rel="publisher" target="_blank" title="Hipster on Google+"><img src="img/googleplus.svg" alt="google plus"></a>
+        <a class="media-icon" href="https://www.youtube.com/channel/UCJeACNvmSZCW9gevIIjXQ1w" target="_blank" title="Hipster on Youtube"><img src="img/youtube.svg" alt="youtube"></a>
+        </center>
     </div>
 </div>
 

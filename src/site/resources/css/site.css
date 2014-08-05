@@ -183,3 +183,8 @@ pre.clean {
  	background-color: #435A6E;
  	*background-color: #003bb3;
  }
+
+ .media-icon{
+      padding-left: 10px;
+      padding-right: 10px;
+ }
