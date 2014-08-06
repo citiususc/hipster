@@ -52,17 +52,10 @@ public class DepthFirstSearchTest {
                 .connect("G").to("O").withEdge("14")
                 .buildDirectedGraph();
 
-        String[] expected = {"A", "B", "D", "H", "I", "E", "J", "K", "C", "F", "L", "M", "G", "N", "O"};
-
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(tree).build()).iterator();
 
-        int i=0;
-        while(iterator.hasNext()){
-            UnweightedNode<String,String> node = iterator.next();
-            assertEquals(expected[i++], node.state());
-        }
-
+        verify(iterator, new String[]{"A", "B", "D", "H", "I", "E", "J", "K", "C", "F", "L", "M", "G", "N", "O"});
     }
 
     @Test
@@ -79,13 +72,7 @@ public class DepthFirstSearchTest {
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
 
-        String[] expected = {"A", "B", "D", "E", "C"};
-
-        int i=0;
-        while(iterator.hasNext()){
-            UnweightedNode<String,String> node = iterator.next();
-            assertEquals(expected[i++], node.state());
-        }
+        verify(iterator, new String[]{"A", "B", "D", "E", "C"});
     }
 
     @Test
@@ -103,8 +90,10 @@ public class DepthFirstSearchTest {
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
 
-        String[] expected = {"A", "B", "D", "E", "C"};
+        verify(iterator, new String[]{"A", "B", "D", "E", "C"});
+    }
 
+    private void verify(Iterator<UnweightedNode<String, String>> iterator, String[] expected){
         int i=0;
         while(iterator.hasNext()){
             UnweightedNode<String,String> node = iterator.next();
