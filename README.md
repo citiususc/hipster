@@ -9,7 +9,7 @@ Hipster relies on a flexible model with generic operators that allow you to reus
 
 You can use Hipster to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
 
-## Features
+## Features [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
 
 The current version of the library comes with some very well-known and wide used search algorithms. Note that this list may not be exhaustive:
 
