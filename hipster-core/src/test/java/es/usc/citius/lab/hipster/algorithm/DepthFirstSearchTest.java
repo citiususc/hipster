@@ -16,7 +16,6 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
@@ -24,14 +23,18 @@ import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import org.junit.Test;
 
+import java.util.Iterator;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class DepthFirstSearchTest {
 
     @Test
-    public void test(){
-        HipsterDirectedGraph<String, String> graph =
+    public void testTree(){
+        HipsterDirectedGraph<String, String> tree =
                 GraphBuilder.create()
                 .connect("A").to("B").withEdge("1")
                 .connect("A").to("C").withEdge("2")
@@ -49,15 +52,63 @@ public class DepthFirstSearchTest {
                 .connect("G").to("O").withEdge("14")
                 .buildDirectedGraph();
 
-        /*
-        Hipster.createDepthFirstSearch(
-                GraphSearchProblem.from("A").to("O").in(graph).withoutCosts()
-        ).search(new Algorithm.SearchListener<UnweightedNode<String, String>>() {
-            @Override
-            public void handle(UnweightedNode<String, String> node) {
-                System.out.println(node);
-            }
-        });*/
+        String[] expected = {"A", "B", "D", "H", "I", "E", "J", "K", "C", "F", "L", "M", "G", "N", "O"};
 
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(tree).build()).iterator();
+
+        int i=0;
+        while(iterator.hasNext()){
+            UnweightedNode<String,String> node = iterator.next();
+            assertEquals(expected[i++], node.state());
+        }
+
+    }
+
+    @Test
+    public void testGraphWithoutCycles(){
+        HipsterDirectedGraph<String, String> graph =
+                GraphBuilder.create()
+                        .connect("A").to("B").withEdge("1")
+                        .connect("A").to("C").withEdge("2")
+                        .connect("B").to("D").withEdge("3")
+                        .connect("B").to("E").withEdge("4")
+                        .connect("E").to("C").withEdge("5")
+                        .buildDirectedGraph();
+
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
+
+        String[] expected = {"A", "B", "D", "E", "C"};
+
+        int i=0;
+        while(iterator.hasNext()){
+            UnweightedNode<String,String> node = iterator.next();
+            assertEquals(expected[i++], node.state());
+        }
+    }
+
+    @Test
+    public void testGraph(){
+        HipsterDirectedGraph<String, String> graph =
+                GraphBuilder.create()
+                .connect("A").to("B").withEdge("1")
+                .connect("A").to("C").withEdge("2")
+                .connect("B").to("D").withEdge("3")
+                .connect("B").to("E").withEdge("4")
+                .connect("E").to("C").withEdge("5")
+                .connect("C").to("A").withEdge("6")
+                .buildDirectedGraph();
+
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
+
+        String[] expected = {"A", "B", "D", "E", "C"};
+
+        int i=0;
+        while(iterator.hasNext()){
+            UnweightedNode<String,String> node = iterator.next();
+            assertEquals(expected[i++], node.state());
+        }
     }
 }
