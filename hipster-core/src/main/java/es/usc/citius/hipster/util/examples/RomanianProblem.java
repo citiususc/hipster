@@ -20,6 +20,9 @@ import java.util.Map;
  */
 public class RomanianProblem {
 
+    /**
+     * Enum with all the cities of the problem.
+     */
     public enum City{
         Arad, Bucharest, Craiova, Drobeta, Eforie, Fagaras, Giurgiu,
         Hirsova, Iasi, Lugoj, Mehadia, Neamt, Oradea, Pitesti, Rimnicu_Vilcea,
@@ -80,19 +83,27 @@ public class RomanianProblem {
 
     }
 
+    /**
+     * Returns a {@link es.usc.citius.hipster.util.graph.HipsterGraph} that represents the map of Romania.
+     * @return graph with the cities and costs.
+     */
     public static HipsterGraph<City, Double> graph(){
         return graph;
     }
 
     /**
      * Heuristics definition for the Romania problem. Goal is considered Bucharest.
-     *
      * @return map with the heuristics definition for the Romania problem.
      */
     public static Map<City, Double> heuristics(){
         return heuristicMap;
     }
 
+    /**
+     * Heuristic function required to define search problems to be used with Hipster.
+     * @see es.usc.citius.hipster.model.problem.SearchProblem
+     * @return {@link es.usc.citius.hipster.model.function.HeuristicFunction} with the {@link #heuristics()} values.
+     */
     public static HeuristicFunction<City, Double> heuristicFunction(){
         return new HeuristicFunction<City, Double>() {
             @Override
