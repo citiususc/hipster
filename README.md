@@ -101,7 +101,7 @@ SearchProblem p = GraphSearchProblem
 // Search the shortest path from "A" to "F"
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
-But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems (not only graph search) such as the eight puzzle problem or the N-Queens problem.
+But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
 
 ## What's next?
 
