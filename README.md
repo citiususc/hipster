@@ -9,7 +9,7 @@ Hipster relies on a flexible model with generic operators that allow you to reus
 
 You can use Hipster to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
 
-## Features [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
+## Features
 
 The current version of the library comes with some very well-known and wide used search algorithms. Note that this list may not be exhaustive:
 
@@ -68,7 +68,7 @@ You can use the latest (unstable) version of Hipster under development. Just add
 </dependencies>
 ```
 
-#### Releases
+#### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
 
 Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/issues/milestones) to check the current development status.
 
@@ -101,7 +101,7 @@ SearchProblem p = GraphSearchProblem
 // Search the shortest path from "A" to "F"
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
-But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems (not only graph search) such as the eight puzzle problem or the N-Queens problem.
+But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
 
 ## What's next?
 
