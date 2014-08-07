@@ -137,6 +137,13 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     }
 
 
+    /**
+     * Executes the search algorithm until the predicate condition is
+     * satisfied or there are no more nodes to explore.
+     *
+     * @param condition predicate with the boolean condition.
+     * @return {@link es.usc.citius.hipster.algorithm.Algorithm.SearchResult with information about the search}
+     */
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator<N> it = iterator();
@@ -162,12 +169,13 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
      * </p>
      *
      * <pre class="prettyprint">
-     *  Hipster.createDijkstra(problem).search(new Algorithm.SearchListener() {
+     *  {@code Hipster.createDijkstra(problem).search(new Algorithm.SearchListener() {
      *      @Override
      *          public void handle(Node node) {
      *              // Do something with the node.
      *          }
      *      });
+     *  }
      * </pre>
      *
      * @param listener listener used to receive the explored nodes.
