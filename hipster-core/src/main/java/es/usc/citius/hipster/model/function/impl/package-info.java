@@ -15,6 +15,6 @@
  */
 
 /**
- * Implementations for some functions.
+ * Default implementations of many function operators required by the search algorithms.
  */
 package es.usc.citius.hipster.model.function.impl;
