@@ -50,11 +50,11 @@ public class HillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,
         this.enforced = enforcedHillClimbing;
     }
 
-    public class EHCIter implements Iterator<N> {
+    public class EHCIterator implements Iterator<N> {
         private Queue<N> queue = new LinkedList<N>();
         private C bestScore = null;
 
-        private EHCIter() {
+        private EHCIterator() {
             bestScore = initialNode.getEstimation();
             queue.add(initialNode);
         }
@@ -124,7 +124,7 @@ public class HillClimbing<A,S,C extends Comparable<C>,N extends HeuristicNode<A,
 
 
     @Override
-    public EHCIter iterator() {
-        return new EHCIter();
+    public EHCIterator iterator() {
+        return new EHCIterator();
     }
 }

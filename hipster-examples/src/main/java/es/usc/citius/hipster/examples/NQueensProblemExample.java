@@ -90,7 +90,7 @@ public class NQueensProblemExample {
 
         System.out.println("Running 8-Queens problem with Enforced Hill Climbing using fine-grained iteration capabilities");
         // Option 2 - Manual execution. Expand nodes until we find a state that meets the requirements (no attacked queens)
-        HillClimbing<Void, NQueens, Double, WeightedNode<Void, NQueens, Double>>.EHCIter it = Hipster.createHillClimbing(p, true).iterator();
+        HillClimbing.EHCIterator it = Hipster.createHillClimbing(p, true).iterator();
         int iteration = 0;
         Double best = it.getBestScore();
         while (it.hasNext()) {
