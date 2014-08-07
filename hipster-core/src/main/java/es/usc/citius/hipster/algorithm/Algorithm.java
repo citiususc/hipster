@@ -23,6 +23,14 @@ import es.usc.citius.hipster.model.Node;
 
 import java.util.*;
 
+/**
+ * Abstract class implemented by each search algorithm. This class provides basic methods
+ * to each algorithm for searching or printing detailed information about the search.
+ *
+ * @param <A> type of the actions ({@code Void} if actions are not explicit).
+ * @param <S> type of the states.
+ * @param <N> type of the nodes.
+ */
 public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N> {
 
 
@@ -147,14 +155,19 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     }
 
     /**
+     * <p>
      * Executes the search algorithm and invokes the method
      * {@link SearchListener#handle(Object)} passing the current
      * explored node to the listener.
+     * </p>
      *
-     * <pre>
-     * {@code
-     *    TODO;
-     * }
+     * <pre class="prettyprint">
+     *  Hipster.createDijkstra(problem).search(new Algorithm.SearchListener() {
+     *      @Override
+     *          public void handle(Node node) {
+     *              // Do something with the node.
+     *          }
+     *      });
      * </pre>
      *
      * @param listener listener used to receive the explored nodes.
@@ -166,6 +179,14 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
     }
 
+    /**
+     * Returns a path with all the states of the path.
+     *
+     * @param <S> type of the state.
+     * @param <N> type of the node.
+     * @return a list with the states of the path, from the initial state
+     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     */
     public static <S, N extends Node<?,S,N>>  List<S> recoverStatePath(N node){
         List<S> states = new LinkedList<S>();
         for(N n : node.path()){
@@ -175,6 +196,14 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         return states;
     }
 
+    /**
+     * Returns a path of the actions applied from the initial state
+     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     *
+     * @param <A> type of the actions.
+     * @param <N> type of the nodes.
+     * @return list with the ordered actions.
+     */
     public static <A, N extends Node<A,?,N>>  List<A> recoverActionPath(N node){
         List<A> actions = new LinkedList<A>();
         for(N n : node.path()){
