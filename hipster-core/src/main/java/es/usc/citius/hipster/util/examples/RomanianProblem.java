@@ -4,12 +4,16 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * <p>
  * Definition of the states, transitions, costs and heuristics for the Romania Problem
  * as described in http://www.pearsonhighered.com/assets/hip/us/hip_us_pearsonhighered/samplechapter/0136042597.pdf.
+ * </p>
  *
+ * <img src="../../../../../../../assets/images/javadoc/romanian-problem.png" />
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier
