@@ -108,7 +108,7 @@ But that's not all. Hipster comes with different problem examples that illustrat
 If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/citiususc/hipster/wiki/Getting-Started) and the [JavaDoc documentation](http://citiususc.github.io/hipster/documentation/javadoc/1.0.0-SNAPSHOT). There are also a few implemented examples [here](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples).
 We also suggest you to check [this presentation](https://speakerdeck.com/pablormier/hipster-an-open-source-java-library-for-heuristic-search) for a quick introduction.
 
-## License
+## License & Citation
 
 This software is licensed under the Apache 2 license, quoted below.
 
@@ -129,3 +129,22 @@ This software is licensed under the Apache 2 license, quoted below.
     
     
 
+### Citation
+
+This library was presented in the "9th Iberian Conference on Information Systems and Technologies (CISTI), 2014". If you use this library in your research projects, we encourage you to please cite our work: 
+
+> Rodriguez-Mier, P., Gonzalez-Sieira, A., Mucientes, M., Lama, M. & Bugarin, A. (2014). **Hipster: An Open Source Java Library for Heuristic Search**. _9th Iberian Conference on Information Systems and Technologies (CISTI)_.
+
+```
+@inproceedings{RodriguezMier2014,
+  author = {Rodriguez-Mier, Pablo and Gonzalez-Sieira, Adrian and Mucientes, Manuel and and Lama, Manuel and Bugarin, Alberto},
+  booktitle = {9th Iberian Conference on Information Systems and Technologies (CISTI 2014)},
+  month = jun,
+  volume = 1,
+  title = {{Hipster: An Open Source Java Library for Heuristic Search}},
+  pages = {481--486},
+  isbn = "978-989-98434-2-4"
+  address = "Barcelona",
+  year = {2014}
+}
+```
