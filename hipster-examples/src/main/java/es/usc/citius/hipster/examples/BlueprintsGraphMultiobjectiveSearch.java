@@ -27,9 +27,7 @@ public class BlueprintsGraphMultiobjectiveSearch {
     public static void main(String[] args) throws IOException {
 
         Graph g = new TinkerGraph();
-        GraphMLReader.inputGraph(g, new URL("https://gist.githubusercontent.com/pablormier/5d52543b4dcae297ab14/raw/56b6b540b68679f201db2f0cb51e9d915ac3d32c/multiobjective-graph.graphml").openStream());
-
-        g = buildGraph();
+        GraphMLReader.inputGraph(g, new URL("https://gist.githubusercontent.com/pablormier/5d52543b4dcae297ab14/raw/multiobjective-graph.graphml").openStream());
 
         // Since we use a special cost, we need to define a BinaryOperation<Cost>
         // that provides the required elements to work with our special cost type.
@@ -82,6 +80,7 @@ public class BlueprintsGraphMultiobjectiveSearch {
                 }, bf).build();
 
         System.out.println(Hipster.createMultiobjectiveLS(p).search(g.getVertex("v6")));
+
 
     }
 
