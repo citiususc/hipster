@@ -29,6 +29,7 @@ public class BlueprintsGraphMultiobjectiveSearch {
         Graph g = new TinkerGraph();
         GraphMLReader.inputGraph(g, new URL("https://gist.githubusercontent.com/pablormier/5d52543b4dcae297ab14/raw/56b6b540b68679f201db2f0cb51e9d915ac3d32c/multiobjective-graph.graphml").openStream());
 
+        g = buildGraph();
 
         // Since we use a special cost, we need to define a BinaryOperation<Cost>
         // that provides the required elements to work with our special cost type.
@@ -93,37 +94,41 @@ public class BlueprintsGraphMultiobjectiveSearch {
         Vertex v5 = g.addVertex("v5");
         Vertex v6 = g.addVertex("v6");
 
-        Edge e1 = g.addEdge("e1", v1, v2, "7, 1");
+        Edge e1 = g.addEdge("e1", v1, v2, "(7, 1)");
         e1.setProperty("c1", 7);
         e1.setProperty("c2", 1);
 
-        Edge e2 = g.addEdge("e2", v1, v3, "1, 7");
+        Edge e2 = g.addEdge("e2", v1, v3, "(1, 4)");
         e2.setProperty("c1", 1);
-        e2.setProperty("c2", 7);
+        e2.setProperty("c2", 4);
 
-        Edge e3 = g.addEdge("e3", v1, v4, "2, 1");
+        Edge e3 = g.addEdge("e3", v1, v4, "(2, 1)");
         e3.setProperty("c1", 2);
         e3.setProperty("c2", 1);
 
-        Edge e4 = g.addEdge("e4", v2, v4, "1, 1");
+        Edge e4 = g.addEdge("e4", v2, v4, "(1, 1)");
         e4.setProperty("c1", 1);
         e4.setProperty("c2", 1);
 
-        Edge e5 = g.addEdge("e5", v2, v6, "2, 2");
+        Edge e5 = g.addEdge("e5", v2, v6, "(2, 1)");
         e5.setProperty("c1", 2);
-        e5.setProperty("c2", 2);
+        e5.setProperty("c2", 1);
 
-        Edge e6 = g.addEdge("e6", v3, v4, "1, 1");
+        Edge e6 = g.addEdge("e6", v3, v4, "(1, 1)");
         e6.setProperty("c1", 1);
         e6.setProperty("c2", 1);
 
-        Edge e7 = g.addEdge("e7", v4, v5, "6, 4");
-        e7.setProperty("c1", 6);
-        e7.setProperty("c2", 4);
+        Edge e7 = g.addEdge("e7", v4, v5, "(3, 2)");
+        e7.setProperty("c1", 3);
+        e7.setProperty("c2", 2);
 
-        Edge e8 = g.addEdge("e8", v4, v6, "2, 2");
-        e8.setProperty("c1", 2);
-        e8.setProperty("c2", 2);
+        Edge e8 = g.addEdge("e8", v4, v6, "(4, 8)");
+        e8.setProperty("c1", 4);
+        e8.setProperty("c2", 8);
+
+        Edge e9 = g.addEdge("e9", v5, v6, "(1, 1)");
+        e9.setProperty("c1", 1);
+        e9.setProperty("c2", 1);
 
         return g;
     }
@@ -147,12 +152,17 @@ public class BlueprintsGraphMultiobjectiveSearch {
 
         @Override
         public int compareTo(Cost o) {
-            // Lexicographical comparison
-            if (c1 < o.c1 && c2 < o.c2) {
-                return -1;
-            } else if (o.c1 < c1 && o.c2 < c2) {
-                return 1;
+
+            if (c1 <= o.c1 && c2 <= o.c2){
+                if (c1 < o.c1 || c2 < o.c2){
+                    return -1;
+                }
+            } else if (o.c1 <= c1 && o.c2 <= o.c2){
+                if (o.c1 < c1 || o.c2 < c2){
+                    return 1;
+                }
             }
+
             // Non-dominated
             return 0;
         }
