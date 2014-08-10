@@ -37,6 +37,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>es.usc.citius.hipster</groupId>
+            <artifactId>hipster-third-party-graphs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>forms_rt</artifactId>
             <version>7.0.3</version>
