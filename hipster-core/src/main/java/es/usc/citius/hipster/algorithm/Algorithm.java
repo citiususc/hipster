@@ -108,7 +108,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
                 builder.append(" - Actions: ").append(ls);
                 builder.append("\t").append(recoverActionPath(goalNode).toString()).append(ls);
                 builder.append(" - Search information: ").append(ls);
-                builder.append("\t").append(goalNode.toString());
+                builder.append("\t").append(goalNode.toString()).append(ls);
                 solution++;
             }
             return builder.toString();
