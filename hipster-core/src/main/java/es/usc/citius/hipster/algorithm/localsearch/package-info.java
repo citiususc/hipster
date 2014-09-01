@@ -15,6 +15,6 @@
  */
 
 /**
- * Default implementations of many function operators required by the search algorithms.
+ * Implementation of local search algorithms (such as hill climbing).
  */
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.algorithm.localsearch;

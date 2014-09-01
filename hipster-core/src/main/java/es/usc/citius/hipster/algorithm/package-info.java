@@ -15,6 +15,7 @@
  */
 
 /**
- * Default implementations of many function operators required by the search algorithms.
+ * Implementation of the different algorithms included in the library. Use the
+ * class {@link es.usc.citius.hipster.algorithm.Hipster} to create algorithms in an easy way.
  */
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.algorithm;

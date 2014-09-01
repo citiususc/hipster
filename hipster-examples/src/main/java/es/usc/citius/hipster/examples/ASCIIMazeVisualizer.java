@@ -193,6 +193,7 @@ public class ASCIIMazeVisualizer {
         comboMazes.addItem("Maze example 4");
         comboMazes.addItem("Maze example 5");
 
+        comboAlgorithm.addItem("Depth First Search (DFS, non-optimal)");
         comboAlgorithm.addItem("Breadth First Search (BFS, non-optimal) ");
         comboAlgorithm.addItem("Bellman Ford");
         comboAlgorithm.addItem("Dijkstra");
@@ -363,18 +364,21 @@ public class ASCIIMazeVisualizer {
         switch (comboAlgorithm.getSelectedIndex()) {
 
             case 0:
-                iterator = Hipster.createBreadthFirstSearch(buildProblem(maze, false)).iterator();
+                iterator = Hipster.createDepthFirstSearch(buildProblem(maze, false)).iterator();
                 break;
             case 1:
-                iterator = Hipster.createBellmanFord(buildProblem(maze, false)).iterator();
+                iterator = Hipster.createBreadthFirstSearch(buildProblem(maze, false)).iterator();
                 break;
             case 2:
-                iterator = Hipster.createDijkstra(buildProblem(maze, false)).iterator();
+                iterator = Hipster.createBellmanFord(buildProblem(maze, false)).iterator();
                 break;
             case 3:
-                iterator = Hipster.createAStar(buildProblem(maze, true)).iterator();
+                iterator = Hipster.createDijkstra(buildProblem(maze, false)).iterator();
                 break;
             case 4:
+                iterator = Hipster.createAStar(buildProblem(maze, true)).iterator();
+                break;
+            case 5:
                 iterator = Hipster.createIDAStar(buildProblem(maze, true)).iterator();
                 break;
             default:

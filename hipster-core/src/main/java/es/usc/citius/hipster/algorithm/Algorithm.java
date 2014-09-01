@@ -23,6 +23,14 @@ import es.usc.citius.hipster.model.Node;
 
 import java.util.*;
 
+/**
+ * Abstract class implemented by each search algorithm. This class provides basic methods
+ * to each algorithm for searching or printing detailed information about the search.
+ *
+ * @param <A> type of the actions ({@code Void} if actions are not explicit).
+ * @param <S> type of the states.
+ * @param <N> type of the nodes.
+ */
 public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N> {
 
 
@@ -100,7 +108,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
                 builder.append(" - Actions: ").append(ls);
                 builder.append("\t").append(recoverActionPath(goalNode).toString()).append(ls);
                 builder.append(" - Search information: ").append(ls);
-                builder.append("\t").append(goalNode.toString());
+                builder.append("\t").append(goalNode.toString()).append(ls);
                 solution++;
             }
             return builder.toString();
@@ -129,6 +137,13 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     }
 
 
+    /**
+     * Executes the search algorithm until the predicate condition is
+     * satisfied or there are no more nodes to explore.
+     *
+     * @param condition predicate with the boolean condition.
+     * @return {@link es.usc.citius.hipster.algorithm.Algorithm.SearchResult with information about the search}
+     */
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator<N> it = iterator();
@@ -147,14 +162,20 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     }
 
     /**
+     * <p>
      * Executes the search algorithm and invokes the method
      * {@link SearchListener#handle(Object)} passing the current
      * explored node to the listener.
+     * </p>
      *
-     * <pre>
-     * {@code
-     *    TODO;
-     * }
+     * <pre class="prettyprint">
+     *  {@code Hipster.createDijkstra(problem).search(new Algorithm.SearchListener() {
+     *      @Override
+     *          public void handle(Node node) {
+     *              // Do something with the node.
+     *          }
+     *      });
+     *  }
      * </pre>
      *
      * @param listener listener used to receive the explored nodes.
@@ -166,6 +187,14 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         }
     }
 
+    /**
+     * Returns a path with all the states of the path.
+     *
+     * @param <S> type of the state.
+     * @param <N> type of the node.
+     * @return a list with the states of the path, from the initial state
+     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     */
     public static <S, N extends Node<?,S,N>>  List<S> recoverStatePath(N node){
         List<S> states = new LinkedList<S>();
         for(N n : node.path()){
@@ -175,6 +204,14 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         return states;
     }
 
+    /**
+     * Returns a path of the actions applied from the initial state
+     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     *
+     * @param <A> type of the actions.
+     * @param <N> type of the nodes.
+     * @return list with the ordered actions.
+     */
     public static <A, N extends Node<A,?,N>>  List<A> recoverActionPath(N node){
         List<A> actions = new LinkedList<A>();
         for(N n : node.path()){

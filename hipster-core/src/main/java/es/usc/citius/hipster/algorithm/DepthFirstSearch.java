@@ -19,6 +19,8 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -28,7 +30,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
     private N initialNode;
     private NodeExpander<A,S,N> expander;
 
-    // TODO; Remove duplicates with IDAStar
+    // TODO; DRY common structures with other algorithms (like IDA)
 
     public DepthFirstSearch(N initialNode, NodeExpander<A, S, N> expander) {
         this.expander = expander;
@@ -60,6 +62,8 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
     public class Iterator implements java.util.Iterator<N> {
         private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
         private StackFrameNode next;
+        private Set<S> closed = new HashSet<S>();
+        private boolean graphSupport = true;
 
         private Iterator(){
             this.stack.add(new StackFrameNode(initialNode));
@@ -104,10 +108,14 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
             StackFrameNode nextNode;
             do {
                 nextNode = processNextNode();
-            } while(nextNode != null && (nextNode.processed || nextNode.visited));
+            } while(nextNode != null && (nextNode.processed || nextNode.visited || closed.contains(nextNode.node.state())));
 
             if (nextNode != null){
                 nextNode.visited = true;
+                // For graphs, the DFS needs to keep track of all nodes
+                // that were processed and removed from the stack, in order
+                // to avoid cycles.
+                if (graphSupport) closed.add(nextNode.node.state());
             }
             return nextNode;
         }
@@ -122,8 +130,10 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
             // Find a successor
             if (current.successors.hasNext()){
                 N successor = current.successors.next();
-                // push the node;
-                stack.add(new StackFrameNode(successor));
+                // push the node (if not explored)
+                if (!graphSupport || !closed.contains(successor.state())) {
+                    stack.add(new StackFrameNode(successor));
+                }
                 return current;
             } else {
                 // Visited?
@@ -132,6 +142,38 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
                 }
                 return stack.pop();
             }
+        }
+
+        public Stack<StackFrameNode> getStack() {
+            return stack;
+        }
+
+        public void setStack(Stack<StackFrameNode> stack) {
+            this.stack = stack;
+        }
+
+        public StackFrameNode getNext() {
+            return next;
+        }
+
+        public void setNext(StackFrameNode next) {
+            this.next = next;
+        }
+
+        public Set<S> getClosed() {
+            return closed;
+        }
+
+        public void setClosed(Set<S> closed) {
+            this.closed = closed;
+        }
+
+        public boolean isGraphSupport() {
+            return graphSupport;
+        }
+
+        public void setGraphSupport(boolean graphSupport) {
+            this.graphSupport = graphSupport;
         }
     }
     @Override

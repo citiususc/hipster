@@ -1,6 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
-A powerful, easy to use heuristic search library implemented in pure java.
+A powerful and friendly heuristic search library implemented in pure java.
 
 ## What's Hipster?
 
@@ -15,14 +15,14 @@ The current version of the library comes with some very well-known and wide used
 
 * Search algorithms:
     * Uninformed search:
-        * Depth-First-Search (DFS).
-        * Breadth-First-Search (BFS).
+        * DFS: Depth-First-Search.
+        * BFS: Breadth-First-Search.
         * Dijkstra.
         * Bellman-Ford.
     * Informed search:
-        * A\* algorithm.
-        * Iterative Deepening A\* (IDA\*).
-        * Anytime D\* (AD\*).
+        * A\*. \\A star\\
+        * IDA\*: Iterative Deepening A\*. \\IDA star\\
+        * AD\*: Anytime Dynamic A\*. \\AD star\\
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
@@ -68,7 +68,7 @@ You can use the latest (unstable) version of Hipster under development. Just add
 </dependencies>
 ```
 
-#### Releases
+#### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
 
 Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/issues/milestones) to check the current development status.
 
@@ -101,14 +101,14 @@ SearchProblem p = GraphSearchProblem
 // Search the shortest path from "A" to "F"
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
-But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a wide variety of problems (not only graph search) such as the eight puzzle problem or the N-Queens problem.
+But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
 
 ## What's next?
 
 If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/citiususc/hipster/wiki/Getting-Started) and the [JavaDoc documentation](http://citiususc.github.io/hipster/documentation/javadoc/1.0.0-SNAPSHOT). There are also a few implemented examples [here](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples).
 We also suggest you to check [this presentation](https://speakerdeck.com/pablormier/hipster-an-open-source-java-library-for-heuristic-search) for a quick introduction.
 
-## License
+## License & Citation
 
 This software is licensed under the Apache 2 license, quoted below.
 
@@ -129,3 +129,22 @@ This software is licensed under the Apache 2 license, quoted below.
     
     
 
+### Citation
+
+This library was presented in the "9th Iberian Conference on Information Systems and Technologies (CISTI), 2014". If you use this library in your research projects, we encourage you to please cite our work: 
+
+> Rodriguez-Mier, P., Gonzalez-Sieira, A., Mucientes, M., Lama, M. & Bugarin, A. (2014). **Hipster: An Open Source Java Library for Heuristic Search**. _9th Iberian Conference on Information Systems and Technologies (CISTI)_.
+
+```
+@inproceedings{RodriguezMier2014,
+  author = {Rodriguez-Mier, Pablo and Gonzalez-Sieira, Adrian and Mucientes, Manuel and and Lama, Manuel and Bugarin, Alberto},
+  booktitle = {9th Iberian Conference on Information Systems and Technologies (CISTI 2014)},
+  month = jun,
+  volume = 1,
+  title = {{Hipster: An Open Source Java Library for Heuristic Search}},
+  pages = {481--486},
+  isbn = "978-989-98434-2-4"
+  address = "Barcelona",
+  year = {2014}
+}
+```

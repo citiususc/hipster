@@ -4,18 +4,25 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.util.graph.GraphBuilder;
 import es.usc.citius.hipster.util.graph.HipsterGraph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * <p>
  * Definition of the states, transitions, costs and heuristics for the Romania Problem
  * as described in http://www.pearsonhighered.com/assets/hip/us/hip_us_pearsonhighered/samplechapter/0136042597.pdf.
+ * </p>
  *
+ * <img src="../../../../../../../assets/images/javadoc/romanian-problem.png" />
  *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @author Pablo Rodríguez Mier
  */
 public class RomanianProblem {
 
+    /**
+     * Enum with all the cities of the problem.
+     */
     public enum City{
         Arad, Bucharest, Craiova, Drobeta, Eforie, Fagaras, Giurgiu,
         Hirsova, Iasi, Lugoj, Mehadia, Neamt, Oradea, Pitesti, Rimnicu_Vilcea,
@@ -76,19 +83,27 @@ public class RomanianProblem {
 
     }
 
+    /**
+     * Returns a {@link es.usc.citius.hipster.util.graph.HipsterGraph} that represents the map of Romania.
+     * @return graph with the cities and costs.
+     */
     public static HipsterGraph<City, Double> graph(){
         return graph;
     }
 
     /**
      * Heuristics definition for the Romania problem. Goal is considered Bucharest.
-     *
      * @return map with the heuristics definition for the Romania problem.
      */
     public static Map<City, Double> heuristics(){
         return heuristicMap;
     }
 
+    /**
+     * Heuristic function required to define search problems to be used with Hipster.
+     * @see es.usc.citius.hipster.model.problem.SearchProblem
+     * @return {@link es.usc.citius.hipster.model.function.HeuristicFunction} with the {@link #heuristics()} values.
+     */
     public static HeuristicFunction<City, Double> heuristicFunction(){
         return new HeuristicFunction<City, Double>() {
             @Override
