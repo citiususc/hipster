@@ -70,7 +70,7 @@ You can use the latest (unstable) version of Hipster under development. Just add
 
 #### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
 
-Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/issues/milestones) to check the current development status.
+Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
 
 #### Quick Example
 
