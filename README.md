@@ -1,6 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
-A powerful, easy to use heuristic search library implemented in pure java.
+A powerful and friendly heuristic search library implemented in pure java.
 
 ## What's Hipster?
 
@@ -15,14 +15,14 @@ The current version of the library comes with some very well-known and wide used
 
 * Search algorithms:
     * Uninformed search:
-        * Depth-First-Search (DFS).
-        * Breadth-First-Search (BFS).
+        * DFS: Depth-First-Search.
+        * BFS: Breadth-First-Search.
         * Dijkstra.
         * Bellman-Ford.
     * Informed search:
-        * A\* algorithm.
-        * Iterative Deepening A\* (IDA\*).
-        * Anytime D\* (AD\*).
+        * A\*. \\A star\\
+        * IDA\*: Iterative Deepening A\*. \\IDA star\\
+        * AD\*: Anytime Dynamic A\*. \\AD star\\
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
@@ -70,7 +70,7 @@ You can use the latest (unstable) version of Hipster under development. Just add
 
 #### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
 
-Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/issues/milestones) to check the current development status.
+Stable releases are still not generated. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
 
 #### Quick Example
 
