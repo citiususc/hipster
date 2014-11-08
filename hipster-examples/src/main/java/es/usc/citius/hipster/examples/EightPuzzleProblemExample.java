@@ -33,7 +33,13 @@ import static es.usc.citius.hipster.examples.problem.NPuzzle.Puzzle;
 import static es.usc.citius.hipster.examples.problem.NPuzzle.PuzzleMove;
 
 
-public class NPuzzleProblemExample {
+/**
+ * Instance of the N-Puzzle with 3x3 tiles solved with the A* algorithm
+ * using the manhattan distance heuristic.
+ *
+ * @see {@link es.usc.citius.hipster.examples.problem.NPuzzle}
+ */
+public class EightPuzzleProblemExample {
 
     public static void main(String[] args){
 
