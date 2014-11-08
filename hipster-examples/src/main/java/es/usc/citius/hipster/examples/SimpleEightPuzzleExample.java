@@ -28,7 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Simple implementation of the 8-Puzzle problem with Hipster.
+ * Simple implementation of the 8-Puzzle that uses an array as the
+ * representation of a 8-Puzzle state.
  */
 public class SimpleEightPuzzleExample {
 
