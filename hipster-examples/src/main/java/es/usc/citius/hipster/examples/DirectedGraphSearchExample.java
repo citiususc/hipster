@@ -7,6 +7,9 @@ import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 
 /**
+ * An example that creates a directed graph with Hipster and searches the shortest path
+ * between node A and F.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class DirectedGraphSearchExample {
