@@ -19,6 +19,11 @@ package es.usc.citius.hipster.model.function;
 import es.usc.citius.hipster.model.Node;
 
 /**
+ * Defines a function that takes a {@link es.usc.citius.hipster.model.Node} and expands it
+ * in order to generate all the possible successors. Nodes are the abstract representation of
+ * a state with some additional information (such as the accumulated cost and a pointer to the previous
+ * node that can be used to track the current search path).
+ * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public interface NodeExpander<A,S,N extends Node<A,S,N>> {
