@@ -32,7 +32,11 @@ import java.util.*;
  * Original paper:
  * Martins, E. D. Q. V., & Santos, J. L. E. (1999). <b>"The labeling algorithm for the multiobjective shortest path problem"</b>. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i>.
  *
- * @param <S> type of the states used by the algorithm
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <C> comparable cost used to compare states.
+ * @param <N> type of the heuristic search node used.
+ *           
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
