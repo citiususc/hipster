@@ -32,7 +32,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NQueensProblemExample {
+/**
+ * <p>
+ * Demonstration of the Hill Climbing and Enforced Hill Climbing algorithms to
+ * attack the 8-Queens problem.
+ * @see {@link es.usc.citius.hipster.examples.problem.NQueens}
+ */
+public class EightQueensProblemExample {
 
     public static void main(String[] args) {
         // Solve the 8-Queen problem with Hill Climbing and Enforced Hill Climbing
