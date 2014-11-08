@@ -28,6 +28,11 @@ import es.usc.citius.hipster.util.examples.maze.Mazes;
 
 import java.awt.*;
 
+/**
+ * This example demonstrates how to find the shortest path in a 2D maze
+ * with Hipster.
+ * 
+ */
 public class MazeShortestPathExample {
 
     public static void main(String[] args) throws InterruptedException {
