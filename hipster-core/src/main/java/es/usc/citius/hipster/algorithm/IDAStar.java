@@ -74,6 +74,12 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         }
     }
 
+    /**
+     * IDA iterator. It expands the next state to be explored. Backtracking
+     * is automatically performed so if the state reaches a dead-end the next
+     * call to {@code iterator.next()} returns the next state after performing
+     * backtracking.
+     */
     public class Iterator implements java.util.Iterator<N> {
         private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
         private C fLimit;
