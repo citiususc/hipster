@@ -20,7 +20,15 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <p>General N-Puzzle problem.</p>
+ *
+ * See the description of the N-Puzzle in
+ * <a href="http://heuristicswiki.wikispaces.com/N+-+Puzzle">Heuristics Wiki</a>
+ */
 public final class NPuzzle {
+
+    private NPuzzle(){}
 
     /**
      * Prints a search path in a readable form.
