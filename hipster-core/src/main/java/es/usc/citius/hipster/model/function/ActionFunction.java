@@ -16,6 +16,15 @@
 
 package es.usc.citius.hipster.model.function;
 
+/**
+ * Interface that defines an action function that computes applicable
+ * actions for a given state. For example, in the 8-Puzzle problem,
+ * the action function for a configuration of the board returns all the possible
+ * movements (UP, DOWN, RIGHT, LEFT) depending on the empty tile position.
+ *
+ * @param <A> action type.
+ * @param <S> state type
+ */
 public interface ActionFunction<A,S> {
     /**
      * Compute a set of applicable actions for the given state
