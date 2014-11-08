@@ -19,6 +19,13 @@ package es.usc.citius.hipster.util.graph;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Hipster graph edge implementation to represent edges (or arcs) of a directed or
+ * undirected graph.
+ *
+ * @param <V> vertex type.
+ * @param <E> edge type.
+ */
 public final class GraphEdge<V,E> {
     private V vertex1;   // endpoint 1 (source vertex in a directed graph)
     private V vertex2;   // endpoint 2 (target vertex in a directed graph)
