@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * An adapter to adapt a JUNG graph to a general HipsterGraph interface.
+ * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
