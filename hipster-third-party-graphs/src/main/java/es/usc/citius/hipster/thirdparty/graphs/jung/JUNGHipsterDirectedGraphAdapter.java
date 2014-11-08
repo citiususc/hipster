@@ -26,6 +26,11 @@ import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * An adapter class to adapt a JUNG graph to the Hipster Graph interface.
+ * @param <V> vertex type.
+ * @param <E> edge type.
+ */
 public class JUNGHipsterDirectedGraphAdapter<V,E> extends JUNGHipsterGraphAdapter<V,E> implements HipsterDirectedGraph<V,E> {
 
     public JUNGHipsterDirectedGraphAdapter(Graph<V, E> graph) {
