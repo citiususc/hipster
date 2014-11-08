@@ -16,10 +16,19 @@
 
 package es.usc.citius.hipster.model.function;
 
-
+/**
+ * Interface to define a transition function that takes an action
+ * and a concrete state and returns the new state. For example, in
+ * the 8-Puzzle, this function takes a board with a concrete configuration
+ * and a valid action, and returns the new board resulting of moving the empty
+ * tile in the direction that corresponds to the action applied.
+ *
+ * @param <A> action type.
+ * @param <S> state type.
+ */
 public interface ActionStateTransitionFunction<A,S> {
     /**
-     * Apply an action to a state and return the resultant state
+     * Apply an action to a state and return the resultant state.
      * @param action action to apply
      * @param state state where the actions is applied to
      * @return the new resultant action
