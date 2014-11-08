@@ -16,7 +16,14 @@
 
 package es.usc.citius.hipster.model.function;
 
-
+/**
+ * Defines a function that takes a state and estimates the distance
+ * to the goal of the problem. The cost is generic (for example a Double)
+ * and should be defined by the user.
+ *
+ * @param <S> state type.
+ * @param <C> cost type.
+ */
 public interface HeuristicFunction<S,C> {
     C estimate(S state);
 }
