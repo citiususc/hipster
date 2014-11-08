@@ -20,6 +20,12 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
+ * <p>Simple example that loads a GraphML example graph from GitHub, loads it with the
+ * Blueprints API and then solves the multiobjective problem with Hipster</p>
+ *
+ * A full description of the problem is published on
+ * <a href="https://github.com/citiususc/hipster/wiki/Multiobjective-Search-with-Hipster-and-TinkerPop-Blueprints">Hipster's wiki</a>.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class BlueprintsGraphMultiobjectiveSearch {
