@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Dumb class that can be used to generate unique edges for a graph with a value.
  * Do not use this for production code!
  * @param <V> edge value type
+ *
  * @author Pablo Rodríguez Mier
  */
 public class UniqueEdge<V> {

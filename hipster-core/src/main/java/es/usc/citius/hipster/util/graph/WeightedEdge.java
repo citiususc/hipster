@@ -20,6 +20,7 @@ package es.usc.citius.hipster.util.graph;
 /**
  * Dumb class that can be used to generate unique weighted edges for a graph.
  * Do not use this for production code!
+ * 
  * @author Pablo Rodríguez Mier
  */
 public class WeightedEdge extends UniqueEdge<Double> {
