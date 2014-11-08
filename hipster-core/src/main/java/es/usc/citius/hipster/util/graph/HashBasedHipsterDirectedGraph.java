@@ -19,6 +19,8 @@ package es.usc.citius.hipster.util.graph;
 import com.google.common.base.Preconditions;
 
 /**
+ * Implementation of a HipsterDirectedGraph using a Guava Hash Table.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
