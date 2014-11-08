@@ -19,6 +19,14 @@ package es.usc.citius.hipster.model.function;
 
 import es.usc.citius.hipster.model.Transition;
 
+/**
+ * Defines a function that returns the possible transitions from
+ * a given state. A transition is just a class that keeps the source state,
+ * the action and the resultant state.
+ *
+ * @param <A> action type.
+ * @param <S> state type.
+ */
 public interface TransitionFunction<A,S> {
     Iterable<Transition<A,S>> transitionsFrom(S state);
 }
