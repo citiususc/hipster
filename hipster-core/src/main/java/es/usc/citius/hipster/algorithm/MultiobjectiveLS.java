@@ -44,6 +44,13 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
         this.nodeExpander = nodeExpander;
     }
 
+    /**
+     * MultiobjectiveLS iterator. It expands one state at a time and updates
+     * an internal table (nonDominated) which stores all non-dominated paths.
+     * In order to find all non-dominated shortest path, the algorithm must be
+     * executed until {@code iterator.hasNext() == false}. Paths can be recovered
+     * with {@code iterator.getNonDominated.get(goalState)}
+     */
     public class Iterator implements java.util.Iterator<N> {
         private Queue<N> queue = new LinkedList<N>();
         public Multimap<S, N> nonDominated;
