@@ -19,6 +19,13 @@ package es.usc.citius.hipster.model.function;
 
 import es.usc.citius.hipster.model.Transition;
 
+/**
+ * Generator of nodes. Creates a new node using the information of the current
+ * node and the transition between the state of the {@code fromNode} to the current state.
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <N> node type.
+ */
 public interface NodeFactory<A,S,N> {
     N makeNode(N fromNode, Transition<A,S> transition);
 }
