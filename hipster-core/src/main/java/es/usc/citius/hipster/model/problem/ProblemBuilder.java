@@ -146,7 +146,7 @@ public final class ProblemBuilder {
                  * reachable from a given state. The function returns a set of Transition
                  * with the action and the new resultant state. If you prefer to define actions
                  * separately, use useActionFunction instead.
-                 * @param transitionFunction
+                 * @param transitionFunction transition function.
                  *
                  */
                 public <A> Uninformed<A> useTransitionFunction(TransitionFunction<A, S> transitionFunction){
@@ -154,6 +154,12 @@ public final class ProblemBuilder {
                 }
             }
 
+            /**
+             * Creates a uninformed problem (a problem without a cost/heuristic evaluator) to
+             * be used with uninformed algorithms like DFS, BFS.
+             *
+             * @param <A> action type.
+             */
             public final class Uninformed<A> {
                 private final TransitionFunction<A,S> tf;
 
@@ -221,6 +227,9 @@ public final class ProblemBuilder {
                         return new Heuristic(hf);
                     }
 
+                    /**
+                     * Defines the heuristic function to be used.
+                     */
                     public final class Heuristic {
                         private HeuristicFunction<S,C> hf;
 
