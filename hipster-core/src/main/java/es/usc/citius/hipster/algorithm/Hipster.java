@@ -29,6 +29,13 @@ import es.usc.citius.hipster.model.problem.SearchProblem;
 
 import java.util.Collections;
 
+/**
+ * Util class to create algorithms easily. Each method expects a {@link es.usc.citius.hipster.model.problem.SearchProblem}
+ * with the components of the algorithm and returns an iterable algorithm that can be used to search a goal or iterate over
+ * the state space. A SearchProblem can be easily defined with the {@link es.usc.citius.hipster.model.problem.ProblemBuilder} class.
+ *
+ * @see es.usc.citius.hipster.model.problem.ProblemBuilder
+ */
 public final class Hipster {
 
     private Hipster(){
@@ -67,7 +74,7 @@ public final class Hipster {
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> MultiobjectiveLS<A,S,C,N> createMultiobjectiveLS(SearchProblem<A,S,N> components){
         return new MultiobjectiveLS<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
-
+    
     public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C,ADStarNodeImpl<A,S,C>> createADStar(SearchComponents<A, S, C> components){
         //node factory instantiation
         ADStarNodeFactory<A, S, C> factory = new ADStarNodeFactory<A, S, C>(components);
