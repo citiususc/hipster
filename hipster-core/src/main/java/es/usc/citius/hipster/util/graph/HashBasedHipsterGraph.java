@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Implementation of a HipsterGraph using a Guava Hash Table.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
