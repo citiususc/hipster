@@ -32,6 +32,9 @@ import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
 /**
+ * Builder to generate a {@link es.usc.citius.hipster.model.problem.SearchProblem} but using
+ * a HipsterGraph.
+ * 
  * @author Pablo Rodríguez Mier
  */
 public final class GraphSearchProblem {
