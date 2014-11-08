@@ -25,10 +25,14 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
+ * <p>
  * Breadth First Search (BFS) implementation. This is an uninformed algorithm that explores
  * first the neighbors at distance 1 (direct neighbors), then the neighbors at distance 2
  * (neighbors of the neighbors), and so on. The algorithm is complete but not optimal
  * (it is only optimal if the cost of the problem is uniform and each transition has a cost of one).
+ * </p>
+ *
+ * See this <a href="http://en.wikipedia.org/wiki/Breadth-first_search">Wikipedia article</a> for more information about BFS.
  *
  * @param <A> action type.
  * @param <S> state type.
