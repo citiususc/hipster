@@ -28,6 +28,9 @@ import es.usc.citius.hipster.util.graph.HipsterGraph;
 
 import javax.annotation.Nullable;
 
+/**
+ * Simple graph adapter between a Blueprints graph and a HipsterGraph.
+ */
 public class BlueprintsHipsterGraphAdapter implements HipsterGraph<Vertex, Edge> {
     private Graph graph;
 
