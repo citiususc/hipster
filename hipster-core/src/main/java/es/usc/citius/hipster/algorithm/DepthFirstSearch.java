@@ -24,6 +24,16 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
+ * <p>
+ * Depth First Search (DFS) is a blind algorithm that performs an exploration
+ * of the graph in a way that always reaches the deepest node before backtracking.
+ * The Hipster implementation is a graph-based search that can handle cycles.
+ * This algorithm is complete (it always finds a solution if it exists) but not
+ * optimal.
+ * </p>
+ *
+ * For more information see <a href="http://en.wikipedia.org/wiki/Depth-first_search">this article of the Wikipedia</a> about DFS.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
