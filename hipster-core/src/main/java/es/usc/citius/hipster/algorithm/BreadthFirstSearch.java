@@ -19,8 +19,21 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
+/**
+ * Breadth First Search (BFS) implementation. This is an uninformed algorithm that explores
+ * first the neighbors at distance 1 (direct neighbors), then the neighbors at distance 2
+ * (neighbors of the neighbors), and so on. The algorithm is complete but not optimal
+ * (it is only optimal if the cost of the problem is uniform and each transition has a cost of one).
+ *
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <N> type of the heuristic search node used.
+ */
 public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
     private final N initialNode;
     private final NodeExpander<A,S,N> expander;
