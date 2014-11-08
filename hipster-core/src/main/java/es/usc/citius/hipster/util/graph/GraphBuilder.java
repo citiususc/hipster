@@ -20,6 +20,22 @@ package es.usc.citius.hipster.util.graph;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * <p>Graph builder assistant to create a Hipster graph. Usage example:</p>
+ * <pre class="prettyprint">
+ * {@code
+ * HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
+ *     .connect("A").to("B").withEdge(4d)
+ *     .connect("A").to("C").withEdge(2d)
+ *     .connect("B").to("C").withEdge(5d)
+ *     .connect("B").to("D").withEdge(10d)
+ *     .connect("C").to("E").withEdge(3d)
+ *     .connect("D").to("F").withEdge(11d)
+ *     .connect("E").to("D").withEdge(4d)
+ *     .buildDirectedGraph();
+ * }
+ * </pre>
+ */
 public class GraphBuilder {
 
     public final static class Assistant {
