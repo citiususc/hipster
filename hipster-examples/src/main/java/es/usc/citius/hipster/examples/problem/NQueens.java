@@ -20,6 +20,15 @@ package es.usc.citius.hipster.examples.problem;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * <p>
+ * General N-Queens problem. The goal is to place N-Queens in a N-Chess Board
+ * without any queen attacking each other.
+ * </p>
+ *
+ * There is a good description of the problem
+ * <a href="http://www.math.utah.edu/~alfeld/queens/queens.html">in Peter Alfeld's Web Page (University of Utah)</a>
+ */
 public class NQueens {
     private static final String LS = System.getProperty("path.separator");
 
