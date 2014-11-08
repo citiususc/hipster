@@ -22,9 +22,27 @@ import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.lab.hipster.collections.HashQueue;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 
 /**
+ * <p>
+ * Optimized implementation of the Bellman-Ford algorithm. The main difference with the standard version
+ * of Bellman-Ford is that this implementation does not relax all edges at each iteration. This implies that
+ * the first time the goal state is reached, the cost may not be the optimal one. The optimal cost is only guaranteed
+ * when the queue is empty (when bellmanFordIt.hasNext() == false).
+ * </p>
+ *
+ * <a href="http://www.ams.org/mathscinet-getitem?mr=0102435">Original paper</a>:
+ * Bellman, R. <b>"On a routing problem"</b>. <i>Quarterly of Applied Mathematics (1958) 16: 87–90</i>.
+ *
+ * @param <A> action type.
+ * @param <S> state type.
+ * @param <C> comparable cost used to compare states.
+ * @param <N> type of the heuristic search node used.
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Algorithm<A,S,N> {
@@ -36,6 +54,11 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         this.nodeExpander = nodeExpander;
     }
 
+    /**
+     * Bellman-Ford iterator. Each invocation to {@code next()} returns the
+     * next expanded node with the approximated cost. The cost is only optimal
+     * when the queue is fully processed.
+     */
     public class Iterator implements java.util.Iterator<N> {
         private Queue<S> queue;
         private Map<S, N> explored;
