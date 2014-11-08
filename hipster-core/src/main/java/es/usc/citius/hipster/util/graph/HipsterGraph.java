@@ -16,7 +16,11 @@
 
 package es.usc.citius.hipster.util.graph;
 
-
+/**
+ * Defines a graph in terms of edges and vertices.
+ * @param <V> vertex type.
+ * @param <E> edge type.
+ */
 public interface HipsterGraph<V,E> {
     /**
      * Return the edges.
