@@ -89,10 +89,16 @@ Current stable release is v1.0.0-rc1. See the [milestones](https://github.com/ci
 
 #### Quick Example
 
-Here is a quick example of how to search a shortest path in a graph with Dijkstra's algorithm:
+Let's solve the graph used in [this Wikipedia article](http://en.wikipedia.org/wiki/Shortest_path_problem)
+about Shortest paths.
+
+![DirectedGraph](http://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Shortest_path_with_direct_weights.svg/512px-Shortest_path_with_direct_weights.svg.png)
+
+Although Hipster is graph agnostic, we include some useful classes to create a graph or a
+directed graph and the search problem. We create a graph using the GraphBuilder class and then
+we use the GraphSearchProblem to create the required components to solve it using Dijkstra's algorithm:
 
 ```java
-// Create a simple weighted directed graph with Hipster where
 // Create a simple weighted directed graph with Hipster where
 // vertices are Strings and edge values are just doubles
 HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
@@ -116,7 +122,9 @@ SearchProblem p = GraphSearchProblem
 // Search the shortest path from "A" to "F"
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
-But that's not all. Hipster comes with different problem examples that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
+
+But that's not all. Hipster comes with different problem examples
+that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
 
 ## What's next?
 
