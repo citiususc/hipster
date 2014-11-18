@@ -10,8 +10,11 @@ import es.usc.citius.hipster.model.Transition;
  * te cost elements of the node (G and V) and the definition of the {@link ADStarNodeImpl.Key}
  * to compare {@link ADStarNodeImpl} elements.
  *
+ * @param <A> type of the actions ({@code Void} if actions are not explicit).
+ * @param <S> type of the states.
+ * @param <C> type of the cost
+ *
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 1.0.0
  */
 public class ADStarNodeImpl<A, S, C extends Comparable<C>>
         extends AbstractNode<A, S, ADStarNodeImpl<A, S, C>>
@@ -45,6 +48,7 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
      *
      * @return object representing the current cost
      */
+    @Override
     public C getG() {
         return g;
     }
@@ -54,38 +58,47 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
      *
      * @return object representing the estimated cost to goal
      */
+    @Override
     public C getV() {
         return v;
     }
 
+    @Override
     public boolean isDoUpdate() {
         return doUpdate;
     }
 
+    @Override
     public void setG(C g) {
         this.g = g;
     }
 
+    @Override
     public void setV(C v) {
         this.v = v;
     }
 
+    @Override
     public void setKey(es.usc.citius.hipster.model.ADStarNode.Key<C> key) {
         this.key = key;
     }
 
+    @Override
     public void setPreviousNode(ADStarNodeImpl<A, S, C> parent){
         this.previousNode = parent;
     }
 
+    @Override
     public void setState(S state){
         this.state = state;
     }
 
+    @Override
     public void setAction(A action){
         this.action = action;
     }
 
+    @Override
     public void setDoUpdate(boolean doUpdate) {
         this.doUpdate = doUpdate;
     }
@@ -130,10 +143,9 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
      * @param o ADStarNode instance
      * @return usual comparison value
      */
+    @Override
     public int compareTo(ADStarNodeImpl<A, S, C> o) {
         return this.key.compareTo(o.key);
     }
-
-
 
 }
