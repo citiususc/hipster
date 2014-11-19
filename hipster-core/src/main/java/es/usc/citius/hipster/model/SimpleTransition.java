@@ -18,12 +18,33 @@ package es.usc.citius.hipster.model;
 
 
 /**
- * A SimpleTransition is just a transition without explicit actions {@code Transition<Void,S>}
+ * A SimpleTransition is just a transition without explicit actions {@code Transition<Void,S>}.
+ *
  * @param <S> state type of the transition
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class SimpleTransition<S> extends Transition<Void, S> {
 
+    /**
+     * Instantiates a new transition only specifying the destination
+     * of the transition.
+     *
+     * @param state destination of the transition
+     */
     public SimpleTransition(S state) {
         super(null, state);
+    }
+
+    /**
+     * Instantiates a new transition specifying the origin and destination
+     * of the transition.
+     *
+     * @param fromState origin state of the transition
+     * @param toState destination state of the transition
+     */
+    public SimpleTransition(S fromState, S toState) {
+        super(fromState, null, toState);
     }
 }

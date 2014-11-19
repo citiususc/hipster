@@ -17,18 +17,24 @@
 package es.usc.citius.hipster.model;
 
 /**
- * This interface extends {@link es.usc.citius.hipster.model.Node} providing a new method
- * to obtain a generic comparable cost that is used to evaluate and compare nodes.
+ * Defines a node which stores an attribute for the cost, extending
+ * the interface of a basic node {@link es.usc.citius.hipster.model.Node}. The cost has
+ * a generic definition but must be comparable. This type of node is used by algorithms
+ * which store information about the cost from the cost but do not use a heuristic function
+ * to estimate the cost to the goal.
  *
- * @param <A> Action type
- * @param <S> State type
- * @param <C> Cost type (comparable)
- * @param <N> Mode type
+ * @param <A> type of the actions
+ * @param <S> type of the state
+ * @param <C> type of the cost (must extend {@link java.lang.Comparable})
+ * @param <N> node type
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public interface CostNode<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Node<A,S,N>, Comparable<N> {
+
     /**
-     * Obtain the generic cost associated to the cost node.
-     * @return
+     * @return the cost of this node
      */
     C getCost();
 }
