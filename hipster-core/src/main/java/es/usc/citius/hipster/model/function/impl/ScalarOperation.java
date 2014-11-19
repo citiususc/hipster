@@ -9,10 +9,11 @@ import es.usc.citius.hipster.model.function.ScalarFunction;
  * <ul>
  * 		<li>identity element (A*i = A)</li>
  * </ul>
- * 
- * @author Adrián González <adrian.gonzalez@usc.es>
  *
- * @param <E> operator class
+ * @param <E> element type
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class ScalarOperation<E extends Comparable<E>> implements ScalarFunction<E> {
 
@@ -23,8 +24,8 @@ public class ScalarOperation<E extends Comparable<E>> implements ScalarFunction<
 	 * Unique constructor for {@link ScalarOperation}, that takes the {@link ScalarFunction}
 	 * applied and the identity element.
 	 *
-	 * @param operation
-	 * @param identityElem
+	 * @param operation operation definition
+	 * @param identityElem identity
 	 */
 	public ScalarOperation(ScalarFunction<E> operation, double identityElem) {
 		this.identityElem = identityElem;
@@ -36,6 +37,9 @@ public class ScalarOperation<E extends Comparable<E>> implements ScalarFunction<
 		return this.op.scale(a, b);
 	}
 
+	/**
+	 * @return identity element
+	 */
 	public double getIdentityElem() {
 		return identityElem;
 	}

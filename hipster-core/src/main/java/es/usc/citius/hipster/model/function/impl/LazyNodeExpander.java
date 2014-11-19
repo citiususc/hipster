@@ -25,12 +25,28 @@ import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
 /**
+ * Implementation of a {@link es.usc.citius.hipster.model.function.NodeExpander} which takes advantage
+ * of method in Guava {@link Iterables#transform(Iterable, com.google.common.base.Function)} to generate
+ * a {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Node} which are instantiated
+ * in a lazy way, as required by the algorithms, and not in advance.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the states
+ * @param <N> type of the nodes
+ *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander<A,S,N> {
     private TransitionFunction<A,S> tf;
     private NodeFactory<A,S,N> factory;
 
+    /**
+     * Initializes this node expander taking a node factory and the transition function
+     * of the problem.
+     *
+     * @param tf transition function
+     * @param factory node factory
+     */
     public LazyNodeExpander(TransitionFunction<A, S> tf, NodeFactory<A, S, N> factory) {
         this.tf = tf;
         this.factory = factory;
@@ -49,10 +65,16 @@ public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander
         });
     }
 
+    /**
+     * @return transition function
+     */
     public TransitionFunction<A, S> getTransitionFunction() {
         return tf;
     }
 
+    /**
+     * @return classic node factory
+     */
     public NodeFactory<A, S, N> getNodeFactory() {
         return factory;
     }

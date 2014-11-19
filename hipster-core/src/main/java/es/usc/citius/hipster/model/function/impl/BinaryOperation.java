@@ -36,6 +36,13 @@ public class BinaryOperation<E> implements BinaryFunction<E> {
 	private E identityElem;
 	private BinaryFunction<E> op;
 
+	/**
+	 *
+	 *
+	 * @param operation
+	 * @param identityElem
+	 * @param maxElem
+	 */
 	public BinaryOperation(BinaryFunction<E> operation, E identityElem, E maxElem) {
         // Check properties
         assert operation.apply(identityElem, maxElem).equals(maxElem);
@@ -49,22 +56,28 @@ public class BinaryOperation<E> implements BinaryFunction<E> {
 		this.op = operation;
 	}
 
+	@Override
 	public E apply(E a, E b) {
 		return this.op.apply(a, b);
 	}
-	
+
+	/**
+	 * @return maximum cost
+	 */
 	public E getMaxElem() {
 		return maxElem;
 	}
 
+	/**
+	 * @return minimum (identity) cost
+	 */
 	public E getIdentityElem() {
 		return identityElem;
 	}
 
     /**
-     * Returns a default addition implementation which works with doubles.
-     * For example, {@literal BinaryOperation.doubleAdditionOp().apply(2.5d, 1.0d)} returns 3.5d.
-     * @return
+     * @return a default addition implementation which works with doubles.
+	 * For example, {@literal BinaryOperation.doubleAdditionOp().apply(2.5d, 1.0d)} returns 3.5d.
      */
 	public static BinaryOperation<Double> doubleAdditionOp() {
 		return new BinaryOperation<Double>(new BinaryFunction<Double>() {
@@ -75,9 +88,8 @@ public class BinaryOperation<E> implements BinaryFunction<E> {
 	}
 
     /**
-     * Returns a multiplication implementation which works with doubles.
+     * @return a multiplication implementation which works with doubles.
      * For example, {@literal BinaryOperation.doubleMultiplicationOp.apply(2.5d, 2.0d)} returns 5.0d.
-     * @return
      */
 	public static BinaryOperation<Double> doubleMultiplicationOp() {
 		return new BinaryOperation<Double>(new BinaryFunction<Double>() {

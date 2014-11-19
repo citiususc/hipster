@@ -23,6 +23,22 @@ import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
+/**
+ * Implementation of {@link es.usc.citius.hipster.model.function.NodeFactory} for nodes of type
+ * {@link es.usc.citius.hipster.model.impl.WeightedNode}. The new nodes have a cost which
+ * is the sum of the cost of the parent and the cost of the {@link es.usc.citius.hipster.model.Transition}
+ * between the parent node and the current one, calculated by a {@link es.usc.citius.hipster.model.function.CostFunction}.
+ *
+ * Also, the score is the sum of the cost of the node and the estimated cost to the goal,
+ * according to a {@link es.usc.citius.hipster.model.function.HeuristicFunction}.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the states
+ * @param <C> type of the cost
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ */
 public class WeightedNodeFactory<A,S,C extends Comparable<C>> implements NodeFactory<A,S,WeightedNode<A,S,C>>{
 
     private CostFunction<A,S,C> gf;
@@ -30,12 +46,26 @@ public class WeightedNodeFactory<A,S,C extends Comparable<C>> implements NodeFac
     private BinaryOperation<C> costAccumulator;
 
 
+    /**
+     * Instantiates a node factory using a cost function, a heuristic function and a cost accumulator.
+     *
+     * @param costFunction cost function
+     * @param heuristicFunction heuristic function
+     * @param costAccumulator function to accumulate the cost elements
+     */
     public WeightedNodeFactory(CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = heuristicFunction;
         this.costAccumulator = costAccumulator;
     }
 
+    /**
+     * Instantiates a node factory using a cost function and a cost accumulator. The
+     * heuristic function is considered to return always the identity element of the cost.
+     *
+     * @param costFunction cost function
+     * @param costAccumulator function to accumulate the cost elements
+     */
     public WeightedNodeFactory(CostFunction<A, S, C> costFunction, BinaryOperation<C> costAccumulator) {
         this.gf = costFunction;
         this.hf = new HeuristicFunction<S, C>() {
