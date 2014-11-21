@@ -67,17 +67,31 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
     private Collection<S> goals;
     private ADStarNodeExpander<A, S, C, N> expander;
 
+    /**
+     * Create an instance of the algorithm with a begin, a goal and a component to
+     * expand new nodes from the current one.
+     *
+     * @param begin begin state
+     * @param goal goal state
+     * @param expander component which generates new nodes from the current
+     */
     public ADStarForward(S begin, S goal, ADStarNodeExpander<A, S, C, N> expander) {
         this(begin, Collections.singleton(goal), expander);
     }
 
+    /**
+     * Create an instance of the algorithm with a begin, multiple goals and a component to
+     * expand new nodes from the current one.
+     *
+     * @param begin begin state
+     * @param goals collection of goal states
+     * @param expander component which generates new nodes from the current
+     */
     public ADStarForward(S begin, Collection<S> goals, ADStarNodeExpander<A, S, C, N> expander) {
         this.begin = begin;
         this.goals = goals;
         this.expander = expander;
     }
-
-
 
     @Override
     public Iterator iterator() {
@@ -183,6 +197,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
          *
          * @return always true
          */
+        @Override
         public boolean hasNext() {
             return takePromising() != null;
         }
@@ -190,10 +205,12 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         /**
          * Removing is not supported.
          */
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public N next() {
             //First node in OPEN retrieved, not removed
             N current = takePromising();
