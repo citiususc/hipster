@@ -2,9 +2,10 @@ package es.usc.citius.hipster.util.examples.maze;
 
 
 /**
- * Defines a set of maze examples.
+ * Class containing a set of {@link es.usc.citius.hipster.util.examples.maze.Maze2D} to execute in the tests
+ * of the search iterators.
  *
- * @author Pablo Rodríguez Mier
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public final class Mazes {
 

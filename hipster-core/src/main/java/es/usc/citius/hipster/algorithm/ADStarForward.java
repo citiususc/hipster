@@ -59,7 +59,6 @@ import java.util.Queue;
  * @param <C> class defining the cost, must implement {@link java.lang.Comparable}
  *
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
- * @since 1.0.0
  */
 public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>> extends Algorithm<A, S, N> {
 

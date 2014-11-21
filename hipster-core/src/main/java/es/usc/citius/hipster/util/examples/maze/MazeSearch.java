@@ -28,12 +28,11 @@ import java.util.List;
 
 
 /**
- * Class to generate sample maps to test different search algorithms.
+ * This class executes the search iterators over maps of type {@link es.usc.citius.hipster.util.examples.maze.Maze2D}.
+ * And prints the results in the console.
  *
- * @author Adrián González Sieira
- * @author Pablo Rodríguez Mier
- * @version 1.0
- * @since 26-03-2013
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public final class MazeSearch {
 
@@ -41,6 +40,10 @@ public final class MazeSearch {
     private MazeSearch() {
     }
 
+    /**
+     * Inner class to define the results of the search process over
+     * {@link es.usc.citius.hipster.util.examples.maze.Maze2D}.
+     */
     public static final class Result {
 
         public static final Result NO_RESULT = new Result(Collections.EMPTY_LIST, Double.POSITIVE_INFINITY);
@@ -84,8 +87,13 @@ public final class MazeSearch {
         }
     }
 
-
-
+    /**
+     * Prints the maze and the result of the current iteration until the solution is found.
+     *
+     * @param it search iterator
+     * @param maze maze to perform the search
+     * @throws InterruptedException sleep exception between iterations
+     */
     public static void printSearch(Iterator<? extends Node<?,Point,?>> it, Maze2D maze) throws InterruptedException {
         Collection<Point> explored = new HashSet<Point>();
         while (it.hasNext()) {
@@ -108,12 +116,26 @@ public final class MazeSearch {
         }
     }
 
+    /**
+     * Clears the output of the console between results printed by {@link #printSearch(java.util.Iterator, Maze2D)}.
+     *
+     * @param newlines number of new lines
+     */
     public static void clearOutput(int newlines) {
         char[] chars = new char[newlines];
         Arrays.fill(chars, '\n');
         System.out.println(chars);
     }
 
+    /**
+     * Returns the maze passed as parameter but replacing some characters to print the path found in the
+     * current iteration.
+     *
+     * @param maze used to search
+     * @param explored collection of the points of the maze explored by the iterator
+     * @param path current path found by the iterator
+     * @return maze with the characters of the explored points and the current path replaced, to print the results in the console
+     */
     public static String getMazeStringSolution(Maze2D maze, Collection<Point> explored, Collection<Point> path) {
         List<Map<Point, Character>> replacements = new ArrayList<Map<Point, Character>>();
         Map<Point, Character> replacement = new HashMap<Point, Character>();
