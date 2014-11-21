@@ -57,6 +57,7 @@ import java.util.Queue;
  * @param <A> class defining the action
  * @param <S> class defining the state
  * @param <C> class defining the cost, must implement {@link java.lang.Comparable}
+ * @param <N> type of the nodes
  *
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */

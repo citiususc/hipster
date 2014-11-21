@@ -30,6 +30,8 @@ import java.util.*;
  * @param <A> type of the actions ({@code Void} if actions are not explicit).
  * @param <S> type of the states.
  * @param <N> type of the nodes.
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N> {
 
