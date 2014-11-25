@@ -34,10 +34,25 @@ import static es.usc.citius.hipster.examples.problem.NPuzzle.PuzzleMove;
 
 
 /**
- * Instance of the N-Puzzle with 3x3 tiles solved with the A* algorithm
- * using the manhattan distance heuristic.
+ * Example of the N-Puzzle (3x3 tiles) search problem solved with the A* algorithm.
+ *
+ * This example defines first the initial and goal states, and a
+ * {@link es.usc.citius.hipster.model.function.ActionFunction} which decides in each
+ * state which actions can be applied to reach another state.
+ *
+ * The {@link es.usc.citius.hipster.model.function.ActionStateTransitionFunction} takes
+ * as input an initial state and an action, generating the {@link es.usc.citius.hipster.model.Transition}
+ * between them.
+ *
+ * The {@link es.usc.citius.hipster.model.function.CostFunction} returns always a unitary
+ * cost, so A* will minimize the number of actions applied. As
+ * {@link es.usc.citius.hipster.model.function.HeuristicFunction} the Manhattan distance between states
+ * is used.
  *
  * @see {@link es.usc.citius.hipster.examples.problem.NPuzzle}
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class EightPuzzleProblemExample {
 
@@ -47,6 +62,8 @@ public class EightPuzzleProblemExample {
         final Puzzle goalState = new Puzzle(new int[]{0,1,2,3,4,5,6,7,8});
         //final int[][] goal = goalState.getMatrixBoard();
 
+        //Definition of the action function. Taking as input an state, determine the
+        //actions which can be applied to reach other state.
         ActionFunction<PuzzleMove, Puzzle> af = new ActionFunction<PuzzleMove, Puzzle>() {
             @Override
             public Iterable<PuzzleMove> actionsFor(Puzzle state) {
@@ -74,6 +91,8 @@ public class EightPuzzleProblemExample {
             }
         };
 
+        //Definition of the transition function (taking as input the current state and
+        //current action). It generates following state after applying the action.
         ActionStateTransitionFunction<PuzzleMove, Puzzle> atf = new ActionStateTransitionFunction<PuzzleMove, Puzzle>() {
             @Override
             public Puzzle apply(PuzzleMove action, Puzzle state) {
@@ -105,6 +124,7 @@ public class EightPuzzleProblemExample {
             }
         };
 
+        //definition of an unitary cost function
         CostFunction<PuzzleMove, Puzzle, Double> cf = new CostFunction<PuzzleMove, Puzzle, Double>() {
             @Override
             public Double evaluate(Transition<PuzzleMove, Puzzle> transition) {
@@ -112,6 +132,7 @@ public class EightPuzzleProblemExample {
             }
         };
 
+        //definition of an heuristic, the Manhattan distance between states
         HeuristicFunction<Puzzle, Double> hf = new HeuristicFunction<Puzzle, Double>() {
             @Override
             public Double estimate(Puzzle state) {
@@ -134,6 +155,10 @@ public class EightPuzzleProblemExample {
             }
         };
 
+        //here the search problem is instantiated defining all the components
+        //to be used in the search: the initial state,
+        //the action and transition function and the cost and heuristic
+        //functions to be used in the evaluation.
         SearchProblem<PuzzleMove, Puzzle, WeightedNode<PuzzleMove, Puzzle, Double>> p =
             ProblemBuilder.create()
                 .initialState(initialState)
@@ -145,8 +170,12 @@ public class EightPuzzleProblemExample {
                     .build();
 
 
-        // There are many ways to launch the search.
-        // Easiest way, just run the algorithm and print the result
+        //Here we create the search iterator, A* in this case, and
+        //we launch the search process until the goal state is reached.
+        //More algorithms are available in the Hipster class to be used with
+        //any search problem.
+        //There are many ways to use a search iterator, but this is the
+        //simplest one.
         System.out.println(Hipster.createAStar(p).search(goalState));
 
     }

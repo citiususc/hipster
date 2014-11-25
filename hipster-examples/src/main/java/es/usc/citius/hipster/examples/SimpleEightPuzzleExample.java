@@ -28,8 +28,19 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Simple implementation of the 8-Puzzle that uses an array as the
- * representation of a 8-Puzzle state.
+ * Implementation of the 8-puzzle search problem, represented as an array. It is solved
+ * using the Dijkstra algorithm.
+ *
+ * This problem defines an action function, from a state it retrieves the set of
+ * actions which can be applied to reach other states. The transition function takes
+ * the action applied to the current state and the to obtain the successor one.
+ * As cost function we assign a constant value to each action, so the objective is to
+ * minimize the number of actions to solve the 8-puzzle.
+ *
+ * @see {@link es.usc.citius.hipster.examples.EightPuzzleProblemExample}
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class SimpleEightPuzzleExample {
 
@@ -61,7 +72,6 @@ public class SimpleEightPuzzleExample {
                 }).build();
 
         // Solve the problem using Dijkstra
-
         System.out.println(Hipster.createDijkstra(p).search(Arrays.asList(0,1,2,3,4,5,6,7,8)));
 
     }

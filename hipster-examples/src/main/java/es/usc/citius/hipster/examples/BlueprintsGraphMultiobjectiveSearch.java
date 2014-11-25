@@ -90,8 +90,14 @@ public class BlueprintsGraphMultiobjectiveSearch {
 
     }
 
+    /**
+     * Build an example graph to execute in this example.
+     *
+     * @return example graph
+     */
     private static Graph buildGraph() {
         Graph g = new TinkerGraph();
+        //add vertices
         Vertex v1 = g.addVertex("v1");
         Vertex v2 = g.addVertex("v2");
         Vertex v3 = g.addVertex("v3");
@@ -99,6 +105,7 @@ public class BlueprintsGraphMultiobjectiveSearch {
         Vertex v5 = g.addVertex("v5");
         Vertex v6 = g.addVertex("v6");
 
+        //add edges labeled with costs
         Edge e1 = g.addEdge("e1", v1, v2, "(7, 1)");
         e1.setProperty("c1", 7);
         e1.setProperty("c2", 1);
@@ -138,10 +145,19 @@ public class BlueprintsGraphMultiobjectiveSearch {
         return g;
     }
 
+    /**
+     * Inner class to define a multi-objective cost.
+     */
     static class Cost implements Comparable<Cost> {
         private double c1;
         private double c2;
 
+        /**
+         * Creation of multi-objective cost from two double values.
+         *
+         * @param c1 first element of the cost
+         * @param c2 second element of the cost
+         */
         public Cost(double c1, double c2) {
             this.c1 = c1;
             this.c2 = c2;
@@ -155,6 +171,14 @@ public class BlueprintsGraphMultiobjectiveSearch {
                     '}';
         }
 
+        /**
+         * A cost is lower/higher than other if both components
+         * are (dominated cost). Returns 0 in the rest of the cases
+         * (non-dominated).
+         *
+         * @param o other cost element
+         * @return comparison result: -1/1 (dominated) or 0 (non-dominated)
+         */
         @Override
         public int compareTo(Cost o) {
 

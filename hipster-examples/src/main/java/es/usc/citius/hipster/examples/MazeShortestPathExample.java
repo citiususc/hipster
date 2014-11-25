@@ -29,9 +29,16 @@ import es.usc.citius.hipster.util.examples.maze.Mazes;
 import java.awt.*;
 
 /**
- * This example demonstrates how to find the shortest path in a 2D maze
- * with Hipster.
- * 
+ * Example using a 2D {@link es.usc.citius.hipster.util.examples.maze.Maze2D}, solved using the A* algorithm.
+ *
+ * This example consists in a search problem without explicit actions defined, which uses
+ * a transition function implemented in the class {@link es.usc.citius.hipster.util.examples.maze.Maze2D}
+ * to return the accessible states from the current. The cost functions is the Euclidean distance
+ * between points and the heuristic is not defined. In this case, the heuristic value is
+ * 0 for all states, which forces A* to act in the same way as the Dijkstra algorithm.
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class MazeShortestPathExample {
 
@@ -96,6 +103,5 @@ public class MazeShortestPathExample {
 
         //MazeSearch.printSearch(Hipster.createAStar(p).iterator(), maze);
         System.out.println(Hipster.createAStar(p).search(goal));
-
     }
 }
