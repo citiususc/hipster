@@ -35,6 +35,9 @@ import java.util.Collections;
  * the state space. A SearchProblem can be easily defined with the {@link es.usc.citius.hipster.model.problem.ProblemBuilder} class.
  *
  * @see es.usc.citius.hipster.model.problem.ProblemBuilder
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public final class Hipster {
 
@@ -42,39 +45,128 @@ public final class Hipster {
 
     }
 
+    /**
+     * Instantiates a A* algorithm given a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.AStar} for the problem definition
+     */
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> AStar<A,S,C,N> createAStar(SearchProblem<A,S,N> components){
         return new AStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates a Dijkstra algorithm (A* algorithm with no heuristic function) given a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.AStar} for the problem definition, using no heuristic.
+     */
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> AStar<A,S,C,N> createDijkstra(SearchProblem<A,S,N> components){
         //TODO: There is no difference with AStar. Actually if the NodeExpander uses heuristics, this "Dijkstra" impl works as the AStar. This should be changed!
         return new AStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates a Bellman Ford algorithm for a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.BellmanFord} for the problem definition
+     */
     public static <A,S,C extends Comparable<C>, N extends CostNode<A,S,C,N>> BellmanFord<A,S,C,N> createBellmanFord(SearchProblem<A,S,N> components){
         return new BellmanFord<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates Breadth First Search algorithm for a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.BreadthFirstSearch} for the problem definition
+     */
     public static <A,S,N extends Node<A,S,N>> BreadthFirstSearch<A,S,N> createBreadthFirstSearch(SearchProblem<A,S,N> components){
         return new BreadthFirstSearch<A,S,N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates Depth First Search algorithm for a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.DepthFirstSearch} for the problem definition
+     */
     public static <A,S,N extends Node<A,S,N>> DepthFirstSearch<A,S,N> createDepthFirstSearch(SearchProblem<A,S,N> components){
         return new DepthFirstSearch<A, S, N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates a IDA* algorithm given a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.IDAStar} for the problem definition
+     */
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> IDAStar<A,S,C,N> createIDAStar(SearchProblem<A,S,N> components){
         return new IDAStar<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
 
+    /**
+     * Instantiates a Hill Climbing algorithm given a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param enforced flag to use Enforced Hill Climbing instead of classic Hill Climbing algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.localsearch.HillClimbing} for the problem definition
+     */
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> HillClimbing<A,S,C,N> createHillClimbing(SearchProblem<A,S,N> components, boolean enforced){
         return new HillClimbing<A,S,C,N>(components.getInitialNode(), components.getExpander(), enforced);
     }
 
+    /**
+     * Instantiates a Multi-objective Label Setting algorithm given a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.MultiobjectiveLS} for the problem definition
+     */
     public static <A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> MultiobjectiveLS<A,S,C,N> createMultiobjectiveLS(SearchProblem<A,S,N> components){
         return new MultiobjectiveLS<A, S, C, N>(components.getInitialNode(), components.getExpander());
     }
-    
+
+    /**
+     * Instantiates a Anytime Dynamic A* algorithm given the search components. Search components can be obtained
+     * easily for graph-based problems using {@link es.usc.citius.hipster.util.graph.GraphSearchProblem}.
+     *
+     * @param components search components to be used by the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <C> type of the cost
+     * @return instance of {@link es.usc.citius.hipster.algorithm.ADStarForward} for the search components
+     */
     public static <A,S,C extends Comparable<C>> ADStarForward<A,S,C,ADStarNodeImpl<A,S,C>> createADStar(SearchComponents<A, S, C> components){
         //node factory instantiation
         ADStarNodeFactory<A, S, C> factory = new ADStarNodeFactory<A, S, C>(components);
