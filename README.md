@@ -31,7 +31,7 @@ The current version of the library comes with some very well-known and wide used
 * 3rd party adapters:
     * [Java Universal/Graph (JUNG)](http://jung.sourceforge.net/) adapter.
 
-If you don't find the algorithm or the feature you are looking for, please consider contributing to Hipster!. You can open a new issue or better fork this repository and create a pull request with your contribution. If you go for this second option, please follow the contribution guidelines.
+If you don't find the algorithm or the feature you are looking for, please consider contributing to Hipster!. You can open a new issue or better fork this repository and create a pull request with your contribution.
 
 ## Getting started
 
