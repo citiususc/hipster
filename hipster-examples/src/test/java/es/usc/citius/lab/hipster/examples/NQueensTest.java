@@ -17,6 +17,7 @@
 package es.usc.citius.lab.hipster.examples;
 
 
+import es.usc.citius.hipster.examples.problem.NQueens;
 import org.junit.Test;
 
 import java.util.HashSet;

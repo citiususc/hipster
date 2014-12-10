@@ -23,67 +23,86 @@
     <skin>
         <groupId>lt.velykis.maven.skins</groupId>
         <artifactId>reflow-maven-skin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </skin>
+
+    <publishDate position="bottom" format="yyyy-MM-dd" />
+    <version position="bottom" />
+    <googleAnalyticsAccountId>UA-54364281-1</googleAnalyticsAccountId>
 
     <custom>
         <reflowSkin>
             <smoothScroll>true</smoothScroll>
-            <theme>default</theme>
-            <highlightJs>true</highlightJs>
-            <highlightJsTheme>github</highlightJsTheme>
+            <theme>bootswatch-united</theme>
+
             <brand>
                 <name>Hipster</name>
-                <href>http://github.com/pablormier/hipster</href>
+                <href>http://www.github.com/citiususc/hipster</href>
             </brand>
-            <slogan>Heuristic Search Library for Java</slogan>
+            <slogan>An Open Source Java Library for Heuristic Search</slogan>
             <titleTemplate>%2$s | %1$s</titleTemplate>
             <!-- Use Table of Contents at the top of the page (max 6 elements) -->
             <toc>top</toc>
             <tocTopMax>6</tocTopMax>
-            <!-- Include the documentation and tools in the top navigation (in addition to links) -->
-            <topNav>Download|reports</topNav>
-            <bottomNav maxSpan="9">
-                <column>Main|Download</column>
-                <column>Documentation</column>
-                <!--<column>reports</column>-->
-            </bottomNav>
+
             <bottomDescription>
                 The Open Source Heuristic Search Library implemented in pure Java.
             </bottomDescription>
             <pages>
-                <index project="project-id">
-                    <shortTitle>Welcome</shortTitle>
+                <index project="hipster-pom">
+                    <!-- Override the title -->
+                    <titleTemplate>Hipster</titleTemplate>
+                    <!-- no breadcrumbs on the main index page -->
                     <breadcrumbs>false</breadcrumbs>
+                    <!-- no ToC on the main index page -->
                     <toc>false</toc>
+                    <markPageHeader>false</markPageHeader>
                     <sections>
-                        <carousel />
+                        <columns>1</columns>
+                        <columns>3</columns>
                         <body />
                         <sidebar />
-                        <thumbs>2</thumbs>
-                        <columns>3</columns>
                     </sections>
                 </index>
-                <developer-info>
-                    <toc>sidebar</toc>
-                </developer-info>
+                <contribute>
+                    <breadcrumbs>false</breadcrumbs>
+                </contribute>
+                <issue-tracking>
+                    <highlightJs>false</highlightJs>
+                    <toc>false</toc>
+                </issue-tracking>
+                <license>
+                    <toc>false</toc>
+                </license>
+                <!-- Disable ToC for some Maven reports -->
+                <project-info>
+                    <toc>false</toc>
+                </project-info>
+                <github-report>
+                    <toc>false</toc>
+                </github-report>
+                <dependencies>
+                    <tocTopMax>4</tocTopMax>
+                </dependencies>
             </pages>
         </reflowSkin>
     </custom>
 
-    <!--
-    <bannerLeft>
-        <name></name>
-        <src>images/logo.png</src>
-        <height>475</height>
-        <width>263</width>
-        <href></href>
-    </bannerLeft>
-    -->
-
     <body>
-        <menu name="Modules" ref="modules"/>
-        <menu name="Reports" ref="reports"/>
+        <head>
+            <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+            <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/obsidian.min.css" />
+        </head>
+
+        <links>
+            <item name="Hipster on GitHub" href="http://www.github.com/citiususc/hipster" />
+        </links>
+
+        <breadcrumbs>
+            <item name="Hipster" href="/" />
+        </breadcrumbs>
+
+        <menu name="Project info" ref="reports" inherit="bottom"/>
     </body>
 
 </project>

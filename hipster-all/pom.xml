@@ -19,9 +19,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hipster-pom</artifactId>
         <groupId>es.usc.citius.hipster</groupId>
-        <version>1.0.0-alpha-1</version>
+        <artifactId>hipster-pom</artifactId>
+        <version>1.0.0-rc1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hipster-all</artifactId>
@@ -48,5 +48,27 @@
         </dependency>
     </dependencies>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>${project.artifactId}-${project.version}-all</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

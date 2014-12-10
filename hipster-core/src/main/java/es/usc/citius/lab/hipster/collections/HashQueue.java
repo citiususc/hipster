@@ -15,6 +15,7 @@ public class HashQueue<S> extends AbstractQueue<S> {
     private final Set<S> elements = new LinkedHashSet<S>();
     private S first = null;
 
+    @Override
     public boolean offer(S e) {
         elements.add(e);
         if (first == null) {
@@ -23,6 +24,7 @@ public class HashQueue<S> extends AbstractQueue<S> {
         return true;
     }
 
+    @Override
     public S poll() {
         // Remove the first element
         elements.remove(first);
@@ -32,6 +34,7 @@ public class HashQueue<S> extends AbstractQueue<S> {
         return out;
     }
 
+    @Override
     public S peek() {
         return first;
     }

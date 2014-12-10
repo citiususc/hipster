@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ * Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,97 +16,88 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-
-import com.google.common.collect.*;
-import es.usc.citius.lab.hipster.function.TransitionFunction;
-import es.usc.citius.lab.hipster.node.Node;
-import es.usc.citius.lab.hipster.node.Transition;
+import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.model.impl.UnweightedNode;
+import es.usc.citius.hipster.util.graph.GraphBuilder;
+import es.usc.citius.hipster.util.graph.GraphSearchProblem;
+import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ */
 public class DepthFirstSearchTest {
 
-
     @Test
-    public void treeSearch(){
-        /*
-           DFS over this tree example
-                    A
-                   /|\
-                  B C D
-                 /\ |
-                E F H
-                |
-                G
-         */
-        final ListMultimap<String, String> tree = ArrayListMultimap.create();
-        tree.get("A").addAll(Arrays.asList("B","C","D"));
-        tree.get("B").addAll(Arrays.asList("E","F"));
-        tree.get("E").add("G");
-        tree.get("C").add("H");
-        validate(dfs(tree, "A"), new String[]{"A", "B", "E", "G", "F", "C", "H", "D"});
-    }
+    public void testTree(){
+        HipsterDirectedGraph<String, String> tree =
+                GraphBuilder.create()
+                .connect("A").to("B").withEdge("1")
+                .connect("A").to("C").withEdge("2")
+                .connect("B").to("D").withEdge("3")
+                .connect("B").to("E").withEdge("4")
+                .connect("D").to("H").withEdge("5")
+                .connect("D").to("I").withEdge("6")
+                .connect("E").to("J").withEdge("7")
+                .connect("E").to("K").withEdge("8")
+                .connect("C").to("F").withEdge("9")
+                .connect("C").to("G").withEdge("10")
+                .connect("F").to("L").withEdge("11")
+                .connect("F").to("M").withEdge("12")
+                .connect("G").to("N").withEdge("13")
+                .connect("G").to("O").withEdge("14")
+                .buildDirectedGraph();
 
-    @Test
-    public void consistentHasNext(){
-        final ListMultimap<String, String> graph = ArrayListMultimap.create();
-        graph.get("A").add("B");
-        DepthFirstSearch<String> dfs = dfs(graph, "A");
-        assertTrue(dfs.hasNext());
-        dfs.next();
-        assertTrue(dfs.hasNext());
-        dfs.next();
-        assertFalse(dfs.hasNext());
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(tree).build()).iterator();
+
+        verify(iterator, new String[]{"A", "B", "D", "H", "I", "E", "J", "K", "C", "F", "L", "M", "G", "N", "O"});
     }
 
     @Test
-    public void noSuccessors(){
-        final ListMultimap<String, String> graph = ArrayListMultimap.create();
-        DepthFirstSearch<String> dfs = dfs(graph, "A");
-        dfs.next();
-        assertFalse(dfs.hasNext());
+    public void testGraphWithoutCycles(){
+        HipsterDirectedGraph<String, String> graph =
+                GraphBuilder.create()
+                        .connect("A").to("B").withEdge("1")
+                        .connect("A").to("C").withEdge("2")
+                        .connect("B").to("D").withEdge("3")
+                        .connect("B").to("E").withEdge("4")
+                        .connect("E").to("C").withEdge("5")
+                        .buildDirectedGraph();
+
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
+
+        verify(iterator, new String[]{"A", "B", "D", "E", "C"});
     }
 
     @Test
-    public void cyclicGraphSearch(){
-        final ListMultimap<String, String> graph = ArrayListMultimap.create();
-        graph.get("A").addAll(Arrays.asList("B", "C", "D"));
-        graph.get("B").addAll(Arrays.asList("E", "F"));
-        graph.get("E").addAll(Arrays.asList("F", "B"));
-        graph.get("F").addAll(Arrays.asList("E", "B"));
-        graph.get("C").addAll(Arrays.asList("D","A"));
-        graph.get("D").addAll(Arrays.asList("A","C","G"));
-        graph.get("G").add("D");
-        validate(dfs(graph, "A"), new String[]{"A", "B", "E", "F", "C", "D", "G"});
+    public void testGraph(){
+        HipsterDirectedGraph<String, String> graph =
+                GraphBuilder.create()
+                .connect("A").to("B").withEdge("1")
+                .connect("A").to("C").withEdge("2")
+                .connect("B").to("D").withEdge("3")
+                .connect("B").to("E").withEdge("4")
+                .connect("E").to("C").withEdge("5")
+                .connect("C").to("A").withEdge("6")
+                .buildDirectedGraph();
+
+        Iterator<UnweightedNode<String, String>> iterator =
+                Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
+
+        verify(iterator, new String[]{"A", "B", "D", "E", "C"});
     }
 
-    private DepthFirstSearch<String> dfs(final Multimap<String, String> graph, String initial){
-        TransitionFunction<String> tf = new TransitionFunction<String>() {
-            @Override
-            public Iterable<? extends Transition<String>> from(String current) {
-                List<Transition<String>> transitions = Lists.newArrayList(Transition.map(current, graph.get(current)));
-                // By default, this DFS implementation iterates from right to left.
-                // Inverting the order of the successors makes the algorithm iterate from left to right
-                //Collections.reverse(transitions);
-                return transitions;
-            }
-        };
-        return new DepthFirstSearch<String>(initial, tf);
-    }
-
-    private void validate(DepthFirstSearch<String> dfs,String[] expected){
-        int i = 0;
-        while(dfs.hasNext()){
-            Node<String> node = dfs.next();
-            //System.out.println(node.transition().to());
-            assertEquals(expected[i++], node.transition().to());
+    private void verify(Iterator<UnweightedNode<String, String>> iterator, String[] expected){
+        int i=0;
+        while(iterator.hasNext()){
+            UnweightedNode<String,String> node = iterator.next();
+            assertEquals(expected[i++], node.state());
         }
     }
-
 }

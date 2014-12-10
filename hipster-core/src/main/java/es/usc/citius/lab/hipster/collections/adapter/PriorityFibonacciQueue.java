@@ -22,26 +22,31 @@ import java.util.AbstractQueue;
 import java.util.Iterator;
 
 /**
+ * Implementation of {@link java.util.Queue} based on the Fibonacci heap
+ * concept, described in http://en.wikipedia.org/wiki/Fibonacci_heap.
+ *
+ * @param <N> type of the nodes
+ *
  * @author Pablo Rodríguez Mier
  */
-public class PriorityFibonacciQueue<E> extends AbstractQueue<E> {
-    private final FibonacciHeap<E> heap = new FibonacciHeap<E>();
-    private PriorityEvaluator<E> evaluator;
+public class PriorityFibonacciQueue<N> extends AbstractQueue<N> {
+    private final FibonacciHeap<N> heap = new FibonacciHeap<N>();
+    private PriorityEvaluator<N> evaluator;
 
-    public PriorityFibonacciQueue(PriorityEvaluator<E> evaluator) {
+    public PriorityFibonacciQueue(PriorityEvaluator<N> evaluator) {
         this.evaluator = evaluator;
     }
 
     @Override
-    public Iterator<E> iterator() {
-        return new Iterator<E>() {
+    public Iterator<N> iterator() {
+        return new Iterator<N>() {
             @Override
             public boolean hasNext() {
                 return heap.size() > 0;
             }
 
             @Override
-            public E next() {
+            public N next() {
                 return heap.dequeueMin().getValue();
             }
 
@@ -58,18 +63,18 @@ public class PriorityFibonacciQueue<E> extends AbstractQueue<E> {
     }
 
     @Override
-    public boolean offer(E e) {
-        heap.enqueue(e, this.evaluator.getPriority(e));
+    public boolean offer(N n) {
+        heap.enqueue(n, this.evaluator.getPriority(n));
         return true;
     }
 
     @Override
-    public E poll() {
+    public N poll() {
         return heap.dequeueMin().getValue();
     }
 
     @Override
-    public E peek() {
+    public N peek() {
         return heap.min().getValue();
     }
 }
