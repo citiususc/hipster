@@ -29,7 +29,6 @@ import es.usc.citius.hipster.model.problem.SearchComponents;
  * @param <C> class defining the cost
  *
  * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
- * @since 0.1.0
  */
 public class ADStarNodeFactory<A, S, C extends Comparable<C>> implements NodeFactory<A, S, ADStarNodeImpl<A, S, C>> {
 
@@ -40,9 +39,13 @@ public class ADStarNodeFactory<A, S, C extends Comparable<C>> implements NodeFac
     protected HeuristicFunction<S, C> hf;
 
     /**
-     * Constructor for the ADStarNodeBuilder. Takes the minimum and
+     * Constructor which takes the minimum and
      * maximum cost values managed by the algorithm to initialize the
      * node values properly.
+     *
+     * @param addOp addition operation
+     * @param scaleOp scaling operation
+     * @param hf heuristic function
      */
     public ADStarNodeFactory(BinaryOperation<C> addOp, ScalarOperation<C> scaleOp, HeuristicFunction<S, C> hf) {
         this.hf = hf;
@@ -52,13 +55,17 @@ public class ADStarNodeFactory<A, S, C extends Comparable<C>> implements NodeFac
         this.max = addOperation.getMaxElem();
     }
 
+    /**
+     * Constructor which takes the search components instead of taking all the separated
+     * arguments.
+     *
+     * @param components search components of the algorithm
+     */
     public ADStarNodeFactory(SearchComponents<A, S, C> components){
         this(components.costAlgebra(), components.scaleAlgebra(), components.heuristicFunction());
     }
 
-    /**
-     * Builds a new node taking the parent and the transition used to access the new node.
-     */
+    @Override
     public ADStarNodeImpl<A, S ,C> makeNode(ADStarNodeImpl<A, S, C> from, Transition<A, S> transition) {
         if (from == null) {
             return new ADStarNodeImpl<A, S, C>(transition, null, min, max, new ADStarNode.Key<C>(min, max, hf.estimate(transition.getState()), 1.0, addOperation, scaleOperation));

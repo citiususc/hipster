@@ -20,12 +20,17 @@ package es.usc.citius.hipster.model.function.impl;
 import es.usc.citius.hipster.model.function.ScalarFunction;
 
 /**
- * Implements the ScalarFunction product for doubles.
+ * Implementation of {@link es.usc.citius.hipster.model.function.ScalarFunction} product
+ * for {@link java.lang.Double} elements.
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class Product implements ScalarFunction<Double> {
 
     /**
      * Returns a*b
+     *
      * @param a value to be scaled
      * @param b scale factor
      * @return a*b

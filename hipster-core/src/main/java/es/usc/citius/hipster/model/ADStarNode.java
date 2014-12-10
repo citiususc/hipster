@@ -4,34 +4,74 @@ import es.usc.citius.hipster.model.function.ScalarFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 
 /**
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 29/07/2014
+ * Implementation of {@link es.usc.citius.hipster.model.Node} to be used with the AD* algorithm, implemented in
+ * {@link es.usc.citius.hipster.algorithm.ADStarForward}. AD* nodes are formed by two cost elements, G and V,
+ * and a {@link es.usc.citius.hipster.model.ADStarNode.Key} which is used to order the nodes by priority
+ * in the queues of the algorithm. This implementation extends {@link es.usc.citius.hipster.model.HeuristicNode}.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the state
+ * @param <C> type of the cost (must extend {@link java.lang.Comparable})
+ * @param <N> node type
+ *
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<A,S,C,N>> extends HeuristicNode<A, S, C, N> {
 
+    /**
+     * @return G-cost of the node
+     */
     public C getG();
 
+    /**
+     * @return V-cost (also RHS) of the node
+     */
     public C getV();
 
+    /**
+     * @return determines if the nodes must be updated by a {@link es.usc.citius.hipster.model.function.impl.ADStarNodeUpdater}.
+     */
     public boolean isDoUpdate();
 
+    /**
+     * @return determines if the node is in a consistent or inconsistent state based on the values of G and V
+     */
     public boolean isConsistent();
 
+    /**
+     * @param g new value of G
+     */
     public void setG(C g);
 
+    /**
+     * @param v new value of V
+     */
     public void setV(C v);
 
+    /**
+     * @param update set a new value for the update flag of this node
+     */
     public void setDoUpdate(boolean update);
 
+    /**
+     * @param key new key to compare the priority of the nodes
+     */
     public void setKey(Key<C> key);
 
+    /**
+     * @param parent new parent of the node
+     */
     public void setPreviousNode(N parent);
 
+    /**
+     * @param state state of this node
+     */
     public void setState(S state);
 
+    /**
+     * @param action action between the parent and this node
+     */
     public void setAction(A action);
-
-
 
 
     /**
@@ -89,10 +129,16 @@ public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<
             }
         }
 
+        /**
+         * @return first value of the key
+         */
         public C getFirst() {
             return first;
         }
 
+        /**
+         * @return second value of the key
+         */
         public C getSecond() {
             return second;
         }

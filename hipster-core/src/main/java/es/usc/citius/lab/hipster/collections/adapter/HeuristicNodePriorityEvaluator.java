@@ -20,6 +20,14 @@ package es.usc.citius.lab.hipster.collections.adapter;
 import es.usc.citius.hipster.model.HeuristicNode;
 
 /**
+ * Calculates the priority (double) of a {@link es.usc.citius.hipster.model.HeuristicNode}
+ * based translating on a cost extending {@link java.lang.Number}.
+ *
+ * @param <A> type of the actions ({@code Void} if actions are not explicit).
+ * @param <S> type of the states
+ * @param <C> type of the cost
+ * @param <N> type of the nodes
+ *
  * @author Pablo Rodríguez Mier
  */
 public class HeuristicNodePriorityEvaluator<A, S, C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> implements PriorityEvaluator<N> {

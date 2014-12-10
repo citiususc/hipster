@@ -23,8 +23,18 @@ package es.usc.citius.lab.hipster.collections.adapter;
  * doubles to sort the elements instead of defining comparable types (as used by
  * {@link java.util.Queue}.
  *
+ * @param <N> type of the nodes
+ *
  * @author Pablo Rodríguez Mier
  */
-public interface PriorityEvaluator<E> {
-    double getPriority(E e);
+public interface PriorityEvaluator<N> {
+
+    /**
+     * Retrieve the priority of the node.
+     *
+     * @param n node
+     * @return priority as double value
+     */
+    double getPriority(N n);
+
 }

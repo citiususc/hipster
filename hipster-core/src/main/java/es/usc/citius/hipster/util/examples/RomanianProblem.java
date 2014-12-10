@@ -15,8 +15,8 @@ import java.util.Map;
  *
  * <img src="../../../../../../../assets/images/javadoc/romanian-problem.png" />
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @author Pablo Rodríguez Mier
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class RomanianProblem {
 
@@ -32,6 +32,9 @@ public class RomanianProblem {
     private static final Map<City, Double> heuristicMap = new HashMap<City, Double>();
     private static final HipsterGraph<City,Double> graph;
 
+    /**
+     * Define the heuristic values of the problem and create the graph.
+     */
     static {
         heuristicMap.put(City.Oradea, 380d);
         heuristicMap.put(City.Zerind, 374d);

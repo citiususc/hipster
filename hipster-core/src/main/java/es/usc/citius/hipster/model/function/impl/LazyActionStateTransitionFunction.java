@@ -24,10 +24,28 @@ import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
+/**
+ * Implementation of a {@link es.usc.citius.hipster.model.function.TransitionFunction} which takes advantage
+ * of method in Guava {@link Iterables#transform(Iterable, com.google.common.base.Function)} to generate
+ * a {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Transition} which are instantiated
+ * in a lazy way, as the elements are iterated by the algorithms, and not in advance. This class
+ * is used for problems with explicit actions.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the states
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ */
 public class LazyActionStateTransitionFunction<A,S> implements TransitionFunction<A,S> {
     private final ActionFunction<A,S> af;
     private final ActionStateTransitionFunction<A,S> tf;
 
+    /**
+     * Main constructor which initializes this class with the transition functions.
+     *
+     * @param af function which computes the actions applicable in each state
+     * @param tf function which computes the state after applying an action in a concrete state
+     */
     public LazyActionStateTransitionFunction(ActionFunction<A, S> af, ActionStateTransitionFunction<A, S> tf) {
         this.af = af;
         this.tf = tf;

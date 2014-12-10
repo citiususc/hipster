@@ -43,9 +43,9 @@ package es.usc.citius.hipster.model.function;
  * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
- * @since 0.1.0
  */
 public interface ScalarFunction<T> {
+
     /**
      * Scale operation.
      *

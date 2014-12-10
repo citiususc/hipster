@@ -11,8 +11,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
- * @since 23/07/2014
+ * This class is an implementation of {@link es.usc.citius.hipster.model.function.NodeExpander} for nodes
+ * of type {@link es.usc.citius.hipster.model.ADStarNode}. This node expander executes the main
+ * function of a node expander: taking as input a node generates the successor nodes using the information
+ * of the transition, cost and heuristic functions. This expander, to be used
+ * with {@link es.usc.citius.hipster.algorithm.ADStarForward}, also
+ * executes the following operations:
+ *
+ * <li>
+ *     <ul>Obtain a set of iterable nodes from the transitions that changed since the last solution found of AD*</ul>
+ *     <ul>Update nodes in consistent and inconsistent states</ul>
+ *     <ul>Store the nodes visited by the algorithm</ul>
+ *     <ul>Get the predecessors nodes of a current one which were visited by the algorithm</ul>
+ * </li>
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the state
+ * @param <C> type of the cost (must extend {@link java.lang.Comparable})
+ * @param <N> node type
+ *
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>>
         implements NodeExpander<A, S, N>{
@@ -27,11 +45,33 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     private Map<S, N> visited;
     private double epsilon;
 
+    /**
+     * Builds a node expander from a search components and a node factory. A epsilon value (used to inflate
+     * the heuristic and obtain solutions anytime) must be specified, being >= 1.
+     *
+     *
+     * @param components search components of the search
+     * @param factory node factory
+     * @param epsilon heuristic inflation value (>=1)
+     */
     public ADStarNodeExpander(SearchComponents<A, S, C> components, NodeFactory<A, S, N> factory, double epsilon){
         this(components.successorFunction(), components.predecessorFunction(), components.costFunction(),
                 components.heuristicFunction(), components.costAlgebra(), components.scaleAlgebra(), factory, epsilon);
     }
 
+    /**
+     * Builds a node expander specifying the required components individually. A epsilon value (used to inflate
+     * the heuristic and obtain solutions anytime) must be specified, being >= 1.
+     *
+     * @param successorFunction successor function
+     * @param predecessorFunction predecessor function
+     * @param costFunction evaluation function
+     * @param heuristicFunction heuristic function
+     * @param add cost addition function
+     * @param scale cost scale function
+     * @param nodeFactory node factory
+     * @param epsilon heuristic inflation value (>=1)
+     */
     public ADStarNodeExpander(TransitionFunction<A, S> successorFunction, TransitionFunction<A, S> predecessorFunction,
                               CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction,
                               BinaryOperation<C> add, ScalarFunction<C> scale, NodeFactory<A, S, N> nodeFactory,
@@ -79,6 +119,15 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
         return nodes;
     }
 
+    /**
+     * Generates an iterable list of nodes, updated as inconsistent after applying the cost changes in the
+     * list of transitions passed as parameter.
+     *
+     * @param begin beginning state of the search
+     * @param current current node of the search
+     * @param transitions list of transitions with changed costs
+     * @return list of updated nodes
+     */
     public Iterable<N> expandTransitionsChanged(S begin, N current, Iterable<Transition<A, S>> transitions){
         Collection<N> nodes = new ArrayList<N>();
         for (Transition<A, S> transition : transitions) {
@@ -199,10 +248,23 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
         this.epsilon = epsilon;
     }
 
+    /**
+     * @return map with the states and nodes visited by the algorithm
+     */
     public Map<S, N> getVisited() { return visited; }
 
+    /**
+     * Clears the set of visited nodes.
+     */
     public void clearVisited() { this.visited = new HashMap<S, N>(); }
 
+    /**
+     * Creates a new node from the parent and a transition, calling the node factory.
+     *
+     * @param from parent node
+     * @param transition transition between the parent and the new node
+     * @return new node created by the node factory
+     */
     public N makeNode(N from, Transition<A, S> transition){
         return nodeFactory.makeNode(from, transition);
     }

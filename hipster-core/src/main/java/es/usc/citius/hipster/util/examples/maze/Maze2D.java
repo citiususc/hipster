@@ -68,6 +68,7 @@ import java.util.List;
  *     <li>".": visited tile</li>
  * </ul>
  *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class Maze2D {
 
@@ -169,6 +170,12 @@ public class Maze2D {
         }
     }
 
+    /**
+     * Find the maximum length of the rows of the maze.
+     *
+     * @param maze instance of maze
+     * @return max lenght of all rows
+     */
     private int findMaxRowLength(String maze[]){
         int max = 0;
         for (String rowMaze : maze) {
@@ -177,6 +184,12 @@ public class Maze2D {
         return max;
     }
 
+    /**
+     * Find the maximum length of the rows of the maze.
+     *
+     * @param maze instance of maze
+     * @return max lenght of all rows
+     */
     private int findMaxRowLength(char maze[][]){
         int max = 0;
         for (int row = 0; row < maze.length; row++) {
@@ -187,6 +200,7 @@ public class Maze2D {
 
     /**
      * Read a maze from a file in plain text.
+     *
      * @param file file with the plain ascii text.
      * @return a new Maze2D.
      * @throws IOException

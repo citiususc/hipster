@@ -20,12 +20,30 @@ package es.usc.citius.hipster.model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Basic implementation of the interface {@link es.usc.citius.hipster.model.Node}. All implementations of
+ * the interface may extend this class to reuse the implemented {@link #path()} method and
+ * the getters.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the state
+ * @param <N> type of the node
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ */
 public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S,N> {
     protected N previousNode;
     protected S state;
     protected A action;
 
-
+    /**
+     * Generic constructor of nodes.
+     *
+     * @param previousNode parent node
+     * @param state current state
+     * @param action action between the previous node and the current state
+     */
     public AbstractNode(N previousNode, S state, A action) {
         this.previousNode = previousNode;
         this.state = state;

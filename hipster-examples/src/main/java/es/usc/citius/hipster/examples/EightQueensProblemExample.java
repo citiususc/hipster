@@ -33,19 +33,43 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>
- * Demonstration of the Hill Climbing and Enforced Hill Climbing algorithms to
- * attack the 8-Queens problem.
+ * Example using the N-Queens problem (size 8x8) solved using the Hill Climbing
+ * and Enforced Hill Climbing algorithms.
+ *
+ * This example is a search problem with no explicit actions, only using a
+ * transition function which generates from a state a set of
+ * successor states. The cost function in this case is constant, and
+ * we assume it has no cost to move a queen. As heuristic for this problem
+ * we use the number of attacked queens. These components are defined
+ * as the same time the problem is being built (using a
+ * {@link es.usc.citius.hipster.model.problem.ProblemBuilder}.
+ *
+ * Once the problem is defined, in this example the Hill Climbing iterator
+ * is created, and the usage of the iterator is shown: we keep expanding
+ * new nodes (using {@link java.util.Iterator#next()}) until a solution is
+ * found, considering a solution as a state where no queens are attacked.
+ * This is a problem where we do not know the goal states a-priori. In
+ * situations like this we might need more control on the search
+ * process and stop it according of our needs, as we show in the
+ * search loop.
+ *
  * @see {@link es.usc.citius.hipster.examples.problem.NQueens}
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class EightQueensProblemExample {
 
     public static void main(String[] args) {
         // Solve the 8-Queen problem with Hill Climbing and Enforced Hill Climbing
         final int size = 8;
+        //search problem definition, here we define also
+        //the transition function between states
+        //and the cost (always 0)
+        //and heuristic function (number of attacked queens)
         SearchProblem<Void,NQueens,WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
                 .initialState(new NQueens(size))
-                        // No goal state: there are multiple goal states, we just need to find a valid goal state
+                //problem without explicit actions, only a transition function is needed
                 .defineProblemWithoutActions()
                 .useTransitionFunction(new StateTransitionFunction<NQueens>() {
                     @Override
@@ -81,10 +105,12 @@ public class EightQueensProblemExample {
                     }
                 }).build();
 
+        //print some information about the search that will be executed
         System.out.println("Random initial state (" + p.getInitialNode().state().attackedQueens() + " attacked queens):");
         System.out.println(p.getInitialNode().state());
 
         System.out.println("Running 8-Queens problem with Enforced Hill Climbing and a custom goal test predicate");
+        //To execute the algorithm we have two options:
         // Option 1 - Run the algorithm until the predicate is satisfied (until we find a state with score 0, that is, no attacked queens)
         System.out.println(Hipster.createHillClimbing(p, true).search(new Predicate<WeightedNode<Void, NQueens, Double>>() {
             @Override
@@ -109,6 +135,7 @@ public class EightQueensProblemExample {
                 System.out.println("New local minimum found with value " + best + " at iteration " + iteration);
             }
             int attacked = node.state().attackedQueens();
+            //same stop condition than in the Option 1
             if (attacked == 0) {
                 System.out.println("Solution found: ");
                 System.out.println(node);

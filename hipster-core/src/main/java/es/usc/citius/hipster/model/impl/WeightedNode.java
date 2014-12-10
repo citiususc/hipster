@@ -20,15 +20,33 @@ package es.usc.citius.hipster.model.impl;
 import es.usc.citius.hipster.model.AbstractNode;
 import es.usc.citius.hipster.model.HeuristicNode;
 
+/**
+ * Basic implementation of a node which does not which keeps information about
+ * the cost. For problems which does not use actions, instances of
+ * {@code new WeightedNode<Void,S,C>} may be used.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the states
+ * @param <C> type of the cost
+ */
 public class WeightedNode<A,S,C extends Comparable<C>>
         extends AbstractNode<A,S,WeightedNode<A,S,C>>
         implements HeuristicNode<A,S,C, WeightedNode<A,S,C>> {
-
 
     private C cost;
     private C estimation;
     private C score;
 
+    /**
+     * Basic constructor for instantiating a new weighted node.
+     *
+     * @param previousNode parent node
+     * @param state state of the node to be created
+     * @param action action connecting the parent node and the current one
+     * @param cost cost of the new node
+     * @param estimation estimated cost between the current node and the goal
+     * @param score score of the new node
+     */
     public WeightedNode(WeightedNode<A, S, C> previousNode, S state, A action, C cost, C estimation, C score) {
         super(previousNode, state, action);
         this.cost = cost;

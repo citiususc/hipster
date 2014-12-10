@@ -24,9 +24,19 @@ import es.usc.citius.hipster.model.Transition;
  * a given state. A transition is just a class that keeps the source state,
  * the action and the resultant state.
  *
- * @param <A> action type.
- * @param <S> state type.
+ * @param <A> type of the action
+ * @param <S> type of the state
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public interface TransitionFunction<A,S> {
+
+    /**
+     * Generate the outgoing transitions from a state.
+     *
+     * @param state current state
+     * @return set of transitions from the current state
+     */
     Iterable<Transition<A,S>> transitionsFrom(S state);
 }

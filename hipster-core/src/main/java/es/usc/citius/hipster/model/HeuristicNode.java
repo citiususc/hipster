@@ -16,8 +16,23 @@
 
 package es.usc.citius.hipster.model;
 
-
+/**
+ * Type of node which stores an estimated (heuristic) cost to the goal, extending
+ * the interface of a cost node {@link es.usc.citius.hipster.model.CostNode}. Cost and
+ * heuristic are of the same type and must be comparable. This type of node is used by algorithms
+ * which store information about the cost from the cost and use a heuristic function
+ * to estimate the cost to the goal.
+ *
+ * @param <A> type of the actions
+ * @param <S> type of the state
+ * @param <C> type of the cost (must extend {@link java.lang.Comparable})
+ * @param <N> node type
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ */
 public interface HeuristicNode<A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> extends CostNode<A,S,C,N> {
+
     /**
      * Retrieves the total cost (typically f = g + h) of this node,
      * where g = {@link HeuristicNode#getCost()} and
