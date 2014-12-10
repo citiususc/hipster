@@ -3,16 +3,15 @@ jdk:
 - oraclejdk7
 - oraclejdk8
 - openjdk7
-- openjdk6
 branches:
   only:
   - master
   - development
 after_success:
 - chmod +x .config/deploy-site.sh
-- .config/deploy-site.sh
+#- .config/deploy-site.sh
 - chmod +x .config/deploy-artifacts.sh
-- .config/deploy-artifacts.sh
+#- .config/deploy-artifacts.sh
 env:
   global:
   - secure: ILdOYjPt+8g5rlexXBYAhECtn5Zm26FRf0/nwCxUU303qtzFQyMcxinIC93aun880OnINjA7fzQeBkG4P+LSVOAXbmGTGhtyPBzMOGcnZouJM/RyXHUft6tAXPimXQ7JjDFjyv7EzSeStk/4WEp0mkxheIryZS3X1pbED1TqgUM=
