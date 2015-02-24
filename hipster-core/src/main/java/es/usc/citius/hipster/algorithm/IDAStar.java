@@ -43,8 +43,8 @@ import java.util.Stack;
  */
 public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private final N initialNode;
-    private final NodeExpander<A,S,N> expander;
+    protected final N initialNode;
+    protected final NodeExpander<A,S,N> expander;
 
 
     public IDAStar(N initialNode, NodeExpander<A,S,N> expander) {
@@ -81,11 +81,11 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
      * backtracking.
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
-        private C fLimit;
-        private C minfLimit;
-        private int reinitialization = 0;
-        private StackFrameNode next;
+        protected Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
+        protected C fLimit;
+        protected C minfLimit;
+        protected int reinitialization = 0;
+        protected StackFrameNode next;
 
         private Iterator(){
             // Set initial bound
@@ -127,7 +127,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             throw new UnsupportedOperationException();
         }
 
-        private void updateMinFLimit(C currentFLimit){
+        protected void updateMinFLimit(C currentFLimit){
             if (minfLimit == null){
                 minfLimit = currentFLimit;
             } else {
@@ -137,7 +137,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             }
         }
 
-        private StackFrameNode nextUnvisited(){
+        protected StackFrameNode nextUnvisited(){
             StackFrameNode nextNode;
             do {
                 nextNode = processNextNode();
@@ -161,7 +161,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         }
 
 
-        private StackFrameNode processNextNode(){
+        protected StackFrameNode processNextNode(){
             // Get and process the current node. Cases:
             //   1 - empty stack, return null
             //   2 - node exceeds the bound: update minfLimit, pop and skip.

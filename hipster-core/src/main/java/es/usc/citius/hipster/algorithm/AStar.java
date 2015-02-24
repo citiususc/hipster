@@ -43,8 +43,8 @@ import java.util.*;
  */
 public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private final N initialNode;
-    private final NodeExpander<A,S,N> expander;
+    protected final N initialNode;
+    protected final NodeExpander<A,S,N> expander;
 
     /**
      * Default constructor for ADStarForward. Requires the initial state, the successor function to generate
@@ -67,9 +67,9 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
      * Internal iterator that implements all the logic of the A* search
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Map<S, N> open;
-        private Map<S, N> closed;
-        private Queue<N> queue;
+        protected Map<S, N> open;
+        protected Map<S, N> closed;
+        protected Queue<N> queue;
 
         private Iterator() {
             open = new HashMap<S, N>();
@@ -86,7 +86,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             return !open.values().isEmpty();
         }
 
-        private N takePromising() {
+        protected N takePromising() {
             // Poll until a valid state is found
             N node = queue.poll();
             while (!open.containsKey(node.state())) {
