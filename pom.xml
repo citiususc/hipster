@@ -21,7 +21,7 @@
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-rc1</version>
+    <version>${hipster.version}</version>
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
