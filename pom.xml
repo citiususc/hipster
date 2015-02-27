@@ -15,7 +15,7 @@
         <!-- Site config -->
         <site.url>http://citiususc.github.io/hipster</site.url>
         <!-- Hipster version -->
-        <hipster.version>1.0.0-rc1</hipster.version>
+        <hipster.version>1.1.0-SNAPSHOT</hipster.version>
     </properties>
 
     <groupId>es.usc.citius.hipster</groupId>
