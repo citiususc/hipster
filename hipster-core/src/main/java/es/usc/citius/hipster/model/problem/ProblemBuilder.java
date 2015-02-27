@@ -99,7 +99,7 @@ public final class ProblemBuilder {
                  *
                  * @param transitionFunction transition function to be used.
                  */
-                public Uninformed<Void> useTransitionFunction(StateTransitionFunction<S> transitionFunction){
+                public Uninformed<Void> useTransitionFunction(TransitionFunction<Void, S> transitionFunction){
                     return new Uninformed<Void>(transitionFunction);
                 }
             }
