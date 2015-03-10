@@ -220,6 +220,12 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
                 //s removed from OPEN
                 open.remove(state);
                 //this.queue.remove(current);
+                //expand successors
+                for (N successorNode : expander.expand(current)) {
+                    if(successorNode.isDoUpdate()){
+                        updateQueues(successorNode);
+                    }
+                }
                 //if v(s) > g(s)
                 if (current.isConsistent()) {
                     //v(s) = g(s)
@@ -230,12 +236,6 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
                     //v(s) = Infinity
                     expander.setMaxV(current);
                     updateQueues(current);
-                }
-
-                for (N successorNode : expander.expand(current)) {
-                    if(successorNode.isDoUpdate()){
-                        updateQueues(successorNode);
-                    }
                 }
             } else {
                 // for all directed edges (u, v) with changed edge costs
