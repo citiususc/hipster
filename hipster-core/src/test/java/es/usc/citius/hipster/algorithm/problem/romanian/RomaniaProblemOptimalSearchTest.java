@@ -87,7 +87,7 @@ public abstract class RomaniaProblemOptimalSearchTest {
                         RomanianProblem.City.Bucharest
                 );
         //path returned by the search algorithm
-        List<? extends HeuristicNode<?, RomanianProblem.City, Double, ?>> path = Lists.reverse(node.path());
+        List<? extends HeuristicNode<?, RomanianProblem.City, Double, ?>> path = node.path();
         //check elements returned by the search algorithm
         assertEquals("Solutions have not the same size", optimalPath.size(), path.size());
         for(int i = 0; i < path.size(); i++){
