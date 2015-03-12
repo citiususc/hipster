@@ -37,8 +37,8 @@ import java.util.Stack;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> expander;
+    protected N initialNode;
+    protected NodeExpander<A,S,N> expander;
 
     // TODO; DRY common structures with other algorithms (like IDA)
 
@@ -73,12 +73,12 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
      * DFS iterator used to expand always the deepest non-visited node.
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
-        private StackFrameNode next;
-        private Set<S> closed = new HashSet<S>();
-        private boolean graphSupport = true;
+        protected Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
+        protected StackFrameNode next;
+        protected Set<S> closed = new HashSet<S>();
+        protected boolean graphSupport = true;
 
-        private Iterator(){
+        protected Iterator(){
             this.stack.add(new StackFrameNode(initialNode));
         }
 
@@ -117,7 +117,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
 
 
-        private StackFrameNode nextUnvisited(){
+        protected StackFrameNode nextUnvisited(){
             StackFrameNode nextNode;
             do {
                 nextNode = processNextNode();
@@ -134,7 +134,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
 
 
-        private StackFrameNode processNextNode(){
+        protected StackFrameNode processNextNode(){
 
             if (stack.isEmpty()) return null;
 

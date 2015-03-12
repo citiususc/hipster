@@ -39,8 +39,8 @@ import java.util.Queue;
  * @param <N> type of the heuristic search node used.
  */
 public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
-    private final N initialNode;
-    private final NodeExpander<A,S,N> expander;
+    protected final N initialNode;
+    protected final NodeExpander<A,S,N> expander;
 
     public BreadthFirstSearch(N initialNode, NodeExpander<A, S, N> expander) {
         this.initialNode = initialNode;
@@ -51,14 +51,14 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
      * Implements all the BFS search logic as an iterator
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Queue<N> queue = new LinkedList<N>();
-        private Map<S, N> visited = new HashMap<S, N>();
+        protected Queue<N> queue = new LinkedList<N>();
+        protected Map<S, N> visited = new HashMap<S, N>();
 
         /**
          * Iterator cannot be instantiated from outside.
          * Use {@link BreadthFirstSearch#iterator()} to create a new BFS iterator.
          */
-        private Iterator(){
+        protected Iterator(){
             visited.put(initialNode.state(), initialNode);
             queue.add(initialNode);
         }

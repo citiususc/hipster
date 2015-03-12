@@ -46,8 +46,8 @@ import java.util.Queue;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> nodeExpander;
+    protected N initialNode;
+    protected NodeExpander<A,S,N> nodeExpander;
 
     public BellmanFord(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -60,10 +60,10 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
      * when the queue is fully processed.
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Queue<S> queue;
-        private Map<S, N> explored;
+        protected Queue<S> queue;
+        protected Map<S, N> explored;
 
-        private Iterator(){
+        protected Iterator(){
             this.queue = new HashQueue<S>();
             this.explored = new HashMap<S, N>();
             this.queue.add(initialNode.state());
@@ -76,7 +76,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
          *
          * @param node node to update the queue status
          */
-        private void enqueue(N node) {
+        protected void enqueue(N node) {
             S state = node.state();
             if (!this.queue.contains(state)) {
                 this.queue.add(state);
@@ -90,7 +90,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
          *
          * @return node of the processing queue head
          */
-        private N dequeue() {
+        protected N dequeue() {
             S state = this.queue.poll();
             return this.explored.get(state);
         }

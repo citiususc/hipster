@@ -40,8 +40,9 @@ import java.util.*;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> nodeExpander;
+
+    protected N initialNode;
+    protected NodeExpander<A,S,N> nodeExpander;
 
     public MultiobjectiveLS(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -56,10 +57,10 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
      * with {@code iterator.getNonDominated.get(goalState)}
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Queue<N> queue = new LinkedList<N>();
+        protected Queue<N> queue = new LinkedList<N>();
         public Multimap<S, N> nonDominated;
 
-        public Iterator(){
+        protected Iterator(){
             queue = new PriorityQueue<N>();
             this.nonDominated = HashMultimap.create();
             this.queue.add(initialNode);
@@ -108,7 +109,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             throw new UnsupportedOperationException();
         }
 
-        private Collection<N> dominatedBy(N node, Iterable<N> nonDominated) {
+        protected Collection<N> dominatedBy(N node, Iterable<N> nonDominated) {
             Collection<N> dominated = new HashSet<N>();
             for (N n : nonDominated) {
                 if (node.getScore().compareTo(n.getScore())<0) {
@@ -118,7 +119,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             return dominated;
         }
 
-        private boolean isDominated(N node, Iterable<N> nonDominated) {
+        protected boolean isDominated(N node, Iterable<N> nonDominated) {
             // Compare all non-dominated nodes with node
             for (N nd : nonDominated) {
                 if (nd.getScore().compareTo(node.getScore())< 0) {
