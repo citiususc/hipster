@@ -87,7 +87,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         protected int reinitialization = 0;
         protected StackFrameNode next;
 
-        private Iterator(){
+        protected Iterator(){
             // Set initial bound
             fLimit = initialNode.getEstimation();
             minfLimit = null;

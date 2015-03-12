@@ -71,7 +71,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
         protected Map<S, N> closed;
         protected Queue<N> queue;
 
-        private Iterator() {
+        protected Iterator() {
             open = new HashMap<S, N>();
             closed = new HashMap<S, N>();
             queue = new PriorityQueue<N>();

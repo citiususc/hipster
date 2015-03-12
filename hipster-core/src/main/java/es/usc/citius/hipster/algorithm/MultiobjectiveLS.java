@@ -60,7 +60,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
         protected Queue<N> queue = new LinkedList<N>();
         public Multimap<S, N> nonDominated;
 
-        public Iterator(){
+        protected Iterator(){
             queue = new PriorityQueue<N>();
             this.nonDominated = HashMultimap.create();
             this.queue.add(initialNode);

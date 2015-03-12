@@ -58,7 +58,7 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
          * Iterator cannot be instantiated from outside.
          * Use {@link BreadthFirstSearch#iterator()} to create a new BFS iterator.
          */
-        private Iterator(){
+        protected Iterator(){
             visited.put(initialNode.state(), initialNode);
             queue.add(initialNode);
         }

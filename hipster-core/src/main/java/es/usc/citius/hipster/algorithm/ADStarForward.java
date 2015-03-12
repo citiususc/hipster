@@ -111,7 +111,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         protected final N beginNode;
         protected final Collection<N> goalNodes;
 
-        private Iterator() {
+        protected Iterator() {
             //initialize nodes
             this.beginNode = expander.makeNode(null, new Transition<A, S>(null, begin));
             //initialize goal node collection

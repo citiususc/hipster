@@ -78,7 +78,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         protected Set<S> closed = new HashSet<S>();
         protected boolean graphSupport = true;
 
-        private Iterator(){
+        protected Iterator(){
             this.stack.add(new StackFrameNode(initialNode));
         }
 

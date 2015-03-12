@@ -63,7 +63,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         protected Queue<S> queue;
         protected Map<S, N> explored;
 
-        private Iterator(){
+        protected Iterator(){
             this.queue = new HashQueue<S>();
             this.explored = new HashMap<S, N>();
             this.queue.add(initialNode.state());
