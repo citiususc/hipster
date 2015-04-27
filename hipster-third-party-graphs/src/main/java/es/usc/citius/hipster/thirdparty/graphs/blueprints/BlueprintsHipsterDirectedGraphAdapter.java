@@ -21,8 +21,8 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import es.usc.citius.hipster.util.graph.GraphEdge;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 
 /**
  * Simple adapter implementation between a Hipster graph and a Blueprints graph.

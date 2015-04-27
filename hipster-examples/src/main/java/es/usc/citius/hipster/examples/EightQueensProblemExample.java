@@ -16,7 +16,6 @@
 
 package es.usc.citius.hipster.examples;
 
-import com.google.common.base.Predicate;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.algorithm.localsearch.HillClimbing;
 import es.usc.citius.hipster.examples.problem.NQueens;
@@ -27,6 +26,7 @@ import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.model.problem.SearchProblem;
+import es.usc.citius.hipster.util.Predicate;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -112,7 +112,7 @@ public class EightQueensProblemExample {
         System.out.println("Running 8-Queens problem with Enforced Hill Climbing and a custom goal test predicate");
         //To execute the algorithm we have two options:
         // Option 1 - Run the algorithm until the predicate is satisfied (until we find a state with score 0, that is, no attacked queens)
-        System.out.println(Hipster.createHillClimbing(p, true).search(new Predicate<WeightedNode<Void, NQueens, Double>>() {
+        System.out.println(Hipster.createHillClimbing(p, true).search(new Predicate<WeightedNode<Void,NQueens,Double>>() {
             @Override
             public boolean apply(WeightedNode<Void, NQueens, Double> node) {
                 return node.getScore().equals(0d);

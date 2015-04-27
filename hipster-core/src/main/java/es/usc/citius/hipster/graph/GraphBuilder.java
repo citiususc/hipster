@@ -14,8 +14,11 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
+
+import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
+import es.usc.citius.hipster.graph.HashBasedHipsterGraph;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -77,6 +80,8 @@ public class GraphBuilder {
                     public HipsterDirectedGraph<VT,ET> buildDirectedGraph(){
                         HashBasedHipsterDirectedGraph<VT, ET> graph = HashBasedHipsterDirectedGraph.create();
                         for(Connection c : connections){
+                            graph.add(c.vertex1);
+                            graph.add(c.vertex2);
                             graph.connect(c.vertex1, c.vertex2, c.edge);
                         }
                         return graph;
@@ -85,6 +90,8 @@ public class GraphBuilder {
                     public HipsterGraph<VT,ET> buildUndirectedGraph(){
                         HashBasedHipsterGraph<VT, ET> graph = HashBasedHipsterGraph.create();
                         for(Connection c : connections){
+                            graph.add(c.vertex1);
+                            graph.add(c.vertex2);
                             graph.connect(c.vertex1, c.vertex2, c.edge);
                         }
                         return graph;

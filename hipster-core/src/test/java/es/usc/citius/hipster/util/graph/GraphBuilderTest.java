@@ -17,7 +17,9 @@
 package es.usc.citius.hipster.util.graph;
 
 
-import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.GraphBuilder;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -54,16 +56,22 @@ public class GraphBuilderTest {
     public void testEdges() {
         Set<Double> expectedValues = new HashSet<Double>(Arrays.asList(4d, 2d, 5d, 10d, 3d, 11d, 4d));
         Set<Double> values = new HashSet<Double>();
+        int count = 0;
         for(GraphEdge<String,Double> edge : testGraph.edges()){
             values.add(edge.getEdgeValue());
+            count++;
         }
-        assertEquals(7, Sets.newHashSet(testGraph.edges()).size());
+
+        assertEquals(7, count);
         assertEquals(expectedValues, values);
     }
 
     @Test
     public void testIncomingEdges(){
-        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.incomingEdgesOf("D"));
+        Set<GraphEdge<String, Double>> edges = new HashSet<GraphEdge<String, Double>>();
+        for(GraphEdge<String, Double> current : testGraph.incomingEdgesOf("D")){
+            edges.add(current);
+        }
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());
@@ -74,7 +82,10 @@ public class GraphBuilderTest {
 
     @Test
     public void testOutgoingEdges(){
-        Set<GraphEdge<String,Double>> edges = Sets.newHashSet(testGraph.outgoingEdgesOf("B"));
+        Set<GraphEdge<String, Double>> edges = new HashSet<GraphEdge<String, Double>>();
+        for(GraphEdge<String, Double> current : testGraph.outgoingEdgesOf("B")){
+            edges.add(current);
+        }
         Set<Double> values = new HashSet<Double>();
         for(GraphEdge<String,Double> e : edges){
             values.add(e.getEdgeValue());

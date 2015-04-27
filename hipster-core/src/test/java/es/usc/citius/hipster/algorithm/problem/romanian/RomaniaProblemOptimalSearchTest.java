@@ -1,10 +1,8 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
-import com.google.common.collect.Lists;
 import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-import es.usc.citius.hipster.util.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.HipsterGraph;
 import org.junit.Before;
 import org.junit.Test;
 

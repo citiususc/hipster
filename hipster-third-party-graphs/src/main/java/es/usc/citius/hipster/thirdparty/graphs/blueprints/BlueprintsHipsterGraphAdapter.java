@@ -17,16 +17,14 @@
 package es.usc.citius.hipster.thirdparty.graphs.blueprints;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import es.usc.citius.hipster.util.graph.GraphEdge;
-import es.usc.citius.hipster.util.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterGraph;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 /**
  * Simple graph adapter between a Blueprints graph and a HipsterGraph.
@@ -54,11 +52,12 @@ public class BlueprintsHipsterGraphAdapter implements HipsterGraph<Vertex, Edge>
     }
 
     protected static Iterable<GraphEdge<Vertex,Edge>> convertEdges(Iterable<Edge> edges){
-        return Iterables.transform(edges, new Function<Edge, GraphEdge<Vertex,Edge>>() {
-            @Override
-            public GraphEdge<Vertex,Edge> apply(@Nullable Edge edge) {
-                return new GraphEdge<Vertex, Edge>(edge.getVertex(Direction.IN), edge.getVertex(Direction.OUT), edge);
-            }
-        });
+        //initialize collection
+        ArrayList<GraphEdge<Vertex,Edge>> convertedEdges = new ArrayList<GraphEdge<Vertex, Edge>>();
+        //convert edges
+        for(Edge current : edges){
+            convertedEdges.add(new GraphEdge<Vertex, Edge>(current.getVertex(Direction.IN), current.getVertex(Direction.OUT), current));
+        }
+        return convertedEdges;
     }
 }

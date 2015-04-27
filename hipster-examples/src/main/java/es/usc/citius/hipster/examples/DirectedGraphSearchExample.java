@@ -1,13 +1,13 @@
 package es.usc.citius.hipster.examples;
 
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.graph.GraphBuilder;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 import es.usc.citius.hipster.model.problem.SearchProblem;
-import es.usc.citius.hipster.util.graph.GraphBuilder;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
 
 /**
- * Example that creates a {@link es.usc.citius.hipster.util.graph.HipsterDirectedGraph},
+ * Example that creates a {@link es.usc.citius.hipster.graph.HipsterDirectedGraph},
  * creates a search problem to be used with Hipster search iterators and performs
  * a search using the Dijkstra algorithm.
  *

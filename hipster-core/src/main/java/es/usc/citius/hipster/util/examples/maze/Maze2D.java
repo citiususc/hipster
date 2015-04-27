@@ -16,9 +16,6 @@
 
 package es.usc.citius.hipster.util.examples.maze;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,7 +56,7 @@ import java.util.List;
  *     }
  * </pre>
  *
- * Symbol table used by Maze2D:
+ * Symbol connected used by Maze2D:
  * <ul>
  *     <li>"X": occupied tile</li>
  *     <li>" ": empty tile</li>
@@ -77,7 +74,7 @@ public class Maze2D {
     private Point goalLoc;
     private int rows;
     private int columns;
-    private static Set<Character> FREE_TILES = Sets.newHashSet(Arrays.asList(' ', 'S', 'G', '.'));
+    private static Set<Character> FREE_TILES = new HashSet<Character>(Arrays.asList(' ', 'S', 'G', '.'));
 
     /**
      * Symbols allowed to create a maze
@@ -146,7 +143,11 @@ public class Maze2D {
         for (int row = 0; row < this.rows; row++) {
             // if the current row has less than 'columns' characters, fill with empty tiles
             if (maze2D[row].length() < this.columns) {
-                maze2D[row] = maze2D[row].concat(Strings.repeat(String.valueOf(Symbol.EMPTY.value()), this.columns - maze2D[row].length()));
+                String string = "";
+                for(int i = 0; i < this.columns - maze2D[row].length(); i++) {
+                    string = string.concat(String.valueOf(Symbol.EMPTY.value()));
+                }
+                maze2D[row] = maze2D[row].concat(string);
             }
             for (int column = 0; column < this.columns; column++) {
                 char charPoint = maze2D[row].charAt(column);
