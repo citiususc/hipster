@@ -1,10 +1,10 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 
 import java.util.Iterator;
 

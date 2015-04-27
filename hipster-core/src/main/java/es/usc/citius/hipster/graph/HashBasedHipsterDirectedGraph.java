@@ -14,9 +14,10 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of a HipsterDirectedGraph using a Guava Hash Table.
@@ -27,22 +28,29 @@ public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,
 
     @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
-        Preconditions.checkArgument(v1 != null && v2 != null, "Vertices cannot be null");
+        //check input
+        if(v1 == null || v2 == null) throw new IllegalArgumentException("Vertices cannot be null");
         GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value, true);
-        graphTable.put(v1, v2, edge);
-        disconnected.remove(v1);
-        disconnected.remove(v2);
+        connected.get(v1).add(edge);
         return edge;
     }
 
     @Override
     public Iterable<GraphEdge<V, E>> outgoingEdgesOf(V vertex) {
-        return graphTable.row(vertex).values();
+        return connected.get(vertex);
     }
 
     @Override
     public Iterable<GraphEdge<V, E>> incomingEdgesOf(V vertex) {
-        return graphTable.column(vertex).values();
+        ArrayList<GraphEdge<V, E>> incomingEdges = new ArrayList<GraphEdge<V, E>>();
+        for(List<GraphEdge<V, E>> edgesList : connected.values()){
+            for(GraphEdge<V, E> outgoingEdge : edgesList){
+                if(outgoingEdge.getVertex2().equals(vertex)){
+                    incomingEdges.add(outgoingEdge);
+                }
+            }
+        }
+        return incomingEdges;
     }
 
     public static <V,E> HashBasedHipsterDirectedGraph<V, E> create() {

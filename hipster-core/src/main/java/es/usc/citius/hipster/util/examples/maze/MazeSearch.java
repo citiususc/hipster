@@ -17,11 +17,8 @@
 package es.usc.citius.hipster.util.examples.maze;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import es.usc.citius.hipster.model.Node;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -101,12 +98,10 @@ public final class MazeSearch {
             if (currentNode.previousNode() != null) {
                 explored.add(currentNode.previousNode().state());
             }
-            List<Point> statePath = Lists.transform(currentNode.path(), new Function<Node<?, Point, ?>, Point>() {
-                @Override
-                public Point apply(@Nullable Node<?, Point, ?> pointNode) {
-                    return pointNode.state();
-                }
-            });
+            List<Point> statePath = new ArrayList<Point>();
+            for(Node<?, Point, ?> current : currentNode.path()){
+                statePath.add(current.state());
+            }
             //clearOutput(20);
             System.out.println(getMazeStringSolution(maze, explored, statePath));
             Thread.sleep(50);

@@ -17,15 +17,14 @@
 package es.usc.citius.hipster.model.function.impl;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
+import java.util.ArrayList;
+
 /**
- * Implementation of a {@link es.usc.citius.hipster.model.function.TransitionFunction} which takes advantage
- * of method in Guava {@link Iterables#transform(Iterable, com.google.common.base.Function)} to generate
- * a {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Transition} which are instantiated
+ * Implementation of a {@link es.usc.citius.hipster.model.function.TransitionFunction} which generates
+ * an {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Transition} which are instantiated
  * in a lazy way, as the elements are iterated by the algorithms, and not in advance. This class
  * is used for problems without explicit actions.
  *
@@ -38,12 +37,13 @@ public abstract class StateTransitionFunction<S> implements TransitionFunction<V
 
     @Override
     public Iterable<Transition<Void, S>> transitionsFrom(final S state) {
-        return Iterables.transform(successorsOf(state), new Function<S, Transition<Void,S>>() {
-            @Override
-            public Transition<Void,S> apply(S successor) {
-                return new Transition<Void, S>(state, null, successor);
-            }
-        });
+        ArrayList<Transition<Void, S>> transitions = new ArrayList<Transition<Void, S>>();
+        //generate successor states
+        for(S current : successorsOf(state)){
+            //generate successor transitions from the states
+            transitions.add(new Transition<Void, S>(state, null, current));
+        }
+        return transitions;
     }
 
     /**

@@ -14,15 +14,31 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
 /**
- * A simple representation of a directed graph with two methods for
- * retrieving the outgoing edges and the incoming edges for a vertex.
+ * Defines a graph in terms of edges and vertices.
  * @param <V> vertex type.
  * @param <E> edge type.
  */
-public interface HipsterDirectedGraph<V,E> extends HipsterGraph<V,E> {
-    Iterable<GraphEdge<V,E>> outgoingEdgesOf(V vertex);
-    Iterable<GraphEdge<V,E>> incomingEdgesOf(V vertex);
+public interface HipsterGraph<V,E> {
+    /**
+     * Return the edges.
+     * @return
+     */
+    Iterable<GraphEdge<V,E>> edges();
+
+    /**
+     * Return the vertices.
+     * @return
+     */
+    Iterable<V> vertices();
+
+    /**
+     * Return all the edges that are connected with the given vertex.
+     * @param vertex
+     * @return
+     */
+    Iterable<GraphEdge<V,E>> edgesOf(V vertex);
+
 }

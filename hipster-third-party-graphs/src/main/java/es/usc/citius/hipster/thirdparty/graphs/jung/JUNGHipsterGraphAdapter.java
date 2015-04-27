@@ -16,12 +16,11 @@
 
 package es.usc.citius.hipster.thirdparty.graphs.jung;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import edu.uci.ics.jung.graph.Graph;
-import es.usc.citius.hipster.util.graph.GraphEdge;
-import es.usc.citius.hipster.util.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterGraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -43,12 +42,11 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         if (edges == null || edges.isEmpty()){
             return Collections.emptyList();
         }
-        return Iterables.transform(edges, new Function<E, GraphEdge<V, E>>() {
-            @Override
-            public GraphEdge<V, E> apply(E edge) {
-                return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
-            }
-        });
+        ArrayList<GraphEdge<V, E>> edgesTransformed = new ArrayList<GraphEdge<V, E>>(edges.size());
+        for(E current : edges){
+            edgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
+        }
+        return edgesTransformed;
     }
 
     @Override
@@ -62,12 +60,11 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         if (edges == null || edges.isEmpty()){
             return Collections.emptyList();
         }
-        return Iterables.transform(edges, new Function<E, GraphEdge<V, E>>() {
-            @Override
-            public GraphEdge<V, E> apply(E edge) {
-                return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
-            }
-        });
+        ArrayList<GraphEdge<V, E>> edgesTransformed = new ArrayList<GraphEdge<V, E>>(edges.size());
+        for(E current : edges){
+            edgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
+        }
+        return edgesTransformed;
     }
 
 }

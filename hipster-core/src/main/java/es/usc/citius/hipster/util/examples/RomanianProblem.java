@@ -1,8 +1,8 @@
 package es.usc.citius.hipster.util.examples;
 
+import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.util.graph.GraphBuilder;
-import es.usc.citius.hipster.util.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.HipsterGraph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class RomanianProblem {
     }
 
     /**
-     * Returns a {@link es.usc.citius.hipster.util.graph.HipsterGraph} that represents the map of Romania.
+     * Returns a {@link es.usc.citius.hipster.graph.HipsterGraph} that represents the map of Romania.
      * @return graph with the cities and costs.
      */
     public static HipsterGraph<City, Double> graph(){

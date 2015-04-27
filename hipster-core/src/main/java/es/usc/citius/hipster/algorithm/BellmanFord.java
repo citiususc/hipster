@@ -16,10 +16,9 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.util.Predicate;
 import es.usc.citius.lab.hipster.collections.HashQueue;
 
 import java.util.Collections;
@@ -133,7 +132,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator it = iterator();
-        Stopwatch w = Stopwatch.createStarted();
+        long begin = System.currentTimeMillis();
         N currentNode = null;
         N goalNode = null;
         while(it.hasNext()){
@@ -144,13 +143,13 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
             }
 
         }
-        w.stop();
+        long end = System.currentTimeMillis();
         if (goalNode != null) {
             N goal = it.explored.get(goalNode.state());
-            return new SearchResult(goal, iteration, w);
+            return new SearchResult(goal, iteration, end - begin);
         }
 
-        return new SearchResult(Collections.<N>emptyList(), iteration, w);
+        return new SearchResult(Collections.<N>emptyList(), iteration, end - begin);
     }
 
     @Override

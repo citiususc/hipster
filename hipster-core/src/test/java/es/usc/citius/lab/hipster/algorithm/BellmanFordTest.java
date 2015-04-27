@@ -16,8 +16,8 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.hipster.util.graph.GraphBuilder;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.graph.GraphBuilder;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 import org.junit.Test;
 
 /**

@@ -16,18 +16,17 @@
 
 package es.usc.citius.hipster.model.function.impl;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
+import java.util.ArrayList;
+
 /**
- * Implementation of a {@link es.usc.citius.hipster.model.function.NodeExpander} which takes advantage
- * of method in Guava {@link Iterables#transform(Iterable, com.google.common.base.Function)} to generate
- * a {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Node} which are instantiated
+ * Implementation of a {@link es.usc.citius.hipster.model.function.NodeExpander} which generates
+ * an {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Node} which are instantiated
  * in a lazy way, as required by the algorithms, and not in advance.
  *
  * @param <A> type of the actions
@@ -57,12 +56,11 @@ public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander
         // The default expansion of a node consists of
         // computing the successor transitions of the current state and
         // generating the associated nodes for each successor
-        return Iterables.transform(tf.transitionsFrom(node.state()), new Function<Transition<A, S>, N>() {
-            @Override
-            public N apply(Transition<A, S> input) {
-                return factory.makeNode(node, input);
-            }
-        });
+        ArrayList<N> nodes = new ArrayList<N>();
+        for(Transition<A, S> current : tf.transitionsFrom(node.state())){
+            nodes.add(factory.makeNode(node, current));
+        }
+        return nodes;
     }
 
     /**

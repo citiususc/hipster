@@ -14,10 +14,8 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
-
-import com.google.common.base.Preconditions;
 
 /**
  * Hipster graph edge implementation to represent edges (or arcs) of a directed or
@@ -37,7 +35,7 @@ public final class GraphEdge<V,E> {
     }
 
     public GraphEdge(V vertex1, V vertex2, E edgeValue, boolean directed) {
-        Preconditions.checkArgument(vertex1 != null && vertex2 != null, "Vertices cannot be null");
+        if(vertex1 == null || vertex2 == null) throw new IllegalArgumentException("Vertices cannot be null");
         this.vertex1 = vertex1;
         this.vertex2 = vertex2;
         this.edgeValue = edgeValue;

@@ -17,12 +17,11 @@
 package es.usc.citius.hipster.thirdparty.graphs.jung;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import edu.uci.ics.jung.graph.Graph;
-import es.usc.citius.hipster.util.graph.GraphEdge;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -45,12 +44,11 @@ public class JUNGHipsterDirectedGraphAdapter<V,E> extends JUNGHipsterGraphAdapte
             if (outEdges == null || outEdges.isEmpty()) {
                 return Collections.emptyList();
             }
-            return Iterables.transform(outEdges, new Function<E, GraphEdge<V, E>>() {
-                @Override
-                public GraphEdge<V, E> apply(E edge) {
-                    return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
-                }
-            });
+            ArrayList<GraphEdge<V, E>> outEdgesTransformed = new ArrayList<GraphEdge<V, E>>(outEdges.size());
+            for(E current : outEdges){
+                outEdgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
+            }
+            return outEdgesTransformed;
         } catch (NullPointerException e){
             return Collections.emptyList();
         }
@@ -64,12 +62,11 @@ public class JUNGHipsterDirectedGraphAdapter<V,E> extends JUNGHipsterGraphAdapte
             if (inEdges == null || inEdges.isEmpty()) {
                 return Collections.emptyList();
             }
-            return Iterables.transform(inEdges, new Function<E, GraphEdge<V, E>>() {
-                @Override
-                public GraphEdge<V, E> apply(E edge) {
-                    return new GraphEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
-                }
-            });
+            ArrayList<GraphEdge<V, E>> inEdgesTransformed = new ArrayList<GraphEdge<V, E>>(inEdges.size());
+            for(E current : inEdges){
+                inEdgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
+            }
+            return inEdgesTransformed;
         }catch(NullPointerException e){
             return Collections.emptyList();
         }

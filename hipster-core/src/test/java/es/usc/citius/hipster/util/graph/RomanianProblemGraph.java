@@ -17,6 +17,7 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import es.usc.citius.hipster.graph.HipsterGraph;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.Before;
 import org.junit.Test;

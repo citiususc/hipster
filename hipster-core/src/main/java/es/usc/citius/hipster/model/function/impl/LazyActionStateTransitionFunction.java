@@ -17,17 +17,16 @@
 package es.usc.citius.hipster.model.function.impl;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 
+import java.util.ArrayList;
+
 /**
- * Implementation of a {@link es.usc.citius.hipster.model.function.TransitionFunction} which takes advantage
- * of method in Guava {@link Iterables#transform(Iterable, com.google.common.base.Function)} to generate
- * a {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Transition} which are instantiated
+ * Implementation of a {@link es.usc.citius.hipster.model.function.TransitionFunction} generates
+ * an {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Transition} which are instantiated
  * in a lazy way, as the elements are iterated by the algorithms, and not in advance. This class
  * is used for problems with explicit actions.
  *
@@ -53,11 +52,12 @@ public class LazyActionStateTransitionFunction<A,S> implements TransitionFunctio
 
     @Override
     public Iterable<Transition<A, S>> transitionsFrom(final S state) {
-        return Iterables.transform(af.actionsFor(state), new Function<A, Transition<A, S>>() {
-            @Override
-            public Transition<A, S> apply(A applicableAction) {
-                return new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state));
-            }
-        });
+        ArrayList<Transition<A, S>> transitions = new ArrayList<Transition<A, S>>();
+        //generate set of actions
+        for(A applicableAction : af.actionsFor(state)){
+            //generate transition for each action
+            transitions.add(new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state)));
+        }
+        return transitions;
     }
 }
