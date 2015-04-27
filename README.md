@@ -1,6 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
-A powerful and friendly heuristic search library implemented in pure java.
+A powerful and friendly heuristic search library implemented in Java.
 
 ## What's Hipster?
 
@@ -20,9 +20,9 @@ The current version of the library comes with some very well-known and wide used
         * Dijkstra.
         * Bellman-Ford.
     * Informed search:
-        * A\*. \\A star\\
-        * IDA\*: Iterative Deepening A\*. \\IDA star\\
-        * AD\*: Anytime Dynamic A\*. \\AD star\\
+        * A star (A*).
+        * IDA star (IDA*), Iterative Deepening A*.
+        * AD star (AD*): Anytime Dynamic A*.
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
