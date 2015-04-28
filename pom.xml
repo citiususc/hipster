@@ -13,7 +13,7 @@
         <!-- Point to the root dir to locate custom templates for javadoc -->
         <hipster.root.dir>${project.basedir}</hipster.root.dir>
         <!-- Site config -->
-        <site.url>http://citiususc.github.io/hipster</site.url>
+        <site.url>http://hipster4j.org</site.url>
         <!-- Hipster version -->
         <hipster.version>1.0.0-SNAPSHOT</hipster.version>
     </properties>
