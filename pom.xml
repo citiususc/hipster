@@ -33,6 +33,7 @@
         <module>hipster-all</module>
         <module>hipster-test</module>
         <module>hipster-third-party-graphs</module>
+        <module>hipster-extensions</module>
     </modules>
 
     <organization>
