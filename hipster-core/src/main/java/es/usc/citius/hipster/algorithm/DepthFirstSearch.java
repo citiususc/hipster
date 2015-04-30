@@ -47,7 +47,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         this.initialNode = initialNode;
     }
 
-    private class StackFrameNode {
+    public class StackFrameNode {
         // Iterable used to compute neighbors of the current node
         java.util.Iterator<N> successors;
         // Current search node
