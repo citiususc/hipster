@@ -20,6 +20,7 @@ import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
 
@@ -49,9 +50,9 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
 
     public class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        java.util.Iterator<N> successors;
+        private java.util.Iterator<N> successors;
         // Current search node
-        N node;
+        private N node;
         // Boolean value to check if the node is still unvisited
         // in the stack or not
         boolean visited = false;
@@ -66,6 +67,22 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         StackFrameNode(N node) {
             this.node = node;
             this.successors = expander.expand(node).iterator();
+        }
+
+        public N getNode() {
+            return node;
+        }
+
+        public java.util.Iterator<N> getSuccessors() {
+            return successors;
+        }
+
+        public boolean isVisited() {
+            return visited;
+        }
+
+        public boolean isProcessed() {
+            return processed;
         }
     }
 
