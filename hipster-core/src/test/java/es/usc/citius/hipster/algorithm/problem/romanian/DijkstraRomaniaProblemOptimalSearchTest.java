@@ -37,19 +37,4 @@ public class DijkstraRomaniaProblemOptimalSearchTest extends RomaniaProblemOptim
         this.expandedNodesTested = iterator.getClosed().values();
     }
 
-
-    /**
-     * In the case of Dijkstra's Algorithm,
-     */
-    @Override
-    @Test
-    public void scoresFromAradToBucharest() {
-        for(HeuristicNode<Double, RomanianProblem.City, Double, ?> node : expandedNodesTested){
-            //compare returned score with expected
-            assertEquals(
-                    "Failed checking score of " + node.state().toString(),
-                    costsFromArad.get(node.state()), node.getScore()
-            );
-        }
-    }
 }

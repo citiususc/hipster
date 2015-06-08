@@ -16,7 +16,7 @@ import java.util.List;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 31/07/2014
  */
-public class IDAStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalSearchTest{
+public class IDAStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalHeuristicSearchTest{
 
     @Override
     public void doSearch() {

@@ -13,7 +13,7 @@ import java.util.Iterator;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 22/07/2014
  */
-public class ADStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalSearchTest{
+public class ADStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalHeuristicSearchTest{
 
     @Override
     public void doSearch() {
