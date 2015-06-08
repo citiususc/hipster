@@ -11,7 +11,7 @@ import es.usc.citius.hipster.util.examples.RomanianProblem;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  * @since 22/07/2014
  */
-public class AStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalSearchTest {
+public class AStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalHeuristicSearchTest {
 
     @Override
     public void doSearch() {

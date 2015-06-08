@@ -1,6 +1,8 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
+import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.graph.HipsterGraph;
 import org.junit.Before;
@@ -28,11 +30,10 @@ import static org.junit.Assert.assertEquals;
 public abstract class RomaniaProblemOptimalSearchTest {
 
     protected final HipsterGraph<RomanianProblem.City, Double> graph = RomanianProblem.graph();
-    protected Collection<HeuristicNode<Double, RomanianProblem.City, Double, ?>> expandedNodesTested;
-    protected List<? extends HeuristicNode<Double, RomanianProblem.City, Double, ?>> optimalPathTested;
+    protected Collection<CostNode<Double, RomanianProblem.City, Double, ?>> expandedNodesTested;
+    protected List<? extends CostNode<Double, RomanianProblem.City, Double, ?>> optimalPathTested;
     protected List<RomanianProblem.City> optimalPath;
     protected final HashMap<RomanianProblem.City, Double> costsFromArad;
-    protected final HashMap<RomanianProblem.City, Double> scoresFromArad;
     protected static final RomanianProblem.City GOAL = RomanianProblem.City.Bucharest;
 
     public RomaniaProblemOptimalSearchTest(){
@@ -50,21 +51,13 @@ public abstract class RomaniaProblemOptimalSearchTest {
         costsFromArad.put(RomanianProblem.City.Lugoj, 229d);
         costsFromArad.put(RomanianProblem.City.Mehadia, 299d);
         costsFromArad.put(RomanianProblem.City.Drobeta, 374d);
-        //obtain score map for expanding nodes to Bucharest
-        scoresFromArad = new HashMap<RomanianProblem.City, Double>();
-        scoresFromArad.put(RomanianProblem.City.Arad, 366d);
-        scoresFromArad.put(RomanianProblem.City.Zerind, 449d);
-        scoresFromArad.put(RomanianProblem.City.Timisoara, 447d);
-        scoresFromArad.put(RomanianProblem.City.Sibiu, 393d);
-        scoresFromArad.put(RomanianProblem.City.Oradea, 526d);
-        scoresFromArad.put(RomanianProblem.City.Fagaras, 415d);
-        scoresFromArad.put(RomanianProblem.City.Rimnicu_Vilcea, 413d);
-        scoresFromArad.put(RomanianProblem.City.Craiova, 526d);
-        scoresFromArad.put(RomanianProblem.City.Pitesti, 417d);
-        scoresFromArad.put(RomanianProblem.City.Bucharest, 418d);
-        scoresFromArad.put(RomanianProblem.City.Lugoj, 473d);
-        scoresFromArad.put(RomanianProblem.City.Mehadia, 540d);
-        scoresFromArad.put(RomanianProblem.City.Drobeta, 616d);
+        costsFromArad.put(RomanianProblem.City.Giurgiu, 508d);
+        costsFromArad.put(RomanianProblem.City.Urziceni, 503d);
+        costsFromArad.put(RomanianProblem.City.Hirsova, 601d);
+        costsFromArad.put(RomanianProblem.City.Eforie, 687d);
+        costsFromArad.put(RomanianProblem.City.Vaslui, 645d);
+        costsFromArad.put(RomanianProblem.City.Iasi, 737d);
+        costsFromArad.put(RomanianProblem.City.Neamt, 824d);
 
         optimalPath =
                 Arrays.asList(
@@ -99,27 +92,15 @@ public abstract class RomaniaProblemOptimalSearchTest {
      */
     @Test
     public void costsFromAradToBucharest() {
-        for(HeuristicNode<Double, RomanianProblem.City, Double, ?> node : expandedNodesTested){
+        for(Node<Double, RomanianProblem.City, ?> node : expandedNodesTested){
+            CostNode<Double, RomanianProblem.City, Double, ?> costNode
+                    = (CostNode<Double, RomanianProblem.City, Double, ?>) node;
             //compare returned cost with expected
             assertEquals(
                     "Failed checking cost of " + node.state().toString() + ". Expected: " +
-                            costsFromArad.get(node.state()) + ", found: " + node.getCost(),
-                    node.getCost(),
+                            costsFromArad.get(node.state()) + ", found: " + costNode.getCost(),
+                    costNode.getCost(),
                     costsFromArad.get(node.state())
-            );
-        }
-    }
-
-    /**
-     * Check the scores of the elements expanded by the algorithm.
-     */
-    @Test
-    public void scoresFromAradToBucharest() {
-        for(HeuristicNode<Double, RomanianProblem.City, Double, ?> node : expandedNodesTested){
-            //compare returned score with expected
-            assertEquals(
-                    "Failed checking score of " + node.state().toString(),
-                    scoresFromArad.get(node.state()), node.getScore()
             );
         }
     }
