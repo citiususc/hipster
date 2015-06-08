@@ -1,12 +1,11 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
+import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-
-import java.util.Iterator;
 
 /**
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
@@ -15,7 +14,7 @@ import java.util.Iterator;
 public class AStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalSearchTest {
 
     @Override
-    public Iterator<HeuristicNode<Double, RomanianProblem.City, Double, ?>> createIterator() {
+    public void doSearch() {
         SearchProblem p = GraphSearchProblem
                 .startingFrom(RomanianProblem.City.Arad)
                 .in(graph)
@@ -23,6 +22,15 @@ public class AStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalS
                 .useHeuristicFunction(RomanianProblem.heuristicFunction())
                 .build();
 
-        return Hipster.createAStar(p).iterator();
+        //create iterator
+        AStar.Iterator iterator = Hipster.createAStar(p).iterator();
+        //find optimal solution
+        HeuristicNode<Double, RomanianProblem.City, Double, ?> node = null;
+        do{
+            node = iterator.next();
+        }while(iterator.hasNext() && !node.state().equals(GOAL));
+        //set variables
+        this.optimalPathTested = node.path();
+        this.expandedNodesTested = iterator.getClosed().values();
     }
 }

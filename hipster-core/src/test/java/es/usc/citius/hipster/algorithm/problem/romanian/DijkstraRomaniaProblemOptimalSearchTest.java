@@ -1,5 +1,6 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
+import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.HeuristicNode;
@@ -18,14 +19,22 @@ import static org.junit.Assert.assertEquals;
 public class DijkstraRomaniaProblemOptimalSearchTest extends RomaniaProblemOptimalSearchTest{
 
     @Override
-    public Iterator<HeuristicNode<Double, RomanianProblem.City, Double, ?>> createIterator() {
+    public void doSearch() {
         SearchProblem p = GraphSearchProblem
                 .startingFrom(RomanianProblem.City.Arad)
                 .in(graph)
                 .takeCostsFromEdges()
                 .build();
-
-        return Hipster.createDijkstra(p).iterator();
+        //create iterator
+        AStar.Iterator iterator = Hipster.createAStar(p).iterator();
+        //find optimal solution
+        HeuristicNode<Double, RomanianProblem.City, Double, ?> node = null;
+        do{
+            node = iterator.next();
+        }while(iterator.hasNext() && !node.state().equals(GOAL));
+        //set variables
+        this.optimalPathTested = node.path();
+        this.expandedNodesTested = iterator.getClosed().values();
     }
 
 
@@ -35,15 +44,12 @@ public class DijkstraRomaniaProblemOptimalSearchTest extends RomaniaProblemOptim
     @Override
     @Test
     public void scoresFromAradToBucharest() {
-        HeuristicNode<?, RomanianProblem.City, Double, ?> node;
-        //search optimal path
-        do{
-            node = searchIterator.next();
+        for(HeuristicNode<Double, RomanianProblem.City, Double, ?> node : expandedNodesTested){
             //compare returned score with expected
             assertEquals(
                     "Failed checking score of " + node.state().toString(),
                     costsFromArad.get(node.state()), node.getScore()
             );
-        }while(searchIterator.hasNext() && !node.state().equals(RomanianProblem.City.Bucharest));
+        }
     }
 }
