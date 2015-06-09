@@ -30,7 +30,7 @@ import java.util.Random;
  * <a href="http://www.math.utah.edu/~alfeld/queens/queens.html">in Peter Alfeld's Web Page (University of Utah)</a>
  */
 public class NQueens {
-    private static final String LS = System.getProperty("path.separator");
+    private static final String LS = System.getProperty("line.separator");
 
 
     // if N = 8:
