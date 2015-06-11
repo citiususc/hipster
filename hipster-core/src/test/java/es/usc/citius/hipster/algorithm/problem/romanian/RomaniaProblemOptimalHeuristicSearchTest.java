@@ -1,11 +1,10 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
-import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -41,9 +40,9 @@ public abstract class RomaniaProblemOptimalHeuristicSearchTest extends RomaniaPr
      */
     @Test
     public void scoresFromAradToBucharest() {
-        for(CostNode<Double, RomanianProblem.City, Double, ?> node : expandedNodesTested){
-            HeuristicNode<Double, RomanianProblem.City, Double, ?> heuristicNode =
-                    (HeuristicNode<Double, RomanianProblem.City, Double, ?>) node;
+        for(Node<Void, RomanianProblem.City, ?> node : expandedNodesTested){
+            HeuristicNode<Void, RomanianProblem.City, Double, ?> heuristicNode =
+                    (HeuristicNode<Void, RomanianProblem.City, Double, ?>) node;
             //compare returned score with expected
             assertEquals(
                     "Failed checking score of " + heuristicNode.state().toString(),

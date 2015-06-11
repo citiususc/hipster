@@ -1,7 +1,7 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
+import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.model.CostNode;
-import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.graph.HipsterGraph;
@@ -30,8 +30,9 @@ import static org.junit.Assert.assertEquals;
 public abstract class RomaniaProblemOptimalSearchTest {
 
     protected final HipsterGraph<RomanianProblem.City, Double> graph = RomanianProblem.graph();
-    protected Collection<CostNode<Double, RomanianProblem.City, Double, ?>> expandedNodesTested;
-    protected List<? extends CostNode<Double, RomanianProblem.City, Double, ?>> optimalPathTested;
+    protected Collection<Node<Void, RomanianProblem.City, ?>> expandedNodesTested;
+    protected List<? extends Node<Void, RomanianProblem.City, ?>> optimalPathIterator;
+    protected List<? extends Node<Void, RomanianProblem.City, ?>> optimalPathSearchMethod;
     protected List<RomanianProblem.City> optimalPath;
     protected final HashMap<RomanianProblem.City, Double> costsFromArad;
     protected static final RomanianProblem.City GOAL = RomanianProblem.City.Bucharest;
@@ -75,14 +76,32 @@ public abstract class RomaniaProblemOptimalSearchTest {
     @Test
     public void optimalPathFromAradToBucharest() {
         //check elements returned by the search algorithm
-        assertEquals("Solutions have not the same size", optimalPathTested.size(), optimalPath.size());
+        assertEquals("Solutions have not the same size", optimalPathIterator.size(), optimalPath.size());
         for(int i = 0; i < optimalPath.size(); i++){
             //check if current element of the path is equals to the
             assertEquals(
                     "Failed checking element " + i + " of the path. Expected: " +
-                            optimalPath.get(i) + ", found: " + optimalPathTested.get(i).state(),
+                            optimalPath.get(i) + ", found: " + optimalPathIterator.get(i).state(),
                     optimalPath.get(i),
-                    optimalPathTested.get(i).state()
+                    optimalPathIterator.get(i).state()
+            );
+        }
+    }
+
+    /**
+     * Check the returned path of the algorithm to be the optimal for the problem definition.
+     */
+    @Test
+    public void optimalPathFromAradToBucharestSearchMethod() {
+        //check elements returned by the search algorithm
+        assertEquals("Solutions have not the same size", optimalPathSearchMethod.size(), optimalPath.size());
+        for(int i = 0; i < optimalPath.size(); i++){
+            //check if current element of the path is equals to the
+            assertEquals(
+                    "Failed checking element " + i + " of the path. Expected: " +
+                            optimalPath.get(i) + ", found: " + optimalPathSearchMethod.get(i).state(),
+                    optimalPath.get(i),
+                    optimalPathSearchMethod.get(i).state()
             );
         }
     }
@@ -92,9 +111,9 @@ public abstract class RomaniaProblemOptimalSearchTest {
      */
     @Test
     public void costsFromAradToBucharest() {
-        for(Node<Double, RomanianProblem.City, ?> node : expandedNodesTested){
-            CostNode<Double, RomanianProblem.City, Double, ?> costNode
-                    = (CostNode<Double, RomanianProblem.City, Double, ?>) node;
+        for(Node<Void, RomanianProblem.City, ?> node : expandedNodesTested){
+            CostNode<Void, RomanianProblem.City, Double, ?> costNode
+                    = (CostNode<Void, RomanianProblem.City, Double, ?>) node;
             //compare returned cost with expected
             assertEquals(
                     "Failed checking cost of " + node.state().toString() + ". Expected: " +
@@ -111,6 +130,26 @@ public abstract class RomaniaProblemOptimalSearchTest {
      * are stored in "expandedNodesTested" and "optmalPath" variables.
      */
     @Before
-    public abstract void doSearch();
+    public void doSearch(){
+        Algorithm<Void, RomanianProblem.City, ? extends Node<Void, RomanianProblem.City, ?>> algorithm = createAlgorithm();
+        //execute iterative search
+        this.optimalPathIterator = iterativeSearch(algorithm.iterator());
+        this.optimalPathSearchMethod = algorithm.search(RomanianProblem.City.Bucharest).getGoalNode().path();
+    };
+
+    /**
+     * Method to execute the iterative search from a search iterator.
+     *
+     * @param iterator instance of {@link Iterator<? extends Node<Void, RomanianProblem.City, ?>>} to search
+     * @return solution list obtained by sarching step-by-step
+     */
+    public abstract List<? extends Node<Void, RomanianProblem.City, ?>> iterativeSearch(Iterator<? extends Node<Void, RomanianProblem.City, ?>> iterator);
+
+    /**
+     * Method to initialize the search algorithm.
+     *
+     * @return instance of {@link Algorithm} to search over the graph
+     */
+    public abstract Algorithm<Void, RomanianProblem.City, ? extends Node<Void, RomanianProblem.City, ?>> createAlgorithm();
 
 }
