@@ -17,9 +17,6 @@
 package es.usc.citius.hipster.graph;
 
 
-import es.usc.citius.hipster.graph.GraphEdge;
-import es.usc.citius.hipster.graph.HipsterDirectedGraph;
-import es.usc.citius.hipster.graph.HipsterGraph;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;

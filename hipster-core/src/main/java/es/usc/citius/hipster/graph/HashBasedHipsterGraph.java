@@ -16,6 +16,10 @@
 
 package es.usc.citius.hipster.graph;
 
+
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import es.usc.citius.hipster.util.Iterators;
+
 import java.util.*;
 
 /**
@@ -24,11 +28,11 @@ import java.util.*;
  * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  * @author Pablo Rodríguez Mier  <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
-public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
-    protected HashMap<V, List<GraphEdge<V, E>>> connected;
+public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
+    protected HashMap<V, Set<GraphEdge<V, E>>> connected;
 
     public HashBasedHipsterGraph(){
-        this.connected = new HashMap<V, List<GraphEdge<V, E>>>();
+        this.connected = new HashMap<V, Set<GraphEdge<V, E>>>();
     }
 
     /**
@@ -36,11 +40,14 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
      *
      * @param v vertex to be added
      */
-    public void add(V v){
+    @Override
+    public boolean add(V v){
         //add a new entry to the hash map if it does not exist
         if(!connected.containsKey(v)){
-            connected.put(v, new ArrayList<GraphEdge<V, E>>());
+            connected.put(v, new HashSet<GraphEdge<V, E>>());
+            return true;
         }
+        return false;
     }
 
     /**
@@ -48,21 +55,27 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
      *
      * @param v vertex to be removed
      */
-    public void remove(V v){
-        // Get vertices connected with this one
-        for(GraphEdge<V,E> edge : edgesOf(v)){
-            int edgeRemoval = 0;
-            List<GraphEdge<V, E>> edgesInverted = connected.get(edge.getVertex2());
-            for(GraphEdge<V, E> current : edgesInverted){
-                edgeRemoval++;
-                if(current.getVertex2().equals(v)){
-                    break;
+    @Override
+    public boolean remove(V v){
+        // Remove all edges related to v
+        Set<GraphEdge<V, E>> edges = this.connected.get(v);
+        if (edges == null) return false;
+
+        for(Iterator<GraphEdge<V,E>> it = edges.iterator(); it.hasNext(); ){
+            // Remove the edge in the list of the selected vertex
+            GraphEdge<V,E> edge = it.next();
+            it.remove();
+
+            V v2 = edge.getVertex1().equals(v) ? edge.getVertex2() : edge.getVertex1();
+            for(Iterator<GraphEdge<V,E>> it2 = this.connected.get(v2).iterator(); it2.hasNext();){
+                GraphEdge<V,E> edge2 = it2.next();
+                if (edge2.getVertex1().equals(v) || edge2.getVertex2().equals(v)){
+                    it2.remove();
                 }
             }
-            edgesInverted.remove(edgeRemoval);
         }
-        //remove vertices from connected
-        connected.remove(v); // v no longer exists
+        this.connected.remove(v);
+        return true;
     }
 
     /**
@@ -72,50 +85,139 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
      * @param v1 source vertex
      * @param v2 destination vertex
      * @param value edge value
-     * @return
+     * @return the generated edge
      */
+    @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         // Check non-null arguments
-        if(v1 == null || v2 == null) throw new IllegalArgumentException("Vertices cannot be null");
+        if(v1 == null || v2 == null) throw new IllegalArgumentException("Invalid vertices. A vertex cannot be null");
         // Ensure that the vertices are in the graph
-        add(v1);
-        add(v2);
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value);
-        GraphEdge<V,E> reversedEdge = new GraphEdge<V, E>(v2, v1, value);
-        // Add edges to the graph
+        if (!connected.containsKey(v1)) throw new IllegalArgumentException(v1 + " is not a vertex of the graph");
+        if (!connected.containsKey(v2)) throw new IllegalArgumentException(v2 + " is not a vertex of the graph");
+        GraphEdge<V,E> edge = buildEdge(v1, v2, value);
+        // Associate the vertices with their edge
         connected.get(v1).add(edge);
-        connected.get(v2).add(reversedEdge);
+        connected.get(v2).add(edge);
         return edge;
     }
 
+    protected GraphEdge<V,E> buildEdge(V v1, V v2, E value){
+        return new UndirectedEdge<V, E>(v1, v2, value);
+    }
+
+    private Map.Entry<V, GraphEdge<V,E>> createEntry(final V vertex, final GraphEdge<V,E> edge){
+        return new Map.Entry<V, GraphEdge<V, E>>() {
+            @Override
+            public V getKey() {
+                return vertex;
+            }
+
+            @Override
+            public GraphEdge<V, E> getValue() {
+                return edge;
+            }
+
+            @Override
+            public GraphEdge<V, E> setValue(GraphEdge<V, E> value) {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    protected Iterable<Map.Entry<V, GraphEdge<V,E>>> vedges(){
+        // TODO: [java-8-migration] Change this ugly lazy iterator with Java 8 streams and flatmaps
+        return new Iterable<Map.Entry<V, GraphEdge<V,E>>>() {
+            @Override
+            public Iterator<Map.Entry<V, GraphEdge<V,E>>> iterator() {
+                return new Iterator<Map.Entry<V, GraphEdge<V,E>>>() {
+                    private Iterator<V> vertices = connected.keySet().iterator();
+                    private V currentVertex = vertices.hasNext() ? vertices.next() : null;
+                    private Iterator<GraphEdge<V, E>> edges =
+                            currentVertex != null ? connected.get(currentVertex).iterator() : Iterators.<GraphEdge<V,E>>empty();
+                    private GraphEdge<V,E> nextElement = null;
+
+                    private GraphEdge<V,E> loadNext(){
+                        // Preload the next element
+                        if (edges.hasNext()){
+                            return edges.next();
+                        } else if (vertices.hasNext()){
+                            currentVertex = vertices.next();
+                            edges = connected.get(currentVertex).iterator();
+                            // skip empty edge lists
+                            return loadNext();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public boolean hasNext() {
+                        // There can be empty lists, so we need to pre-compute the next element in advance
+                        // to check whether there exist a next element or not.
+                        if (nextElement == null) {
+                            nextElement = loadNext();
+                        }
+                        return nextElement != null;
+                    }
+
+                    @Override
+                    public Map.Entry<V, GraphEdge<V,E>> next() {
+                        // Load the next element
+                        if (nextElement != null) {
+                            GraphEdge<V,E> next = nextElement;
+                            nextElement = null;
+                            return createEntry(currentVertex, next);
+                        } else {
+                            return createEntry(currentVertex, loadNext());
+                        }
+                    }
+                };
+            }
+        };
+    }
     /**
      * Returns a list of the edges in the graph.
      * @return edges of the graph.
      */
     @Override
     public Iterable<GraphEdge<V, E>> edges() {
-        final Collection<List<GraphEdge<V, E>>> edges = connected.values();
-        // TODO: Change this ugly lazy iterator with Java 8 streams and flatmaps
         return new Iterable<GraphEdge<V, E>>() {
             @Override
             public Iterator<GraphEdge<V, E>> iterator() {
                 return new Iterator<GraphEdge<V, E>>() {
-                    private Iterator<List<GraphEdge<V,E>>> it = edges.iterator();
-                    private Iterator<GraphEdge<V,E>> currentList = it.next().iterator();
+                    private Iterator<Map.Entry<V, GraphEdge<V,E>>> it = vedges().iterator();
+
+                    @Override
+                    public boolean hasNext() {
+                        return it.hasNext();
+                    }
+
+                    @Override
+                    public GraphEdge<V, E> next() {
+                        return it.next().getValue();
+                    }
+                };
+            }
+        };
+        /*
+        return new Iterable<GraphEdge<V, E>>() {
+            @Override
+            public Iterator<GraphEdge<V, E>> iterator() {
+                return new Iterator<GraphEdge<V, E>>() {
+                    private Iterator<V> vertices = connected.keySet().iterator();
+                    private Iterator<GraphEdge<V, E>> edges =
+                            vertices.hasNext() ? connected.get(vertices.next()).iterator() : Iterators.<GraphEdge<V,E>>empty();
                     private GraphEdge<V,E> nextElement = null;
 
                     private GraphEdge<V,E> loadNext(){
                         // Preload the next element
-                        GraphEdge<V,E> next = null;
-                        if (currentList.hasNext()) {
-                            next = currentList.next();
-                        } else if (it.hasNext()){
-                            currentList = it.next().iterator();
-                            if (currentList.hasNext()) {
-                                next = currentList.next();
-                            }
+                        if (edges.hasNext()){
+                            return edges.next();
+                        } else if (vertices.hasNext()){
+                            edges = connected.get(vertices.next()).iterator();
+                            // skip empty edge lists
+                            return loadNext();
                         }
-                        return next;
+                        return null;
                     }
 
                     @Override
@@ -141,7 +243,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
                     }
                 };
             }
-        };
+        };*/
     }
 
     /**
@@ -156,9 +258,9 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
 
     @Override
     public Iterable<GraphEdge<V, E>> edgesOf(V vertex) {
-        List<GraphEdge<V, E>> list = connected.get(vertex);
-        if (list == null) list = Collections.emptyList();
-        return list;
+        Set<GraphEdge<V, E>> set = connected.get(vertex);
+        if (set == null) set = Collections.emptySet();
+        return set;
     }
 
     public static <V,E> HashBasedHipsterGraph<V, E> create() {

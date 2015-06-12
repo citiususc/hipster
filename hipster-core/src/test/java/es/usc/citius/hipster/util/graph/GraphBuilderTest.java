@@ -35,7 +35,7 @@ public class GraphBuilderTest {
     @BeforeClass
     public static void setUp() throws Exception {
 
-        testGraph = GraphBuilder.create()
+        testGraph = GraphBuilder.<String,Double>create()
                 .connect("A").to("B").withEdge(4d)
                 .connect("A").to("C").withEdge(2d)
                 .connect("B").to("C").withEdge(5d)
@@ -43,7 +43,7 @@ public class GraphBuilderTest {
                 .connect("C").to("E").withEdge(3d)
                 .connect("D").to("F").withEdge(11d)
                 .connect("E").to("D").withEdge(4d)
-                .buildDirectedGraph();
+                .createDirectedGraph();
     }
 
     @Test

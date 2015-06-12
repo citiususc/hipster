@@ -18,8 +18,10 @@ package es.usc.citius.hipster.extensions.graph;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.DirectedEdge;
 import es.usc.citius.hipster.graph.GraphEdge;
 import es.usc.citius.hipster.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.UndirectedEdge;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -80,7 +82,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
 
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         Preconditions.checkArgument(v1 != null && v2 != null, "Vertices cannot be null");
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value);
+        GraphEdge<V,E> edge = new UndirectedEdge<V, E>(v1, v2, value);
         graphTable.put(v1, v2, edge);
         graphTable.put(v2, v1, edge);
         disconnected.remove(v1);

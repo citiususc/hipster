@@ -16,44 +16,79 @@
 
 package es.usc.citius.hipster.graph;
 
-import java.util.ArrayList;
-import java.util.List;
+import es.usc.citius.hipster.util.Function;
+import es.usc.citius.hipster.util.Iterators;
+
+import java.util.*;
 
 /**
  * Implementation of a HipsterDirectedGraph using a Guava Hash Table.
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
-public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
+public class HashBasedHipsterDirectedGraph<V, E> extends HashBasedHipsterGraph<V, E> implements HipsterMutableGraph<V,E>, HipsterDirectedGraph<V, E> {
+
 
     @Override
-    public GraphEdge<V,E> connect(V v1, V v2, E value){
-        //check input
-        if(v1 == null || v2 == null) throw new IllegalArgumentException("Vertices cannot be null");
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value, true);
-        connected.get(v1).add(edge);
-        return edge;
+    protected GraphEdge<V, E> buildEdge(V v1, V v2, E value) {
+        return new DirectedEdge<V, E>(v1, v2, value);
     }
 
     @Override
-    public Iterable<GraphEdge<V, E>> outgoingEdgesOf(V vertex) {
-        return connected.get(vertex);
-    }
-
-    @Override
-    public Iterable<GraphEdge<V, E>> incomingEdgesOf(V vertex) {
-        ArrayList<GraphEdge<V, E>> incomingEdges = new ArrayList<GraphEdge<V, E>>();
-        for(List<GraphEdge<V, E>> edgesList : connected.values()){
-            for(GraphEdge<V, E> outgoingEdge : edgesList){
-                if(outgoingEdge.getVertex2().equals(vertex)){
-                    incomingEdges.add(outgoingEdge);
-                }
+    public Iterable<GraphEdge<V, E>> outgoingEdgesOf(final V vertex) {
+        return new Iterable<GraphEdge<V, E>>() {
+            @Override
+            public Iterator<GraphEdge<V, E>> iterator() {
+                return Iterators.filter(edgesOf(vertex).iterator(), new Function<GraphEdge<V, E>, Boolean>() {
+                    @Override
+                    public Boolean apply(GraphEdge<V, E> edge) {
+                        return edge.getVertex1().equals(vertex);
+                    }
+                });
             }
-        }
-        return incomingEdges;
+        };
     }
 
-    public static <V,E> HashBasedHipsterDirectedGraph<V, E> create() {
+    @Override
+    public Iterable<GraphEdge<V, E>> incomingEdgesOf(final V vertex) {
+        return new Iterable<GraphEdge<V, E>>() {
+            @Override
+            public Iterator<GraphEdge<V, E>> iterator() {
+                return Iterators.filter(edgesOf(vertex).iterator(), new Function<GraphEdge<V, E>, Boolean>() {
+                    @Override
+                    public Boolean apply(GraphEdge<V, E> edge) {
+                        return edge.getVertex2().equals(vertex);
+                    }
+                });
+            }
+        };
+    }
+
+    @Override
+    public Iterable<GraphEdge<V, E>> edges() {
+        // TODO: [java-8-migration] use stream filter
+        return new Iterable<GraphEdge<V, E>>() {
+            @Override
+            public Iterator<GraphEdge<V, E>> iterator() {
+                return Iterators.map(
+                        Iterators.filter(HashBasedHipsterDirectedGraph.super.vedges().iterator(),
+                                new Function<Map.Entry<V, GraphEdge<V, E>>, Boolean>() {
+                                    @Override
+                                    public Boolean apply(Map.Entry<V, GraphEdge<V, E>> input) {
+                                        return input.getKey().equals(input.getValue().getVertex1());
+                                    }
+                                }),
+                        new Function<Map.Entry<V, GraphEdge<V, E>>, GraphEdge<V, E>>() {
+                            @Override
+                            public GraphEdge<V, E> apply(Map.Entry<V, GraphEdge<V, E>> input) {
+                                return input.getValue();
+                            }
+                        });
+            }
+        };
+    }
+
+    public static <V, E> HashBasedHipsterDirectedGraph<V, E> create() {
         return new HashBasedHipsterDirectedGraph<V, E>();
     }
 }

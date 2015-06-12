@@ -16,10 +16,6 @@
 
 package es.usc.citius.hipster.graph;
 
-
-import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
-import es.usc.citius.hipster.graph.HashBasedHipsterGraph;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,124 +23,100 @@ import java.util.List;
  * <p>Graph builder assistant to create a Hipster graph. Usage example:</p>
  * <pre class="prettyprint">
  * {@code
- * HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
- *     .connect("A").to("B").withEdge(4d)
- *     .connect("A").to("C").withEdge(2d)
- *     .connect("B").to("C").withEdge(5d)
- *     .connect("B").to("D").withEdge(10d)
- *     .connect("C").to("E").withEdge(3d)
- *     .connect("D").to("F").withEdge(11d)
- *     .connect("E").to("D").withEdge(4d)
- *     .buildDirectedGraph();
+ * HipsterGraph<String,Double> =
+ * GraphBuilder.<String,Double>create()
+ * .connect("A").to("B").withEdge(4d)
+ * .connect("A").to("C").withEdge(2d)
+ * .connect("B").to("C").withEdge(5d)
+ * .createDirectedGraph();
  * }
  * </pre>
  */
-public class GraphBuilder {
+public class GraphBuilder<V, E> {
 
-    public final static class Assistant {
+    private class Connection {
+        private V vertex1;
+        private V vertex2;
+        private E edge;
 
-        public final class Vertex1<V> {
-            V v1;
-
-            private Vertex1(V v1) {
-                this.v1 = v1;
-            }
-
-            public final class Vertex2 {
-                V v2;
-
-                private Vertex2(V v2) {
-                    this.v2 = v2;
-                }
-
-                public final class Builder<VT,ET> {
-
-                    private List<Connection> connections = new LinkedList<Connection>();
-
-                    private class Connection {
-                        private VT vertex1;
-                        private VT vertex2;
-                        private ET edge;
-
-                        private Connection(VT vertex1, VT vertex2, ET edge) {
-                            this.vertex1 = vertex1;
-                            this.vertex2 = vertex2;
-                            this.edge = edge;
-                        }
-                    }
-
-                    public Builder(VT v1, VT v2, ET edge){
-                        connections.add(new Connection(v1, v2, edge));
-                    }
-
-                    public HipsterDirectedGraph<VT,ET> buildDirectedGraph(){
-                        HashBasedHipsterDirectedGraph<VT, ET> graph = HashBasedHipsterDirectedGraph.create();
-                        for(Connection c : connections){
-                            graph.add(c.vertex1);
-                            graph.add(c.vertex2);
-                            graph.connect(c.vertex1, c.vertex2, c.edge);
-                        }
-                        return graph;
-                    }
-
-                    public HipsterGraph<VT,ET> buildUndirectedGraph(){
-                        HashBasedHipsterGraph<VT, ET> graph = HashBasedHipsterGraph.create();
-                        for(Connection c : connections){
-                            graph.add(c.vertex1);
-                            graph.add(c.vertex2);
-                            graph.connect(c.vertex1, c.vertex2, c.edge);
-                        }
-                        return graph;
-                    }
-
-                    public final class Vertex1T {
-                        private VT v1t;
-
-                        private Vertex1T(VT v1t) {
-                            this.v1t = v1t;
-                        }
-
-                        public final class Vertex2T {
-                            private VT v2t;
-
-                            private Vertex2T(VT vertex) {
-                                this.v2t = vertex;
-                            }
-
-                            public Builder<VT, ET> withEdge(ET edge){
-                                connections.add(new Connection(v1t, v2t, edge));
-                                return Builder.this;
-                            }
-
-                        }
-
-                        public Vertex2T to(VT vertex){
-                            return new Vertex2T(vertex);
-                        }
-                    }
-
-                    public Vertex1T connect(VT vertex){
-                        return new Vertex1T(vertex);
-                    }
-
-                }
-
-                public <E> Builder<V,E> withEdge(E edge){
-                    return new Builder<V, E>(v1, v2, edge);
-                }
-            }
-
-            public Vertex2 to(V vertex){
-                return new Vertex2(vertex);
-            }
-        }
-        public <V> Vertex1<V> connect(V vertex){
-            return new Vertex1<V>(vertex);
+        private Connection(V vertex1, V vertex2, E edge) {
+            this.vertex1 = vertex1;
+            this.vertex2 = vertex2;
+            this.edge = edge;
         }
     }
 
-    public static Assistant create(){
-        return new Assistant();
+    private List<Connection> connections = new LinkedList<Connection>();
+
+    private GraphBuilder() {}
+
+    public static <V, E> GraphBuilder<V,E> create() {
+        return new GraphBuilder<V, E>();
+    }
+
+
+    public Vertex1 connect(V vertex) {
+        return new Vertex1(vertex);
+    }
+
+    public HipsterDirectedGraph<V,E> createDirectedGraph() {
+        HashBasedHipsterDirectedGraph<V, E> graph = HashBasedHipsterDirectedGraph.create();
+        for (Connection c : connections) {
+            graph.connect(c.vertex1, c.vertex2, c.edge);
+        }
+        return graph;
+    }
+
+    public HipsterGraph<V,E> createUndirectedGraph() {
+        HashBasedHipsterGraph<V, E> graph = HashBasedHipsterGraph.create();
+        for (Connection c : connections) {
+            graph.connect(c.vertex1, c.vertex2, c.edge);
+        }
+        return graph;
+    }
+
+    /**
+     * @see GraphBuilder#createDirectedGraph()
+     * @return type-erased directed graph
+     */
+    @Deprecated
+    public HipsterDirectedGraph buildDirectedGraph(){
+        return createDirectedGraph();
+    }
+
+    /**
+     * @see GraphBuilder#createUndirectedGraph()
+     * @return type-erased undirected graph
+     */
+    @Deprecated
+    public HipsterGraph buildUndirectedGraph(){
+        return createUndirectedGraph();
+    }
+
+
+    public final class Vertex1 {
+        V vertex1;
+
+        private Vertex1(V vertex) {
+            this.vertex1 = vertex;
+        }
+
+        public Vertex2 to(V vertex) {
+            return new Vertex2(vertex);
+        }
+
+        public class Vertex2 {
+            V vertex2;
+
+            private Vertex2(V vertex) {
+                this.vertex2 = vertex;
+            }
+
+            public GraphBuilder<V, E> withEdge(E edge) {
+                connections.add(new Connection(vertex1, vertex2, edge));
+                return GraphBuilder.this;
+            }
+        }
     }
 
 }

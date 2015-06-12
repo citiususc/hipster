@@ -14,4 +14,12 @@
         <hipster.root.dir>${project.basedir}/..</hipster.root.dir>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

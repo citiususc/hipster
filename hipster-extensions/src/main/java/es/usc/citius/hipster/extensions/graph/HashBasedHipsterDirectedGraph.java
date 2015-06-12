@@ -16,6 +16,7 @@
 package es.usc.citius.hipster.extensions.graph;
 
 import com.google.common.base.Preconditions;
+import es.usc.citius.hipster.graph.DirectedEdge;
 import es.usc.citius.hipster.graph.GraphEdge;
 import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 
@@ -29,7 +30,7 @@ public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,
     @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         Preconditions.checkArgument(v1 != null && v2 != null, "Vertices cannot be null");
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value, true);
+        GraphEdge<V,E> edge = new DirectedEdge<V, E>(v1, v2, value);
         graphTable.put(v1, v2, edge);
         disconnected.remove(v1);
         disconnected.remove(v2);
