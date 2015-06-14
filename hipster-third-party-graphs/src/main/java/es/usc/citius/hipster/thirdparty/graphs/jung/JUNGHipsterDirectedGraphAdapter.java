@@ -44,11 +44,7 @@ public class JUNGHipsterDirectedGraphAdapter<V,E> extends JUNGHipsterGraphAdapte
             if (outEdges == null || outEdges.isEmpty()) {
                 return Collections.emptyList();
             }
-            ArrayList<GraphEdge<V, E>> outEdgesTransformed = new ArrayList<GraphEdge<V, E>>(outEdges.size());
-            for(E current : outEdges){
-                outEdgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
-            }
-            return outEdgesTransformed;
+            return adapt(outEdges);
         } catch (NullPointerException e){
             return Collections.emptyList();
         }
@@ -62,11 +58,7 @@ public class JUNGHipsterDirectedGraphAdapter<V,E> extends JUNGHipsterGraphAdapte
             if (inEdges == null || inEdges.isEmpty()) {
                 return Collections.emptyList();
             }
-            ArrayList<GraphEdge<V, E>> inEdgesTransformed = new ArrayList<GraphEdge<V, E>>(inEdges.size());
-            for(E current : inEdges){
-                inEdgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
-            }
-            return inEdgesTransformed;
+            return adapt(inEdges);
         }catch(NullPointerException e){
             return Collections.emptyList();
         }

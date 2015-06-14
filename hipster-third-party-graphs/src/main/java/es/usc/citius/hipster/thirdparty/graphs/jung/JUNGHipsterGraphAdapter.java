@@ -17,12 +17,18 @@
 package es.usc.citius.hipster.thirdparty.graphs.jung;
 
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import es.usc.citius.hipster.graph.DirectedEdge;
 import es.usc.citius.hipster.graph.GraphEdge;
 import es.usc.citius.hipster.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.UndirectedEdge;
+import es.usc.citius.hipster.util.Function;
+import es.usc.citius.hipster.util.Iterators;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * An adapter to adapt a JUNG graph to a general HipsterGraph interface.
@@ -36,17 +42,29 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         this.graph = graph;
     }
 
+    protected Iterable<GraphEdge<V,E>> adapt(final Iterable<E> iterable){
+        return new Iterable<GraphEdge<V, E>>() {
+            @Override
+            public Iterator<GraphEdge<V, E>> iterator() {
+                return Iterators.map(iterable.iterator(), new Function<E, GraphEdge<V,E>>() {
+                    @Override
+                    public GraphEdge<V,E> apply(E edge) {
+                        if (graph.getEdgeType(edge).equals(EdgeType.DIRECTED)){
+                            return new DirectedEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
+                        }
+                        return new UndirectedEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
+                    }
+                });
+            }
+        };
+    }
     @Override
     public Iterable<GraphEdge<V, E>> edges() {
         final Collection<E> edges = graph.getEdges();
         if (edges == null || edges.isEmpty()){
             return Collections.emptyList();
         }
-        ArrayList<GraphEdge<V, E>> edgesTransformed = new ArrayList<GraphEdge<V, E>>(edges.size());
-        for(E current : edges){
-            edgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
-        }
-        return edgesTransformed;
+        return adapt(edges);
     }
 
     @Override
@@ -60,11 +78,7 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         if (edges == null || edges.isEmpty()){
             return Collections.emptyList();
         }
-        ArrayList<GraphEdge<V, E>> edgesTransformed = new ArrayList<GraphEdge<V, E>>(edges.size());
-        for(E current : edges){
-            edgesTransformed.add(new GraphEdge<V, E>(graph.getSource(current), graph.getDest(current), current));
-        }
-        return edgesTransformed;
+        return adapt(edges);
     }
 
 }

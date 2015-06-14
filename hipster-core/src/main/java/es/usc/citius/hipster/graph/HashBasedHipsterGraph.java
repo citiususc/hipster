@@ -50,6 +50,15 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         return false;
     }
 
+    @Override
+    public Set<V> add(V... vertices) {
+        Set<V> added = new HashSet<V>();
+        for(V v : vertices){
+            if (add(v)) added.add(v);
+        }
+        return added;
+    }
+
     /**
      * Remove a vertex from the graph.
      *
@@ -76,6 +85,15 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         }
         this.connected.remove(v);
         return true;
+    }
+
+    @Override
+    public Set<V> remove(V... vertices) {
+        Set<V> removed = new HashSet<V>();
+        for(V v : vertices){
+            if (remove(v)) removed.add(v);
+        }
+        return removed;
     }
 
     /**

@@ -13,12 +13,12 @@ public class HashBasedHipsterGraphTest {
     protected HashBasedHipsterGraph graph;
     protected int size = 10;
 
-    public static HashBasedHipsterGraph createStarGraph(int vertices){
+    protected HashBasedHipsterGraph createStarGraph(int vertices){
         HashBasedHipsterGraph g = new HashBasedHipsterGraph();
         for(int i = 0; i < vertices; i++){
             g.add("v"+i);
-            for(int j=i-1; j>=0; j--){
-                g.connect("v"+i, "v"+j, Math.random());
+            for(int j=0; j<i; j++){
+                g.connect("v"+j, "v"+i, Math.random());
             }
         }
         return g;
@@ -82,6 +82,8 @@ public class HashBasedHipsterGraphTest {
 
     @Test
     public void testConnect() throws Exception {
+        graph.add("X");
+        graph.add("Y");
         graph.connect("X","Y",1.0d);
         assertTrue(Sets.newHashSet(graph.vertices()).contains("X"));
         assertTrue(Sets.newHashSet(graph.vertices()).contains("Y"));

@@ -62,6 +62,8 @@ public class GraphBuilder<V, E> {
     public HipsterDirectedGraph<V,E> createDirectedGraph() {
         HashBasedHipsterDirectedGraph<V, E> graph = HashBasedHipsterDirectedGraph.create();
         for (Connection c : connections) {
+            graph.add(c.vertex1);
+            graph.add(c.vertex2);
             graph.connect(c.vertex1, c.vertex2, c.edge);
         }
         return graph;
@@ -70,6 +72,8 @@ public class GraphBuilder<V, E> {
     public HipsterGraph<V,E> createUndirectedGraph() {
         HashBasedHipsterGraph<V, E> graph = HashBasedHipsterGraph.create();
         for (Connection c : connections) {
+            graph.add(c.vertex1);
+            graph.add(c.vertex2);
             graph.connect(c.vertex1, c.vertex2, c.edge);
         }
         return graph;
