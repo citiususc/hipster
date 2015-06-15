@@ -137,11 +137,10 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         N goalNode = null;
         while(it.hasNext()){
             iteration++;
-            it.next();
+            currentNode = it.next();
             if (condition.apply(currentNode)) {
                 goalNode = currentNode;
             }
-
         }
         long end = System.currentTimeMillis();
         if (goalNode != null) {
