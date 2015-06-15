@@ -189,6 +189,11 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
                             return createEntry(currentVertex, loadNext());
                         }
                     }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException("remove");
+                    }
                 };
             }
         };

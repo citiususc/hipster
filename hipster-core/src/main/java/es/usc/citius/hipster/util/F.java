@@ -30,6 +30,11 @@ public final class F {
             public E next() {
                 return mapf.apply(it.next());
             }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove");
+            }
         };
     }
 
@@ -74,6 +79,11 @@ public final class F {
                     return elem;
                 }
                 return nextFiltered();
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove");
             }
         };
     }

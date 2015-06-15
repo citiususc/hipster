@@ -16,6 +16,11 @@ public final class Iterators {
             public E next() {
                 throw new NoSuchElementException("Iterator is empty");
             }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove");
+            }
         };
     }
 }

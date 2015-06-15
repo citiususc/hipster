@@ -211,10 +211,10 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.3</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
@@ -276,37 +276,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <!--
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <anonymousConnection>scm:git:git@github.com:citiususc/hipster.git</anonymousConnection>
-                    <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>summary</report>
-                            <report>license</report>
-                            <report>modules</report>
-                            <report>project-team</report>
-                            <report>scm</report>
-                            <report>issue-tracking</report>
-                            <report>dependencies</report>
-                            <report>dependency-convergence</report>
-                            <report>plugins</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
-    -->
 
     <profiles>
         <profile>
