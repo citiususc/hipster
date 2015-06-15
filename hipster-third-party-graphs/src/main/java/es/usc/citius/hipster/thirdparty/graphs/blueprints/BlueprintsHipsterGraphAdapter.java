@@ -25,9 +25,8 @@ import es.usc.citius.hipster.graph.GraphEdge;
 import es.usc.citius.hipster.graph.HipsterGraph;
 import es.usc.citius.hipster.graph.UndirectedEdge;
 import es.usc.citius.hipster.util.Function;
-import es.usc.citius.hipster.util.Iterators;
+import es.usc.citius.hipster.util.F;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -59,7 +58,7 @@ public class BlueprintsHipsterGraphAdapter implements HipsterGraph<Vertex, Edge>
         return new Iterable<GraphEdge<Vertex, Edge>>() {
             @Override
             public Iterator<GraphEdge<Vertex, Edge>> iterator() {
-                return Iterators.map(edges.iterator(), new Function<Edge, GraphEdge<Vertex, Edge>>() {
+                return F.map(edges.iterator(), new Function<Edge, GraphEdge<Vertex, Edge>>() {
                     @Override
                     public GraphEdge<Vertex, Edge> apply(Edge edge) {
                         return new UndirectedEdge<Vertex, Edge>(edge.getVertex(Direction.OUT), edge.getVertex(Direction.IN), edge);

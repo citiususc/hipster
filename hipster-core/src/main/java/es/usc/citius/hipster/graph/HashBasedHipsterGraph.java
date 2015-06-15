@@ -17,7 +17,8 @@
 package es.usc.citius.hipster.graph;
 
 
-import com.sun.corba.se.impl.orbutil.graph.Graph;
+import es.usc.citius.hipster.util.F;
+import es.usc.citius.hipster.util.Function;
 import es.usc.citius.hipster.util.Iterators;
 
 import java.util.*;
@@ -198,70 +199,12 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
      */
     @Override
     public Iterable<GraphEdge<V, E>> edges() {
-        return new Iterable<GraphEdge<V, E>>() {
+        return F.map(vedges(), new Function<Map.Entry<V, GraphEdge<V, E>>, GraphEdge<V, E>>() {
             @Override
-            public Iterator<GraphEdge<V, E>> iterator() {
-                return new Iterator<GraphEdge<V, E>>() {
-                    private Iterator<Map.Entry<V, GraphEdge<V,E>>> it = vedges().iterator();
-
-                    @Override
-                    public boolean hasNext() {
-                        return it.hasNext();
-                    }
-
-                    @Override
-                    public GraphEdge<V, E> next() {
-                        return it.next().getValue();
-                    }
-                };
+            public GraphEdge<V, E> apply(Map.Entry<V, GraphEdge<V, E>> entry) {
+                return entry.getValue();
             }
-        };
-        /*
-        return new Iterable<GraphEdge<V, E>>() {
-            @Override
-            public Iterator<GraphEdge<V, E>> iterator() {
-                return new Iterator<GraphEdge<V, E>>() {
-                    private Iterator<V> vertices = connected.keySet().iterator();
-                    private Iterator<GraphEdge<V, E>> edges =
-                            vertices.hasNext() ? connected.get(vertices.next()).iterator() : Iterators.<GraphEdge<V,E>>empty();
-                    private GraphEdge<V,E> nextElement = null;
-
-                    private GraphEdge<V,E> loadNext(){
-                        // Preload the next element
-                        if (edges.hasNext()){
-                            return edges.next();
-                        } else if (vertices.hasNext()){
-                            edges = connected.get(vertices.next()).iterator();
-                            // skip empty edge lists
-                            return loadNext();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    public boolean hasNext() {
-                        // There can be empty lists, so we need to pre-compute the next element in advance
-                        // to check whether there exist a next element or not.
-                        if (nextElement == null) {
-                            nextElement = loadNext();
-                        }
-                        return nextElement != null;
-                    }
-
-                    @Override
-                    public GraphEdge<V, E> next() {
-                        // Load the next element
-                        if (nextElement != null) {
-                            GraphEdge<V,E> next = nextElement;
-                            nextElement = null;
-                            return next;
-                        } else {
-                            return loadNext();
-                        }
-                    }
-                };
-            }
-        };*/
+        });
     }
 
     /**

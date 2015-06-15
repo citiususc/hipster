@@ -23,9 +23,8 @@ import es.usc.citius.hipster.graph.GraphEdge;
 import es.usc.citius.hipster.graph.HipsterGraph;
 import es.usc.citius.hipster.graph.UndirectedEdge;
 import es.usc.citius.hipster.util.Function;
-import es.usc.citius.hipster.util.Iterators;
+import es.usc.citius.hipster.util.F;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -46,10 +45,10 @@ public class JUNGHipsterGraphAdapter<V,E> implements HipsterGraph<V,E> {
         return new Iterable<GraphEdge<V, E>>() {
             @Override
             public Iterator<GraphEdge<V, E>> iterator() {
-                return Iterators.map(iterable.iterator(), new Function<E, GraphEdge<V,E>>() {
+                return F.map(iterable.iterator(), new Function<E, GraphEdge<V, E>>() {
                     @Override
-                    public GraphEdge<V,E> apply(E edge) {
-                        if (graph.getEdgeType(edge).equals(EdgeType.DIRECTED)){
+                    public GraphEdge<V, E> apply(E edge) {
+                        if (graph.getEdgeType(edge).equals(EdgeType.DIRECTED)) {
                             return new DirectedEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
                         }
                         return new UndirectedEdge<V, E>(graph.getSource(edge), graph.getDest(edge), edge);
