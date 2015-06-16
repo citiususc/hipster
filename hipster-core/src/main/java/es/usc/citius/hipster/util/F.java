@@ -23,20 +23,13 @@ public final class F {
     }
 
     public static <T,E> Iterator<E> map(final Iterator<T> it, final Function<? super T,? extends E> mapf){
-        return new Iterator<E>() {
+        return new Iterators.AbstractIterator<E>() {
             @Override
-            public boolean hasNext() {
-                return it.hasNext();
-            }
-
-            @Override
-            public E next() {
-                return mapf.apply(it.next());
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("remove");
+            protected E computeNext() {
+                if (it.hasNext()){
+                    return mapf.apply(it.next());
+                }
+                return null;
             }
         };
     }
@@ -51,42 +44,16 @@ public final class F {
     }
 
     public static <T> Iterator<T> filter(final Iterator<T> it, final Function<? super T, Boolean> condition) {
-        return new Iterator<T>() {
-            private T next = null;
-
-            private T nextFiltered() {
-                T nextElem = null;
-                while (it.hasNext()) {
-                    T elem = it.next();
-                    if (condition.apply(elem)) {
-                        nextElem = elem;
-                        break;
+        return new Iterators.AbstractIterator<T>() {
+            @Override
+            protected T computeNext() {
+                while(it.hasNext()){
+                    T next = it.next();
+                    if (condition.apply(next)){
+                        return next;
                     }
                 }
-                return nextElem;
-            }
-
-            @Override
-            public boolean hasNext() {
-                if (next != null) return true;
-                // Preload the next edge
-                next = nextFiltered();
-                return next != null;
-            }
-
-            @Override
-            public T next() {
-                if (next != null) {
-                    T elem = next;
-                    next = null;
-                    return elem;
-                }
-                return nextFiltered();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("remove");
+                return null;
             }
         };
     }
@@ -106,40 +73,18 @@ public final class F {
     }
 
     public static <E,T> Iterator<T> flatMap(final Iterator<E> it, final Function<? super E, ? extends Iterator<? extends T>> mapf){
-        return new Iterator<T>() {
-            private Iterator<Iterator<? extends T>> mapIt = map(it, mapf);
-            private Iterator<? extends T> current = mapIt.hasNext() ? mapIt.next() : Iterators.<T>empty();
-            private T t;
+        return new Iterators.AbstractIterator<T>() {
+            Iterator<Iterator<? extends T>> mapIt = map(it, mapf);
+            Iterator<? extends T> current = mapIt.hasNext() ? mapIt.next() : Iterators.<T>empty();
 
-            private T loadNext(){
+            @Override
+            protected T computeNext() {
                 if (current.hasNext()) return current.next();
                 if (mapIt.hasNext()){
                     current = mapIt.next();
-                    return loadNext();
+                    return computeNext();
                 }
                 return null;
-            }
-
-            @Override
-            public boolean hasNext() {
-                if (t == null) t = loadNext();
-                return t != null;
-            }
-
-            @Override
-            public T next() {
-                if (t != null) {
-                    T next = t;
-                    t = null; // consumed
-                    return next;
-                } else {
-                    return loadNext();
-                }
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("remove");
             }
         };
     }
