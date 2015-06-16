@@ -35,7 +35,7 @@ public class DepthFirstSearchTest {
     @Test
     public void testTree(){
         HipsterDirectedGraph<String, String> tree =
-                GraphBuilder.create()
+                GraphBuilder.<String,String>create()
                 .connect("A").to("B").withEdge("1")
                 .connect("A").to("C").withEdge("2")
                 .connect("B").to("D").withEdge("3")
@@ -50,7 +50,7 @@ public class DepthFirstSearchTest {
                 .connect("F").to("M").withEdge("12")
                 .connect("G").to("N").withEdge("13")
                 .connect("G").to("O").withEdge("14")
-                .buildDirectedGraph();
+                .createDirectedGraph();
 
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(tree).build()).iterator();
@@ -61,13 +61,13 @@ public class DepthFirstSearchTest {
     @Test
     public void testGraphWithoutCycles(){
         HipsterDirectedGraph<String, String> graph =
-                GraphBuilder.create()
+                GraphBuilder.<String,String>create()
                         .connect("A").to("B").withEdge("1")
                         .connect("A").to("C").withEdge("2")
                         .connect("B").to("D").withEdge("3")
                         .connect("B").to("E").withEdge("4")
                         .connect("E").to("C").withEdge("5")
-                        .buildDirectedGraph();
+                        .createDirectedGraph();
 
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
@@ -78,14 +78,14 @@ public class DepthFirstSearchTest {
     @Test
     public void testGraph(){
         HipsterDirectedGraph<String, String> graph =
-                GraphBuilder.create()
+                GraphBuilder.<String,String>create()
                 .connect("A").to("B").withEdge("1")
                 .connect("A").to("C").withEdge("2")
                 .connect("B").to("D").withEdge("3")
                 .connect("B").to("E").withEdge("4")
                 .connect("E").to("C").withEdge("5")
                 .connect("C").to("A").withEdge("6")
-                .buildDirectedGraph();
+                .createDirectedGraph();
 
         Iterator<UnweightedNode<String, String>> iterator =
                 Hipster.createDepthFirstSearch(GraphSearchProblem.startingFrom("A").in(graph).build()).iterator();
