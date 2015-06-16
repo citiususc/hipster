@@ -100,9 +100,21 @@ public final class GraphSearchProblem {
                     @Override
                     public Double evaluate(Transition<E, V> transition) {
                         E action = transition.getAction();
+
                         if (action instanceof Number) {
+                            // Try to cast to number automatically
                             return ((Number) action).doubleValue();
+                        } else if (action instanceof String){
+                            // Try to parse to a number
+                            try {
+                                return Double.parseDouble((String) action);
+                            } catch (NumberFormatException e){
+                                throw new IllegalArgumentException("Exception ocurred when trying" +
+                                        "to cast " + action + " to a number. Use the method " +
+                                        "extractCostsFromEdges to define a custom evaluation strategy.", e);
+                            }
                         } else {
+                            // TODO: Throw exception instead?
                             // Assume uniform costs.
                             return 1d;
                             /*

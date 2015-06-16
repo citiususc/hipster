@@ -45,7 +45,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
     public boolean add(V v){
         //add a new entry to the hash map if it does not exist
         if(!connected.containsKey(v)){
-            connected.put(v, new HashSet<GraphEdge<V, E>>());
+            connected.put(v, new LinkedHashSet<GraphEdge<V, E>>());
             return true;
         }
         return false;
