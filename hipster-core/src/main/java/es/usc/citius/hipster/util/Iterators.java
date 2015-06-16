@@ -21,11 +21,6 @@ public final class Iterators {
             return current != null;
         }
 
-        protected void skip(){
-            // Jump to the next element or terminate if done
-
-        }
-
         @Override
         public E next() {
             if (current != null) {
@@ -43,20 +38,10 @@ public final class Iterators {
     }
 
     public static <E> Iterator<E> empty() {
-        return new Iterator<E>() {
+        return new AbstractIterator<E>() {
             @Override
-            public boolean hasNext() {
-                return false;
-            }
-
-            @Override
-            public E next() {
-                throw new NoSuchElementException("Iterator is empty");
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("remove");
+            protected E computeNext() {
+                return null;
             }
         };
     }

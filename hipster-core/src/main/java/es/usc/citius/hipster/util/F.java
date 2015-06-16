@@ -5,9 +5,12 @@ import java.util.Iterator;
 
 
 /**
- * This class contains a very limited set of functional methods to process iterables and iterators.
- * Required due to the removal of Guava dependencies (issue #125 https://github.com/citiususc/hipster/issues/125)
+ * This class contains a very limited set of functions to process iterables and iterators in a lazy way.
+ * Guava / Java 8 is not an option due to current size / compatibility restrictions.
+ * Required since the removal of Guava dependencies (issue #125 https://github.com/citiususc/hipster/issues/125)
  * NOTE: This class may be removed in future versions to take advantage of Java 8 functional Streams
+ *
+ * Pure functional programmers, please forgive us for this crime
  *
  * @author Pablo Rodríguez Mier
  */
