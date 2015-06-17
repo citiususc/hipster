@@ -19,7 +19,6 @@ package es.usc.citius.hipster.graph;
 
 import es.usc.citius.hipster.util.F;
 import es.usc.citius.hipster.util.Function;
-import es.usc.citius.hipster.util.Iterators;
 
 import java.util.*;
 
@@ -144,59 +143,18 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
     }
 
     protected Iterable<Map.Entry<V, GraphEdge<V,E>>> vedges(){
-        // TODO: [java-8-migration] Change this ugly lazy iterator with Java 8 streams and flatmaps
-        return new Iterable<Map.Entry<V, GraphEdge<V,E>>>() {
+        // TODO: [java-8-migration]
+        return F.flatMap(connected.entrySet(), new Function<Map.Entry<V, Set<GraphEdge<V, E>>>, Iterable<Map.Entry<V, GraphEdge<V, E>>>>() {
             @Override
-            public Iterator<Map.Entry<V, GraphEdge<V,E>>> iterator() {
-                return new Iterator<Map.Entry<V, GraphEdge<V,E>>>() {
-                    private Iterator<V> vertices = connected.keySet().iterator();
-                    private V currentVertex = vertices.hasNext() ? vertices.next() : null;
-                    private Iterator<GraphEdge<V, E>> edges =
-                            currentVertex != null ? connected.get(currentVertex).iterator() : Iterators.<GraphEdge<V,E>>empty();
-                    private GraphEdge<V,E> nextElement = null;
-
-                    private GraphEdge<V,E> loadNext(){
-                        // Preload the next element
-                        if (edges.hasNext()){
-                            return edges.next();
-                        } else if (vertices.hasNext()){
-                            currentVertex = vertices.next();
-                            edges = connected.get(currentVertex).iterator();
-                            // skip empty edge lists
-                            return loadNext();
-                        }
-                        return null;
-                    }
-
+            public Iterable<Map.Entry<V, GraphEdge<V, E>>> apply(final Map.Entry<V, Set<GraphEdge<V, E>>> entry) {
+                return F.map(entry.getValue(), new Function<GraphEdge<V, E>, Map.Entry<V, GraphEdge<V, E>>>() {
                     @Override
-                    public boolean hasNext() {
-                        // There can be empty lists, so we need to pre-compute the next element in advance
-                        // to check whether there exist a next element or not.
-                        if (nextElement == null) {
-                            nextElement = loadNext();
-                        }
-                        return nextElement != null;
+                    public Map.Entry<V, GraphEdge<V, E>> apply(GraphEdge<V, E> input) {
+                        return createEntry(entry.getKey(), input);
                     }
-
-                    @Override
-                    public Map.Entry<V, GraphEdge<V,E>> next() {
-                        // Load the next element
-                        if (nextElement != null) {
-                            GraphEdge<V,E> next = nextElement;
-                            nextElement = null;
-                            return createEntry(currentVertex, next);
-                        } else {
-                            return createEntry(currentVertex, loadNext());
-                        }
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("remove");
-                    }
-                };
+                });
             }
-        };
+        });
     }
     /**
      * Returns a list of the edges in the graph.

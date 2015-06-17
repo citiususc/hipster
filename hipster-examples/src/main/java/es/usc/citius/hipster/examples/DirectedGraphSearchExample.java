@@ -24,7 +24,8 @@ public class DirectedGraphSearchExample {
     public static void main(String[] args){
         // Create a simple weighted directed graph with Hipster where
         // vertices are Strings and edge values are just doubles
-        HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
+        HipsterDirectedGraph<String,Double> graph =
+                GraphBuilder.<String,Double>create()
                 .connect("A").to("B").withEdge(4d)
                 .connect("A").to("C").withEdge(2d)
                 .connect("B").to("C").withEdge(5d)
@@ -32,7 +33,7 @@ public class DirectedGraphSearchExample {
                 .connect("C").to("E").withEdge(3d)
                 .connect("D").to("F").withEdge(11d)
                 .connect("E").to("D").withEdge(4d)
-                .buildDirectedGraph();
+                .createDirectedGraph();
 
 
         // Create the search problem. For graph problems, just use
