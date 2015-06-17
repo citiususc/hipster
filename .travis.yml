@@ -11,6 +11,7 @@ after_success:
 #- .config/deploy-site.sh
 - chmod +x .config/deploy-artifacts.sh
 - .config/deploy-artifacts.sh
+- mvn clean cobertura:cobertura coveralls:cobertura
 env:
   global:
   - secure: ILdOYjPt+8g5rlexXBYAhECtn5Zm26FRf0/nwCxUU303qtzFQyMcxinIC93aun880OnINjA7fzQeBkG4P+LSVOAXbmGTGhtyPBzMOGcnZouJM/RyXHUft6tAXPimXQ7JjDFjyv7EzSeStk/4WEp0mkxheIryZS3X1pbED1TqgUM=
