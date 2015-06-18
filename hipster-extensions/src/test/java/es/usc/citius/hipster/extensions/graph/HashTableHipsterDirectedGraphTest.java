@@ -27,13 +27,13 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 
-public class HashBasedHipsterDirectedGraphTest extends HashBasedHipsterGraphTest {
-    private HashBasedHipsterDirectedGraph<String, Double> directedGraph;
+public class HashTableHipsterDirectedGraphTest extends HashTableHipsterGraphTest {
+    private HashTableHipsterDirectedGraph<String, Double> directedGraph;
 
     @Before
     @Override
     public void setUp() {
-        directedGraph = HashBasedHipsterDirectedGraph.create();
+        directedGraph = HashTableHipsterDirectedGraph.create();
         directedGraph.connect("A", "B", 4d);
         directedGraph.connect("A", "C", 2d);
         directedGraph.connect("B", "C", 5d);

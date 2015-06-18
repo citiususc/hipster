@@ -25,7 +25,7 @@ import es.usc.citius.hipster.graph.HipsterDirectedGraph;
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
-public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
+public class HashTableHipsterDirectedGraph<V,E> extends HashTableHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
 
     @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
@@ -47,7 +47,7 @@ public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,
         return graphTable.column(vertex).values();
     }
 
-    public static <V,E> HashBasedHipsterDirectedGraph<V, E> create() {
-        return new HashBasedHipsterDirectedGraph<V, E>();
+    public static <V,E> HashTableHipsterDirectedGraph<V, E> create() {
+        return new HashTableHipsterDirectedGraph<V, E>();
     }
 }

@@ -30,12 +30,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class HashBasedHipsterGraphTest {
-    protected HashBasedHipsterGraph<String, Double> graph;
+public class HashTableHipsterGraphTest {
+    protected HashTableHipsterGraph<String, Double> graph;
 
     @Before
     public void setUp(){
-        graph = HashBasedHipsterGraph.create();
+        graph = HashTableHipsterGraph.create();
         graph.connect("A", "B", 4d);
         graph.connect("A", "C", 2d);
         graph.connect("B", "C", 5d);
