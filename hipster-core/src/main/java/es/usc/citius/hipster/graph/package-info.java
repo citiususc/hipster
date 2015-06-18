@@ -15,6 +15,6 @@
  */
 
 /**
- * Simple Graph model used for algorithm validation.
+ * Lightweight graph interfaces and in-memory graph implementations.
  */
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
