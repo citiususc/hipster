@@ -187,6 +187,18 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         return set;
     }
 
+    /**
+     * Returns the internal HashMap representation of the graph
+     * @return HashMap where keys are vertices and values a set with the connected edges
+     */
+    public HashMap<V, Set<GraphEdge<V, E>>> getConnected() {
+        return connected;
+    }
+    
+    public void setConnected(HashMap<V, Set<GraphEdge<V, E>>> connected) {
+        this.connected = connected;
+    }
+
     public static <V,E> HashBasedHipsterGraph<V, E> create() {
         return new HashBasedHipsterGraph<V, E>();
     }
