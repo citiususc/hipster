@@ -23,10 +23,8 @@ import es.usc.citius.hipster.util.Function;
 import java.util.*;
 
 /**
- * Implementation of a HipsterGraph using a Guava Hash Table.
- *
- * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
- * @author Pablo Rodríguez Mier  <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * Lightweight implementation of an in-memory, mutable graph backed to a {@link HashMap} where
+ * keys are vertices and edges are {@link GraphEdge}s
  */
 public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
     protected HashMap<V, Set<GraphEdge<V, E>>> connected;
@@ -35,11 +33,6 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         this.connected = new HashMap<V, Set<GraphEdge<V, E>>>();
     }
 
-    /**
-     * Add a new node to the graph with no connections.
-     *
-     * @param v vertex to be added
-     */
     @Override
     public boolean add(V v){
         //add a new entry to the hash map if it does not exist
@@ -59,11 +52,6 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         return added;
     }
 
-    /**
-     * Remove a vertex from the graph.
-     *
-     * @param v vertex to be removed
-     */
     @Override
     public boolean remove(V v){
         // Remove all edges related to v
@@ -96,15 +84,6 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         return removed;
     }
 
-    /**
-     * Connect to vertices in the graph. If the vertices are not in the graph, they are automatically
-     * added to the graph before connecting them.
-     *
-     * @param v1 source vertex
-     * @param v2 destination vertex
-     * @param value edge value
-     * @return the generated edge
-     */
     @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         // Check non-null arguments
@@ -194,7 +173,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
     public HashMap<V, Set<GraphEdge<V, E>>> getConnected() {
         return connected;
     }
-    
+
     public void setConnected(HashMap<V, Set<GraphEdge<V, E>>> connected) {
         this.connected = connected;
     }
