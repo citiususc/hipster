@@ -11,6 +11,14 @@ public class Pair<E> {
         this.e2 = e2;
     }
 
+    public E _1() {
+        return e1;
+    }
+
+    public E _2() {
+        return e2;
+    }
+
     public E getE1() {
         return e1;
     }
