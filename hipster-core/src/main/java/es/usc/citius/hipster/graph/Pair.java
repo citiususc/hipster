@@ -53,4 +53,9 @@ public class Pair<E> {
         result = 31 * result + e2.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "(" + e1 + ", " + e2 + ")";
+    }
 }

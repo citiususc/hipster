@@ -43,4 +43,9 @@ public class UnorderedPair<E> {
     public int hashCode() {
         return e1.hashCode() + e2.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "(" + e1 + ", " + e2 + ")";
+    }
 }
