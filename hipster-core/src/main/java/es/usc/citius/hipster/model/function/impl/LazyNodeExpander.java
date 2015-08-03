@@ -21,6 +21,8 @@ import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.util.F;
+import es.usc.citius.hipster.util.Function;
 
 import java.util.ArrayList;
 
@@ -56,11 +58,12 @@ public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander
         // The default expansion of a node consists of
         // computing the successor transitions of the current state and
         // generating the associated nodes for each successor
-        ArrayList<N> nodes = new ArrayList<N>();
-        for(Transition<A, S> current : tf.transitionsFrom(node.state())){
-            nodes.add(factory.makeNode(node, current));
-        }
-        return nodes;
+        return F.map(tf.transitionsFrom(node.state()), new Function<Transition<A, S>, N>() {
+            @Override
+            public N apply(Transition<A, S> t) {
+                return factory.makeNode(node, t);
+            }
+        });
     }
 
     /**
