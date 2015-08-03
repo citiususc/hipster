@@ -21,6 +21,8 @@ import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.util.F;
+import es.usc.citius.hipster.util.Function;
 
 import java.util.ArrayList;
 
@@ -52,12 +54,11 @@ public class LazyActionStateTransitionFunction<A,S> implements TransitionFunctio
 
     @Override
     public Iterable<Transition<A, S>> transitionsFrom(final S state) {
-        ArrayList<Transition<A, S>> transitions = new ArrayList<Transition<A, S>>();
-        //generate set of actions
-        for(A applicableAction : af.actionsFor(state)){
-            //generate transition for each action
-            transitions.add(new Transition<A, S>(state, applicableAction, tf.apply(applicableAction, state)));
-        }
-        return transitions;
+        return F.map(af.actionsFor(state), new Function<A, Transition<A, S>>() {
+            @Override
+            public Transition<A, S> apply(A a) {
+                return Transition.create(state, a, tf.apply(a, state));
+            }
+        });
     }
 }
