@@ -19,6 +19,8 @@ package es.usc.citius.hipster.model.function.impl;
 
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.hipster.util.F;
+import es.usc.citius.hipster.util.Function;
 
 import java.util.ArrayList;
 
@@ -37,13 +39,13 @@ public abstract class StateTransitionFunction<S> implements TransitionFunction<V
 
     @Override
     public Iterable<Transition<Void, S>> transitionsFrom(final S state) {
-        ArrayList<Transition<Void, S>> transitions = new ArrayList<Transition<Void, S>>();
         //generate successor states
-        for(S current : successorsOf(state)){
-            //generate successor transitions from the states
-            transitions.add(new Transition<Void, S>(state, null, current));
-        }
-        return transitions;
+        return F.map(successorsOf(state), new Function<S, Transition<Void, S>>() {
+            @Override
+            public Transition<Void, S> apply(S current) {
+                return Transition.create(state, null, current);
+            }
+        });
     }
 
     /**
