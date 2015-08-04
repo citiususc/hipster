@@ -26,7 +26,7 @@ import java.util.*;
  * Implementation of the A* algorithm. The A* algorithm extends the original
  * Dijkstra's algorithm by including heuristics to improve the search. By default,
  * the implementation uses a {@link java.util.PriorityQueue} for the nodes, which requires
- * {@literal O(n*log n)} time for insertions. The queue can be changed to use another
+ * {@literal O(log n)} time for insertions. The queue can be changed to use another
  * type of queue, for example a fibonacci heap as a queue, which works with constant amortized
  * time for insertions.
  * </p>
