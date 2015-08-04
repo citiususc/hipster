@@ -6,6 +6,7 @@ jdk:
 branches:
   except:
   - /^(?i:wip).*$/
+sudo: false
 after_success:
 #- chmod +x .config/deploy-site.sh
 #- .config/deploy-site.sh
