@@ -15,13 +15,13 @@
         <!-- Site config -->
         <site.url>http://hipster4j.org</site.url>
         <!-- Hipster version -->
-        <hipster.version>1.0.0-rc2-SNAPSHOT</hipster.version>
+        <hipster.version>1.0.0-rc2</hipster.version>
     </properties>
 
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-rc2-SNAPSHOT</version>
+    <version>1.0.0-rc2</version>
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
