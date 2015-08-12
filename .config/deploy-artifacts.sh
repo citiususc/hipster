@@ -8,7 +8,7 @@ if [ "$TRAVIS_REPO_SLUG" == "citiususc/hipster" ] && [ "$TRAVIS_JDK_VERSION" == 
   # Deploy to CITIUS
   #mvn --settings .config/maven-settings.xml -P citius-snapshot-deploy deploy -DskipTests=true
   # Deploy to Sonatype Nexus OSS
-  mvn --settings .config/maven-settings.xml deploy -DskipTests=true
+  mvn --settings .config/maven-settings.xml -P sonatype-nexus-snapshots deploy -DskipTests=true
 else
   echo "Skipping deployment for this build..."
 fi

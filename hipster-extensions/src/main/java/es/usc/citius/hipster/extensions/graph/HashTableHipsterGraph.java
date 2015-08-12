@@ -13,12 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.extensions.graph;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.UndirectedEdge;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +30,7 @@ import java.util.Set;
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
-public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
+public class HashTableHipsterGraph<V,E> implements HipsterGraph<V,E> {
     protected HashBasedTable<V,V,GraphEdge<V,E>> graphTable = HashBasedTable.create();
     // keep extra info for all those disconnected vertices
     protected Set<V> disconnected = new HashSet<V>();
@@ -79,7 +81,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
 
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         Preconditions.checkArgument(v1 != null && v2 != null, "Vertices cannot be null");
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value);
+        GraphEdge<V,E> edge = new UndirectedEdge<V, E>(v1, v2, value);
         graphTable.put(v1, v2, edge);
         graphTable.put(v2, v1, edge);
         disconnected.remove(v1);
@@ -102,7 +104,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterGraph<V,E> {
         return Sets.union(Sets.newHashSet(graphTable.row(vertex).values()), Sets.newHashSet(graphTable.column(vertex).values()));
     }
 
-    public static <V,E> HashBasedHipsterGraph<V, E> create() {
-        return new HashBasedHipsterGraph<V, E>();
+    public static <V,E> HashTableHipsterGraph<V, E> create() {
+        return new HashTableHipsterGraph<V, E>();
     }
 }

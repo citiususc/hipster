@@ -14,11 +14,9 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
@@ -30,6 +28,9 @@ import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
+import es.usc.citius.hipster.util.Function;
+
+import java.util.ArrayList;
 
 /**
  * Builder to generate a {@link es.usc.citius.hipster.model.problem.SearchProblem} but using
@@ -63,25 +64,23 @@ public final class GraphSearchProblem {
                 tf = new TransitionFunction<E, V>() {
                     @Override
                     public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                        return Iterables.transform(dg.outgoingEdgesOf(state), new Function<GraphEdge<V, E>, Transition<E, V>>() {
-                            @Override
-                            public Transition<E, V> apply(GraphEdge<V, E> edge) {
-                                return Transition.create(state, edge.getEdgeValue(), edge.getVertex2());
-                            }
-                        });
+                        ArrayList<Transition<E, V>> transitions = new ArrayList<Transition<E, V>>();
+                        for(GraphEdge<V, E> edge : dg.outgoingEdgesOf(state)){
+                            transitions.add(Transition.create(state, edge.getEdgeValue(), edge.getVertex2()));
+                        }
+                        return transitions;
                     }
                 };
             } else {
                 tf = new TransitionFunction<E, V>() {
                     @Override
                     public Iterable<Transition<E, V>> transitionsFrom(final V state) {
-                        return Iterables.transform(graph.edgesOf(state), new Function<GraphEdge<V, E>, Transition<E, V>>() {
-                            @Override
-                            public Transition<E, V> apply(GraphEdge<V, E> edge) {
-                                V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
-                                return Transition.create(state, edge.getEdgeValue(), oppositeVertex);
-                            }
-                        });
+                        ArrayList<Transition<E, V>> transitions = new ArrayList<Transition<E, V>>();
+                        for(GraphEdge<V, E> edge : graph.edgesOf(state)){
+                            V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
+                            transitions.add(Transition.create(state, edge.getEdgeValue(), oppositeVertex));
+                        }
+                        return transitions;
                     }
                 };
             }
@@ -101,9 +100,21 @@ public final class GraphSearchProblem {
                     @Override
                     public Double evaluate(Transition<E, V> transition) {
                         E action = transition.getAction();
+
                         if (action instanceof Number) {
+                            // Try to cast to number automatically
                             return ((Number) action).doubleValue();
+                        } else if (action instanceof String){
+                            // Try to parse to a number
+                            try {
+                                return Double.parseDouble((String) action);
+                            } catch (NumberFormatException e){
+                                throw new IllegalArgumentException("Exception ocurred when trying" +
+                                        "to cast " + action + " to a number. Use the method " +
+                                        "extractCostsFromEdges to define a custom evaluation strategy.", e);
+                            }
                         } else {
+                            // TODO: Throw exception instead?
                             // Assume uniform costs.
                             return 1d;
                             /*

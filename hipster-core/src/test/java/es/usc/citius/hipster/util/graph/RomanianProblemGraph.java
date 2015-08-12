@@ -17,9 +17,18 @@
 package es.usc.citius.hipster.util.graph;
 
 
+import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterGraph;
+import es.usc.citius.hipster.graph.UndirectedEdge;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 public class RomanianProblemGraph {
     private HipsterGraph<RomanianProblem.City, Double> graph;
@@ -31,7 +40,11 @@ public class RomanianProblemGraph {
 
     @Test
     public void testAradRoads() {
-        System.out.println(graph.edgesOf(RomanianProblem.City.Arad));
-        System.out.println(graph.edgesOf(RomanianProblem.City.Sibiu));
+        Set<GraphEdge<RomanianProblem.City, Double>> roads = Sets.newHashSet(graph.edgesOf(RomanianProblem.City.Arad));
+        Set<GraphEdge<RomanianProblem.City, Double>> expected = new HashSet<>();
+        expected.add(new UndirectedEdge<RomanianProblem.City, Double>(RomanianProblem.City.Arad, RomanianProblem.City.Zerind, 75d));
+        expected.add(new UndirectedEdge<RomanianProblem.City, Double>(RomanianProblem.City.Arad, RomanianProblem.City.Sibiu, 140d));
+        expected.add(new UndirectedEdge<RomanianProblem.City, Double>(RomanianProblem.City.Arad, RomanianProblem.City.Timisoara, 118d));
+        assertEquals(expected, roads);
     }
 }

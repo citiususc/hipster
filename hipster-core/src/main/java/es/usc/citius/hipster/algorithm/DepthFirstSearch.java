@@ -20,6 +20,7 @@ import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
 
@@ -37,8 +38,8 @@ import java.util.Stack;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> expander;
+    protected N initialNode;
+    protected NodeExpander<A,S,N> expander;
 
     // TODO; DRY common structures with other algorithms (like IDA)
 
@@ -47,11 +48,11 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         this.initialNode = initialNode;
     }
 
-    private class StackFrameNode {
+    public class StackFrameNode {
         // Iterable used to compute neighbors of the current node
-        java.util.Iterator<N> successors;
+        private java.util.Iterator<N> successors;
         // Current search node
-        N node;
+        private N node;
         // Boolean value to check if the node is still unvisited
         // in the stack or not
         boolean visited = false;
@@ -67,18 +68,34 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
             this.node = node;
             this.successors = expander.expand(node).iterator();
         }
+
+        public N getNode() {
+            return node;
+        }
+
+        public java.util.Iterator<N> getSuccessors() {
+            return successors;
+        }
+
+        public boolean isVisited() {
+            return visited;
+        }
+
+        public boolean isProcessed() {
+            return processed;
+        }
     }
 
     /**
      * DFS iterator used to expand always the deepest non-visited node.
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
-        private StackFrameNode next;
-        private Set<S> closed = new HashSet<S>();
-        private boolean graphSupport = true;
+        protected Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
+        protected StackFrameNode next;
+        protected Set<S> closed = new HashSet<S>();
+        protected boolean graphSupport = true;
 
-        private Iterator(){
+        protected Iterator(){
             this.stack.add(new StackFrameNode(initialNode));
         }
 
@@ -117,7 +134,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
 
 
-        private StackFrameNode nextUnvisited(){
+        protected StackFrameNode nextUnvisited(){
             StackFrameNode nextNode;
             do {
                 nextNode = processNextNode();
@@ -134,7 +151,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         }
 
 
-        private StackFrameNode processNextNode(){
+        protected StackFrameNode processNextNode(){
 
             if (stack.isEmpty()) return null;
 

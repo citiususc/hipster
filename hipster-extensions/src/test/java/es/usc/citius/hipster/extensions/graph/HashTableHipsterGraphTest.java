@@ -14,9 +14,11 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.extensions.graph;
 
 import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.UndirectedEdge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,12 +30,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class HashBasedHipsterGraphTest {
-    protected HashBasedHipsterGraph<String, Double> graph;
+public class HashTableHipsterGraphTest {
+    protected HashTableHipsterGraph<String, Double> graph;
 
     @Before
     public void setUp(){
-        graph = HashBasedHipsterGraph.create();
+        graph = HashTableHipsterGraph.create();
         graph.connect("A", "B", 4d);
         graph.connect("A", "C", 2d);
         graph.connect("B", "C", 5d);
@@ -70,13 +72,13 @@ public class HashBasedHipsterGraphTest {
     @Test
     public void testEdges() throws Exception {
         Set<GraphEdge<String,Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("A","B",4d));
-        expected.add(new GraphEdge<String, Double>("A","C",2d));
-        expected.add(new GraphEdge<String, Double>("B","C",5d));
-        expected.add(new GraphEdge<String, Double>("B","D",10d));
-        expected.add(new GraphEdge<String, Double>("C","E",3d));
-        expected.add(new GraphEdge<String, Double>("D","F",11d));
-        expected.add(new GraphEdge<String, Double>("E","D",4d));
+        expected.add(new UndirectedEdge<String, Double>("A","B",4d));
+        expected.add(new UndirectedEdge<String, Double>("A","C",2d));
+        expected.add(new UndirectedEdge<String, Double>("B","C",5d));
+        expected.add(new UndirectedEdge<String, Double>("B","D",10d));
+        expected.add(new UndirectedEdge<String, Double>("C","E",3d));
+        expected.add(new UndirectedEdge<String, Double>("D","F",11d));
+        expected.add(new UndirectedEdge<String, Double>("E","D",4d));
         assertEquals(expected, Sets.newHashSet(graph.edges()));
     }
 
@@ -89,9 +91,9 @@ public class HashBasedHipsterGraphTest {
     @Test
     public void testEdgesOf() throws Exception {
         Set<GraphEdge<String,Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("B","D",10d));
-        expected.add(new GraphEdge<String, Double>("A","B",4d));
-        expected.add(new GraphEdge<String, Double>("B","C",5d));
+        expected.add(new UndirectedEdge<String, Double>("B","D",10d));
+        expected.add(new UndirectedEdge<String, Double>("A","B",4d));
+        expected.add(new UndirectedEdge<String, Double>("B","C",5d));
         assertEquals(expected, graph.edgesOf("B"));
     }
 

@@ -14,30 +14,30 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
 /**
- * Defines a graph in terms of edges and vertices.
+ * Basic definition of the read-only methods for a graph in terms of edges and vertices.
  * @param <V> vertex type.
  * @param <E> edge type.
  */
 public interface HipsterGraph<V,E> {
     /**
-     * Return the edges.
-     * @return
+     * Returns an {@link Iterable} of the edges in the graph.
+     * @return an iterable of {@link GraphEdge} in the graph
      */
     Iterable<GraphEdge<V,E>> edges();
 
     /**
-     * Return the vertices.
-     * @return
+     * Returns an iterable of the vertices in the graph.
+     * @return iterable of vertices
      */
     Iterable<V> vertices();
 
     /**
      * Return all the edges that are connected with the given vertex.
-     * @param vertex
-     * @return
+     * @param vertex vertex to be queried
+     * @return an iterable of {@link GraphEdge}s connected to the vertex
      */
     Iterable<GraphEdge<V,E>> edgesOf(V vertex);
 

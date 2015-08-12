@@ -16,12 +16,9 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.util.Predicate;
 
 import java.util.*;
 
@@ -40,8 +37,9 @@ import java.util.*;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> nodeExpander;
+
+    protected N initialNode;
+    protected NodeExpander<A,S,N> nodeExpander;
 
     public MultiobjectiveLS(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -50,18 +48,20 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
 
     /**
      * MultiobjectiveLS iterator. It expands one state at a time and updates
-     * an internal table (nonDominated) which stores all non-dominated paths.
+     * an internal connected (nonDominated) which stores all non-dominated paths.
      * In order to find all non-dominated shortest path, the algorithm must be
      * executed until {@code iterator.hasNext() == false}. Paths can be recovered
      * with {@code iterator.getNonDominated.get(goalState)}
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Queue<N> queue = new LinkedList<N>();
-        public Multimap<S, N> nonDominated;
+        protected Queue<N> queue = new LinkedList<N>();
+        public Map<S, Collection<N>> nonDominated;
+        //auxiliar variable which stores an empty list to avoid nullable values in code
+        private final Collection<N> EMPTYLIST = new ArrayList<N>();
 
-        public Iterator(){
+        protected Iterator(){
             queue = new PriorityQueue<N>();
-            this.nonDominated = HashMultimap.create();
+            this.nonDominated = new HashMap<S, Collection<N>>();
             this.queue.add(initialNode);
         }
 
@@ -86,7 +86,13 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             for (N candidate : nodeExpander.expand(current)) {
                 // Take non-dominated (nd) nodes associated to the current state
                 // (i.e., all non-dominated paths from start to currentState
-                Collection<N> ndNodes = this.nonDominated.get(candidate.state());
+                Collection<N> ndNodes = EMPTYLIST;
+                if(!nonDominated.containsKey(candidate.state())){
+                    nonDominated.put(candidate.state(), new ArrayList<N>());
+                }
+                else{
+                    ndNodes = nonDominated.get(candidate.state());
+                }
                 // Check if the node is non-dominated
                 if (!isDominated(candidate, ndNodes)) {
                     // Assign the candidate to the queue
@@ -108,7 +114,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             throw new UnsupportedOperationException();
         }
 
-        private Collection<N> dominatedBy(N node, Iterable<N> nonDominated) {
+        protected Collection<N> dominatedBy(N node, Iterable<N> nonDominated) {
             Collection<N> dominated = new HashSet<N>();
             for (N n : nonDominated) {
                 if (node.getScore().compareTo(n.getScore())<0) {
@@ -118,7 +124,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             return dominated;
         }
 
-        private boolean isDominated(N node, Iterable<N> nonDominated) {
+        protected boolean isDominated(N node, Iterable<N> nonDominated) {
             // Compare all non-dominated nodes with node
             for (N nd : nonDominated) {
                 if (nd.getScore().compareTo(node.getScore())< 0) {
@@ -132,7 +138,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
             return queue;
         }
 
-        public Multimap<S, N> getNonDominated() {
+        public Map<S, Collection<N>> getNonDominated() {
             return nonDominated;
         }
     }
@@ -141,7 +147,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator it = new Iterator();
-        Stopwatch w = Stopwatch.createStarted();
+        long beginTime = System.currentTimeMillis();
         N currentNode;
         N goalNode = null;
         while(it.hasNext()){
@@ -151,12 +157,12 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
                 goalNode = currentNode;
             }
         }
-        w.stop();
+        long elapsed = System.currentTimeMillis() - beginTime;
         if (goalNode != null) {
             Collection<N> solutions = it.nonDominated.get(goalNode.state());
-            return new SearchResult(solutions, iteration, w);
+            return new SearchResult(solutions, iteration, elapsed);
         }
-        return new SearchResult(Collections.<N>emptyList(), iteration, w);
+        return new SearchResult(Collections.<N>emptyList(), iteration, elapsed);
     }
 
     @Override

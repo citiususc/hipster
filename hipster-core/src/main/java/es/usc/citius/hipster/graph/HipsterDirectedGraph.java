@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela (USC).
+ * Copyright 2014 CITIUS <http://citius.usc.es>, University of Santiago de Compostela.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -14,7 +14,15 @@
  *    limitations under the License.
  */
 
+package es.usc.citius.hipster.graph;
+
 /**
- * Simple Graph model used for algorithm validation.
+ * A simple representation of a directed graph with two methods for
+ * retrieving the outgoing edges and the incoming edges for a vertex.
+ * @param <V> vertex type.
+ * @param <E> edge type.
  */
-package es.usc.citius.hipster.util.graph;
+public interface HipsterDirectedGraph<V,E> extends HipsterGraph<V,E> {
+    Iterable<GraphEdge<V,E>> outgoingEdgesOf(V vertex);
+    Iterable<GraphEdge<V,E>> incomingEdgesOf(V vertex);
+}

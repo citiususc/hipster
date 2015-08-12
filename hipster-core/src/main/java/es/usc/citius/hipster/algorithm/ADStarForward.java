@@ -63,9 +63,9 @@ import java.util.Queue;
  */
 public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>> extends Algorithm<A, S, N> {
 
-    private S begin;
-    private Collection<S> goals;
-    private ADStarNodeExpander<A, S, C, N> expander;
+    protected S begin;
+    protected Collection<S> goals;
+    protected ADStarNodeExpander<A, S, C, N> expander;
 
     /**
      * Create an instance of the algorithm with a begin, a goal and a component to
@@ -103,15 +103,15 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
      */
     public class Iterator implements java.util.Iterator<N> {
         //queues used by the algorithm
-        private Map<S, N> open;
-        private Map<S, N> closed;
-        private Map<S, N> incons;
-        private Iterable<Transition<A, S>> transitionsChanged;
-        private Queue<N> queue;
-        private final N beginNode;
-        private final Collection<N> goalNodes;
+        protected Map<S, N> open;
+        protected Map<S, N> closed;
+        protected Map<S, N> incons;
+        protected Iterable<Transition<A, S>> transitionsChanged;
+        protected Queue<N> queue;
+        protected final N beginNode;
+        protected final Collection<N> goalNodes;
 
-        public Iterator() {
+        protected Iterator() {
             //initialize nodes
             this.beginNode = expander.makeNode(null, new Transition<A, S>(null, begin));
             //initialize goal node collection
@@ -146,7 +146,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
          *
          * @param node instance of node to add
          */
-        private void insertOpen(N node) {
+        protected void insertOpen(N node) {
             this.open.put(node.state(), node);
             this.queue.offer(node);
         }
@@ -157,7 +157,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
          *
          * @return most promising node
          */
-        private N takePromising() {
+        protected N takePromising() {
             while (!queue.isEmpty()) {
                 N head = queue.peek();
                 if (!open.containsKey(head.state())) {
@@ -174,7 +174,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
          *
          * @param node instance of node
          */
-        private void updateQueues(N node) {
+        protected void updateQueues(N node) {
             S state = node.state();
             if (node.getV().compareTo(node.getG()) != 0) {
                 if (!this.closed.containsKey(state)) {
@@ -220,6 +220,12 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
                 //s removed from OPEN
                 open.remove(state);
                 //this.queue.remove(current);
+                //expand successors
+                for (N successorNode : expander.expand(current)) {
+                    if(successorNode.isDoUpdate()){
+                        updateQueues(successorNode);
+                    }
+                }
                 //if v(s) > g(s)
                 if (current.isConsistent()) {
                     //v(s) = g(s)
@@ -230,12 +236,6 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
                     //v(s) = Infinity
                     expander.setMaxV(current);
                     updateQueues(current);
-                }
-
-                for (N successorNode : expander.expand(current)) {
-                    if(successorNode.isDoUpdate()){
-                        updateQueues(successorNode);
-                    }
                 }
             } else {
                 // for all directed edges (u, v) with changed edge costs

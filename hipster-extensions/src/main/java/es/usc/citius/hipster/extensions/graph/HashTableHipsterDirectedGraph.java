@@ -13,22 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.extensions.graph;
 
 import com.google.common.base.Preconditions;
+import es.usc.citius.hipster.graph.DirectedEdge;
+import es.usc.citius.hipster.graph.GraphEdge;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 
 /**
  * Implementation of a HipsterDirectedGraph using a Guava Hash Table.
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
-public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
+public class HashTableHipsterDirectedGraph<V,E> extends HashTableHipsterGraph<V,E> implements HipsterDirectedGraph<V,E> {
 
     @Override
     public GraphEdge<V,E> connect(V v1, V v2, E value){
         Preconditions.checkArgument(v1 != null && v2 != null, "Vertices cannot be null");
-        GraphEdge<V,E> edge = new GraphEdge<V, E>(v1, v2, value, true);
+        GraphEdge<V,E> edge = new DirectedEdge<V, E>(v1, v2, value);
         graphTable.put(v1, v2, edge);
         disconnected.remove(v1);
         disconnected.remove(v2);
@@ -45,7 +47,7 @@ public class HashBasedHipsterDirectedGraph<V,E> extends HashBasedHipsterGraph<V,
         return graphTable.column(vertex).values();
     }
 
-    public static <V,E> HashBasedHipsterDirectedGraph<V, E> create() {
-        return new HashBasedHipsterDirectedGraph<V, E>();
+    public static <V,E> HashTableHipsterDirectedGraph<V, E> create() {
+        return new HashTableHipsterDirectedGraph<V, E>();
     }
 }

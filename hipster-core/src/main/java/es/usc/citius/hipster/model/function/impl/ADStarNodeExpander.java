@@ -90,6 +90,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     @Override
     public Iterable<N> expand(N node) {
         Collection<N> nodes = new ArrayList<N>();
+        boolean consistency = node.isConsistent();
         //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
         for (Transition<A, S> transition : successorFunction.transitionsFrom(node.state())) {
             N successorNode = visited.get(transition.getState());
@@ -98,7 +99,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                 visited.put(transition.getState(), successorNode);
             }
             //if consistent
-            if (node.isConsistent()) {
+            if (consistency) {
                 //if g(s') > g(s) + c(s, s')
                 // bp(s') = s
                 // g(s') = g(s) + c(s, s')

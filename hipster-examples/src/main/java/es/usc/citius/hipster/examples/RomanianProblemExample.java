@@ -1,9 +1,9 @@
 package es.usc.citius.hipster.examples;
 
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 
 /**
  * Implementation of the Romania problem as described in

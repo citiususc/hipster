@@ -17,7 +17,6 @@
 package es.usc.citius.hipster.thirdparty.graphs;
 
 
-import com.google.common.base.Function;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -25,15 +24,15 @@ import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.blueprints.oupls.jung.GraphJung;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.thirdparty.graphs.jung.JUNGHipsterDirectedGraphAdapter;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.util.Function;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -99,7 +98,7 @@ public class JUNGHipsterGraphAdapterTest {
                         .in(adaptedGraph)
                         .extractCostFromEdges(new Function<Edge, Double>() {
                             @Override
-                            public Double apply(@Nullable Edge edge) {
+                            public Double apply(Edge edge) {
                                 return edge.getProperty("weight");
                             }
                         })

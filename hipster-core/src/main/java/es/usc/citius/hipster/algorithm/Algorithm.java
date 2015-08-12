@@ -17,9 +17,8 @@
 package es.usc.citius.hipster.algorithm;
 
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.util.Predicate;
 
 import java.util.*;
 
@@ -40,30 +39,29 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
      * Holds information about the search process.
      */
     public final class SearchResult {
-        Stopwatch stopwatch;
-        int iterations;
-        Collection<N> goalNodes;
+        private int iterations;
+        private Collection<N> goalNodes;
+        private long elapsed;
 
 
-        public SearchResult(N goalNode, int iterations, Stopwatch stopwatch) {
+        public SearchResult(N goalNode, int iterations, long elapsed) {
             this.goalNodes = Collections.singletonList(goalNode);
             this.iterations = iterations;
-            this.stopwatch = stopwatch;
+            this.elapsed = elapsed;
         }
 
-        public SearchResult(Collection<N> goalNodes, int iterations, Stopwatch stopwatch) {
+        public SearchResult(Collection<N> goalNodes, int iterations, long elapsed) {
             this.goalNodes = goalNodes;
             this.iterations = iterations;
-            this.stopwatch = stopwatch;
+            this.elapsed = elapsed;
         }
 
         /**
-         * Returns a stopped {@link Stopwatch} with the total search time.
-         * Use stopwatch.toString() to print the formatted time.
-         * @return stopwatch with the total search time.
+         * @return the elapsed time (in milliseconds) between the begin of the search and the
+         * search result generation.
          */
-        public Stopwatch getStopwatch() {
-            return stopwatch;
+        public long getElapsed() {
+            return elapsed;
         }
 
         /**
@@ -99,7 +97,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             final String ls = System.getProperty("line.separator");
             StringBuilder builder = new StringBuilder();
             builder.append("Total solutions: ").append(goalNodes.size()).append(ls);
-            builder.append("Total time: ").append(getStopwatch().toString()).append(ls);
+            builder.append("Total time: ").append(getElapsed()).append(ls);
             builder.append("Total number of iterations: ").append(getIterations()).append(ls);
             // Take solutions
             int solution=1;
@@ -149,7 +147,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator<N> it = iterator();
-        Stopwatch w = Stopwatch.createStarted();
+        long begin = System.currentTimeMillis();
         N currentNode = null;
         while(it.hasNext()){
             iteration++;
@@ -159,8 +157,8 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             }
 
         }
-        w.stop();
-        return new SearchResult(currentNode, iteration, w);
+        long end = System.currentTimeMillis();
+        return new SearchResult(currentNode, iteration, end - begin);
     }
 
     /**
@@ -202,7 +200,6 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         for(N n : node.path()){
             states.add(n.state());
         }
-        Collections.reverse(states);
         return states;
     }
 

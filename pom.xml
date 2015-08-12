@@ -13,15 +13,15 @@
         <!-- Point to the root dir to locate custom templates for javadoc -->
         <hipster.root.dir>${project.basedir}</hipster.root.dir>
         <!-- Site config -->
-        <site.url>http://citiususc.github.io/hipster</site.url>
+        <site.url>http://hipster4j.org</site.url>
         <!-- Hipster version -->
-        <hipster.version>1.0.0-rc1</hipster.version>
+        <hipster.version>1.0.0-rc2</hipster.version>
     </properties>
 
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-rc1</version>
+    <version>1.0.0-rc2</version>
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
@@ -33,6 +33,7 @@
         <module>hipster-all</module>
         <module>hipster-test</module>
         <module>hipster-third-party-graphs</module>
+        <module>hipster-extensions</module>
     </modules>
 
     <organization>
@@ -91,18 +92,18 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.11</version>
+                <version>4.12</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>16.0.1</version>
+                <version>18.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
-                <version>2.0.3</version>
+                <version>3.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -210,10 +211,10 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.3</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
@@ -236,6 +237,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -266,11 +268,24 @@
                 <artifactId>maven-site-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+
             <!-- Plugin to generate reports of test coverage -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.6</version>
+                <configuration>
+                    <format>xml</format>
+                    <maxmem>256m</maxmem>
+                    <!-- aggregated reports for multi-module projects -->
+                    <aggregate>true</aggregate>
+                    <check />
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -278,28 +293,16 @@
     <reporting>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.5.2</version>
                 <configuration>
-                    <anonymousConnection>scm:git:git@github.com:citiususc/hipster.git</anonymousConnection>
-                    <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
+                    <check />
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
                 </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>summary</report>
-                            <report>license</report>
-                            <report>modules</report>
-                            <report>project-team</report>
-                            <report>scm</report>
-                            <report>issue-tracking</report>
-                            <report>dependencies</report>
-                            <report>dependency-convergence</report>
-                            <report>plugins</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
             </plugin>
         </plugins>
     </reporting>

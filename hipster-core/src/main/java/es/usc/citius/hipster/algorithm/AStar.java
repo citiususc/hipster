@@ -26,7 +26,7 @@ import java.util.*;
  * Implementation of the A* algorithm. The A* algorithm extends the original
  * Dijkstra's algorithm by including heuristics to improve the search. By default,
  * the implementation uses a {@link java.util.PriorityQueue} for the nodes, which requires
- * {@literal O(n*log n)} time for insertions. The queue can be changed to use another
+ * {@literal O(log n)} time for insertions. The queue can be changed to use another
  * type of queue, for example a fibonacci heap as a queue, which works with constant amortized
  * time for insertions.
  * </p>
@@ -43,8 +43,8 @@ import java.util.*;
  */
 public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
 
-    private final N initialNode;
-    private final NodeExpander<A,S,N> expander;
+    protected final N initialNode;
+    protected final NodeExpander<A,S,N> expander;
 
     /**
      * Default constructor for ADStarForward. Requires the initial state, the successor function to generate
@@ -67,11 +67,11 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
      * Internal iterator that implements all the logic of the A* search
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Map<S, N> open;
-        private Map<S, N> closed;
-        private Queue<N> queue;
+        protected Map<S, N> open;
+        protected Map<S, N> closed;
+        protected Queue<N> queue;
 
-        private Iterator() {
+        protected Iterator() {
             open = new HashMap<S, N>();
             closed = new HashMap<S, N>();
             queue = new PriorityQueue<N>();
@@ -86,7 +86,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
             return !open.values().isEmpty();
         }
 
-        private N takePromising() {
+        protected N takePromising() {
             // Poll until a valid state is found
             N node = queue.poll();
             while (!open.containsKey(node.state())) {

@@ -14,9 +14,10 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.extensions.graph;
 
 import com.google.common.collect.Sets;
+import es.usc.citius.hipster.graph.DirectedEdge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,13 +27,13 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 
-public class HashBasedHipsterDirectedGraphTest extends HashBasedHipsterGraphTest {
-    private HashBasedHipsterDirectedGraph<String, Double> directedGraph;
+public class HashTableHipsterDirectedGraphTest extends HashTableHipsterGraphTest {
+    private HashTableHipsterDirectedGraph<String, Double> directedGraph;
 
     @Before
     @Override
     public void setUp() {
-        directedGraph = HashBasedHipsterDirectedGraph.create();
+        directedGraph = HashTableHipsterDirectedGraph.create();
         directedGraph.connect("A", "B", 4d);
         directedGraph.connect("A", "C", 2d);
         directedGraph.connect("B", "C", 5d);
@@ -51,41 +52,41 @@ public class HashBasedHipsterDirectedGraphTest extends HashBasedHipsterGraphTest
 
     @Test
     public void testOutgoingEdgesOf() throws Exception {
-        Set<GraphEdge<String, Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("B", "C", 5d, true));
-        expected.add(new GraphEdge<String, Double>("B", "D", 10d, true));
+        Set<DirectedEdge<String, Double>> expected = new HashSet<DirectedEdge<String, Double>>();
+        expected.add(new DirectedEdge<String, Double>("B", "C", 5d));
+        expected.add(new DirectedEdge<String, Double>("B", "D", 10d));
         assertEquals(expected, Sets.newHashSet(directedGraph.outgoingEdgesOf("B")));
     }
 
     @Test
     public void testIncomingEdgesOf() throws Exception {
-        Set<GraphEdge<String, Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("B", "C", 5d, true));
-        expected.add(new GraphEdge<String, Double>("A", "C", 2d, true));
+        Set<DirectedEdge<String, Double>> expected = new HashSet<DirectedEdge<String, Double>>();
+        expected.add(new DirectedEdge<String, Double>("B", "C", 5d));
+        expected.add(new DirectedEdge<String, Double>("A", "C", 2d));
         assertEquals(expected, Sets.newHashSet(directedGraph.incomingEdgesOf("C")));
     }
 
     @Test
     @Override
     public void testEdges() throws Exception {
-        Set<GraphEdge<String, Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("A", "B", 4d, true));
-        expected.add(new GraphEdge<String, Double>("A", "C", 2d, true));
-        expected.add(new GraphEdge<String, Double>("B", "C", 5d, true));
-        expected.add(new GraphEdge<String, Double>("B", "D", 10d, true));
-        expected.add(new GraphEdge<String, Double>("C", "E", 3d, true));
-        expected.add(new GraphEdge<String, Double>("D", "F", 11d, true));
-        expected.add(new GraphEdge<String, Double>("E", "D", 4d, true));
+        Set<DirectedEdge<String, Double>> expected = new HashSet<DirectedEdge<String, Double>>();
+        expected.add(new DirectedEdge<String, Double>("A", "B", 4d));
+        expected.add(new DirectedEdge<String, Double>("A", "C", 2d));
+        expected.add(new DirectedEdge<String, Double>("B", "C", 5d));
+        expected.add(new DirectedEdge<String, Double>("B", "D", 10d));
+        expected.add(new DirectedEdge<String, Double>("C", "E", 3d));
+        expected.add(new DirectedEdge<String, Double>("D", "F", 11d));
+        expected.add(new DirectedEdge<String, Double>("E", "D", 4d));
         assertEquals(expected, Sets.newHashSet(graph.edges()));
     }
 
     @Test
     @Override
     public void testEdgesOf() throws Exception {
-        Set<GraphEdge<String,Double>> expected = new HashSet<GraphEdge<String, Double>>();
-        expected.add(new GraphEdge<String, Double>("B", "D", 10d, true));
-        expected.add(new GraphEdge<String, Double>("A", "B", 4d, true));
-        expected.add(new GraphEdge<String, Double>("B", "C", 5d, true));
+        Set<DirectedEdge<String,Double>> expected = new HashSet<DirectedEdge<String, Double>>();
+        expected.add(new DirectedEdge<String, Double>("B", "D", 10d));
+        expected.add(new DirectedEdge<String, Double>("A", "B", 4d));
+        expected.add(new DirectedEdge<String, Double>("B", "C", 5d));
         assertEquals(expected, graph.edgesOf("B"));
     }
 }

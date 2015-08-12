@@ -1,6 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
-A powerful and friendly heuristic search library implemented in pure java.
+A powerful and friendly heuristic search library implemented in Java.
 
 ## What's Hipster?
 
@@ -20,14 +20,14 @@ The current version of the library comes with some very well-known and wide used
         * Dijkstra.
         * Bellman-Ford.
     * Informed search:
-        * A\*. \\A star\\
-        * IDA\*: Iterative Deepening A\*. \\IDA star\\
-        * AD\*: Anytime Dynamic A\*. \\AD star\\
+        * A star (A*).
+        * IDA star (IDA*), Iterative Deepening A*.
+        * AD star (AD*): Anytime Dynamic A*.
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
     * Other (experimental implementations)
-        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling            algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de                Coimbra, Portugal, Tech. Rep. TR-99/005
+        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i>
 * 3rd party adapters:
     * [Java Universal/Graph (JUNG)](http://jung.sourceforge.net/) adapter.
 
@@ -101,7 +101,8 @@ we use the GraphSearchProblem to create the required components to solve it usin
 ```java
 // Create a simple weighted directed graph with Hipster where
 // vertices are Strings and edge values are just doubles
-HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
+HipsterDirectedGraph<String,Double> graph = 
+    GraphBuilder.<String,Double>create()
      .connect("A").to("B").withEdge(4d)
      .connect("A").to("C").withEdge(2d)
      .connect("B").to("C").withEdge(5d)
@@ -109,7 +110,7 @@ HipsterDirectedGraph<String,Double> graph = GraphBuilder.create()
      .connect("C").to("E").withEdge(3d)
      .connect("D").to("F").withEdge(11d)
      .connect("E").to("D").withEdge(4d)
-     .buildDirectedGraph();
+     .createDirectedGraph();
 
 // Create the search problem. For graph problems, just use
 // the GraphSearchProblem util class to generate the problem with ease.

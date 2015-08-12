@@ -17,11 +17,11 @@
 package es.usc.citius.lab.hipster.algorithm;
 
 import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.graph.GraphBuilder;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.function.BinaryFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
-import es.usc.citius.hipster.util.graph.GraphBuilder;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
-import es.usc.citius.hipster.util.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.graph.HipsterDirectedGraph;
 import org.junit.Test;
 
 /**

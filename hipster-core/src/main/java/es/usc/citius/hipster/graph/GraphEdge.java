@@ -14,31 +14,26 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.util.graph;
+package es.usc.citius.hipster.graph;
 
 
 /**
- * Dumb class that can be used to generate unique weighted edges for a graph.
- * Do not use this for production code!
- * 
- * @author Pablo Rodríguez Mier
+ * Hipster graph edge implementation to represent edges (or arcs) of a directed or
+ * undirected graph.
+ *
+ * @param <V> vertex type.
+ * @param <E> edge type.
  */
-public class WeightedEdge extends UniqueEdge<Double> {
+public interface GraphEdge<V,E> {
+    enum Type { DIRECTED, UNDIRECTED }
 
-    public WeightedEdge(Double value) {
-        super(value);
-    }
+    V getVertex1();
+    V getVertex2();
+    E getEdgeValue();
+    Type getType();
 
-    public static WeightedEdge create(Double value){
-        return new WeightedEdge(value);
-    }
-
-    @Override
-    public String toString() {
-        return "WeightedEdge{" +
-                "value=" + this.getValue() +
-                ", edgeId='" + this.getEdgeId() + '\'' +
-                '}';
-    }
-
+//    @Override
+//    public String toString() {
+//        return getVertex1() + " ---(" + edgeValue + ")---" + (isDirected() ? "> " : " ") + getVertex2();
+//    }
 }

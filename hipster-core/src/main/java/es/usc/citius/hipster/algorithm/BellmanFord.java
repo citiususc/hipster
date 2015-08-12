@@ -16,10 +16,9 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Stopwatch;
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.util.Predicate;
 import es.usc.citius.lab.hipster.collections.HashQueue;
 
 import java.util.Collections;
@@ -46,8 +45,8 @@ import java.util.Queue;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Algorithm<A,S,N> {
-    private N initialNode;
-    private NodeExpander<A,S,N> nodeExpander;
+    protected N initialNode;
+    protected NodeExpander<A,S,N> nodeExpander;
 
     public BellmanFord(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -60,10 +59,10 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
      * when the queue is fully processed.
      */
     public class Iterator implements java.util.Iterator<N> {
-        private Queue<S> queue;
-        private Map<S, N> explored;
+        protected Queue<S> queue;
+        protected Map<S, N> explored;
 
-        private Iterator(){
+        protected Iterator(){
             this.queue = new HashQueue<S>();
             this.explored = new HashMap<S, N>();
             this.queue.add(initialNode.state());
@@ -76,7 +75,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
          *
          * @param node node to update the queue status
          */
-        private void enqueue(N node) {
+        protected void enqueue(N node) {
             S state = node.state();
             if (!this.queue.contains(state)) {
                 this.queue.add(state);
@@ -90,7 +89,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
          *
          * @return node of the processing queue head
          */
-        private N dequeue() {
+        protected N dequeue() {
             S state = this.queue.poll();
             return this.explored.get(state);
         }
@@ -133,24 +132,23 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     public SearchResult search(Predicate<N> condition){
         int iteration = 0;
         Iterator it = iterator();
-        Stopwatch w = Stopwatch.createStarted();
+        long begin = System.currentTimeMillis();
         N currentNode = null;
         N goalNode = null;
         while(it.hasNext()){
             iteration++;
-            it.next();
+            currentNode = it.next();
             if (condition.apply(currentNode)) {
                 goalNode = currentNode;
             }
-
         }
-        w.stop();
+        long end = System.currentTimeMillis();
         if (goalNode != null) {
             N goal = it.explored.get(goalNode.state());
-            return new SearchResult(goal, iteration, w);
+            return new SearchResult(goal, iteration, end - begin);
         }
 
-        return new SearchResult(Collections.<N>emptyList(), iteration, w);
+        return new SearchResult(Collections.<N>emptyList(), iteration, end - begin);
     }
 
     @Override
