@@ -68,21 +68,21 @@ You can use the latest (unstable) version of Hipster under development. Just add
 </dependencies>
 ```
 
-#### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
+#### Releases
 
-Current stable release is v1.0.0-rc1. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
+Current stable release is v1.0.0-rc2. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
 
 ```xml
 <dependencies>
   <!--
     Add this dependency under your pom.xml <dependencies> section to add
     all the dependencies of Hipster to your project. Add hipster-core
-    instead of hipster-all for basic functionality.
+    instead of hipster-all for core functionality.
   -->
   <dependency>
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-all</artifactId>
-    <version>1.0.0-rc1</version>
+    <version>1.0.0-rc2</version>
   </dependency>
 </dependencies>
 ```
