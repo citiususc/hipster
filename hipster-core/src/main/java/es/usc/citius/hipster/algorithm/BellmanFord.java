@@ -138,7 +138,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         while(it.hasNext()){
             iteration++;
             currentNode = it.next();
-            if (condition.apply(currentNode)) {
+            if (goalNode == null && condition.apply(currentNode)) {
                 goalNode = currentNode;
             }
         }
@@ -154,5 +154,21 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     @Override
     public Iterator iterator() {
         return new Iterator();
+    }
+
+    public N getInitialNode() {
+        return initialNode;
+    }
+
+    public void setInitialNode(N initialNode) {
+        this.initialNode = initialNode;
+    }
+
+    public NodeExpander<A, S, N> getNodeExpander() {
+        return nodeExpander;
+    }
+
+    public void setNodeExpander(NodeExpander<A, S, N> nodeExpander) {
+        this.nodeExpander = nodeExpander;
     }
 }
