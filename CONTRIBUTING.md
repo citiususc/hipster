@@ -2,10 +2,10 @@
 
 First of all, thank you so much for being interested in contributing to Hipster4j!. This document will guide you through this process. You can contribute in different ways:
 
-Reporting issues
-Fixing bugs or developing new features
-Creating new examples
-Sending a motivating email telling us how do you like the library (or dislike) :)
+- Reporting issues
+- Fixing bugs or developing new features
+- Creating new examples
+- Sending a motivating email telling us how do you like the library (or dislike) :)
 
 ## Issues
 Feel free to open new issues or participating in the discussion of the existing ones on 
