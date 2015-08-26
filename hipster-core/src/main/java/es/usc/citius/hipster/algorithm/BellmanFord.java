@@ -47,6 +47,7 @@ import java.util.Queue;
 public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Algorithm<A,S,N> {
     protected N initialNode;
     protected NodeExpander<A,S,N> nodeExpander;
+    protected boolean checkNegativeCycles = true;
 
     public BellmanFord(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -104,6 +105,9 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         public N next() {
             // Take the next node
             N currentNode = dequeue();
+            if (checkNegativeCycles && currentNode.pathSize() > explored.size()){
+                throw new NegativeCycleException();
+            }
             for (N successor : nodeExpander.expand(currentNode)) {
                 // Check if there is any improvement in the old cost
                 N previousNode = this.explored.get(successor.state());
@@ -170,5 +174,13 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
 
     public void setNodeExpander(NodeExpander<A, S, N> nodeExpander) {
         this.nodeExpander = nodeExpander;
+    }
+
+    public boolean isCheckNegativeCycles() {
+        return checkNegativeCycles;
+    }
+
+    public void setCheckNegativeCycles(boolean checkNegativeCycles) {
+        this.checkNegativeCycles = checkNegativeCycles;
     }
 }

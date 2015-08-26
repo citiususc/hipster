@@ -16,26 +16,79 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
+import es.usc.citius.hipster.algorithm.Algorithm;
+import es.usc.citius.hipster.algorithm.Hipster;
+import es.usc.citius.hipster.algorithm.NegativeCycleException;
 import es.usc.citius.hipster.graph.GraphBuilder;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
+import es.usc.citius.hipster.graph.HashBasedHipsterGraph;
 import es.usc.citius.hipster.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  */
 public class BellmanFordTest {
 
-    @Test
+    @Test(expected = NegativeCycleException.class)
     public void negativeCycleTest(){
-        // Create a graph with negative cycles
-        HipsterDirectedGraph<String, Double> graph =
-                GraphBuilder.create()
-                .connect("A").to("B").withEdge(1d)
-                .connect("B").to("C").withEdge(1d)
-                .connect("C").to("B").withEdge(-2d)
-                .connect("C").to("D").withEdge(1d)
-                .buildDirectedGraph();
-        //TODO; Complete test
-        //System.out.println(Hipster.createBellmanFord(GraphSearchProblem.from("A").to("D").in(graph)).search());
+        // Create a simple graph with negative cycles
+        HipsterDirectedGraph<Integer,Integer> g =
+                GraphBuilder.<Integer, Integer>create()
+                .connect(1).to(2).withEdge(1)
+                .connect(2).to(3).withEdge(1)
+                .connect(3).to(1).withEdge(-3)
+                .connect(3).to(4).withEdge(2)
+                .createDirectedGraph();
+
+        // Test search
+        Hipster.createBellmanFord(GraphSearchProblem.startingFrom(1).in(g).takeCostsFromEdges().build()).search(4);
     }
+
+    @Test
+    public void negativeWeightedGraphTest(){
+        HipsterDirectedGraph<String,Integer> g =
+                GraphBuilder.<String, Integer>create()
+                        .connect("s").to("A").withEdge(5)
+                        .connect("s").to("C").withEdge(-2)
+                        .connect("A").to("B").withEdge(1)
+                        .connect("B").to("C").withEdge(2)
+                        .connect("B").to("t").withEdge(3)
+                        .connect("B").to("D").withEdge(7)
+                        .connect("C").to("A").withEdge(2)
+                        .connect("D").to("C").withEdge(3)
+                        .connect("D").to("t").withEdge(10)
+                        .createDirectedGraph();
+        // Test search
+        Algorithm<Integer, String, WeightedNode<Integer, String, Double>>.SearchResult result =
+                Hipster.createBellmanFord(GraphSearchProblem.startingFrom("s").in(g).takeCostsFromEdges().build())
+                .search("t");
+
+        List<String> path = result.getOptimalPaths().get(0);
+        int cost = result.getGoalNode().getCost().intValue();
+
+        assertEquals(Arrays.asList("s", "C", "A", "B", "t"), path);
+        assertEquals(4, cost);
+    }
+
+
+
+    public static HashBasedHipsterGraph<Integer, Integer> completeRandomGraph(int vertices){
+        HashBasedHipsterGraph<Integer, Integer> graph = new HashBasedHipsterGraph<>();
+        for(int i=0; i<vertices; i++){
+            graph.add(i);
+            for(int j=0; j<i; j++){
+                int cost = (int)(Math.random() * 10);
+                graph.connect(j, i, cost);
+            }
+        }
+        return graph;
+    }
+
 }
