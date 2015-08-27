@@ -216,7 +216,6 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         for(N n : node.path()){
             if (n.action() != null) actions.add(n.action());
         }
-        Collections.reverse(actions);
         return actions;
     }
 }
