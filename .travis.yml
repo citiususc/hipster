@@ -1,17 +1,13 @@
 language: java
 jdk:
 - oraclejdk7
-- oraclejdk8
-- openjdk7
 branches:
   except:
   - /^(?i:wip).*$/
 sudo: false
 after_success:
-#- chmod +x .config/deploy-site.sh
-#- .config/deploy-site.sh
-- chmod +x .config/deploy-artifacts.sh
 - .config/deploy-artifacts.sh
+- .config/publish-javadocs.sh
 - mvn clean cobertura:cobertura coveralls:report
 env:
   global:
