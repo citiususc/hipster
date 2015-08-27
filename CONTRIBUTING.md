@@ -87,7 +87,7 @@ Go to your forked project on GitHub, select your feature branch and click the â€
 
 
 ### License Agreement
-By contributing your code, you agree to license your contribution under the terms of the [Apache 2.0 license](https://github.com/citiususc/hipster/blob/1.0.X/LICENSE).
+By contributing your code, you agree to license your contribution under the terms of the [Apache 2.0 license](https://raw.githubusercontent.com/citiususc/hipster/4ca93e681ad7335acbd0bea9e49fe678d56f3519/LICENSE).
 
 Also, remember to add this header to each new file that youâ€™ve created:
 
