@@ -371,7 +371,7 @@ public class Maze2D {
      * @return true if the point is in the maze.
      */
     public boolean pointInBounds(Point loc) {
-        return loc.x < this.columns && loc.y < this.rows;
+        return loc.x >= 0 && loc.x < this.columns && loc.y >= 0 && loc.y < this.rows;
     }
 
     /**

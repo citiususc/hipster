@@ -26,6 +26,7 @@ import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class Maze2DTest {
 
@@ -132,5 +133,22 @@ public class Maze2DTest {
         maze.removeObstacleRectangle(new Point(10, 1), new Point(17, 3));
         assertTrue(maze.diff(new Maze2D(refMaze)).isEmpty());
         assertTrue(!maze.diff(goal).isEmpty());
+    }
+    
+	@Test
+    public void testPointInBounds() {
+    	Maze2D maze = new Maze2D(testMaze);
+    	assertFalse(maze.pointInBounds(new Point(-1,0)));
+    	assertFalse(maze.pointInBounds(new Point(0,-1)));
+    	
+    	int colLength = maze.getMaze()[0].length;
+    	int rowLength = maze.getMaze().length;
+    	assertFalse(maze.pointInBounds(new Point(colLength,0)));
+    	assertFalse(maze.pointInBounds(new Point(0,rowLength)));
+    	
+    	assertTrue(maze.pointInBounds(new Point(0,0)));
+    	assertTrue(maze.pointInBounds(new Point(0,0)));
+    	assertTrue(maze.pointInBounds(new Point(colLength-1,0)));
+    	assertTrue(maze.pointInBounds(new Point(0,rowLength-1)));
     }
 }
