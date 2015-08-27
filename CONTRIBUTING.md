@@ -12,18 +12,18 @@ Feel free to open new issues or participating in the discussion of the existing 
 [this repository](https://github.com/citiususc/hipster/issues), but before doing so, please make sure that the issue is not duplicated and/or the discussion is related to the topic of the issue.
 
 ## Pull requests
-Code contributions are welcome following a process which guarantees the long-term mantainability of the project. 
+Code contributions are welcome following a process which guarantees the long-term maintainability of the project. 
 You can contribute either with bugfixes or new features. Before submitting a new feature, we highly encourage you to first open a new issue describing its motivation and details and discuss it with one of the project mantainers. This will ensure that the feature fits well in the project.
 
 ### Step 1: Open a new issue (if not opened yet)
 Before starting to code, it is desirable to first open an issue describing the bug or the new feature. Please be sure the issue is not duplicated.
 
 ### Step 2: Fork the repository
-Check out your copy of the project locally.
+Fork the project https://github.com/citiususc/hipster into your account. Then, check out your copy of the project locally.
 ```
-git clone https://github.com/citiususc/hipster.git
+git clone git@github.com:username/hipster.git
 cd hipster
-git remote add upstream git://github.com/citiususc/hipster.git
+git remote add upstream https://github.com/citiususc/hipster.git
 ```
 
 ### Step 3: Create a new feature branch `contrib/issue-number`
