@@ -24,3 +24,7 @@ nb-configuration.xml
 # Idea specific #
 *.iml
 .idea
+
+# Eclipse specific #
+.metadata/
+
