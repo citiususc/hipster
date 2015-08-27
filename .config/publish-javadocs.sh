@@ -33,7 +33,7 @@ echo "Building javadocs..."
 mvn javadoc:aggregate
 
 # Clone Hipster4j GitHub gh-pages for Javadocs
-git clone --quiet --branch=gh-pages https://github.com/citiususc/hipster.git gh-pages > /dev/null
+git clone --quiet --branch=gh-pages https://github.com/hipster4j/hipster-javadocs.git gh-pages > /dev/null
 
 # Overwrite the previous version with the new one
 cp -Rf target/apidocs/* gh-pages/
