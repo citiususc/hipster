@@ -24,6 +24,11 @@
             <username>${env.SONATYPE_SNAPSHOT_USERNAME}</username>
             <password>${env.SONATYPE_SNAPSHOT_PASSWORD}</password>
         </server>
+        <server>
+            <id>bintray-hipster4j-maven</id>
+            <username>${env.BINTRAY_USER}</username>
+            <password>${env.BINTRAY_API_KEY}</password>
+        </server>
     </servers>
 
     <profiles>
