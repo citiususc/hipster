@@ -8,5 +8,5 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 fi
 echo "Running mvn deploy, current directory: `pwd`"
 # Deploy to Sonatype Nexus OSS
-mvn --settings .config/maven-settings.xml -P sonatype-nexus-snapshots deploy -DskipTests=true
+mvn --settings .config/maven-settings.xml deploy -DskipTests=true
 echo "Deployment script finished." 
