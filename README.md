@@ -27,7 +27,7 @@ The current version of the library comes with some very well-known and wide used
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
     * Multiobjective search
-        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i>
+        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i> ([see an example](https://github.com/citiususc/hipster/wiki/Multiobjective-Search-with-Hipster-and-TinkerPop-Blueprints))
 * 3rd party adapters:
     * [Java Universal/Graph (JUNG)](http://jung.sourceforge.net/) adapter.
 
