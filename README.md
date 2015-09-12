@@ -11,7 +11,7 @@ You can use Hipster to solve from simple graph search problems to more advanced 
 
 ## Features
 
-The current version of the library comes with some very well-known and wide used search algorithms. Note that this list may not be exhaustive:
+The current version of the library comes with some very well-known and wide used search algorithms. We're working to add more algorithms soon:
 
 * Search algorithms:
     * Uninformed search:
