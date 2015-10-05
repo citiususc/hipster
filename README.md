@@ -1,5 +1,9 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
+[![SonarQube Tech Debt](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/tech_debt.svg)](http://nemo.sonarqube.org/dashboard/index/es.usc.citius.hipster:hipster-pom) 
+[![Coverage](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/coverage.svg)]()
+![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
+
 A powerful and friendly heuristic search library implemented in Java.
 
 ## What's Hipster?
@@ -38,7 +42,7 @@ If you don't find the algorithm or the feature you are looking for, please consi
 The easiest way to use Hipster is adding it as a dependency with your favourite dependency manager.
 Maven users can include the library using the following snippet:
 
-#### Snapshots ![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
+#### Snapshots
 
 You can use the latest (unstable) version of Hipster under development. Just add the following dependency into your pom.xml:
 
