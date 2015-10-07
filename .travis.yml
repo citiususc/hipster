@@ -5,7 +5,9 @@ branches:
   except:
   - /^(?i:wip).*$/
 sudo: false
+before_install:
+  - pip install --user codecov
 after_success:
-- .config/deploy-artifacts.sh
-- .config/publish-javadocs.sh
-- mvn clean cobertura:cobertura coveralls:report
+  - .config/deploy-artifacts.sh
+  - .config/publish-javadocs.sh
+  - codecov
