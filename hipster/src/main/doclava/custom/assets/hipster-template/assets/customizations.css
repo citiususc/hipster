@@ -1,0 +1,131 @@
+#header {
+    border-bottom: 3px solid #0767a4;
+}
+
+#search_filtered .jd-selected {
+    background-color: #0767a4;
+}
+
+/************* Customizations for Hipster *************/
+
+body {
+    background-image: none;
+    font: 14px/19px Roboto, sans-serif;
+}
+
+th {
+    background-color: #E2E2E2;
+}
+
+#header {
+    border-bottom: 3px solid #F36126;
+    height: 80px;
+}
+
+#masthead-title {
+    color: #E56B3C;
+}
+
+#jd-header {
+    background-color: transparent;
+}
+
+.jd-sumtable a:hover {
+    text-decoration:none;
+    color: #F36126;
+}
+
+.ui-resizable-s {
+    background: none;
+    background-color: #F1F1F1;
+}
+.ui-resizable-e {
+    background: none;
+    background-color: #F1F1F1;
+}
+
+#search-button {
+    border: 0;
+    background: url(images/icon_search.png) no-repeat;
+    width: 50px;
+    height: 28px;
+    color: transparent;
+}
+
+#search-button:hover {
+    background-position: 0 -28px;
+}
+
+a:active,
+a:active code {
+  color:#F36126;
+}
+
+/* Scrollbar replacement. Original snippet from https://gist.github.com/devinrhode2/2573411 */
+::-webkit-scrollbar {
+    height: 5px;
+    overflow: visible;
+    width: 5px;
+    background-color: rgba(0,0,0,0);
+}
+/* 243,97,38 */
+
+::-webkit-scrollbar:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+::-webkit-scrollbar-thumb:vertical {
+    background: rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb:vertical:hover {
+    background: rgba(243,97,38,0.6);
+}
+::-webkit-scrollbar-thumb:vertical:active {
+    background: rgba(243,97,38,0.8);
+}
+::-webkit-scrollbar-thumb:horizontal {
+    background: rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb:horizontal:hover {
+    background: rgba(243,97,38,0.6);
+}
+::-webkit-scrollbar-thumb:horizontal:active {
+    background: rgba(243,97,38,0.8);
+}
+
+/* Google roboto font */
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100;
+    src: local('Roboto Thin'), local('Roboto-Thin'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/vzIUHo9z-oJ4WgkpPOtg1_esZW2xOQ-xsNqO47m55DA.woff) format('woff');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto Regular'), local('Roboto-Regular'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/2UX7WLTfW3W8TclTUvlFyQ.woff) format('woff');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Roboto Medium'), local('Roboto-Medium'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/RxZJdnzeo3R5zSexge8UUT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Roboto Bold'), local('Roboto-Bold'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Roboto Italic'), local('Roboto-Italic'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/1pO9eUAp8pSF8VnRTP3xnvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 500;
+    src: local('Roboto Medium Italic'), local('Roboto-MediumItalic'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/OLffGBTaF0XFOW1gnuHF0YbN6UDyHWBl620a-IRfuBk.woff) format('woff');
+}
