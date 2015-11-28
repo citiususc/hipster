@@ -24,8 +24,10 @@ import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeExpander;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeFactory;
 import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
+import java.awt.Point;
 
 import java.util.Collections;
 
@@ -40,6 +42,7 @@ import java.util.Collections;
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public final class Hipster {
+
 
     private Hipster(){
 
@@ -112,6 +115,10 @@ public final class Hipster {
      */
     public static <A,S,N extends Node<A,S,N>> DepthFirstSearch<A,S,N> createDepthFirstSearch(SearchProblem<A,S,N> components){
         return new DepthFirstSearch<A, S, N>(components.getInitialNode(), components.getExpander());
+    }
+    
+    public static <A,S,N extends Node<A,S,N>> DepthLimitedSearch<A,S,N> createDepthLimitedSearch(SearchProblem<A,S,N> components){
+        return new DepthLimitedSearch<A, S, N>(components.getInitialNode(), components.getExpander(),70);
     }
 
     /**
