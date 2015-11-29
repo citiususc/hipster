@@ -22,6 +22,8 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 /**
@@ -81,7 +83,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
      * backtracking.
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
+        protected Deque<StackFrameNode> stack = new ArrayDeque<StackFrameNode>();
         protected C fLimit;
         protected C minfLimit;
         protected int reinitialization = 0;
@@ -204,11 +206,11 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             }
         }
 
-        public Stack<StackFrameNode> getStack() {
+        public Deque<StackFrameNode> getStack() {
             return stack;
         }
 
-        public void setStack(Stack<StackFrameNode> stack) {
+        public void setStack(Deque<StackFrameNode> stack) {
             this.stack = stack;
         }
 
