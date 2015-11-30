@@ -93,7 +93,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
         protected boolean graphSupport = true;
 
         protected Iterator(){
-            this.stack.add(new StackFrameNode(initialNode));
+            this.stack.addLast(new StackFrameNode(initialNode));
         }
 
 
@@ -152,14 +152,14 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
 
             if (stack.isEmpty()) return null;
 
-            // Take current node in the stack but do not remove
-            StackFrameNode current = stack.peek();
+            // Take last node in the stack but do not remove
+            StackFrameNode current = stack.peekLast();
             // Find a successor
             if (current.successors.hasNext()){
                 N successor = current.successors.next();
                 // push the node (if not explored)
                 if (!graphSupport || !closed.contains(successor.state())) {
-                    stack.add(new StackFrameNode(successor));
+                    stack.addLast(new StackFrameNode(successor));
                 }
                 return current;
             } else {
@@ -167,7 +167,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
                 if (current.visited){
                     current.processed = true;
                 }
-                return stack.pop();
+                return stack.removeFirst();
             }
         }
 

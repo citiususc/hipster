@@ -24,7 +24,6 @@ import es.usc.citius.hipster.model.function.NodeExpander;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
 
 /**
  * <p>
@@ -83,7 +82,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
      * backtracking.
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Deque<StackFrameNode> stack = new ArrayDeque<StackFrameNode>();
+        protected Deque<StackFrameNode> stack = new ArrayDeque<>();
         protected C fLimit;
         protected C minfLimit;
         protected int reinitialization = 0;
@@ -93,7 +92,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             // Set initial bound
             fLimit = initialNode.getEstimation();
             minfLimit = null;
-            this.stack.add(new StackFrameNode(initialNode));
+            this.stack.addLast(new StackFrameNode(initialNode));
         }
 
         @Override
@@ -150,7 +149,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                         fLimit = minfLimit;
                         reinitialization++;
                         minfLimit = null;
-                        stack.add(new StackFrameNode(initialNode));
+                        stack.addLast(new StackFrameNode(initialNode));
                         nextNode = processNextNode();
                     }
                 }
@@ -176,8 +175,8 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             // 1- If the stack is empty, change fLimit and reinitialize the search
             if (stack.isEmpty()) return null;
 
-            // Take current node in the stack but do not remove
-            StackFrameNode current = stack.peek();
+            // Take last node in the stack but do not remove
+            StackFrameNode current = stack.peekLast();
 
             // 2 - Check if the current node exceeds the limit bound
             C fCurrent = current.node.getScore();
@@ -186,7 +185,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 updateMinFLimit(fCurrent);
                 // Remove from stack
                 current.processed = true;
-                return stack.pop();
+                return stack.removeLast();
             }
 
             // Find a successor
@@ -194,7 +193,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 // 3 - Node has at least one neighbor
                 N successor = current.successors.next();
                 // push the node
-                stack.add(new StackFrameNode(successor));
+                stack.addLast(new StackFrameNode(successor));
                 return current;
 
             } else {
@@ -202,7 +201,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 if (current.visited){
                     current.processed = true;
                 }
-                return stack.pop();
+                return stack.removeLast();
             }
         }
 
