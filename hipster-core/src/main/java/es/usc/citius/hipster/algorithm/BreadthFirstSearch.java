@@ -51,8 +51,8 @@ public class BreadthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S
      * Implements all the BFS search logic as an iterator
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Queue<N> queue = new LinkedList<>();
-        protected Map<S, N> visited = new HashMap<>();
+        protected Queue<N> queue = new LinkedList<N>();
+        protected Map<S, N> visited = new HashMap<S, N>();
 
         /**
          * Iterator cannot be instantiated from outside.

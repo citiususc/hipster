@@ -87,9 +87,9 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
      * DFS iterator used to expand always the deepest non-visited node.
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Deque<StackFrameNode> stack = new ArrayDeque<>();
+        protected Deque<StackFrameNode> stack = new ArrayDeque<StackFrameNode>();
         protected StackFrameNode next;
-        protected Set<S> closed = new HashSet<>();
+        protected Set<S> closed = new HashSet<S>();
         protected boolean graphSupport = true;
 
         protected Iterator(){

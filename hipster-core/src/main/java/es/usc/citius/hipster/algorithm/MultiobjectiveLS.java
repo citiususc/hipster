@@ -54,14 +54,14 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
      * with {@code iterator.getNonDominated.get(goalState)}
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Queue<N> queue = new LinkedList<>();
+        protected Queue<N> queue = new LinkedList<N>();
         public Map<S, Collection<N>> nonDominated;
         //auxiliary variable which stores an empty list to avoid nullable values in code
-        private final Collection<N> EMPTYLIST = new ArrayList<>();
+        private final Collection<N> EMPTYLIST = new ArrayList<N>();
 
         protected Iterator(){
-            queue = new PriorityQueue<>();
-            this.nonDominated = new HashMap<>();
+            queue = new PriorityQueue<N>();
+            this.nonDominated = new HashMap<S, Collection<N>>();
             this.queue.add(initialNode);
         }
 
