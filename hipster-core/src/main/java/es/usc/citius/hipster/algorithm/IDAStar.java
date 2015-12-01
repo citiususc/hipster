@@ -22,9 +22,6 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /**
  * <p>
  * Implementation of the IDA* algorithm. Similar to Iterative DFS but using heuristics to limit
@@ -40,39 +37,18 @@ import java.util.Deque;
  * @param <C> comparable cost used to compare states.
  * @param <N> type of the heuristic search node.
  *
- * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Jennnnyz
+ * 
  */
-public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
+public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends DepthFirstSearch<A,S,N> {
 
-    protected final N initialNode;
-    protected final NodeExpander<A,S,N> expander;
-
-
+    /**
+     * 
+     * @param initialNode
+     * @param expander 
+     */
     public IDAStar(N initialNode, NodeExpander<A,S,N> expander) {
-        this.initialNode = initialNode;
-        this.expander = expander;
-    }
-
-    private class StackFrameNode {
-        // Iterable used to compute neighbors of the current node
-        java.util.Iterator<N> successors;
-        // Current search node
-        N node;
-        // Boolean value to check if the node is still unvisited
-        // in the stack or not
-        boolean visited = false;
-        // Boolean to indicate that this node is fully processed
-        boolean processed = false;
-
-        StackFrameNode(java.util.Iterator successors, N node) {
-            this.successors = successors;
-            this.node = node;
-        }
-
-        StackFrameNode(N node) {
-            this.node = node;
-            this.successors = expander.expand(node).iterator();
-        }
+        super(initialNode, expander);
     }
 
     /**
@@ -81,51 +57,17 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
      * call to {@code iterator.next()} returns the next state after performing
      * backtracking.
      */
-    public class Iterator implements java.util.Iterator<N> {
-        protected Deque<StackFrameNode> stack = new ArrayDeque<>();
+
+    public class Iterator extends DepthFirstSearch.Iterator {
         protected C fLimit;
         protected C minfLimit;
         protected int reinitialization = 0;
-        protected StackFrameNode next;
 
         protected Iterator(){
             // Set initial bound
+            super();
             fLimit = initialNode.getEstimation();
             minfLimit = null;
-            this.stack.addLast(new StackFrameNode(initialNode));
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (next == null){
-                // Compute next
-                next = nextUnvisited();
-                if (next == null) return false;
-            }
-            return true;
-        }
-
-        @Override
-        public N next(){
-            if (next != null){
-                StackFrameNode e = next;
-                // Compute the next one
-                next = null;
-                // Return current node
-                return e.node;
-            }
-            // Compute next
-            StackFrameNode nextUnvisited = nextUnvisited();
-            if (nextUnvisited!=null){
-                return nextUnvisited.node;
-            }
-            return null;
-
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
         }
 
         protected void updateMinFLimit(C currentFLimit){
@@ -138,6 +80,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             }
         }
 
+        @Override
         protected StackFrameNode nextUnvisited(){
             StackFrameNode nextNode;
             do {
@@ -149,7 +92,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                         fLimit = minfLimit;
                         reinitialization++;
                         minfLimit = null;
-                        stack.addLast(new StackFrameNode(initialNode));
+                        super.getStack().addLast(new StackFrameNode(initialNode));
                         nextNode = processNextNode();
                     }
                 }
@@ -161,7 +104,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             return nextNode;
         }
 
-
+        @Override
         protected StackFrameNode processNextNode(){
             // Get and process the current node. Cases:
             //   1 - empty stack, return null
@@ -173,27 +116,27 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             //             mark as visited, pop and return.
 
             // 1- If the stack is empty, change fLimit and reinitialize the search
-            if (stack.isEmpty()) return null;
+            if (super.getStack().isEmpty()) return null;
 
-            // Take last node in the stack but do not remove
-            StackFrameNode current = stack.peekLast();
+            // Take current node in the stack but do not remove
+            StackFrameNode current = (StackFrameNode) super.getStack().peekLast();
 
             // 2 - Check if the current node exceeds the limit bound
-            C fCurrent = current.node.getScore();
+            C fCurrent = current.getNode().getScore();
             if (fCurrent.compareTo(fLimit)>0){
                 // Current node exceeds the limit bound, update minfLimit, pop and skip.
                 updateMinFLimit(fCurrent);
                 // Remove from stack
                 current.processed = true;
-                return stack.removeLast();
+                return (StackFrameNode) super.getStack().removeLast();
             }
 
             // Find a successor
-            if (current.successors.hasNext()){
+            if (current.getSuccessors().hasNext()){
                 // 3 - Node has at least one neighbor
-                N successor = current.successors.next();
+                N successor = current.getSuccessors().next();
                 // push the node
-                stack.addLast(new StackFrameNode(successor));
+                super.getStack().addLast(new StackFrameNode(successor));
                 return current;
 
             } else {
@@ -201,16 +144,8 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 if (current.visited){
                     current.processed = true;
                 }
-                return stack.removeLast();
+                return (StackFrameNode) super.getStack().removeLast();
             }
-        }
-
-        public Deque<StackFrameNode> getStack() {
-            return stack;
-        }
-
-        public void setStack(Deque<StackFrameNode> stack) {
-            this.stack = stack;
         }
 
         public C getfLimit() {
@@ -235,14 +170,6 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
         public void setReinitialization(int reinitialization) {
             this.reinitialization = reinitialization;
-        }
-
-        public StackFrameNode getNext() {
-            return next;
-        }
-
-        public void setNext(StackFrameNode next) {
-            this.next = next;
         }
     }
 
