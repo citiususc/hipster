@@ -19,10 +19,7 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * <p>
@@ -90,13 +87,13 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
      * DFS iterator used to expand always the deepest non-visited node.
      */
     public class Iterator implements java.util.Iterator<N> {
-        protected Stack<StackFrameNode> stack = new Stack<StackFrameNode>();
+        protected Deque<StackFrameNode> stack = new ArrayDeque<StackFrameNode>();
         protected StackFrameNode next;
         protected Set<S> closed = new HashSet<S>();
         protected boolean graphSupport = true;
 
         protected Iterator(){
-            this.stack.add(new StackFrameNode(initialNode));
+            this.stack.addLast(new StackFrameNode(initialNode));
         }
 
 
@@ -155,14 +152,14 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
 
             if (stack.isEmpty()) return null;
 
-            // Take current node in the stack but do not remove
-            StackFrameNode current = stack.peek();
+            // Take last node in the stack but do not remove
+            StackFrameNode current = stack.peekLast();
             // Find a successor
             if (current.successors.hasNext()){
                 N successor = current.successors.next();
                 // push the node (if not explored)
                 if (!graphSupport || !closed.contains(successor.state())) {
-                    stack.add(new StackFrameNode(successor));
+                    stack.addLast(new StackFrameNode(successor));
                 }
                 return current;
             } else {
@@ -170,15 +167,15 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
                 if (current.visited){
                     current.processed = true;
                 }
-                return stack.pop();
+                return stack.removeFirst();
             }
         }
 
-        public Stack<StackFrameNode> getStack() {
+        public Deque<StackFrameNode> getStack() {
             return stack;
         }
 
-        public void setStack(Stack<StackFrameNode> stack) {
+        public void setStack(Deque<StackFrameNode> stack) {
             this.stack = stack;
         }
 
