@@ -119,7 +119,7 @@ public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             if (super.getStack().isEmpty()) return null;
 
             // Take current node in the stack but do not remove
-            StackFrameNode current = (StackFrameNode) super.getStack().peekLast();
+            StackFrameNode current = (StackFrameNode) super.stack.peekLast();
 
             // 2 - Check if the current node exceeds the limit bound
             C fCurrent = current.getNode().getScore();
