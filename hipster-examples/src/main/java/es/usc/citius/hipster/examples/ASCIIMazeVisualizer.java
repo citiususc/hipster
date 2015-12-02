@@ -198,6 +198,7 @@ public class ASCIIMazeVisualizer {
         comboMazes.addItem("Maze example 5");
 
         comboAlgorithm.addItem("Depth First Search (DFS, non-optimal)");
+	    comboAlgorithm.addItem("Depth Limited Search(DLS, non-optimal)");
         comboAlgorithm.addItem("Breadth First Search (BFS, non-optimal) ");
         comboAlgorithm.addItem("Bellman Ford");
         comboAlgorithm.addItem("Dijkstra");
@@ -367,24 +368,27 @@ public class ASCIIMazeVisualizer {
         final Iterator<? extends Node<?, Point, ?>> iterator;
         switch (comboAlgorithm.getSelectedIndex()) {
 
-            case 0:
-                iterator = Hipster.createDepthFirstSearch(buildProblem(maze, false)).iterator();
-                break;
-            case 1:
-                iterator = Hipster.createBreadthFirstSearch(buildProblem(maze, false)).iterator();
-                break;
-            case 2:
-                iterator = Hipster.createBellmanFord(buildProblem(maze, false)).iterator();
-                break;
-            case 3:
-                iterator = Hipster.createDijkstra(buildProblem(maze, false)).iterator();
-                break;
-            case 4:
-                iterator = Hipster.createAStar(buildProblem(maze, true)).iterator();
-                break;
-            case 5:
-                iterator = Hipster.createIDAStar(buildProblem(maze, true)).iterator();
-                break;
+	        case 0:
+		        iterator = Hipster.createDepthFirstSearch(buildProblem(maze, false)).iterator();
+		        break;
+	        case 1:
+		        iterator = Hipster.createDepthLimitedSearch(buildProblem(maze, false)).iterator();
+		        break;
+	        case 2:
+		        iterator = Hipster.createBreadthFirstSearch(buildProblem(maze, false)).iterator();
+		        break;
+	        case 3:
+		        iterator = Hipster.createBellmanFord(buildProblem(maze, false)).iterator();
+		        break;
+	        case 4:
+		        iterator = Hipster.createDijkstra(buildProblem(maze, false)).iterator();
+		        break;
+	        case 5:
+		        iterator = Hipster.createAStar(buildProblem(maze, true)).iterator();
+		        break;
+	        case 6:
+		        iterator = Hipster.createIDAStar(buildProblem(maze, true)).iterator();
+		        break;
             default:
                 throw new IllegalStateException("Invalid algorithm");
         }

@@ -114,6 +114,10 @@ public final class Hipster {
         return new DepthFirstSearch<A, S, N>(components.getInitialNode(), components.getExpander());
     }
 
+	public static <A,S,N extends Node<A,S,N>> DepthLimitedSearch<A,S,N> createDepthLimitedSearch(SearchProblem<A,S,N> components){
+		return new DepthLimitedSearch<A, S, N>(components.getInitialNode(), components.getExpander(),70);
+	}
+
     /**
      * Instantiates a IDA* algorithm given a problem definition.
      *

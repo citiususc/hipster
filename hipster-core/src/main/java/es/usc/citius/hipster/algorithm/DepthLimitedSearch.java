@@ -35,7 +35,7 @@ public class DepthLimitedSearch<A,S,N extends Node<A,S,N>> extends DepthFirstSea
     /**
      *
      * @param initialNode
-     * @param expandert
+     * @param expander
      * @param limit
      */
     public DepthLimitedSearch(N initialNode, NodeExpander<A, S, N> expander,int limit) {        
@@ -68,14 +68,16 @@ public class DepthLimitedSearch<A,S,N extends Node<A,S,N>> extends DepthFirstSea
             depth = depth + 1;
             do {
                 nextNode = super.processNextNode();
-            } while(nextNode != null && (nextNode.processed || nextNode.visited || closed.contains(nextNode.node.state())));
+            } while(nextNode != null &&
+		            (nextNode.processed ||
+				            nextNode.visited || closed.contains(nextNode.getNode().state())));
 
             if (nextNode != null){
                 nextNode.visited = true;
                 // For graphs, the DFS needs to keep track of all nodes
                 // that were processed and removed from the stack, in order
                 // to avoid cycles.
-                if (graphSupport) closed.add(nextNode.node.state());
+                if (graphSupport) closed.add(nextNode.getNode().state());
             }
             return nextNode;
          }
