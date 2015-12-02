@@ -37,8 +37,9 @@ import es.usc.citius.hipster.model.function.NodeExpander;
  * @param <C> comparable cost used to compare states.
  * @param <N> type of the heuristic search node.
  *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @author Jennnnyz
- * 
+ *
  */
 public class IDAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends DepthFirstSearch<A,S,N> {
 
