@@ -31,7 +31,7 @@ public class Trip
     }
     
     public Trip(){
-        townList = new ArrayList();
+        townList = new ArrayList<Town>();
     }
 
     public List<Town> getTownList() {

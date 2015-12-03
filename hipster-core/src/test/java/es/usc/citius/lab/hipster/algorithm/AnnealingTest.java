@@ -6,6 +6,7 @@ import es.usc.citius.hipster.model.Trip;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /*
@@ -33,7 +34,7 @@ public class AnnealingTest {
     @Test
     public void testAnnealing()
     {
-        List<Town> towns = new ArrayList();
+        List<Town> towns = new ArrayList<Town>();
         
         towns.add(new Town(11, 22));
         towns.add(new Town(24, 45));
@@ -41,24 +42,13 @@ public class AnnealingTest {
         
         Annealing newExample = new Annealing(50000, towns, 0.002);
         Trip trip = newExample.runAnnealing();
-        
+
+        // ensure total distance gives expected value
         assertEquals(trip.getTownDistance(), 237);
     }
-    
+
     @Test
-    public void testTown()
-    {
-        Town townOne = new Town(1,2);
-        Town townTwo = new Town(3,4);
-        
-        assertEquals(townOne.getxCoord(), 1);
-        assertEquals(townTwo.getyCoord(), 4);
-        
-        assertEquals(townOne.findDistanceToOtherTown(townTwo), Math.sqrt(8), 0.01f);
-    }
-    
-    @Test
-    public void testTrip()
+    public void testAnnealing2()
     {
         List<Town> towns = new ArrayList();
         
@@ -73,19 +63,13 @@ public class AnnealingTest {
         towns.add(new Town(44, 78));
         towns.add(new Town(999, 111));
         
-        Trip trip = new Trip(towns);
-        
-        assertEquals(trip.getTownDistance(), 4746);
-        
-        for(int i = 0; i < towns.size(); i++)
-        {
-            assertEquals(towns.get(i).getxCoord(), trip.getTownList().get(i).getxCoord());
-            assertEquals(towns.get(i).getyCoord(), trip.getTownList().get(i).getyCoord());
-        }
-        
-        trip.setTown(1, new Town(1,1));
-        assertEquals(trip.getTownList().get(1).getxCoord(), 1);
-        assertEquals(trip.getTownList().get(1).getyCoord(), 1);
-        
+        Trip trip1 = new Trip(towns);
+        assertEquals(trip1.getTownDistance(), 4746);
+
+        Annealing newExample = new Annealing(50000, towns, 0.002);
+        Trip trip2 = newExample.runAnnealing();
+
+        // ensure total distance within expected range
+        assertTrue((trip2.getTownDistance() - 3450) < 200);
     }
 }
