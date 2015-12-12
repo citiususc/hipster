@@ -1,4 +1,4 @@
-These are the issues that we worked on for the CPEN 321 project. Each of the pull requests contains the exact differences between our project and the source code. Each pull request is numbered by the issue it addresses, as well as the branch name that those implementations were pushed to (we have no master branch in our source code). Descriptions of the issues can be found in the source repo.
+These are the issues that we worked on for the CPEN 321 project. Each of the pull requests contains the exact differences between our project and the source code. Each pull request is numbered by the issue it addresses, as well as the branch name that those implementations were pushed to. We have no master branch in our forked repo, we let the merging be done by the source repo as per requirements elicitation from the repo owners. Descriptions of the issues can be found in the source repo.
 
 Issue 137: Replace Stack with ArrayDeque (https://github.com/citiususc/hipster/pull/156)
 
