@@ -1,0 +1,10 @@
+These are the issues that we worked on for the CPEN 321 project. Each of the pull requests contains the exact differences between our project and the source code. Each pull request is numbered by the issue it addresses, as well as the branch name that those implementations were pushed to (we have no master branch in our source code). Descriptions of the issues can be found in the source repo.
+
+Issue 137: Replace Stack with ArrayDeque (https://github.com/citiususc/hipster/pull/156)
+
+Issue 64: Reuse DFS in IDA* (https://github.com/citiususc/hipster/pull/160)
+
+Issue 158: Implementation of Annealing local search (https://github.com/citiususc/hipster/pull/161)
+
+
+Issue 157: Implementation of Depth Limited Search (https://github.com/citiususc/hipster/pull/162)
