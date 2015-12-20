@@ -45,9 +45,16 @@ public final class ProblemBuilder {
          */
         public static final class ActionState<S> {
             private final S initialState;
+            private final S finalState;
 
             public ActionState(S initialState) {
                 this.initialState = initialState;
+                this.finalState = null;
+            }
+
+            public ActionState(S initialState, S finalState) {
+                this.initialState = initialState;
+                this.finalState = finalState;
             }
 
             /**
@@ -175,8 +182,9 @@ public final class ProblemBuilder {
                         }
                     };
                     UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
+                    UnweightedNode<A,S> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
                     NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
-                    return new SearchProblem<A,S, UnweightedNode<A,S>>(initialNode, nodeExpander);
+                    return new SearchProblem<A,S, UnweightedNode<A,S>>(initialNode, finalNode, nodeExpander);
                 }
 
                 /**
@@ -253,6 +261,10 @@ public final class ProblemBuilder {
 
         public <S> ActionState<S> initialState(S initialState){
             return new ActionState<S>(initialState);
+        }
+
+        public <S> ActionState<S> initialState(S initialState, S finalState){
+            return new ActionState<S>(initialState, finalState);
         }
 
     }

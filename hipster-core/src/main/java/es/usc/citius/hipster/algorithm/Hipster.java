@@ -114,6 +114,19 @@ public final class Hipster {
         return new DepthFirstSearch<A, S, N>(components.getInitialNode(), components.getExpander());
     }
 
+ /**
+     * Instantiates Depth Limited Search algorithm for a problem definition.
+     *
+     * @param components search problem definition with the components of the algorithm
+     * @param <A> type of the actions
+     * @param <S> type of the states
+     * @param <N> type of the nodes
+     * @return instance of {@link es.usc.citius.hipster.algorithm.DepthFirstSearch} for the problem definition
+     */
+    public static <A,S,N extends Node<A,S,N>> DepthLimitedSearch<A,S,N> createDepthLimitedSearch(SearchProblem<A,S,N> components, int depth){
+        return new DepthLimitedSearch<A, S, N>(components.getInitialNode(), components.getFinalNode(), components.getExpander(), depth);
+    }
+
     /**
      * Instantiates a IDA* algorithm given a problem definition.
      *
