@@ -30,7 +30,7 @@ public class HashBasedHipsterDirectedGraph<V, E> extends HashBasedHipsterGraph<V
 
 
     @Override
-    protected GraphEdge<V, E> buildEdge(V v1, V v2, E value) {
+    public GraphEdge<V, E> buildEdge(V v1, V v2, E value) {
         return new DirectedEdge<V, E>(v1, v2, value);
     }
 

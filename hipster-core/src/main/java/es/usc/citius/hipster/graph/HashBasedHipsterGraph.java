@@ -98,7 +98,7 @@ public class HashBasedHipsterGraph<V,E> implements HipsterMutableGraph<V,E> {
         return edge;
     }
 
-    protected GraphEdge<V,E> buildEdge(V v1, V v2, E value){
+    public GraphEdge<V,E> buildEdge(V v1, V v2, E value){
         return new UndirectedEdge<V, E>(v1, v2, value);
     }
 

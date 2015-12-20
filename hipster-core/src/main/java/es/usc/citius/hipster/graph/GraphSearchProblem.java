@@ -150,7 +150,7 @@ public final class GraphSearchProblem {
 
             public SearchProblem<E, V, UnweightedNode<E, V>> build() {
                 return ProblemBuilder.create()
-                        .initialState(fromVertex)
+                        .initialState(fromVertex, toVertex)
                         .defineProblemWithExplicitActions()
                         .useTransitionFunction(tf)
                         .build();
