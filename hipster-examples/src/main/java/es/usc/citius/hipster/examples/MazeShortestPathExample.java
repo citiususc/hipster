@@ -20,6 +20,7 @@ package es.usc.citius.hipster.examples;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.model.problem.SearchProblem;
@@ -60,8 +61,8 @@ public class MazeShortestPathExample {
         final Maze2D maze = example.getMaze();
         // In order to search, we need at least the origin and the goal destination.
         // We can take these two points from the default maze:
-        Point origin = maze.getInitialLoc();
-        Point goal = maze.getGoalLoc();
+        final Point origin = maze.getInitialLoc();
+        final Point goal = maze.getGoalLoc();
         // The maze is a 2D map, where each tile defined by 2D coordinates x and y
         // can be empty or occupied by an obstacle. We have to define de transition
         // function that tells the algorithm which are the available movements from
@@ -98,6 +99,15 @@ public class MazeShortestPathExample {
                         // distance between these two points http://en.wikipedia.org/wiki/Euclidean_distance
                         return source.distance(destination);
                     }
+                .useHeuristicFunction(new HeuristicFunction<Point, Double>() {
+                    // Give A* an estimate for the remaining distance to goal. Estimate need not be exact as long as
+                    // it doesn't overestimate the remaining distance.
+                    @Override
+                    public Double estimate(Point state) {
+                        // Provide Euclidean distance as simple estimate.
+                        // Manhattan distance is not applicable as it doesn't support diagonal transitions.
+                        return state.distance(goal);
+                    }                    
                 })
                 .build();
 
