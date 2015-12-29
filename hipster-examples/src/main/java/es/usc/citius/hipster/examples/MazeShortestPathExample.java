@@ -99,6 +99,7 @@ public class MazeShortestPathExample {
                         // distance between these two points http://en.wikipedia.org/wiki/Euclidean_distance
                         return source.distance(destination);
                     }
+                })
                 .useHeuristicFunction(new HeuristicFunction<Point, Double>() {
                     // Give A* an estimate for the remaining distance to goal. Estimate need not be exact as long as
                     // it doesn't overestimate the remaining distance.
