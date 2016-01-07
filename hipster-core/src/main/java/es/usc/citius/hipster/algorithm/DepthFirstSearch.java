@@ -167,7 +167,7 @@ public class DepthFirstSearch<A,S,N extends Node<A,S,N>> extends Algorithm<A,S,N
                 if (current.visited){
                     current.processed = true;
                 }
-                return stack.removeFirst();
+               return stack.removeLast();
             }
         }
 
