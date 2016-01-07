@@ -49,7 +49,11 @@ public class UndirectedGraphSearchExample {
 		// {@link GraphSearchProblem#useGenericCosts} can also be used to give
 		// each edge a unitary cost
 
-		SearchProblem p = GraphSearchProblem.startingFrom("A").in(graph).takeCostsFromEdges().build();
+		SearchProblem p = GraphSearchProblem
+				.startingFrom("A")
+				.in(graph)
+				.takeCostsFromEdges()
+				.build();
 
 		// Search the shortest path from "A" to "L". The search will stop when
 		// the goal state
