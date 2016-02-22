@@ -1,5 +1,9 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
+[![SonarQube Tech Debt](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/tech_debt.svg)](http://nemo.sonarqube.org/dashboard/index/es.usc.citius.hipster:hipster-pom) 
+[![Coverage](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/coverage.svg)]()
+![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
+
 A powerful and friendly heuristic search library implemented in Java.
 
 ## What's Hipster?
@@ -11,7 +15,7 @@ You can use Hipster to solve from simple graph search problems to more advanced 
 
 ## Features
 
-The current version of the library comes with some very well-known and wide used search algorithms. Note that this list may not be exhaustive:
+The current version of the library comes with some very well-known and wide used search algorithms. We're working to add more algorithms soon:
 
 * Search algorithms:
     * Uninformed search:
@@ -26,8 +30,8 @@ The current version of the library comes with some very well-known and wide used
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
-    * Other (experimental implementations)
-        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i>
+    * Multiobjective search
+        * Multiobjective LS algorithm. Original paper: Martins, E. D. Q. V., & Santos, J. L. E. (1999). *"The labeling algorithm for the multiobjective shortest path problem"*. <i>Departamento de Matematica, Universidade de Coimbra, Portugal, Tech. Rep. TR-99/005</i> ([see an example](https://github.com/citiususc/hipster/wiki/Multiobjective-Search-with-Hipster-and-TinkerPop-Blueprints))
 * 3rd party adapters:
     * [Java Universal/Graph (JUNG)](http://jung.sourceforge.net/) adapter.
 
@@ -38,7 +42,7 @@ If you don't find the algorithm or the feature you are looking for, please consi
 The easiest way to use Hipster is adding it as a dependency with your favourite dependency manager.
 Maven users can include the library using the following snippet:
 
-#### Snapshots ![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
+#### Snapshots
 
 You can use the latest (unstable) version of Hipster under development. Just add the following dependency into your pom.xml:
 
@@ -68,21 +72,21 @@ You can use the latest (unstable) version of Hipster under development. Just add
 </dependencies>
 ```
 
-#### Releases [![Stories in Ready](https://badge.waffle.io/citiususc/hipster.png?label=ready&title=Ready)](http://waffle.io/citiususc/hipster)
+#### Releases
 
-Current stable release is v1.0.0-rc1. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
+Current stable release is v1.0.0-rc2. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
 
 ```xml
 <dependencies>
   <!--
     Add this dependency under your pom.xml <dependencies> section to add
     all the dependencies of Hipster to your project. Add hipster-core
-    instead of hipster-all for basic functionality.
+    instead of hipster-all for core functionality.
   -->
   <dependency>
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-all</artifactId>
-    <version>1.0.0-rc1</version>
+    <version>1.0.0-rc2</version>
   </dependency>
 </dependencies>
 ```
@@ -127,11 +131,11 @@ System.out.println(Hipster.createDijkstra(p).search("F"));
 Output result: `Total number of iterations: 7. States: [A, B, C, E, D, F], Actions: [2.0, 1.0, 3.0, 2.0, 2.0], Search information: WeightedNode{state=F, cost=10.0, estimation=0.0, score=10.0}`
 
 But that's not all. Hipster comes with different problem examples
-that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/development/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
+that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/0c0ec9cb5087fede9930a6efbd5126afd69896ac/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
 
 ## What's next?
 
-If you want to learn how to solve a problem by searching with Hipster, check the wiki to [learn the basics](https://github.com/citiususc/hipster/wiki/Getting-Started) and the [JavaDoc documentation](http://www.hipster4j.org/javadocs/latest).
+If you want to learn how to solve a problem by searching with Hipster, check the [wiki](https://github.com/citiususc/hipster/wiki) and the [JavaDoc documentation](http://www.hipster4j.org/hipster-javadocs).
 We also suggest you to check [this presentation](https://speakerdeck.com/pablormier/hipster-an-open-source-java-library-for-heuristic-search) for a quick introduction.
 
 ## License & Citation

@@ -36,6 +36,7 @@ public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S
     protected N previousNode;
     protected S state;
     protected A action;
+    protected int pathSize;
 
     /**
      * Generic constructor of nodes.
@@ -48,6 +49,7 @@ public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S
         this.previousNode = previousNode;
         this.state = state;
         this.action = action;
+        this.pathSize =  (previousNode != null) ? previousNode.pathSize + 1 : 1;
     }
 
     @Override
@@ -59,6 +61,11 @@ public class AbstractNode<A,S,N extends AbstractNode<A,S,N>> implements Node<A,S
             currentNode = currentNode.previousNode;
         }
         return path;
+    }
+
+    @Override
+    public int pathSize() {
+        return pathSize;
     }
 
     @Override

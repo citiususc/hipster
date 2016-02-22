@@ -44,6 +44,48 @@ public class GraphBuilder<V, E> {
             this.vertex2 = vertex2;
             this.edge = edge;
         }
+
+        private Connection(V vertex1, V vertex2) {
+            this.vertex1 = vertex1;
+            this.vertex2 = vertex2;
+            this.edge = (E) new Object();
+        }
+
+        public V getVertex1() {
+            return vertex1;
+        }
+
+        public void setVertex1(V vertex1) {
+            this.vertex1 = vertex1;
+        }
+
+        public V getVertex2() {
+            return vertex2;
+        }
+
+        public void setVertex2(V vertex2) {
+            this.vertex2 = vertex2;
+        }
+
+        public E getEdge() {
+            return edge;
+        }
+
+        public void setEdge(E edge) {
+            this.edge = edge;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Connection that = (Connection) o;
+
+            if (!vertex1.equals(that.vertex1)) return false;
+            return vertex2.equals(that.vertex2);
+
+        }
     }
 
     private List<Connection> connections = new LinkedList<Connection>();
@@ -54,9 +96,14 @@ public class GraphBuilder<V, E> {
         return new GraphBuilder<V, E>();
     }
 
-
     public Vertex1 connect(V vertex) {
         return new Vertex1(vertex);
+    }
+
+    public GraphBuilder<V, E> connect(V vertex1, V vertex2) {
+        Vertex1 vertex = new Vertex1(vertex1);
+        vertex.to(vertex2);
+        return this;
     }
 
     public HipsterDirectedGraph<V,E> createDirectedGraph() {
@@ -114,10 +161,18 @@ public class GraphBuilder<V, E> {
 
             private Vertex2(V vertex) {
                 this.vertex2 = vertex;
+                connections.add(new Connection(vertex1, vertex2));
             }
 
             public GraphBuilder<V, E> withEdge(E edge) {
-                connections.add(new Connection(vertex1, vertex2, edge));
+                Connection connection = new Connection(vertex1, vertex2);
+                int connectionIndex = connections.indexOf(connection);
+                if(connectionIndex != -1 ) {
+                    connections.get(connectionIndex).setEdge(edge);
+                } else {
+                    connection.setEdge(edge);
+                    connections.add(connection);
+                }
                 return GraphBuilder.this;
             }
         }

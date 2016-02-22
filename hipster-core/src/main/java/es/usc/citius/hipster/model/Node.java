@@ -42,6 +42,13 @@ public interface Node<A,S,N extends Node<A,S,N>> {
     List<N> path();
 
     /**
+     * Returns the length of the path from the start to the current node. Note that pathSize() == path().size()
+     * but this method provides a fast way to obtain the length of the path without tracking back the nodes of the path.
+     * @return length of the path from the initial node to this node.
+     */
+    int pathSize();
+
+    /**
      * Returns the previous node to the current.
      *
      * @return instance of {@link es.usc.citius.hipster.model.Node}

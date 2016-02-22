@@ -16,6 +16,8 @@ import java.util.Iterator;
  */
 public final class F {
 
+    private F() {}
+
     public static <T,E> Iterable<E> map(final Iterable<T> it, final Function<? super T,? extends E> mapf){
         return new Iterable<E>() {
             @Override

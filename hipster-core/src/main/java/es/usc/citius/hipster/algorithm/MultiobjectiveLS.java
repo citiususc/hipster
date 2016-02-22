@@ -56,7 +56,7 @@ public class MultiobjectiveLS<A,S,C extends Comparable<C>,N extends HeuristicNod
     public class Iterator implements java.util.Iterator<N> {
         protected Queue<N> queue = new LinkedList<N>();
         public Map<S, Collection<N>> nonDominated;
-        //auxiliar variable which stores an empty list to avoid nullable values in code
+        //auxiliary variable which stores an empty list to avoid nullable values in code
         private final Collection<N> EMPTYLIST = new ArrayList<N>();
 
         protected Iterator(){

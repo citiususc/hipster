@@ -16,6 +16,7 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
+import es.usc.citius.hipster.algorithm.DepthLimitedSearch;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.graph.GraphSearchProblem;

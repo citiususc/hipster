@@ -97,7 +97,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
             final String ls = System.getProperty("line.separator");
             StringBuilder builder = new StringBuilder();
             builder.append("Total solutions: ").append(goalNodes.size()).append(ls);
-            builder.append("Total time: ").append(getElapsed()).append(ls);
+            builder.append("Total time: ").append(getElapsed()).append(" ms").append(ls);
             builder.append("Total number of iterations: ").append(getIterations()).append(ls);
             // Take solutions
             int solution=1;
@@ -216,7 +216,6 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
         for(N n : node.path()){
             if (n.action() != null) actions.add(n.action());
         }
-        Collections.reverse(actions);
         return actions;
     }
 }

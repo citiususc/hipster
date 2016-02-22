@@ -47,6 +47,7 @@ import java.util.Queue;
 public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Algorithm<A,S,N> {
     protected N initialNode;
     protected NodeExpander<A,S,N> nodeExpander;
+    protected boolean checkNegativeCycles = true;
 
     public BellmanFord(N initialNode, NodeExpander<A, S, N> nodeExpander) {
         this.initialNode = initialNode;
@@ -104,6 +105,9 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         public N next() {
             // Take the next node
             N currentNode = dequeue();
+            if (checkNegativeCycles && currentNode.pathSize() > explored.size()){
+                throw new NegativeCycleException();
+            }
             for (N successor : nodeExpander.expand(currentNode)) {
                 // Check if there is any improvement in the old cost
                 N previousNode = this.explored.get(successor.state());
@@ -138,7 +142,7 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
         while(it.hasNext()){
             iteration++;
             currentNode = it.next();
-            if (condition.apply(currentNode)) {
+            if (goalNode == null && condition.apply(currentNode)) {
                 goalNode = currentNode;
             }
         }
@@ -154,5 +158,29 @@ public class BellmanFord<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>
     @Override
     public Iterator iterator() {
         return new Iterator();
+    }
+
+    public N getInitialNode() {
+        return initialNode;
+    }
+
+    public void setInitialNode(N initialNode) {
+        this.initialNode = initialNode;
+    }
+
+    public NodeExpander<A, S, N> getNodeExpander() {
+        return nodeExpander;
+    }
+
+    public void setNodeExpander(NodeExpander<A, S, N> nodeExpander) {
+        this.nodeExpander = nodeExpander;
+    }
+
+    public boolean isCheckNegativeCycles() {
+        return checkNegativeCycles;
+    }
+
+    public void setCheckNegativeCycles(boolean checkNegativeCycles) {
+        this.checkNegativeCycles = checkNegativeCycles;
     }
 }

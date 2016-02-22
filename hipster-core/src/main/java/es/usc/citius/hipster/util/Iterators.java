@@ -23,12 +23,16 @@ public final class Iterators {
 
         @Override
         public E next() {
+            E next;
             if (current != null) {
-                E next = current;
+                next = current;
                 current = null;
                 return next;
+            } else {
+                next = computeNext();
+                if (next == null) throw new NoSuchElementException("next");
+                return next;
             }
-            return computeNext();
         }
 
         @Override

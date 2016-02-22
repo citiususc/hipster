@@ -15,19 +15,48 @@
 ~ limitations under the License.
 -->
 
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
-      <!-- Internal organization repository for snapshots -->
+        <!-- Sonatype Maven repository for snapshots -->
         <server>
-            <id>citius-nexus-snapshots</id>
-            <username>${env.NEXUS_SNAPSHOT_USERNAME}</username>
-            <password>${env.NEXUS_SNAPSHOT_PASSWORD}</password>
-        </server>
-	<!-- Sonatype Maven repository for snapshots -->
-	<server>
             <id>sonatype-nexus-snapshots</id>
             <username>${env.SONATYPE_SNAPSHOT_USERNAME}</username>
             <password>${env.SONATYPE_SNAPSHOT_PASSWORD}</password>
         </server>
+        <server>
+            <id>bintray-hipster4j-maven</id>
+            <username>${env.BINTRAY_USER}</username>
+            <password>${env.BINTRAY_API_KEY}</password>
+        </server>
     </servers>
+
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-hipster4j-maven</id>
+                    <name>bintray</name>
+                    <url>http://dl.bintray.com/hipster4j/maven</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-hipster4j-maven</id>
+                    <name>bintray-plugins</name>
+                    <url>http://dl.bintray.com/hipster4j/maven</url>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>bintray</id>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>bintray</activeProfile>
+    </activeProfiles>
 </settings> 
