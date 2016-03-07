@@ -31,14 +31,16 @@ import java.awt.*;
 
 /**
  * Example using a 2D {@link Maze2D}, solved using the A* algorithm.
- *
- * This example consists in a search problem in a bidimensional maze.
- * The problem is defined without explicit actions, and it uses a transition function implemented in the class
- * {@link Maze2D} which returns the accessible states from the current.
- * The cost functions is the Euclidean distance between points and so it is the heuristic.
- *
+ * <p>
+ * This example consists in a search problem in a bidimensional maze. This problem is characterized by:
+ * <ul>
+ * <li>The problem is defined without explicit actions</li>
+ * <li>It uses a transition function implemented in the class {@link Maze2D}, which returns the accessible states from the current.</li>
+ * <li>The cost functions is the Euclidean distance between points.</li>
+ * <li>Heuristic function is also Euclidean Distance.</li>
+ * </ul>
  * This example illustrates how to instantiate a {@link SearchProblem} and each one of the components
- * required for search, explaining what they are.
+ * required for search, explaining what they do.
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
