@@ -43,6 +43,7 @@ public class RomanianProblemExample {
             a HipsterGraph.
          */
         SearchProblem problem = GraphSearchProblem
+
                 /*
                     Here we set the start of the search problem to the city Arad.
                  */
@@ -73,7 +74,12 @@ public class RomanianProblemExample {
 
 
         /**
-         * Search is executed with with goal set to Bucharest. Results of the search are printed.
+         * Search iterators can be easily created using the methods in the Hipster class. This allows
+         * you to instantiate several search algorithms using the information stored in SearchProblem created
+         * above.
+         *
+         * In this example the search is executed using A* with with the goal set to Bucharest.
+         * Search will stop when the algorithm explores that node. Results of the search are printed.
          */
         System.out.println(Hipster.createAStar(problem).search(RomanianProblem.City.Bucharest));
     }
