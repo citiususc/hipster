@@ -30,14 +30,14 @@ import es.usc.citius.hipster.util.examples.maze.Mazes;
 import java.awt.*;
 
 /**
- * Example using a 2D {@link Maze2D}, solved using the A* algorithm.
+ * Example using a bidimensional maze, solved using the A* algorithm.
  * <p>
- * This example consists in a search problem in a bidimensional maze. This problem is characterized by:
+ * This example consists in a search problem in a {@link Maze2D}. This problem is characterized by:
  * <ul>
- * <li>The problem is defined without explicit actions</li>
- * <li>It uses a transition function implemented in the class {@link Maze2D}, which returns the accessible states from the current.</li>
- * <li>The cost functions is the Euclidean distance between points.</li>
- * <li>Heuristic function is also Euclidean Distance.</li>
+ *      <li>The problem is defined without explicit actions</li>
+ *      <li>It uses a transition function implemented in the class {@link Maze2D}, which returns the accessible states from the current.</li>
+ *      <li>The cost functions is the Euclidean distance between points.</li>
+ *      <li>Heuristic function is also Euclidean Distance.</li>
  * </ul>
  * This example illustrates how to instantiate a {@link SearchProblem} and each one of the components
  * required for search, explaining what they do.
@@ -81,7 +81,7 @@ public class MazeShortestPathExample {
         final Point goal = maze.getGoalLoc();
 
         /*
-            The SearchProblem is the structure used by Hipster to store all the
+            SearchProblem is the structure used by Hipster to store all the
             information about the search query, like: start, goals, transition function,
             cost function, etc. Once created it is used to instantiate the search
             iterators which provide the results.
