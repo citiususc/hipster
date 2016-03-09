@@ -28,14 +28,26 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation of the 8-puzzle search problem, represented as an array. It is solved
- * using the Dijkstra algorithm.
+ * Example of using Hipster to solve the 8-puzzle search problem problem using the
+ * Dijkstra's algorithm.
+ * <p>
+ * In this example a {@link SearchProblem} is used to define the components of the search, and
+ * the search iterator is later instantiated using this structure. This summarizes the content
+ * of this example:
+ * <ul>
+ *     <li>Uses {@link SearchProblem}, a structure created to facilitate organizing and storing the components
+ *     of the search.</li>
+ *     <li>The state of the 8-puzzle problem is modeled as an array. Each position of the array stores the number
+ *     of each piece of the puzzle at the given position, meaning the 0 the empty space.</li>
+ *     <li>This problem is modeled with actions, so an {@link ActionFunction} is used.
+ *     This function analyzes which actions are applicable in each state. Valid actions for this problem are moving the
+ *     empty space in each of the following directions: UP, DOWN, LEFT, RIGHT.</li>
+ *     <li>The {@link es.usc.citius.hipster.model.function.TransitionFunction}
+ *     creates the {@link Transition} resulting from apply the given actions to the current state.</li>
+ *     <li>The {@link CostFunction} for this problem is unitary. All actions have unitary cost.</li>
+ * </ul>
  *
- * This problem defines an action function, from a state it retrieves the set of
- * actions which can be applied to reach other states. The transition function takes
- * the action applied to the current state and the to obtain the successor one.
- * As cost function we assign a constant value to each action, so the objective is to
- * minimize the number of actions to solve the 8-puzzle.
+ * The objective of this search problem is to minimize the number of actions to solve the 8-puzzle.
  *
  * @see {@link es.usc.citius.hipster.examples.EightPuzzleProblemExample}
  *
@@ -48,30 +60,88 @@ public class SimpleEightPuzzleExample {
 
     public static void main(String[] args){
 
+        /*
+            SearchProblem is the structure used by Hipster to store all the
+            information about the search query, like: start, goals, transition function,
+            cost function, etc. Once created it is used to instantiate the search
+            iterators which provide the results.
+         */
         SearchProblem p = ProblemBuilder.create()
+
+                /*
+                    Initial state of the search. Defined as an array.
+                 */
                 .initialState(Arrays.asList(5,4,0,7,2,6,8,1,3))
+
+                /*
+                    Search problems can be defined with or without actions. In this example
+                    we use actions, as the solution results more informative if includes the
+                    motions followed to order the pieces of the puzzle (i.e. LEFT, DOWN, DOWN...).
+                    But problems without explicit actions can also be defined using the method
+                    defineProblemWithoutActions. This is useful when the sequence of actions is not
+                    interesting for the solution of the search, like in the 2D maze search
+                    problem that you can find in this module.
+                 */
                 .defineProblemWithExplicitActions()
+
+                /*
+                    The action function is the component which calculates for each state the
+                    actions that are available to reach other state. In this example the action
+                    function discards all motions that are not possible due to the bounds of the
+                    puzzle. This code is in the function validMovementsFor of this same class.
+                 */
                 .useActionFunction(new ActionFunction<Action, List<Integer>>() {
                     @Override
                     public Iterable<Action> actionsFor(List<Integer> state) {
                         // Here we compute the valid movements for the state
                         return validMovementsFor(state);
                     }
-                }).useTransitionFunction(new ActionStateTransitionFunction<Action, List<Integer>>() {
+                })
+
+                /*
+                    The transition
+                    function takes the available actions given by the actionFunction defined
+                    above and computes the new state that results from applying to the current state
+                    each one of the available actions.
+
+                    The transition function returns a collection of transitions.
+                    A transition is defined by a class Transition which has two attributes:
+                    source point (from) and destination point (to). The source point
+                    is the current state that we are exploring, and the destination point
+                    is a reachable location from that state.
+                */
+                .useTransitionFunction(new ActionStateTransitionFunction<Action, List<Integer>>() {
                     @Override
                     public List<Integer> apply(Action action, List<Integer> state) {
                         // Here we compute the state that results from doing an action A to the current state
                         return applyActionToState(action, state);
                     }
-                }).useCostFunction(new CostFunction<Action, List<Integer>, Double>() {
+                })
+
+                /*
+                    The cost function defines the effort moving between states.
+                    The CostFunction is an interface with three generic types: S - the state,
+                    A - the action type and T - the cost type.
+                    In this example we consider an unitary cost for each motion.
+                 */
+                .useCostFunction(new CostFunction<Action, List<Integer>, Double>() {
                     @Override
                     public Double evaluate(Transition<Action, List<Integer>> transition) {
                         // Every movement has the same cost, 1
                         return 1d;
                     }
-                }).build();
+                })
 
-        // Solve the problem using Dijkstra
+                /*
+                    With this method the SearchProblem is instantiated using the data introduced with the methods
+                    above.
+                 */
+                .build();
+
+        /**
+         * Here the search iterator (Dijkstra's algorithm) is created. Search is executed with until the goal
+         * state is explored and the results are printed by console.
+         */
         System.out.println(Hipster.createDijkstra(p).search(Arrays.asList(0,1,2,3,4,5,6,7,8)));
 
     }
