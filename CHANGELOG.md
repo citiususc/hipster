@@ -1,7 +1,7 @@
 # Change Log
 
 ## [1.0.1](https://github.com/citiususc/hipster/tree/1.0.1) (2016-05-16)
-[Full Changelog](https://github.com/citiususc/hipster/compare/v1.0.0...1.0.1)
+[Full Changelog](https://github.com/citiususc/hipster/compare/v1.0.0...v1.0.1)
 
 **Fixed bugs:**
 
