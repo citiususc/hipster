@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.0.1](https://github.com/citiususc/hipster/tree/1.0.1) (2016-05-16)
+[Full Changelog](https://github.com/citiususc/hipster/compare/v1.0.0...1.0.1)
+
+**Fixed bugs:**
+
+- open queue does not manage repeated elements [\#170](https://github.com/citiususc/hipster/issues/170)
+
+**Closed issues:**
+
+- Add heuristic to maze example [\#165](https://github.com/citiususc/hipster/issues/165)
+- Implementation of Annealing localsearch [\#158](https://github.com/citiususc/hipster/issues/158)
+
 ## [v1.0.0](https://github.com/citiususc/hipster/tree/v1.0.0) (2016-02-22)
 [Full Changelog](https://github.com/citiususc/hipster/compare/v1.0.0-rc2...v1.0.0)
 
