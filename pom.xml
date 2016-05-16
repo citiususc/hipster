@@ -40,7 +40,9 @@
         <url>http://github.com/citiususc/hipster/issues</url>
     </issueManagement>
 
-
+    <description>
+        Hipster4j is a lightweight and powerful heuristic search library for Java and Android. It contains common, fully customizable algorithms such as Dijkstra, A* (A-Star), DFS, BFS, Bellman-Ford and more.
+    </description>
 
     <licenses>
         <license>
