@@ -104,7 +104,7 @@ public class AStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>>
          */
         public N next() {
             // Get and remove the best node in the queue
-            N current = queue.poll();
+            N current = takePromising();
             S currentState = current.state();
             // Remove from open as well
             open.remove(currentState);
