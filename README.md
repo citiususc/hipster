@@ -67,14 +67,14 @@ You can use the latest (unstable) version of Hipster under development. Just add
   <dependency>
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-all</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
 
 #### Releases
 
-Current stable release is v1.0.0. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
+Current stable release is v1.0.1. See the [milestones](https://github.com/citiususc/hipster/milestones) to check the current development status.
 
 ```xml
 <dependencies>
@@ -86,7 +86,7 @@ Current stable release is v1.0.0. See the [milestones](https://github.com/citius
   <dependency>
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-all</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </dependency>
 </dependencies>
 ```

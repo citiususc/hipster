@@ -9,13 +9,13 @@
         <!-- Site config -->
         <site.url>http://hipster4j.org</site.url>
         <!-- Hipster version -->
-        <hipster.version>1.0.1-SNAPSHOT</hipster.version>
+        <hipster.version>1.0.2-SNAPSHOT</hipster.version>
     </properties>
 
     <groupId>es.usc.citius.hipster</groupId>
     <artifactId>hipster-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
