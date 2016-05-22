@@ -7,12 +7,12 @@
 
 A powerful and friendly heuristic search library implemented in Java.
 
-## What's Hipster?
+## What's Hipster4j?
 
-The aim of Hipster is to provide an easy to use yet powerful and flexible type-safe Java library for heuristic search. 
+The aim of Hipster4j is to provide an easy to use yet powerful and flexible type-safe Java library for heuristic search. 
 Hipster relies on a flexible model with generic operators that allow you to reuse and change the behavior of the algorithms very easily. Algorithms are also implemented in an iterative way, avoiding recursion. This has many benefits: full control over the search, access to the internals at runtime or a better and clear scale-out for large search spaces using the heap memory.
 
-You can use Hipster to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
+You can use Hipster4j to solve from simple graph search problems to more advanced state-space search problems where the state space is complex and weights are not just double values but custom defined costs.
 
 ## Features
 
@@ -22,7 +22,7 @@ The current version of the library comes with some very well-known and wide used
     * Uninformed search:
         * DFS: Depth-First-Search.
         * BFS: Breadth-First-Search.
-        * Dijkstra.
+        * Dijkstra's algorithm.
         * Bellman-Ford.
     * Informed search:
         * A star (A*).
