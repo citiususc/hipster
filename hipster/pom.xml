@@ -1,0 +1,273 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Point to the root dir to locate custom templates for javadoc -->
+        <hipster.root.dir>${project.basedir}</hipster.root.dir>
+        <!-- Site config -->
+        <site.url>http://hipster4j.org</site.url>
+        <!-- Hipster version -->
+        <hipster.version>1.0.0-SNAPSHOT</hipster.version>
+    </properties>
+
+    <groupId>es.usc.citius.hipster</groupId>
+    <artifactId>hipster-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>hipster-pom</name>
+    <url>${site.url}</url>
+    <inceptionYear>2013</inceptionYear>
+
+    <modules>
+        <module>hipster-core</module>
+        <module>hipster-examples</module>
+        <module>hipster-all</module>
+        <module>hipster-test</module>
+        <module>hipster-third-party-graphs</module>
+        <module>hipster-extensions</module>
+    </modules>
+
+    <organization>
+        <name>Centro de Investigación en Tecnoloxías da Información (CITIUS), University of Santiago de Compostela</name>
+        <url>http://citius.usc.es</url>
+    </organization>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>http://github.com/citiususc/hipster/issues</url>
+    </issueManagement>
+
+
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <prerequisites>
+        <maven>3.0.3</maven>
+    </prerequisites>
+
+    <scm>
+        <connection>scm:git:git@github.com:citiususc/hipster.git</connection>
+        <developerConnection>scm:git:git@github.com:citiususc/hipster.git</developerConnection>
+        <url>scm:git:git@github.com:citiususc/hipster.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>pablormier</id>
+            <name>Pablo Rodríguez Mier</name>
+            <email>pablo.rodriguez.mier@usc.es</email>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>adrian_gonzalez</id>
+            <name>Adrián González Sieira</name>
+            <email>adrian.gonzalez@usc.es</email>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <docencoding>UTF-8</docencoding>
+                        <charset>UTF-8</charset>
+                        <!-- Doclava specific configuration -->
+                        <docletArtifact>
+                            <groupId>com.google.doclava</groupId>
+                            <artifactId>doclava</artifactId>
+                            <version>1.0.6</version>
+                        </docletArtifact>
+                        <doclet>com.google.doclava.Doclava</doclet>
+                        <bootclasspath>${sun.boot.class.path}</bootclasspath>
+                        <additionalparam>
+                            -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+                            -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+                            -hdf project.name "${project.name}"
+                            -templatedir ${hipster.root.dir}/src/main/doclava/custom/assets/hipster-template/
+                            -d ${project.build.directory}/apidocs
+                        </additionalparam>
+                        <useStandardDocletOptions>false</useStandardDocletOptions>
+                        <additionalJOption>-J-Xmx1024m</additionalJOption>
+                        <docfilessubdirs>true</docfilessubdirs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <generateReports>true</generateReports>
+                        <inputEncoding>UTF-8</inputEncoding>
+                        <outputEncoding>UTF-8</outputEncoding>
+                        <skipDeploy>true</skipDeploy>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+
+
+            <!-- Generate site documentation using reflow-maven-skin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+
+            <!-- Plugin to generate reports of test coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.5.201505241946</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
