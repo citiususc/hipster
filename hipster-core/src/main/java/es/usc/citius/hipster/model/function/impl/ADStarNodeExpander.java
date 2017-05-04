@@ -129,16 +129,16 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * @param transitions list of transitions with changed costs
      * @return list of updated nodes
      */
-    public Iterable<N> expandTransitionsChanged(S begin, N current, Iterable<Transition<A, S>> transitions){
+    public Iterable<N> expandTransitionsChanged(N begin, Iterable<Transition<A, S>> transitions){
         Collection<N> nodes = new ArrayList<N>();
         for (Transition<A, S> transition : transitions) {
             S state = transition.getState();
             //if v != start
-            if (!state.equals(begin)) {
+            if (!state.equals(begin.state())) {
                 //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
                 N node = this.visited.get(state);
                 if (node == null) {
-                    node = nodeFactory.makeNode(current, transition);
+                    node = nodeFactory.makeNode(begin, transition);
                     visited.put(state, node);
                 }
                 // bp(v) = arg min s'' predecessor of v such that (v(s'') + c(s'', v))
@@ -241,12 +241,30 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     }
 
     /**
+     * Assigns the maximum value to G in the current node.
+     *
+     * @param node {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl} to modify the value of V
+     */
+    public void setMaxG(N node)  {
+        node.setG(this.add.getMaxElem());
+    }
+
+    /**
      * Assign a value to the inflation parameter of the heuristic.
      *
      * @param epsilon new value
      */
     public void setEpsilon(double epsilon) {
         this.epsilon = epsilon;
+    }
+
+    /**
+     * Queries the current value of epsilon (sub-optimal bound for anytime solutions).
+     *
+     * @return current value of epsilon
+     */
+    public double getEpsilon() {
+        return epsilon;
     }
 
     /**
@@ -268,5 +286,17 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      */
     public N makeNode(N from, Transition<A, S> transition){
         return nodeFactory.makeNode(from, transition);
+    }
+
+    /**
+     * Updating the priority of a node is required when changing the value of Epsilon.
+     */
+    public void updateKey(N node){
+        node.setKey(new es.usc.citius.hipster.model.ADStarNode.Key<C>(node.getG(), node.getV(),
+                heuristicFunction.estimate(node.state()), epsilon, add, scale));
+    }
+
+    public void setMaxKey(N node){
+        node.setKey(new ADStarNode.Key<C>(add.getMaxElem(), add.getMaxElem()));
     }
 }

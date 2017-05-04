@@ -17,13 +17,7 @@
 package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.CostFunction;
-import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.model.function.NodeFactory;
-import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.model.function.impl.*;
-import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
-import es.usc.citius.hipster.model.problem.SearchComponents;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,12 +100,14 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         protected Map<S, N> open;
         protected Map<S, N> closed;
         protected Map<S, N> incons;
-        protected Iterable<Transition<A, S>> transitionsChanged;
+        protected Collection<Transition<A, S>> transitionsChanged;
         protected Queue<N> queue;
+        protected boolean replan;
         protected final N beginNode;
         protected final Collection<N> goalNodes;
 
         protected Iterator() {
+            this.replan = false;
             //initialize nodes
             this.beginNode = expander.makeNode(null, new Transition<A, S>(null, begin));
             //initialize goal node collection
@@ -192,14 +188,20 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         }
 
         /**
-         * As the algorithm is executed iteratively refreshing the changed relations
-         * between nodes, this method will return always true.
+         * The iterator will have next() nodes when the stop condition of the algorithm is not reached, or if the
+         * value of Epsilon has changed and a replanning is needed. It may happen that after chaning Epsilon the
+         * solution does not improve, and therefore this method will return false. In that case, Epsilon should be
+         * reduced again until the minimum value of 1 is reached. In that case, the solution will be optimal.
          *
-         * @return always true
+         * @see #setEpsilon(double)
+         *
+         * @return true if a replan is pending or the solution has not been found
          */
         @Override
         public boolean hasNext() {
-            return takePromising() != null;
+            N current = takePromising();
+            N minGoal = Collections.min(goalNodes);
+            return replan || minGoal.compareTo(current) >= 0 || minGoal.getV().compareTo(minGoal.getG()) < 0;
         }
 
         /**
@@ -238,19 +240,28 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
                     updateQueues(current);
                 }
             } else {
+                this.replan = false;
                 // for all directed edges (u, v) with changed edge costs
-                for(N nodeTransitionsChanged : expander.expandTransitionsChanged(beginNode.state(), current, transitionsChanged)){
+                for(N nodeTransitionsChanged : expander.expandTransitionsChanged(beginNode, transitionsChanged)){
                     updateQueues(nodeTransitionsChanged);
                 }
+                //empty the list of transitions
+                transitionsChanged.clear();
                 //move states from INCONS to OPEN
                 open.putAll(incons);
+                //empty INCONS queue
+                incons.clear();
                 //updateQueues the priorities for all s in OPEN according to key(s)
                 queue.clear();
                 for(N node : open.values()){
+                    //key is recalculated according to the new value of Epsilon
+                    expander.updateKey(node);
+                    //insert into the priority queue
                     queue.offer(node);
                 }
                 //closed = empty
                 closed.clear();
+                current = takePromising();
             }
             return current;
         }
@@ -274,6 +285,40 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         public Map<S, N> getClosed() { return closed; }
 
         public Map<S, N> getIncons() { return incons; }
+
+        /**
+         * Updates the value of epsilon to improve the cost of the solutions.
+         * The update of Epsilon must be manually done, as this parameter higlhy depends on the heuristic used,
+         * and the search problem. Use only values of epsilon above 1, as the opposite will lead to diminish the
+         * estimate of the heuristic, which is supposed to be optimistic. Values below 1 result in underestimating
+         * the cost to the goal, and therefore in a greater number of expansions to find the same solution than with
+         * epsilon = 1.
+         *
+         * @param epsilon new value of epsilon (sub-optimal bound to obtain anytime solutions)
+         */
+        public void setEpsilon(double epsilon){
+            this.replan = true;
+            expander.setEpsilon(epsilon);
+        }
+
+        /**
+         * Queries the current value of Epsilon (sub-optimal bound for anytime solutions).
+         *
+         * @return current value of Epsilon
+         */
+        public double getEpsilon(){
+            return expander.getEpsilon();
+        }
+
+        /**
+         * Marks transitions to be processed in the next replan event.
+         *
+         * @param transitions
+         */
+        public void addTransitionsChanged(Collection<Transition<A, S>> transitions){
+            this.replan = true;
+            transitionsChanged.addAll(transitions);
+        }
     }
 
 }
