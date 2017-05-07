@@ -5,10 +5,7 @@ import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.ADStarNode;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is an implementation of {@link es.usc.citius.hipster.model.function.NodeExpander} for nodes
@@ -43,6 +40,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     private final ScalarFunction<C> scale;
     private final NodeFactory<A, S, N> nodeFactory;
     private Map<S, N> visited;
+    private Map<S, Map<S, Transition<A, S>>> ingoing;
     private double epsilon;
 
     /**
@@ -84,16 +82,26 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
         this.scale = scale;
         this.nodeFactory = nodeFactory;
         this.visited = new HashMap<S, N>();
+        this.ingoing = new HashMap<S, Map<S, Transition<A, S>>>();
         this.epsilon = epsilon;
     }
 
     @Override
     public Iterable<N> expand(N node) {
         Collection<N> nodes = new ArrayList<N>();
+        S state = node.state();
         boolean consistency = node.isConsistent();
         //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
         for (Transition<A, S> transition : successorFunction.transitionsFrom(node.state())) {
             N successorNode = visited.get(transition.getState());
+            //add ass predecessor
+            Map<S, Transition<A, S>> ingoingTransitions = ingoing.get(node);
+            if(ingoingTransitions == null){
+                ingoingTransitions = new HashMap<S, Transition<A, S>>();
+                ingoing.put(state, ingoingTransitions);
+            }
+            ingoingTransitions.put(transition.getFromState(), transition);
+            //create not visited node
             if (successorNode == null) {
                 successorNode = nodeFactory.makeNode(node, transition);
                 visited.put(transition.getState(), successorNode);
@@ -107,10 +115,10 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                 successorNode.setDoUpdate(updateConsistent(successorNode, node, transition));
             } else {
                 //Generate
-                if (transition.getState().equals(node.state())) {
+                if (successorNode.previousNode().state().equals(node.state())) {
                     // bp(s') = arg min s'' predecessor of s' such that (v(s'') + c(s'', s'))
                     // g(s') = v(bp(s')) + c(bp(s'), s'')
-                    updateInconsistent(successorNode, predecessorsMap(transition.getState()));
+                    updateInconsistent(successorNode, ingoing.get(transition.getState()));
                     //update queues after this
                     successorNode.setDoUpdate(true);
                 }
@@ -125,7 +133,6 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * list of transitions passed as parameter.
      *
      * @param begin beginning state of the search
-     * @param current current node of the search
      * @param transitions list of transitions with changed costs
      * @return list of updated nodes
      */
@@ -143,7 +150,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                 }
                 // bp(v) = arg min s'' predecessor of v such that (v(s'') + c(s'', v))
                 // g(v) = v(bp(v)) + c(bp(v), v)
-                updateInconsistent(node, predecessorsMap(transition.getState()));
+                updateInconsistent(node, ingoing.get(state));
                 nodes.add(node);
             }
         }
@@ -184,18 +191,17 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * @param predecessorMap map containing the the predecessor nodes and
      * @return true if the node has changed its {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key}
      */
-    private boolean updateInconsistent(N node, Map<Transition<A, S>, N> predecessorMap) {
-        C minValue = add.getIdentityElem();
+    private boolean updateInconsistent(N node, Map<S, Transition<A, S>> predecessorMap) {
+        C minValue = add.getMaxElem();
         N minParent = null;
         Transition<A, S> minTransition = null;
-        for (Map.Entry<Transition<A, S>, N> current : predecessorMap
-                .entrySet()) {
-            C value = add.apply(current.getValue().getV(), costFunction.evaluate(current.getKey()));
-            //T value = current.getValue().v.add(this.costFunction.evaluate(current.getKey()));
+        for (Transition<A, S> current : predecessorMap.values()) {
+            N predecessorNode = visited.get(current.getFromState());
+            C value = add.apply(predecessorNode.getV(), costFunction.evaluate(current));
             if (value.compareTo(minValue) < 0) {
                 minValue = value;
-                minParent = current.getValue();
-                minTransition = current.getKey();
+                minParent = predecessorNode;
+                minTransition = current;
             }
         }
         node.setPreviousNode(minParent);
@@ -209,26 +215,6 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                         heuristicFunction.estimate(minTransition.getState()), epsilon, add, scale)
         );
         return true;
-    }
-
-    /**
-     * Retrieves a map with the predecessors states and the node associated
-     * to each predecessor state.
-     *
-     * @param current current state to calculate predecessors of
-     * @return map pairs of <state, node> with the visited predecessors of the state
-     */
-    private Map<Transition<A, S>, N> predecessorsMap(S current){
-        //Map<Transition, Node> containing predecessors relations
-        Map<Transition<A, S>, N> mapPredecessors = new HashMap<Transition<A, S>, N>();
-        //Fill with non-null pairs of <Transition, Node>
-        for (Transition<A, S> predecessor : predecessorFunction.transitionsFrom(current)) {
-            N predecessorNode = visited.get(predecessor.getState());
-            if (predecessorNode != null) {
-                mapPredecessors.put(predecessor, predecessorNode);
-            }
-        }
-        return mapPredecessors;
     }
 
     /**
