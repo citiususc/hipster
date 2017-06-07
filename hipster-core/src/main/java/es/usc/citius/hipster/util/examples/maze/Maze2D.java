@@ -121,7 +121,7 @@ public class Maze2D {
 
     private Point charToPoint(char c){
         for(int row = 0; row < this.rows; row++){
-            for(int column = 0; row < this.columns; column++){
+            for(int column = 0; column < this.columns; column++){
                 if (maze[row][column] == c) return new Point(column, row);
             }
         }
