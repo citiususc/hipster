@@ -16,17 +16,20 @@
 
 package es.usc.citius.lab.hipster.maze;
 
-import es.usc.citius.hipster.util.examples.maze.Maze2D;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.awt.*;
+import java.awt.Point;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import es.usc.citius.hipster.util.examples.maze.Maze2D;
 
 public class Maze2DTest {
 
@@ -151,4 +154,22 @@ public class Maze2DTest {
     	assertTrue(maze.pointInBounds(new Point(colLength-1,0)));
     	assertTrue(maze.pointInBounds(new Point(0,rowLength-1)));
     }
+	
+	@Test
+	public void testCharToPoint(){
+		try{
+			Maze2D maze = new Maze2D(testMaze);
+			Method method = maze.getClass().getDeclaredMethod("charToPoint", char.class);
+			method.setAccessible(true);
+			char c = ' ';
+			Point point = (Point) method.invoke(maze, c);
+			assertEquals(new Point(2, 1), point);
+		}catch(NoSuchMethodException e){
+			assertTrue(false);
+		}catch(InvocationTargetException e){
+			assertTrue(false);
+		}catch(IllegalAccessException e){
+			assertTrue(false);
+		}
+	}
 }
