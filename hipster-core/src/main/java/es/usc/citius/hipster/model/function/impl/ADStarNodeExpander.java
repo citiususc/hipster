@@ -125,7 +125,6 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * list of transitions passed as parameter.
      *
      * @param begin beginning state of the search
-     * @param current current node of the search
      * @param transitions list of transitions with changed costs
      * @return list of updated nodes
      */
@@ -204,10 +203,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
         node.setState(minTransition.getState());
         node.setAction(minTransition.getAction());
         // node.state = minTransition;
-        node.setKey(
-                new ADStarNode.Key<C>(node.getG(), node.getV(),
-                        heuristicFunction.estimate(minTransition.getState()), epsilon, add, scale)
-        );
+        node.getKey().update(node.getG(), node.getV(), heuristicFunction.estimate(minTransition.getState()), epsilon, add, scale);
         return true;
     }
 
@@ -292,8 +288,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * Updating the priority of a node is required when changing the value of Epsilon.
      */
     public void updateKey(N node){
-        node.setKey(new es.usc.citius.hipster.model.ADStarNode.Key<C>(node.getG(), node.getV(),
-                heuristicFunction.estimate(node.state()), epsilon, add, scale));
+        node.getKey().update(node.getG(), node.getV(), heuristicFunction.estimate(node.state()), epsilon, add, scale);
     }
 
     public void setMaxKey(N node){

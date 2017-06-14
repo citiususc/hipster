@@ -49,7 +49,7 @@ public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<
     public void setV(C v);
 
     /**
-     * @param update set a new value for the update flag of this node
+     * @param update set a new value for the calculate flag of this node
      */
     public void setDoUpdate(boolean update);
 
@@ -57,6 +57,11 @@ public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<
      * @param key new key to compare the priority of the nodes
      */
     public void setKey(Key<C> key);
+
+    /**
+     * @return retrieves the current key of the node
+     */
+    public Key<C> getKey();
 
     /**
      * @param parent new parent of the node
@@ -93,6 +98,21 @@ public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<
          * @param e inflation value
          */
         public Key(C g, C v, C h, double e, BinaryOperation<C> add, ScalarFunction<C> scale) {
+            calculate(g, v, h, e, add, scale);
+        }
+
+        /**
+         * Updates the value of the key. This is done for efficiency, to avoid
+         * creating new instances.
+         */
+        public void update(C g, C v, C h, double e, BinaryOperation<C> add, ScalarFunction<C> scale){
+            calculate(g, v, h, e, add, scale);
+        }
+
+        /**
+         * Updates the value of the key
+         */
+        private void calculate(C g, C v, C h, double e, BinaryOperation<C> add, ScalarFunction<C> scale){
             if (v.compareTo(g) >= 0) {
                 this.first = add.apply(g, scale.scale(h, e)); //g + h*e
                 this.second = g;

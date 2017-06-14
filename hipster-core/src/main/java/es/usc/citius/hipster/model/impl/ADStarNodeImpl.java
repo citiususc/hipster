@@ -84,6 +84,11 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
     }
 
     @Override
+    public Key<C> getKey() {
+        return key;
+    }
+
+    @Override
     public void setPreviousNode(ADStarNodeImpl<A, S, C> parent){
         this.previousNode = parent;
     }
