@@ -201,7 +201,7 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         public boolean hasNext() {
             N current = takePromising();
             N minGoal = Collections.min(goalNodes);
-            return replan || minGoal.compareTo(current) >= 0 || minGoal.getV().compareTo(minGoal.getG()) < 0;
+            return replan || this.open.containsKey(minGoal.state()) || minGoal.compareTo(current) >= 0 || minGoal.getV().compareTo(minGoal.getG()) < 0;
         }
 
         /**
@@ -285,6 +285,15 @@ public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.
         public Map<S, N> getClosed() { return closed; }
 
         public Map<S, N> getIncons() { return incons; }
+
+        /**
+         * Retrieves the list of goal nodes for its modification.
+         *
+         * @return list of goals
+         */
+        public Collection<N> getGoalNodes() {
+            return goalNodes;
+        }
 
         /**
          * Updates the value of epsilon to improve the cost of the solutions.
