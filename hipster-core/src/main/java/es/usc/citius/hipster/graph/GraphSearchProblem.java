@@ -31,6 +31,8 @@ import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.Function;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Builder to generate a {@link es.usc.citius.hipster.model.problem.SearchProblem} but using
@@ -80,6 +82,47 @@ public final class GraphSearchProblem {
                             V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
                             transitions.add(Transition.create(state, edge.getEdgeValue(), oppositeVertex));
                         }
+                        return transitions;
+                    }
+                };
+            }
+            return new CostType<E>(tf);
+        }
+
+        public <E> CostType<E> inGraphWithLexicographicalOrder(final HipsterGraph<V, E> graph) {
+
+            class ComparatorTransitions implements Comparator<Transition<E, V>>{
+
+                @Override
+                public int compare(Transition<E, V> o1, Transition<E, V> o2) {
+                    return o1.getState().toString().compareTo(o2.getState().toString());
+                }
+            }
+
+            TransitionFunction<E, V> tf;
+            if (graph instanceof HipsterDirectedGraph) {
+                final HipsterDirectedGraph<V, E> dg = (HipsterDirectedGraph<V, E>) graph;
+                tf = new TransitionFunction<E, V>() {
+                    @Override
+                    public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                        ArrayList<Transition<E, V>> transitions = new ArrayList<Transition<E, V>>();
+                        for(GraphEdge<V, E> edge : dg.outgoingEdgesOf(state)){
+                            transitions.add(Transition.create(state, edge.getEdgeValue(), edge.getVertex2()));
+                        }
+                        Collections.sort(transitions, new ComparatorTransitions());
+                        return transitions;
+                    }
+                };
+            } else {
+                tf = new TransitionFunction<E, V>() {
+                    @Override
+                    public Iterable<Transition<E, V>> transitionsFrom(final V state) {
+                        ArrayList<Transition<E, V>> transitions = new ArrayList<Transition<E, V>>();
+                        for(GraphEdge<V, E> edge : graph.edgesOf(state)){
+                            V oppositeVertex = edge.getVertex1().equals(state) ? edge.getVertex2() : edge.getVertex1();
+                            transitions.add(Transition.create(state, edge.getEdgeValue(), oppositeVertex));
+                        }
+                        Collections.sort(transitions, new ComparatorTransitions());
                         return transitions;
                     }
                 };
