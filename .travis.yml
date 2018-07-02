@@ -1,6 +1,6 @@
 language: java
 jdk:
-- oraclejdk7
+  - openjdk8
 branches:
   except:
   - /^(?i:wip).*$/
