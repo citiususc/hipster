@@ -44,6 +44,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     private final NodeFactory<A, S, N> nodeFactory;
     private Map<S, N> visited;
     private double epsilon;
+    private boolean nodeConsistent;
 
     /**
      * Builds a node expander from a search components and a node factory. A epsilon value (used to inflate
@@ -87,10 +88,13 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
         this.epsilon = epsilon;
     }
 
+    public void setNodeConsistent(boolean nodeConsistent) {
+        this.nodeConsistent = nodeConsistent;
+    }
+
     @Override
     public Iterable<N> expand(N node) {
         Collection<N> nodes = new ArrayList<N>();
-        boolean consistency = node.isConsistent();
         //if s' not visited before: v(s')=g(s')=Infinity; bp(s')=null
         for (Transition<A, S> transition : successorFunction.transitionsFrom(node.state())) {
             N successorNode = visited.get(transition.getState());
@@ -99,7 +103,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                 visited.put(transition.getState(), successorNode);
             }
             //if consistent
-            if (consistency) {
+            if (nodeConsistent) {
                 //if g(s') > g(s) + c(s, s')
                 // bp(s') = s
                 // g(s') = g(s) + c(s, s')
@@ -107,7 +111,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
                 successorNode.setDoUpdate(updateConsistent(successorNode, node, transition));
             } else {
                 //Generate
-                if (transition.getState().equals(node.state())) {
+                if (successorNode.previousNode() != null && successorNode.previousNode().state().equals(node.state())) {
                     // bp(s') = arg min s'' predecessor of s' such that (v(s'') + c(s'', s'))
                     // g(s') = v(bp(s')) + c(bp(s'), s'')
                     updateInconsistent(successorNode, predecessorsMap(transition.getState()));
