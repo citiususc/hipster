@@ -129,7 +129,17 @@ SearchProblem p = GraphSearchProblem
 System.out.println(Hipster.createDijkstra(p).search("F"));
 ```
 
-Output result: `Total number of iterations: 7. States: [A, B, C, E, D, F], Actions: [2.0, 1.0, 3.0, 2.0, 2.0], Search information: WeightedNode{state=F, cost=10.0, estimation=0.0, score=10.0}`
+Output result:
+`Total solutions: 1
+Total time: 6 ms
+Total number of iterations: 6
++ Solution 1: 
+ - States: 
+	[A, C, E, D, F]
+ - Actions: 
+	[2.0, 3.0, 4.0, 11.0]
+ - Search information: 
+	WeightedNode{state=F, cost=20.0, estimation=0.0, score=20.0}`
 
 But that's not all. Hipster comes with different problem examples
 that illustrate how Hipster can be used to solve a [wide variety of problems](https://github.com/citiususc/hipster/tree/0c0ec9cb5087fede9930a6efbd5126afd69896ac/hipster-examples/src/main/java/es/usc/citius/hipster/examples) (not only graph search).
