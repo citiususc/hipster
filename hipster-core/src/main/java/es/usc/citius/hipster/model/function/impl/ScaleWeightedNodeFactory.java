@@ -40,8 +40,8 @@ import es.usc.citius.hipster.model.impl.WeightedNode;
  */
 public class ScaleWeightedNodeFactory<A,S,C extends Comparable<C>> implements NodeFactory<A,S,WeightedNode<A,S,C>>{
 
-    protected CostFunction<A,S,C> gf;
-    protected HeuristicFunction<S,C> hf;
+    protected CostFunction<A,S,C> costFunction;
+    protected HeuristicFunction<S,C> heuristicFunction;
     protected BinaryOperation<C> costAccumulator;
     protected ScalarOperation<C> scalarOperation;
     protected double scaleFactor;
@@ -57,8 +57,8 @@ public class ScaleWeightedNodeFactory<A,S,C extends Comparable<C>> implements No
      * @param scaleOperation scaling operation for the cost type
      */
     public ScaleWeightedNodeFactory(CostFunction<A, S, C> costFunction, HeuristicFunction<S, C> heuristicFunction, double scaleFactor, BinaryOperation<C> costAccumulator, ScalarOperation<C> scaleOperation) {
-        this.gf = costFunction;
-        this.hf = heuristicFunction;
+        this.costFunction = costFunction;
+        this.heuristicFunction = heuristicFunction;
         this.costAccumulator = costAccumulator;
         this.scalarOperation = scaleOperation;
         this.scaleFactor = scaleFactor;
@@ -71,16 +71,32 @@ public class ScaleWeightedNodeFactory<A,S,C extends Comparable<C>> implements No
         if (fromNode == null){
             cost = costAccumulator.getIdentityElem();
         } else {
-            cost = costAccumulator.apply(fromNode.getCost(), this.gf.evaluate(transition));
+            cost = costAccumulator.apply(fromNode.getCost(), this.costFunction.evaluate(transition));
         }
-        estimatedDistance = this.hf.estimate(transition.getState());
+        estimatedDistance = this.heuristicFunction.estimate(transition.getState());
         score = costAccumulator.apply(cost, scalarOperation.scale(estimatedDistance, scaleFactor));
 
         return new WeightedNode<A,S,C>(fromNode, transition.getState(), transition.getAction(), cost, estimatedDistance, score);
     }
 
+    public CostFunction<A, S, C> getCostFunction() {
+        return costFunction;
+    }
+
+    public HeuristicFunction<S, C> getHeuristicFunction() {
+        return heuristicFunction;
+    }
+
     public double getScaleFactor() {
         return scaleFactor;
+    }
+
+    public BinaryOperation<C> getCostAccumulator() {
+        return costAccumulator;
+    }
+
+    public ScalarOperation<C> getScalarOperation() {
+        return scalarOperation;
     }
 
     public void setScaleFactor(double scaleFactor) {
