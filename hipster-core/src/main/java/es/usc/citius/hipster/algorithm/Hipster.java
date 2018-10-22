@@ -238,8 +238,6 @@ public final class Hipster {
 	 *            type of the actions
 	 * @param <S>
 	 *            type of the states
-	 * @param <C>
-	 *            type of the cost
 	 * @param <N>
 	 *            type of the nodes
 	 * @return instance of
@@ -279,7 +277,7 @@ public final class Hipster {
 	/**
 	 * Instantiates a Anytime Dynamic A* algorithm given the search components.
 	 * Search components can be obtained easily for graph-based problems using
-	 * {@link es.usc.citius.hipster.util.graph.GraphSearchProblem}.
+	 * {@link es.usc.citius.hipster.graph.GraphSearchProblem}.
 	 *
 	 * @param components
 	 *            search components to be used by the algorithm
