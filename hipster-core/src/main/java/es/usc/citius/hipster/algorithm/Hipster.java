@@ -23,10 +23,10 @@ import es.usc.citius.hipster.algorithm.localsearch.AnnealingSearch.SuccessorFind
 import es.usc.citius.hipster.model.CostNode;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.function.NodeExpander;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeExpander;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeFactory;
 import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
+import es.usc.citius.hipster.model.problem.AnytimeSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
@@ -301,5 +301,31 @@ public final class Hipster {
 				components, factory, 1.0);
 		// instantiate algorithm
 		return new ADStarForward(components.getBegin(), Collections.singleton(components.getGoal()), expander);
+	}
+
+	/**
+	 * Instantiates a ARA* algorithm given a problem definition.
+	 *
+	 * @param components
+	 *            search problem definition with the components of the algorithm
+	 * @param <A>
+	 *            type of the actions
+	 * @param <S>
+	 *            type of the states
+	 * @param <C>
+	 *            type of the cost
+	 * @param <N>
+	 *            type of the nodes
+	 * @return instance of {@link es.usc.citius.hipster.algorithm.ARAStar} for
+	 *         the problem definition
+	 */
+	public static <A, S, C extends Comparable<C>, N extends HeuristicNode<A, S, C, N>> ARAStar<A, S, C, N> createARAStar(
+			AnytimeSearchProblem<A, S, N> components) {
+
+		return new ARAStar<A, S, C, N>(
+				components.getInitialNode().state(), components.getFinalNode().state(),
+				components.getScaleFactor(),
+				components.getExpander()
+		);
 	}
 }

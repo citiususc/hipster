@@ -205,8 +205,8 @@ public final class ProblemBuilder {
                  * An informed search problem builder generates informed search problems with a generic cost
                  */
                 public final class Informed<C extends Comparable<C>> {
-                    private CostFunction<A,S,C> cf;
-                    private BinaryOperation<C> costAlgebra;
+                    protected CostFunction<A,S,C> cf;
+                    protected BinaryOperation<C> costAlgebra;
 
                     public Informed(CostFunction<A, S, C> cf, BinaryOperation<C> costAlgebra) {
                         this.cf = cf;
@@ -239,7 +239,7 @@ public final class ProblemBuilder {
                      * Defines the heuristic function to be used.
                      */
                     public final class Heuristic {
-                        private HeuristicFunction<S,C> hf;
+                        protected HeuristicFunction<S,C> hf;
 
                         public Heuristic(HeuristicFunction<S, C> hf) {
                             this.hf = hf;
@@ -254,6 +254,33 @@ public final class ProblemBuilder {
 
                             return new SearchProblem<A, S, WeightedNode<A,S,C>>(initialNode, nodeExpander);
                         }
+
+                        public Anytime useAnytime(double scaleFactor, ScalarOperation<C> scaleFunction){
+                            return new Anytime(scaleFactor, scaleFunction);
+                        }
+
+                        /**
+                         * Defines the inflation parameter for Anytime algorithms
+                         */
+                        public final class Anytime {
+                            private ScalarOperation<C> scaleFunction;
+                            private double scaleFactor;
+
+                            public Anytime(double scaleFactor, ScalarOperation<C> scalarFunction){
+                                this.scaleFactor = scaleFactor;
+                                this.scaleFunction = scalarFunction;
+                            }
+
+                            public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
+                                ScaleWeightedNodeFactory<A, S, C> factory = new ScaleWeightedNodeFactory<>(cf, hf, scaleFactor, costAlgebra, scaleFunction);
+                                WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
+                                LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander =
+                                        new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
+
+                                return new AnytimeSearchProblem<>(initialNode, nodeExpander, scaleFactor);
+                            }
+                        }
+
                     }
                 }
             }
@@ -284,6 +311,7 @@ public final class ProblemBuilder {
      *                  .useTransitionFunction(atf)
      *                  .useCostFunction(cf)
      *                  .useHeuristicFunction(hf)
+     *                  .useAnytime(<float>)
      *                  .build();
      *     }
      * </pre>
