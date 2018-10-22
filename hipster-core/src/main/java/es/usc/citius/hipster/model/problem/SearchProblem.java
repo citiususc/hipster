@@ -4,28 +4,42 @@ import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.NodeExpander;
 
 /**
- * Defines a search problems in terms of a initial node to start with and the node expander
- * function that generates new successor nodes. A SearchProblem can be fully defined using
- * the {@link es.usc.citius.hipster.model.problem.ProblemBuilder} class assistant builder.
+ * Search problem definition for Anytime search algorithms, containing the following information:
+ * <ul>
+ *     <li>Initial and final states</li>
+ *     <li>Expander component, which creates the successors nodes from the current one</li>
+ *     <li>Heuristic scale factor to obtain sub-optimal solutions in anytime Algorithms (like ARA*)</li>
+ * </ul>
+ *
+ * {@see ProblemBuilder} for further information and assisted creation of instances of this class
  *
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class SearchProblem<A,S,N extends Node<A,S,N>> {
-    private N initialNode;
-    private N finalNode;
-    private NodeExpander<A,S,N> expander;
+
+    protected N initialNode;
+    protected N finalNode;
+    protected float scaleFactor;
+    protected NodeExpander<A,S,N> expander;
 
     public SearchProblem(N initialNode, NodeExpander<A, S, N> expander) {
-        this.initialNode = initialNode;
-        this.finalNode = null;
-        this.expander = expander;
+        this(initialNode, null, expander, 1f);
     }
 
     public SearchProblem(N initialNode, N finalNode, NodeExpander<A, S, N> expander) {
+        this(initialNode, finalNode, expander, 1f);
+    }
+
+    public SearchProblem(N initialNode, NodeExpander<A, S, N> expander, float scaleFactor) {
+        this(initialNode, null, expander, scaleFactor);
+    }
+
+    public SearchProblem(N initialNode, N finalNode, NodeExpander<A, S, N> expander, float scaleFactor) {
         this.initialNode = initialNode;
         this.finalNode = finalNode;
         this.expander = expander;
+        this.scaleFactor = scaleFactor;
     }
 
     public N getInitialNode() {
@@ -38,6 +52,10 @@ public class SearchProblem<A,S,N extends Node<A,S,N>> {
 
     public N getFinalNode() {
         return finalNode;
+    }
+
+    public float getScaleFactor() {
+        return scaleFactor;
     }
 
     /**

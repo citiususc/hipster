@@ -181,10 +181,15 @@ public final class ProblemBuilder {
                             return new UnweightedNode<A, S>(fromNode, transition);
                         }
                     };
-                    UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
-                    UnweightedNode<A,S> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
                     NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
-                    return new SearchProblem<A,S, UnweightedNode<A,S>>(initialNode, finalNode, nodeExpander);
+                    UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
+                    if(finalState != null) {
+                        UnweightedNode<A, S> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
+                        return new SearchProblem<A, S, UnweightedNode<A, S>>(initialNode, finalNode, nodeExpander);
+                    }
+                    else{
+                        return new SearchProblem<A, S, UnweightedNode<A, S>>(initialNode, nodeExpander);
+                    }
                 }
 
                 /**
@@ -222,13 +227,17 @@ public final class ProblemBuilder {
                                         return costAlgebra.getIdentityElem();
                                     }
                                 }, costAlgebra);
-                        // Make the initial node. The initial node contains the initial state
-                        // of the problem, and it comes from no previous node (null) and using no action (null)
-                        WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
                         // Create a Lazy Node Expander by default
                         NodeExpander<A,S,WeightedNode<A,S,C>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
-                        // Create the algorithm with all those components
-                        return new SearchProblem<A,S,WeightedNode<A,S,C>>(initialNode, expander);
+                        WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
+                        if(finalState != null) {
+                            WeightedNode<A, S, C> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
+                            // Create the algorithm with all those components
+                            return new SearchProblem<A, S, WeightedNode<A, S, C>>(initialNode, finalNode, expander);
+                        }
+                        else{
+                            return new SearchProblem<A, S, WeightedNode<A, S, C>>(initialNode, expander);
+                        }
                     }
 
                     public Heuristic useHeuristicFunction(HeuristicFunction<S, C> hf){
@@ -248,14 +257,18 @@ public final class ProblemBuilder {
                         public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
                             WeightedNodeFactory<A, S, C> factory = new WeightedNodeFactory<A,S,C>(
                                     cf, hf, costAlgebra);
+                            LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
                             WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
-                            LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander =
-                                    new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
-
-                            return new SearchProblem<A, S, WeightedNode<A,S,C>>(initialNode, nodeExpander);
+                            if(finalState != null) {
+                                WeightedNode<A,S,C> finalNode = factory.makeNode(null, Transition.<A,S>create(null, null, finalState));
+                                return new SearchProblem<A, S, WeightedNode<A, S, C>>(initialNode, finalNode, nodeExpander);
+                            }
+                            else{
+                                return new SearchProblem<A, S, WeightedNode<A, S, C>>(initialNode, nodeExpander);
+                            }
                         }
 
-                        public Anytime useAnytime(double scaleFactor, ScalarOperation<C> scaleFunction){
+                        public Anytime useAnytime(float scaleFactor, ScalarOperation<C> scaleFunction){
                             return new Anytime(scaleFactor, scaleFunction);
                         }
 
@@ -264,20 +277,24 @@ public final class ProblemBuilder {
                          */
                         public final class Anytime {
                             private ScalarOperation<C> scaleFunction;
-                            private double scaleFactor;
+                            private float scaleFactor;
 
-                            public Anytime(double scaleFactor, ScalarOperation<C> scalarFunction){
+                            public Anytime(float scaleFactor, ScalarOperation<C> scalarFunction){
                                 this.scaleFactor = scaleFactor;
                                 this.scaleFunction = scalarFunction;
                             }
 
                             public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
                                 ScaleWeightedNodeFactory<A, S, C> factory = new ScaleWeightedNodeFactory<>(cf, hf, scaleFactor, costAlgebra, scaleFunction);
+                                LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
                                 WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
-                                LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander =
-                                        new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
-
-                                return new AnytimeSearchProblem<>(initialNode, nodeExpander, scaleFactor);
+                                if(finalState != null) {
+                                    WeightedNode<A, S, C> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
+                                    return new SearchProblem<>(initialNode, finalNode, nodeExpander, scaleFactor);
+                                }
+                                else{
+                                    return new SearchProblem<>(initialNode, nodeExpander, scaleFactor);
+                                }
                             }
                         }
 

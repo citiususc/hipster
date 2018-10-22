@@ -229,9 +229,22 @@ public final class GraphSearchProblem {
 
                 public class Final {
                     private HeuristicFunction<V, C> hf;
+                    private float scaleFactor;
+                    private ScalarOperation<C> scalarOperation;
 
                     private Final(HeuristicFunction<V, C> hf) {
                         this.hf = hf;
+                        this.scaleFactor = 1.0f;
+                    }
+
+                    /**
+                     * Heuristic inflation parameters for anytime algorithms. If your cost type is
+                     * Double, use 'ScalarOperation.doubleMultiplicationOp()' as parameter.
+                     */
+                    public Final useAnytime(float scaleFactor, ScalarOperation<C> scaleOperation){
+                        this.scaleFactor = scaleFactor;
+                        this.scalarOperation = scaleOperation;
+                        return this;
                     }
 
                     public SearchComponents<E, V, C> components(){
@@ -239,13 +252,25 @@ public final class GraphSearchProblem {
                     }
 
                     public SearchProblem<E, V, WeightedNode<E, V, C>> build() {
-                        return ProblemBuilder.create()
-                                .initialState(fromVertex)
-                                .defineProblemWithExplicitActions()
-                                .useTransitionFunction(tf)
-                                .useGenericCostFunction(cf, costAlgebra)
-                                .useHeuristicFunction(hf)
-                                .build();
+                        if(scalarOperation == null) {
+                            return ProblemBuilder.create()
+                                    .initialState(fromVertex, toVertex)
+                                    .defineProblemWithExplicitActions()
+                                    .useTransitionFunction(tf)
+                                    .useGenericCostFunction(cf, costAlgebra)
+                                    .useHeuristicFunction(hf)
+                                    .build();
+                        }
+                        else{
+                            return ProblemBuilder.create()
+                                    .initialState(fromVertex, toVertex)
+                                    .defineProblemWithExplicitActions()
+                                    .useTransitionFunction(tf)
+                                    .useGenericCostFunction(cf, costAlgebra)
+                                    .useHeuristicFunction(hf)
+                                    .useAnytime(scaleFactor, scalarOperation)
+                                    .build();
+                        }
                     }
                 }
             }
