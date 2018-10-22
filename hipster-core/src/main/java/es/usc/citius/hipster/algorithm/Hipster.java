@@ -25,8 +25,8 @@ import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Node;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeExpander;
 import es.usc.citius.hipster.model.function.impl.ADStarNodeFactory;
+import es.usc.citius.hipster.model.function.impl.ScaleWeightedNodeFactory;
 import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
-import es.usc.citius.hipster.model.problem.AnytimeSearchProblem;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 
@@ -318,7 +318,12 @@ public final class Hipster {
 	 *         the problem definition
 	 */
 	public static <A, S, C extends Comparable<C>, N extends HeuristicNode<A, S, C, N>> ARAStar<A, S, C, N> createARAStar(
-			AnytimeSearchProblem<A, S, N> components) {
+			SearchProblem<A, S, N> components) {
+
+		//This solves the issue of calling this method without
+		if(!(components.getExpander().getNodeFactory() instanceof ScaleWeightedNodeFactory)){
+			throw new IllegalArgumentException("ARA* is an Anytime Algorithm. Please, set up your Search Problem properly in the ProblemBuilder");
+		}
 
 		return new ARAStar<A, S, C, N>(
 				components.getInitialNode().state(), components.getFinalNode().state(),
