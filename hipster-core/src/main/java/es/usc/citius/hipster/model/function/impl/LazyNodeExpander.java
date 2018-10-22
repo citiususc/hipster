@@ -76,6 +76,7 @@ public class LazyNodeExpander<A,S,N extends Node<A,S,N>> implements NodeExpander
     /**
      * @return classic node factory
      */
+    @Override
     public NodeFactory<A, S, N> getNodeFactory() {
         return factory;
     }

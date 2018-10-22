@@ -298,4 +298,9 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     public void setMaxKey(N node){
         node.setKey(new ADStarNode.Key<C>(add.getMaxElem(), add.getMaxElem()));
     }
+
+    @Override
+    public NodeFactory<A, S, N> getNodeFactory() {
+        return nodeFactory;
+    }
 }

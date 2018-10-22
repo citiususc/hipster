@@ -25,9 +25,12 @@ import es.usc.citius.hipster.model.Node;
  * node that can be used to track the current search path).
  * 
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public interface NodeExpander<A,S,N extends Node<A,S,N>> {
 
     Iterable<N> expand(N node);
+
+    NodeFactory<A, S, N> getNodeFactory();
 
 }
