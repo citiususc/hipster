@@ -28,14 +28,17 @@ import es.usc.citius.hipster.model.HeuristicNode;
  * @param <A> type of the actions
  * @param <S> type of the states
  * @param <C> type of the cost
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class WeightedNode<A,S,C extends Comparable<C>>
         extends AbstractNode<A,S,WeightedNode<A,S,C>>
         implements HeuristicNode<A,S,C, WeightedNode<A,S,C>> {
 
-    private C cost;
-    private C estimation;
-    private C score;
+    protected C cost;
+    protected C estimation;
+    protected C score;
 
     /**
      * Basic constructor for instantiating a new weighted node.

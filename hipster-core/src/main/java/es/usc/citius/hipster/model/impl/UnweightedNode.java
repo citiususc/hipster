@@ -28,6 +28,9 @@ import es.usc.citius.hipster.model.Transition;
  * @param <S> Generic states of the problem
  *
  * @see UnweightedNode#newNodeWithoutAction(UnweightedNode, Object)
+ *
+ * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
+ * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
 public class UnweightedNode<A,S> extends AbstractNode<A,S,UnweightedNode<A,S>> {
 
