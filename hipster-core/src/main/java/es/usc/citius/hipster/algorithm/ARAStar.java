@@ -1,7 +1,9 @@
 package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.function.NodeFactory;
 import es.usc.citius.hipster.model.function.impl.ScaleWeightedNodeFactory;
 
 import java.util.*;
@@ -11,14 +13,14 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
     protected S goal;
     protected float epsilon;
     protected NodeExpander<A, S, N> expander;
-    protected ScaleWeightedNodeFactory<A, S, C> nodeFactory;
+    protected NodeFactory<A, S, N> nodeFactory;
 
     public ARAStar(S start, S goal, float epsilon, NodeExpander<A, S, N> expander) {
         this.start = start;
         this.goal = goal;
         this.epsilon = epsilon;
         this.expander = expander;
-        this.nodeFactory = (ScaleWeightedNodeFactory<A, S, C>) expander.getNodeFactory();
+        this.nodeFactory = expander.getNodeFactory();
     }
 
     @Override
@@ -32,7 +34,6 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         protected HashMap<S, N> incons;
         protected Queue<N> openQueue;
         protected N beginNode;
-        protected N goalNode;
 
         public Iterator() {
             //OPEN = CLOSED = INCONS = 0
@@ -41,6 +42,7 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             this.closed = new HashMap<>();
             this.incons = new HashMap<>();
             //g(sstart) = 0;
+            this.beginNode = nodeFactory.makeNode(null, Transition.<A,S>create(null, null, start));
             //insert sstart into OPEN with fvalue(sstart);
             insertOpen(beginNode);
         }
@@ -55,9 +57,10 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             N current = takePromising();
 
             //while(fvalue(sgoal) > mins∈OPEN(fvalue(s))), go inside ImprovePath()
-            if(goalNode.compareTo(current) > 0){
+            //if goal is not in OPEN, then fvalue is infinite
+            if(open.get(goal) == null || open.get(goal).getScore().compareTo(current.getScore()) > 0){
                 //remove s with the smallest fvalue(s) from OPEN;
-                open.remove(current);
+                open.remove(current.state());
                 //CLOSED = CLOSED ∪ {s}
                 closed.put(current.state(), current);
                 //for each successor s' of s
