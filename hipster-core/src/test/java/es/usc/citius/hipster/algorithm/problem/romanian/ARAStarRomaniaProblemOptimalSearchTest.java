@@ -1,6 +1,6 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
-import es.usc.citius.hipster.algorithm.AStar;
+import es.usc.citius.hipster.algorithm.ARAStar;
 import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
@@ -43,7 +43,7 @@ public class ARAStarRomaniaProblemOptimalSearchTest extends RomaniaProblemOptima
             node = iterator.next();
         }while(iterator.hasNext() && !node.state().equals(GOAL));
         //set variables of expanded nodes
-        this.expandedNodesTested = ((AStar.Iterator) iterator).getClosed().values();
+        this.expandedNodesTested = ((ARAStar.Iterator) iterator).getClosed().values();
         //return optimal path
         return node.path();
     }
