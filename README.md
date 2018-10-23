@@ -1,9 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
 [![](https://jitpack.io/v/citiususc/hipster.svg)](https://jitpack.io/#citiususc/hipster)
-[![SonarQube Tech Debt](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/tech_debt.svg)](http://nemo.sonarqube.org/dashboard/index/es.usc.citius.hipster:hipster-pom) 
-[![Coverage](https://img.shields.io/sonar/http/nemo.sonarqube.org/es.usc.citius.hipster:hipster-pom/coverage.svg)]()
-![Build Status](https://api.travis-ci.org/citiususc/hipster.svg?branch=development)
 
 A powerful and friendly heuristic search library implemented in Java.
 
