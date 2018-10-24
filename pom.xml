@@ -19,7 +19,7 @@
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
-    <inceptionYear>2013</inceptionYear>
+    <inceptionYear>2013-2018</inceptionYear>
 
     <modules>
         <module>hipster-core</module>
@@ -115,6 +115,32 @@
     <build>
         <pluginManagement>
             <plugins>
+
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>2.11</version>
+                    <configuration>
+                        <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                        <properties>
+                            <email>http://citius.usc.es</email>
+                            <year>2013-2018</year>
+                            <owner>Centro de Investigación en Tecnoloxías da Información (CITIUS)</owner>
+                        </properties>
+                        <includes>
+                            <include>src/main/java/**</include>
+                            <include>src/test/java/**</include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
