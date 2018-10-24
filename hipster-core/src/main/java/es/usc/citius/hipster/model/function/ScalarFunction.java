@@ -15,6 +15,8 @@
  */
 package es.usc.citius.hipster.model.function;
 
+import es.usc.citius.hipster.model.function.impl.ScalarOperation;
+
 /**
  * A scalar function takes an object and modifies its magnitude by a 
  * numeric factor without changing its type.
@@ -37,7 +39,7 @@ package es.usc.citius.hipster.model.function;
  * </pre>
  *
  * To create a default scalar function to operate with doubles,
- * simple use {@link es.usc.citius.hipster.model.function.impl.Product}.
+ * simple use {@link ScalarOperation#doubleMultiplicationOp()}.
  *
  * @param <T> type of the domain of the function
  * 
