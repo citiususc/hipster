@@ -3,24 +3,25 @@ package es.usc.citius.hipster.algorithm;
 import es.usc.citius.hipster.model.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactory;
-import es.usc.citius.hipster.model.function.impl.ScaleWeightedNodeFactory;
+import es.usc.citius.hipster.model.function.NodeFactoryWithUpdates;
+import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.function.impl.ScalarOperation;
 
 import java.util.*;
 
 public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N>> extends Algorithm<A,S,N> {
     protected S start;
     protected S goal;
-    protected float epsilon;
+    protected float initialEpsilon;
     protected NodeExpander<A, S, N> expander;
-    protected NodeFactory<A, S, N> nodeFactory;
+    protected Factory<A, S, C, N> nodeFactory;
 
-    public ARAStar(S start, S goal, float epsilon, NodeExpander<A, S, N> expander) {
+    public ARAStar(S start, S goal, float initialEpsilon, NodeExpander<A, S, N> expander) {
         this.start = start;
         this.goal = goal;
-        this.epsilon = epsilon;
+        this.initialEpsilon = initialEpsilon;
         this.expander = expander;
-        this.nodeFactory = expander.getNodeFactory();
+        this.nodeFactory = (Factory<A, S, C, N>) expander.getNodeFactory();
     }
 
     @Override
@@ -41,6 +42,7 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             this.openQueue = new PriorityQueue<>();
             this.closed = new HashMap<>();
             this.incons = new HashMap<>();
+            nodeFactory.setScaleFactor(initialEpsilon);
             //g(sstart) = 0;
             this.beginNode = nodeFactory.makeNode(null, Transition.<A,S>create(null, null, start));
             //insert sstart into OPEN with fvalue(sstart);
@@ -76,28 +78,41 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 }
 
             }
-            /*else{
+            else{
+                // retrieve goal node from OPEN/CLOSED queues
+                N goalNode = open.get(goal);
+                if(goalNode == null){
+                    goalNode = closed.get(goal);
+                }
                 //ε′ = min(ε, g(sgoal)/ mins∈OPEN∪INCONS(g(s)+h(s)));
-                double epsilon = 1.0;
+                N minIncons = Collections.min(incons.values());
+                N minNode = (minIncons.compareTo(current) > 0) ? current : minIncons;
+                double newEpsilon = Math.min(
+                        nodeFactory.getScaleFactor(),
+                        nodeFactory.getScalarOperation().div(goalNode.getCost(), nodeFactory.getCostAccumulator().apply(minNode.getCost(), minNode.getEstimation())));
                 //publish current ε′-suboptimal solution;
 
                 //while ε′ > 1
-                if(epsilon > 1){
+                if(newEpsilon > 1){
                     //decrease ε;
+                    nodeFactory.setScaleFactor(newEpsilon);
 
                     //Move states from INCONS into OPEN;
                     open.putAll(incons);
 
                     //Update the priorities for all s ∈ OPEN according to fvalue(s);
                     openQueue.clear();
-                    for(N openNode : open.values()){
-                        insertOpen(openNode);
+                    for(N currentNodeUpdate : open.values()){
+                        // re-calculate fvalue(s)
+                        nodeFactory.updateNode(currentNodeUpdate);
+                        // insert in OPEN
+                        openQueue.add(currentNodeUpdate);
                     }
 
                     //CLOSED = ∅;
                     closed.clear();
                 }
-            }*/
+            }
             return current;
         }
 
@@ -128,6 +143,40 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             open.put(node.state(), node);
             openQueue.add(node);
         }
+
+        public HashMap<S, N> getOpen() {
+            return open;
+        }
+
+        public HashMap<S, N> getClosed() {
+            return closed;
+        }
+
+        public HashMap<S, N> getIncons() {
+            return incons;
+        }
+    }
+
+    /**
+     * This algorithm, for purposes of calculating the next value of the scaling factor, has to know
+     * which is the scaling operation. For this reason we define an interface which must implement every
+     * node factory to be used with this algorithm.
+     *
+     * @param <A> action type
+     * @param <S> state type
+     * @param <C> cost type
+     * @param <N> node type
+     */
+    public interface Factory<A, S, C extends Comparable<C>, N> extends NodeFactoryWithUpdates<A, S, N> {
+
+        void setScaleFactor(double epsilon);
+
+        double getScaleFactor();
+
+        ScalarOperation<C> getScalarOperation();
+
+        BinaryOperation<C> getCostAccumulator();
+
     }
 
 }
