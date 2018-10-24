@@ -16,12 +16,11 @@
 
 package es.usc.citius.lab.hipster.algorithm;
 
-import es.usc.citius.hipster.algorithm.DepthLimitedSearch;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
-import es.usc.citius.hipster.model.impl.UnweightedNode;
 import es.usc.citius.hipster.graph.HipsterDirectedGraph;
+import es.usc.citius.hipster.model.node.impl.UnweightedNode;
 import org.junit.Test;
 
 import java.util.Iterator;

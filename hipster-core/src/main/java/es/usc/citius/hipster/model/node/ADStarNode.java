@@ -1,13 +1,14 @@
-package es.usc.citius.hipster.model;
+package es.usc.citius.hipster.model.node;
 
 import es.usc.citius.hipster.model.function.ScalarFunction;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.node.impl.ADStarNodeUpdater;
 
 /**
- * Implementation of {@link es.usc.citius.hipster.model.Node} to be used with the AD* algorithm, implemented in
+ * Implementation of {@link Node} to be used with the AD* algorithm, implemented in
  * {@link es.usc.citius.hipster.algorithm.ADStarForward}. AD* nodes are formed by two cost elements, G and V,
- * and a {@link es.usc.citius.hipster.model.ADStarNode.Key} which is used to order the nodes by priority
- * in the queues of the algorithm. This implementation extends {@link es.usc.citius.hipster.model.HeuristicNode}.
+ * and a {@link ADStarNode.Key} which is used to order the nodes by priority
+ * in the queues of the algorithm. This implementation extends {@link HeuristicNode}.
  *
  * @param <A> type of the actions
  * @param <S> type of the state
@@ -29,7 +30,7 @@ public interface ADStarNode<A, S, C extends Comparable<C>, N extends ADStarNode<
     public C getV();
 
     /**
-     * @return determines if the nodes must be updated by a {@link es.usc.citius.hipster.model.function.impl.ADStarNodeUpdater}.
+     * @return determines if the nodes must be updated by a {@link ADStarNodeUpdater}.
      */
     public boolean isDoUpdate();
 

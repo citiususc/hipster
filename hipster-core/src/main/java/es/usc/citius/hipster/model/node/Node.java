@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model;
+package es.usc.citius.hipster.model.node;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public interface Node<A,S,N extends Node<A,S,N>> {
     /**
      * Returns the previous node to the current.
      *
-     * @return instance of {@link es.usc.citius.hipster.model.Node}
+     * @return instance of {@link Node}
      */
     N previousNode();
 

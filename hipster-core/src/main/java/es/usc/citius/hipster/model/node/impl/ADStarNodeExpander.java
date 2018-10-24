@@ -1,8 +1,11 @@
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.model.node.impl;
 
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
-import es.usc.citius.hipster.model.ADStarNode;
+import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.node.ADStarNode;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
+import es.usc.citius.hipster.model.node.factory.NodeFactory;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 
 import java.util.ArrayList;
@@ -11,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is an implementation of {@link es.usc.citius.hipster.model.function.NodeExpander} for nodes
- * of type {@link es.usc.citius.hipster.model.ADStarNode}. This node expander executes the main
+ * This class is an implementation of {@link NodeExpander} for nodes
+ * of type {@link ADStarNode}. This node expander executes the main
  * function of a node expander: taking as input a node generates the successor nodes using the information
  * of the transition, cost and heuristic functions. This expander, to be used
  * with {@link es.usc.citius.hipster.algorithm.ADStarForward}, also
@@ -32,7 +35,7 @@ import java.util.Map;
  *
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
-public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>>
+public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends ADStarNode<A, S, C, N>>
         implements NodeExpander<A, S, N>{
 
     private final TransitionFunction<A, S> successorFunction;
@@ -160,7 +163,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      * @param node {@link es.usc.citius.hipster.algorithm.ADStarForward} node to update, in consistent state
      * @param parent previous {@link es.usc.citius.hipster.algorithm.ADStarForward} of the node
      * @param transition {@link es.usc.citius.hipster.model.Transition} between the parent and the node
-     * @return true if the node has changed its {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key}
+     * @return true if the node has changed its {@link ADStarNodeImpl.Key}
      */
     private boolean updateConsistent(N node, N parent, Transition<A, S> transition) {
         // parent.getG().add(this.costFunction.evaluate(transition));
@@ -172,7 +175,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
             node.setState(transition.getState());
             node.setAction(transition.getAction());
             // node.state = transition;
-            node.setKey(new es.usc.citius.hipster.model.ADStarNode.Key<C>(node.getG(), node.getV(),
+            node.setKey(new ADStarNode.Key<C>(node.getG(), node.getV(),
                     heuristicFunction.estimate(transition.getState()), epsilon, add, scale));
             return true;
         }
@@ -185,7 +188,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
      *
      * @param node inconsistent {@link es.usc.citius.hipster.algorithm.ADStarForward} node to update
      * @param predecessorMap map containing the the predecessor nodes and
-     * @return true if the node has changed its {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key}
+     * @return true if the node has changed its {@link ADStarNodeImpl.Key}
      */
     private boolean updateInconsistent(N node, Map<Transition<A, S>, N> predecessorMap) {
         C minValue = add.getIdentityElem();
@@ -234,7 +237,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     /**
      * Assigns the maximum value to V in the current node.
      *
-     * @param node {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl} to modify the value of V
+     * @param node {@link ADStarNodeImpl} to modify the value of V
      */
     public void setMaxV(N node) {
         node.setV(this.add.getMaxElem());
@@ -243,7 +246,7 @@ public class ADStarNodeExpander<A, S, C extends Comparable<C>, N extends es.usc.
     /**
      * Assigns the maximum value to G in the current node.
      *
-     * @param node {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl} to modify the value of V
+     * @param node {@link ADStarNodeImpl} to modify the value of V
      */
     public void setMaxG(N node)  {
         node.setG(this.add.getMaxElem());

@@ -1,7 +1,7 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
-import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.HeuristicNode;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import org.junit.Test;
 

@@ -1,11 +1,12 @@
-package es.usc.citius.hipster.model.impl;
+package es.usc.citius.hipster.model.node.impl;
 
-import es.usc.citius.hipster.model.ADStarNode;
-import es.usc.citius.hipster.model.AbstractNode;
+import es.usc.citius.hipster.model.node.ADStarNode;
+import es.usc.citius.hipster.model.node.AbstractNode;
 import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.node.Node;
 
 /**
- * Interface defining the basic operations for {@link es.usc.citius.hipster.model.Node} to be used with
+ * Interface defining the basic operations for {@link Node} to be used with
  * {@link es.usc.citius.hipster.algorithm.ADStarForward}. Contains the declaration of the methods to retrieve
  * te cost elements of the node (G and V) and the definition of the {@link ADStarNodeImpl.Key}
  * to compare {@link ADStarNodeImpl} elements.
@@ -22,7 +23,7 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
 
     protected C g;
     protected C v;
-    protected es.usc.citius.hipster.model.ADStarNode.Key<C> key;
+    protected ADStarNode.Key<C> key;
     protected boolean doUpdate;
 
     /**
@@ -36,7 +37,7 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
      * @param v score to goal
      * @param k key value evaluated over G and V
      */
-    public ADStarNodeImpl(Transition<A, S> transition, ADStarNodeImpl<A, S, C> previousNode, C g, C v, es.usc.citius.hipster.model.ADStarNode.Key<C> k) {
+    public ADStarNodeImpl(Transition<A, S> transition, ADStarNodeImpl<A, S, C> previousNode, C g, C v, ADStarNode.Key<C> k) {
         super(previousNode, transition.getState(), transition.getAction());
         this.g = g;
         this.v = v;
@@ -79,7 +80,7 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
     }
 
     @Override
-    public void setKey(es.usc.citius.hipster.model.ADStarNode.Key<C> key) {
+    public void setKey(ADStarNode.Key<C> key) {
         this.key = key;
     }
 
@@ -142,7 +143,7 @@ public class ADStarNodeImpl<A, S, C extends Comparable<C>>
     }
 
     /**
-     * Compares ADSTarNode instances attending to their {@link es.usc.citius.hipster.model.ADStarNode.Key}
+     * Compares ADSTarNode instances attending to their {@link ADStarNode.Key}
      * values.
      *
      * @param o ADStarNode instance

@@ -14,21 +14,19 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.model.node.impl;
 
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactory;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
+import es.usc.citius.hipster.model.node.factory.NodeFactory;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.hipster.util.F;
 import es.usc.citius.hipster.util.Function;
 
-import java.util.ArrayList;
-
 /**
- * Implementation of a {@link es.usc.citius.hipster.model.function.NodeExpander} which generates
- * an {@link java.lang.Iterable} of {@link es.usc.citius.hipster.model.Node} which are instantiated
+ * Implementation of a {@link NodeExpander} which generates
+ * an {@link java.lang.Iterable} of {@link Node} which are instantiated
  * in a lazy way, as required by the algorithms, and not in advance.
  *
  * @param <A> type of the actions

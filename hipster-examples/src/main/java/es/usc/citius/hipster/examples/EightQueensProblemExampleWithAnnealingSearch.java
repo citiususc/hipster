@@ -26,7 +26,7 @@ import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.impl.StateTransitionFunction;
-import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.node.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.Predicate;
@@ -57,7 +57,7 @@ public class EightQueensProblemExampleWithAnnealingSearch {
         //the transition function between states
         //and the cost (always 0)
         //and heuristic function (number of attacked queens)
-        SearchProblem<Void,NQueens,WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
+        SearchProblem<Void,NQueens, WeightedNode<Void,NQueens,Double>> p = ProblemBuilder.create()
                 .initialState(new NQueens(size))
                 //problem without explicit actions, only a transition function is needed
                 .defineProblemWithoutActions()
@@ -102,7 +102,7 @@ public class EightQueensProblemExampleWithAnnealingSearch {
         System.out.println("Running 8-Queens problem with Annealing search and a custom goal test predicate");
         //To execute the algorithm we have two options:
         // Option 1 - Run the algorithm until the predicate is satisfied (until we find a state with score 0, that is, no attacked queens)
-        System.out.println(Hipster.createAnnealingSearch(p, null,null,null,null).search(new Predicate<WeightedNode<Void,NQueens,Double>>() {
+        System.out.println(Hipster.createAnnealingSearch(p, null,null,null,null).search(new Predicate<WeightedNode<Void, NQueens, Double>>() {
             @Override
             public boolean apply(WeightedNode<Void, NQueens, Double> node) {
                 return node.getScore().equals(0d);

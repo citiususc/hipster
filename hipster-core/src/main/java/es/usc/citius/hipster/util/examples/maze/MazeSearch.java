@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.util.examples.maze;
 
 
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.Node;
 
 import java.awt.*;
 import java.util.*;

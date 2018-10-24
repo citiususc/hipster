@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.function;
+package es.usc.citius.hipster.model.node.factory;
 
 
 import es.usc.citius.hipster.model.Transition;

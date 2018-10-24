@@ -20,8 +20,9 @@ package es.usc.citius.hipster.model.problem;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.*;
 import es.usc.citius.hipster.model.function.impl.*;
-import es.usc.citius.hipster.model.impl.UnweightedNode;
-import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
+import es.usc.citius.hipster.model.node.impl.*;
+import es.usc.citius.hipster.model.node.factory.NodeFactory;
 
 /**
  * Problem builder that is used to guide the user through the creation of a
@@ -175,13 +176,13 @@ public final class ProblemBuilder {
                 }
 
                 public SearchProblem<A, S, UnweightedNode<A, S>> build(){
-                    NodeFactory<A,S,UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
+                    NodeFactory<A,S, UnweightedNode<A,S>> factory = new NodeFactory<A, S, UnweightedNode<A, S>>() {
                         @Override
                         public UnweightedNode<A, S> makeNode(UnweightedNode<A, S> fromNode, Transition<A, S> transition) {
                             return new UnweightedNode<A, S>(fromNode, transition);
                         }
                     };
-                    NodeExpander<A,S,UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
+                    NodeExpander<A,S, UnweightedNode<A,S>> nodeExpander = new LazyNodeExpander<A, S, UnweightedNode<A, S>>(tf, factory);
                     UnweightedNode<A,S> initialNode = factory.makeNode(null, Transition.<A, S>create(null, null, initialState));
                     if(finalState != null) {
                         UnweightedNode<A, S> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
@@ -228,7 +229,7 @@ public final class ProblemBuilder {
                                     }
                                 }, costAlgebra);
                         // Create a Lazy Node Expander by default
-                        NodeExpander<A,S,WeightedNode<A,S,C>> expander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
+                        NodeExpander<A,S, WeightedNode<A,S,C>> expander = new LazyNodeExpander<>(tf, factory);
                         WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
                         if(finalState != null) {
                             WeightedNode<A, S, C> finalNode = factory.makeNode(null, Transition.<A, S>create(null, null, finalState));
@@ -285,7 +286,7 @@ public final class ProblemBuilder {
                             }
 
                             public SearchProblem<A, S, WeightedNode<A, S, C>> build(){
-                                ScaleWeightedNodeFactory<A, S, C> factory = new ScaleWeightedNodeFactory<>(cf, hf, scaleFactor, costAlgebra, scaleFunction);
+                                ScaleWeightedNodeFactory<A, S, C> factory = new ScaleWeightedNodeFactoryWithUpdates<>(cf, hf, scaleFactor, costAlgebra, scaleFunction);
                                 LazyNodeExpander<A, S, WeightedNode<A, S, C>> nodeExpander = new LazyNodeExpander<A, S, WeightedNode<A, S, C>>(tf, factory);
                                 WeightedNode<A,S,C> initialNode = factory.makeNode(null, Transition.<A,S>create(null, null, initialState));
                                 if(finalState != null) {

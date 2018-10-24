@@ -4,7 +4,7 @@ import es.usc.citius.hipster.algorithm.ADStarForward;
 import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 

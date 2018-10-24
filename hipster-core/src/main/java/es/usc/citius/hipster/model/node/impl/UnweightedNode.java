@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.impl;
+package es.usc.citius.hipster.model.node.impl;
 
-import es.usc.citius.hipster.model.AbstractNode;
+import es.usc.citius.hipster.model.node.AbstractNode;
 import es.usc.citius.hipster.model.Transition;
 
 /**

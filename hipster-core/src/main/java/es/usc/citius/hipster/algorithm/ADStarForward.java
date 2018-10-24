@@ -17,7 +17,8 @@
 package es.usc.citius.hipster.algorithm;
 
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.impl.*;
+import es.usc.citius.hipster.model.node.ADStarNode;
+import es.usc.citius.hipster.model.node.impl.ADStarNodeExpander;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,7 +56,7 @@ import java.util.Queue;
  *
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
-public class ADStarForward<A,S,C extends Comparable<C>, N extends es.usc.citius.hipster.model.ADStarNode<A, S, C, N>> extends Algorithm<A, S, N> {
+public class ADStarForward<A,S,C extends Comparable<C>, N extends ADStarNode<A, S, C, N>> extends Algorithm<A, S, N> {
 
     protected S begin;
     protected Collection<S> goals;

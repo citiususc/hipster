@@ -15,6 +15,6 @@
  */
 
 /**
- * Default implementation of some components of the model.
+ * Default implementations for different node types and node factories.
  */
-package es.usc.citius.hipster.model.impl;
+package es.usc.citius.hipster.model.node.impl;

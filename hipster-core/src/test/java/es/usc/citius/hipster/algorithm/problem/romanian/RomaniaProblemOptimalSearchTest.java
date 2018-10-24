@@ -1,8 +1,8 @@
 package es.usc.citius.hipster.algorithm.problem.romanian;
 
 import es.usc.citius.hipster.algorithm.Algorithm;
-import es.usc.citius.hipster.model.CostNode;
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.CostNode;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.util.examples.RomanianProblem;
 import es.usc.citius.hipster.graph.HipsterGraph;
 import org.junit.Before;

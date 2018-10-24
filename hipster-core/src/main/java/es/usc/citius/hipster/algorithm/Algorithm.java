@@ -17,7 +17,7 @@
 package es.usc.citius.hipster.algorithm;
 
 
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.util.Predicate;
 
 import java.util.*;
@@ -193,7 +193,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
      * @param <S> type of the state.
      * @param <N> type of the node.
      * @return a list with the states of the path, from the initial state
-     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     * to the state of the provided node ({@link Node#state()}).
      */
     public static <S, N extends Node<?,S,N>>  List<S> recoverStatePath(N node){
         List<S> states = new LinkedList<S>();
@@ -205,7 +205,7 @@ public abstract class Algorithm<A,S,N extends Node<A,S,N>> implements Iterable<N
 
     /**
      * Returns a path of the actions applied from the initial state
-     * to the state of the provided node ({@link es.usc.citius.hipster.model.Node#state()}).
+     * to the state of the provided node ({@link Node#state()}).
      *
      * @param <A> type of the actions.
      * @param <N> type of the nodes.

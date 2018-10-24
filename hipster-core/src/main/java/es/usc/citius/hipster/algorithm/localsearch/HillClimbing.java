@@ -20,8 +20,8 @@ package es.usc.citius.hipster.algorithm.localsearch;
 
 
 import es.usc.citius.hipster.algorithm.Algorithm;
-import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.node.HeuristicNode;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
 
 import java.util.Iterator;
 import java.util.LinkedList;

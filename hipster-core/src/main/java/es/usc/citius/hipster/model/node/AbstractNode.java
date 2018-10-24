@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model;
+package es.usc.citius.hipster.model.node;
 
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Basic implementation of the interface {@link es.usc.citius.hipster.model.Node}. All implementations of
+ * Basic implementation of the interface {@link Node}. All implementations of
  * the interface may extend this class to reuse the implemented {@link #path()} method and
  * the getters.
  *

@@ -1,9 +1,9 @@
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.node.HeuristicNode;
 import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.function.NodeExpander;
-import es.usc.citius.hipster.model.function.NodeFactoryWithUpdates;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
+import es.usc.citius.hipster.model.node.factory.NodeFactoryWithUpdates;
 import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 import es.usc.citius.hipster.model.function.impl.ScalarOperation;
 

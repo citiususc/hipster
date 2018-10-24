@@ -1,4 +1,4 @@
-package es.usc.citius.hipster.model.function;
+package es.usc.citius.hipster.model.node.factory;
 
 /**
  * Instantiator of nodes with the functionality of updating them as well.

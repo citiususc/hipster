@@ -16,8 +16,8 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.CostNode;
-import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.node.CostNode;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
 import es.usc.citius.hipster.util.Predicate;
 import es.usc.citius.lab.hipster.collections.HashQueue;
 

@@ -22,7 +22,7 @@ import es.usc.citius.hipster.model.function.ActionFunction;
 import es.usc.citius.hipster.model.function.ActionStateTransitionFunction;
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.node.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.ProblemBuilder;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 

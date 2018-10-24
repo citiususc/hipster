@@ -14,29 +14,30 @@
 * limitations under the License.
 */
 
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.model.node.impl;
 
 import es.usc.citius.hipster.model.function.CostFunction;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.function.ScalarFunction;
+import es.usc.citius.hipster.model.function.impl.BinaryOperation;
 
 /**
  * The ADStarNodeUpdater is used by the {@link es.usc.citius.hipster.algorithm.ADStarForward}
- * algorithm to update the G and V values of the {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl}
+ * algorithm to update the G and V values of the {@link ADStarNodeImpl}
  * explored by the algorithm. Different operations are executed depending on its consistent or inconsistent state:
  * <ul>
  * <li>
  * For nodes in consistent state, if the cost of the parent added to the cost of the transition
- * improves the current value of G, the path changes to include the new transition and the {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key}
+ * improves the current value of G, the path changes to include the new transition and the {@link ADStarNodeImpl.Key}
  * is updated taking into account the new cost.
  * </li>
  * <li>
  * For nodes in inconsistent state, all their predecessors are explored to select the one with minimum
- * G and transition cost. The path changes according to the new minimum cost and the {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key} is updated.
+ * G and transition cost. The path changes according to the new minimum cost and the {@link ADStarNodeImpl.Key} is updated.
  * </li>
  * <ul>
  *
- * In both cases the updater returns true if the {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl.Key} values
+ * In both cases the updater returns true if the {@link ADStarNodeImpl.Key} values
  * change to reinsert it in the Open queue with a new priority.
  *
  * @param <A> class defining the action
@@ -55,7 +56,7 @@ public class ADStarNodeUpdater<A, S, C extends Comparable<C>> {
 
     /**
      * The constructor for ADStarNodeUpdater takes the elements that involve the cost
-     * definition to update the G and V values of the {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl}
+     * definition to update the G and V values of the {@link ADStarNodeImpl}
      * as the {@link es.usc.citius.hipster.algorithm.ADStarForward} algorithm is being executed.
      *
      * @param costFunction function to evaluate instances of {@link es.usc.citius.hipster.model.Transition}

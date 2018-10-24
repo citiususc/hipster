@@ -23,7 +23,7 @@ import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.graph.HashBasedHipsterGraph;
 import es.usc.citius.hipster.graph.HipsterDirectedGraph;
-import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.node.impl.WeightedNode;
 import org.junit.Test;
 
 import java.util.Arrays;

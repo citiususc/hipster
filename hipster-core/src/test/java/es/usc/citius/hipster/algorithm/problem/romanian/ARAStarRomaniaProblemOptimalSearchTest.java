@@ -4,7 +4,7 @@ import es.usc.citius.hipster.algorithm.ARAStar;
 import es.usc.citius.hipster.algorithm.Algorithm;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
-import es.usc.citius.hipster.model.Node;
+import es.usc.citius.hipster.model.node.Node;
 import es.usc.citius.hipster.model.function.impl.ScalarOperation;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.examples.RomanianProblem;

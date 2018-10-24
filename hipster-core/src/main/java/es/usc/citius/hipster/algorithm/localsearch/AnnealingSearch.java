@@ -8,9 +8,9 @@ import java.util.Queue;
 import java.util.Random;
 
 import es.usc.citius.hipster.algorithm.Algorithm;
-import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.node.HeuristicNode;
+import es.usc.citius.hipster.model.node.Node;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
 
 /**
  * Implementation of the simulated annealing search that is a probabilistic
@@ -43,9 +43,6 @@ import es.usc.citius.hipster.model.function.NodeExpander;
  *            class defining the action
  * @param <S>
  *            class defining the state
- * @param <C>
- *            class defining the cost, must implement
- *            {@link java.lang.Comparable}
  * @param <N>
  *            type of the nodes
  * 
@@ -195,7 +192,7 @@ public class AnnealingSearch<A, S, N extends HeuristicNode<A, S, Double, N>> ext
 	 */
 	public interface SuccessorFinder<A, S, N extends Node<A, S, N>> {
 		/**
-		 * @param Node
+		 * @param node
 		 * @return the successor of a node.
 		 */
 		N estimate(N node, NodeExpander<A, S, N> nodeExpander);

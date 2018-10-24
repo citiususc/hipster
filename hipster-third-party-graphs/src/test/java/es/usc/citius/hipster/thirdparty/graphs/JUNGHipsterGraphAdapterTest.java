@@ -26,7 +26,7 @@ import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.graph.HipsterDirectedGraph;
-import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.hipster.model.node.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.thirdparty.graphs.jung.JUNGHipsterDirectedGraphAdapter;
 import es.usc.citius.hipster.util.Function;

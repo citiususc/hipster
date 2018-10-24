@@ -1,7 +1,7 @@
 package es.usc.citius.hipster.model.problem;
 
-import es.usc.citius.hipster.model.Node;
-import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.node.Node;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
 
 /**
  * Search problem definition for Anytime search algorithms, containing the following information:

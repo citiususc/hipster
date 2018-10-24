@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model.impl;
+package es.usc.citius.hipster.model.node.impl;
 
 
-import es.usc.citius.hipster.model.AbstractNode;
-import es.usc.citius.hipster.model.HeuristicNode;
+import es.usc.citius.hipster.model.node.AbstractNode;
+import es.usc.citius.hipster.model.node.HeuristicNode;
 
 /**
  * Basic implementation of a node which does not which keeps information about

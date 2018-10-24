@@ -13,17 +13,19 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package es.usc.citius.hipster.model.function.impl;
+package es.usc.citius.hipster.model.node.impl;
 
-import es.usc.citius.hipster.model.ADStarNode;
+import es.usc.citius.hipster.model.function.impl.BinaryOperation;
+import es.usc.citius.hipster.model.function.impl.ScalarOperation;
+import es.usc.citius.hipster.model.node.ADStarNode;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.model.function.NodeFactory;
-import es.usc.citius.hipster.model.impl.ADStarNodeImpl;
+import es.usc.citius.hipster.model.node.factory.NodeFactory;
+import es.usc.citius.hipster.model.node.impl.ADStarNodeImpl;
 import es.usc.citius.hipster.model.problem.SearchComponents;
 
 /**
- * The ADStarNodeBuilder is used for instantiate new {@link es.usc.citius.hipster.model.impl.ADStarNodeImpl}.
+ * The ADStarNodeBuilder is used for instantiate new {@link ADStarNodeImpl}.
  *
  * @param <S> class defining the state
  * @param <C> class defining the cost

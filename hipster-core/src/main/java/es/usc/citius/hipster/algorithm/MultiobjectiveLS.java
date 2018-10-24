@@ -16,8 +16,8 @@
 
 package es.usc.citius.hipster.algorithm;
 
-import es.usc.citius.hipster.model.HeuristicNode;
-import es.usc.citius.hipster.model.function.NodeExpander;
+import es.usc.citius.hipster.model.node.HeuristicNode;
+import es.usc.citius.hipster.model.node.factory.NodeExpander;
 import es.usc.citius.hipster.util.Predicate;
 
 import java.util.*;

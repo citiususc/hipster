@@ -14,13 +14,13 @@
  *    limitations under the License.
  */
 
-package es.usc.citius.hipster.model;
+package es.usc.citius.hipster.model.node;
 
 /**
- * Defines a node which stores an attribute for the cost, extending
- * the interface of a basic node {@link es.usc.citius.hipster.model.Node}. The cost has
- * a generic definition but must be comparable. This type of node is used by algorithms
- * which store information about the cost from the cost but do not use a heuristic function
+ * Type of node which stores an estimated (heuristic) cost to the goal, extending
+ * the interface of a cost node {@link CostNode}. Cost and
+ * heuristic are of the same type and must be comparable. This type of node is used by algorithms
+ * which store information about the cost from the cost and use a heuristic function
  * to estimate the cost to the goal.
  *
  * @param <A> type of the actions
@@ -31,10 +31,20 @@ package es.usc.citius.hipster.model;
  * @author Pablo Rodríguez Mier <<a href="mailto:pablo.rodriguez.mier@usc.es">pablo.rodriguez.mier@usc.es</a>>
  * @author Adrián González Sieira <<a href="adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  */
-public interface CostNode<A,S,C extends Comparable<C>,N extends CostNode<A,S,C,N>> extends Node<A,S,N>, Comparable<N> {
+public interface HeuristicNode<A,S,C extends Comparable<C>, N extends HeuristicNode<A,S,C,N>> extends CostNode<A,S,C,N> {
 
     /**
-     * @return the cost of this node
+     * Retrieves the total cost (typically f = g + h) of this node,
+     * where g = {@link HeuristicNode#getCost()} and
+     * h = {@link HeuristicNode#getEstimation()}
+     *
+     * @return total cost (f function).
      */
-    C getCost();
+    C getScore();
+
+    /**
+     * Return the estimated cost to goal state from the current state.
+     * @return cost estimation.
+     */
+    C getEstimation();
 }
