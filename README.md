@@ -22,9 +22,10 @@ The current version of the library comes with some very well-known and wide used
         * Dijkstra's algorithm.
         * Bellman-Ford.
     * Informed search:
-        * A star (A*).
-        * IDA star (IDA*), Iterative Deepening A*.
-        * AD star (AD*): Anytime Dynamic A*.
+        * A* : A star.
+        * IDA* : Iterative Deepening A star.
+        * ARA* : Anytime Repairing A star.
+        * AD* : Anytime Dynamic A star.
     * Local search:
         * Hill-Climbing.
         * Enforced-Hill-Climbing.
