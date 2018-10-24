@@ -58,7 +58,16 @@ public class ScalarOperation<E extends Comparable<E>> implements ScalarFunction<
 				return a * b;
 			}
 
+			@Override
+			public double div(Double a, Double b) {
+				return a / b;
+			}
+
 		}, 1d);
 	}
-	
+
+	@Override
+	public double div(E a, E b) {
+		return this.op.div(a, b);
+	}
 }

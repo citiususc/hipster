@@ -54,4 +54,13 @@ public interface ScalarFunction<T> {
      * @return {@literal a} scaled by a factor of {@literal b}.
      */
     T scale(T a, double b);
+
+    /**
+     *
+     *
+     * @param a first term of the division
+     * @param b second term of the division
+     * @return scale factor between a and b, as a result of a/b
+     */
+    double div(T a, T b);
 }
