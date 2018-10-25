@@ -50,6 +50,7 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
         protected HashMap<S, N> incons;
         protected Queue<N> openQueue;
         protected N beginNode;
+        protected boolean stopCondition;
 
         public Iterator() {
             //OPEN = CLOSED = INCONS = 0
@@ -58,6 +59,7 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
             this.closed = new HashMap<>();
             this.incons = new HashMap<>();
             nodeFactory.setScaleFactor(initialEpsilon);
+            this.stopCondition = false;
             //g(sstart) = 0;
             this.beginNode = nodeFactory.makeNode(null, Transition.<A,S>create(null, null, start));
             //insert sstart into OPEN with fvalue(sstart);
@@ -66,7 +68,7 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
         @Override
         public boolean hasNext() {
-            return !open.values().isEmpty();
+            return !open.values().isEmpty() && nodeFactory.getScaleFactor() >= 1 && !stopCondition;
         }
 
         @Override
@@ -105,8 +107,8 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
                 double newEpsilon = Math.min(
                         nodeFactory.getScaleFactor(),
                         nodeFactory.getScalarOperation().div(goalNode.getCost(), nodeFactory.getCostAccumulator().apply(minNode.getCost(), minNode.getEstimation())));
-                //publish current ε′-suboptimal solution;
-
+                //publish current ε′-suboptimal solution (returning goal node makes the path to be published);
+                current = goalNode;
                 //while ε′ > 1
                 if(newEpsilon > 1){
                     //decrease ε;
@@ -126,6 +128,9 @@ public class ARAStar<A,S,C extends Comparable<C>,N extends HeuristicNode<A,S,C,N
 
                     //CLOSED = ∅;
                     closed.clear();
+                }
+                else{
+                   this.stopCondition = true;
                 }
             }
             return current;
