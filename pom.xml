@@ -19,7 +19,7 @@
 
     <name>hipster-pom</name>
     <url>${site.url}</url>
-    <inceptionYear>2013-2018</inceptionYear>
+    <inceptionYear>2013-2020</inceptionYear>
 
     <modules>
         <module>hipster-core</module>
@@ -125,7 +125,7 @@
                         <properties>
                             <email>http://citius.usc.es</email>
                             <year>2013-2018</year>
-                            <owner>Centro de Investigación en Tecnoloxías da Información (CITIUS)</owner>
+                            <owner>Centro de Investigación en Tecnoloxías Intelixentes (CITIUS)</owner>
                         </properties>
                         <includes>
                             <include>src/main/java/**</include>
@@ -144,7 +144,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
+                    <version>3.2.0</version>
                     <configuration>
                         <encoding>UTF-8</encoding>
                         <docencoding>UTF-8</docencoding>
@@ -231,7 +231,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.1</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -272,7 +272,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.5.201505241946</version>
+                <version>0.8.5</version>
                 <executions>
                     <execution>
                         <goals>
