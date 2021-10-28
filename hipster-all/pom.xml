@@ -31,21 +31,9 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-examples</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-test</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        
+        
+        
     </dependencies>
 
     <build>
