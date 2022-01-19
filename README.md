@@ -1,6 +1,6 @@
 ![Hipster](src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png?raw=true)
 
-[![Build Status](https://travis-ci.com/citiususc/hipster.svg?branch=1.0.X)](https://travis-ci.com/citiususc/hipster)
+![CI](https://github.com/citiususc/hipster/actions/workflows/maven.yml/badge.svg)
 [![](https://jitpack.io/v/citiususc/hipster.svg)](https://jitpack.io/#citiususc/hipster)
 
 A powerful and friendly heuristic search library implemented in Java.
