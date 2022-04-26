@@ -36,11 +36,7 @@
             <artifactId>hipster-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-third-party-graphs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

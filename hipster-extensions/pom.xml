@@ -21,22 +21,14 @@
             <artifactId>hipster-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-third-party-graphs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
         <!-- Using Guava annotations require this dependency-->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.0</version>
-        </dependency>
+        
 
     </dependencies>
 
